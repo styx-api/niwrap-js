@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DWIBIASCORRECT_METADATA: Metadata = {
-    id: "9185a0c94cb9a81f571005ce1de2411183c6df3f.boutiques",
+    id: "4640ee70fc28dad36861c4fa612c0bcaeca0c5a2.boutiques",
     name: "dwibiascorrect",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",
@@ -15,6 +15,13 @@ interface DwibiascorrectFslgradParameters {
     "__STYXTYPE__": "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
+}
+
+
+interface DwibiascorrectConfigParameters {
+    "__STYXTYPE__": "config";
+    "key": string;
+    "value": string;
 }
 
 
@@ -35,6 +42,7 @@ interface DwibiascorrectParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
+    "config"?: Array<DwibiascorrectConfigParameters> | null | undefined;
     "help": boolean;
     "version": boolean;
     "ants_b"?: string | null | undefined;
@@ -56,6 +64,7 @@ function dynCargs(
     const cargsFuncs = {
         "dwibiascorrect": dwibiascorrect_cargs,
         "fslgrad": dwibiascorrect_fslgrad_cargs,
+        "config": dwibiascorrect_config_cargs,
     };
     return cargsFuncs[t];
 }
@@ -119,6 +128,47 @@ function dwibiascorrect_fslgrad_cargs(
 }
 
 
+function dwibiascorrect_config_params(
+    key: string,
+    value: string,
+): DwibiascorrectConfigParameters {
+    /**
+     * Build parameters.
+    
+     * @param key temporarily set the value of an MRtrix config file entry.
+     * @param value temporarily set the value of an MRtrix config file entry.
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "config" as const,
+        "key": key,
+        "value": value,
+    };
+    return params;
+}
+
+
+function dwibiascorrect_config_cargs(
+    params: DwibiascorrectConfigParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    cargs.push("-config");
+    cargs.push((params["key"] ?? null));
+    cargs.push((params["value"] ?? null));
+    return cargs;
+}
+
+
 /**
  * Output object returned when calling `dwibiascorrect(...)`.
  *
@@ -156,6 +206,7 @@ function dwibiascorrect_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
+    config: Array<DwibiascorrectConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
     ants_b: string | null = null,
@@ -180,6 +231,7 @@ function dwibiascorrect_params(
      * @param debug Display debugging messages
      * @param force Force overwrite of output files
      * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+     * @param config temporarily set the value of an MRtrix config file entry.
      * @param help Display help information and exit
      * @param version Display version information and exit
      * @param ants_b N4BiasFieldCorrection option -b (initial mesh resolution in mm, spline order)
@@ -221,6 +273,9 @@ function dwibiascorrect_params(
     }
     if (nthreads !== null) {
         params["nthreads"] = nthreads;
+    }
+    if (config !== null) {
+        params["config"] = config;
     }
     if (ants_b !== null) {
         params["ants_b"] = ants_b;
@@ -306,7 +361,9 @@ function dwibiascorrect_cargs(
             String((params["nthreads"] ?? null))
         );
     }
-    cargs.push("[CONFIG]");
+    if ((params["config"] ?? null) !== null) {
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+    }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
     }
@@ -396,6 +453,7 @@ function dwibiascorrect(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
+    config: Array<DwibiascorrectConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
     ants_b: string | null = null,
@@ -425,6 +483,7 @@ function dwibiascorrect(
      * @param debug Display debugging messages
      * @param force Force overwrite of output files
      * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+     * @param config temporarily set the value of an MRtrix config file entry.
      * @param help Display help information and exit
      * @param version Display version information and exit
      * @param ants_b N4BiasFieldCorrection option -b (initial mesh resolution in mm, spline order)
@@ -436,17 +495,19 @@ function dwibiascorrect(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DWIBIASCORRECT_METADATA);
-    const params = dwibiascorrect_params(algorithm, input_image, output_image, grad, fslgrad, mask_image, bias_image, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, help, version, ants_b, ants_c, ants_s)
+    const params = dwibiascorrect_params(algorithm, input_image, output_image, grad, fslgrad, mask_image, bias_image, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, config, help, version, ants_b, ants_c, ants_s)
     return dwibiascorrect_execute(params, execution);
 }
 
 
 export {
       DWIBIASCORRECT_METADATA,
+      DwibiascorrectConfigParameters,
       DwibiascorrectFslgradParameters,
       DwibiascorrectOutputs,
       DwibiascorrectParameters,
       dwibiascorrect,
+      dwibiascorrect_config_params,
       dwibiascorrect_fslgrad_params,
       dwibiascorrect_params,
 };
