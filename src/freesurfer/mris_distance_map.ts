@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_DISTANCE_MAP_METADATA: Metadata = {
-    id: "3d8e889c4b656344736f94614b767e1d77d78242.boutiques",
+    id: "686ff961ac8e9db74639a1364b1f5b20b600667e.boutiques",
     name: "mris_distance_map",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -104,7 +104,6 @@ function mris_distance_map_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mris_distance_map");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["input_surface_file"] ?? null)));
     cargs.push((params["output_scalar_field"] ?? null));
     return cargs;

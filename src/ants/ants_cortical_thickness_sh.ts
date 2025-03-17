@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_CORTICAL_THICKNESS_SH_METADATA: Metadata = {
-    id: "927ff3d34dcb64b2fcbc355449b1223268e7ab32.boutiques",
+    id: "1af08fb76713108fbe119513e0ee5dea823c10df.boutiques",
     name: "antsCorticalThickness.sh",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -19,6 +19,25 @@ interface AntsCorticalThicknessShParameters {
     "brain_extraction_probability_mask": InputPathType;
     "brain_segmentation_priors": string;
     "output_prefix": string;
+    "image_file_suffix"?: string | null | undefined;
+    "template_for_t1_registration"?: InputPathType | null | undefined;
+    "extraction_registration_mask"?: InputPathType | null | undefined;
+    "keep_temporary_files"?: 0 | 1 | null | undefined;
+    "denoise_anatomical_images"?: 0 | 1 | null | undefined;
+    "max_iterations_for_registration"?: string | null | undefined;
+    "atropos_prior_segmentation_weight"?: number | null | undefined;
+    "number_of_segmentation_iterations"?: number | null | undefined;
+    "posterior_formulation"?: string | null | undefined;
+    "use_floating_point_precision"?: 0 | 1 | null | undefined;
+    "use_random_seeding"?: 0 | 1 | null | undefined;
+    "use_b_spline_smoothing"?: 0 | 1 | null | undefined;
+    "cortical_thickness_prior_image"?: InputPathType | null | undefined;
+    "label_propagation"?: string | null | undefined;
+    "additional_priors_for_thickness"?: string | null | undefined;
+    "use_quick_registration_parameters"?: 0 | 1 | null | undefined;
+    "atropos_iterations"?: number | null | undefined;
+    "script_stage_to_run"?: number | null | undefined;
+    "test_debug_mode"?: number | null | undefined;
 }
 
 
@@ -92,6 +111,25 @@ function ants_cortical_thickness_sh_params(
     brain_extraction_probability_mask: InputPathType,
     brain_segmentation_priors: string,
     output_prefix: string,
+    image_file_suffix: string | null = null,
+    template_for_t1_registration: InputPathType | null = null,
+    extraction_registration_mask: InputPathType | null = null,
+    keep_temporary_files: 0 | 1 | null = null,
+    denoise_anatomical_images: 0 | 1 | null = null,
+    max_iterations_for_registration: string | null = null,
+    atropos_prior_segmentation_weight: number | null = null,
+    number_of_segmentation_iterations: number | null = null,
+    posterior_formulation: string | null = null,
+    use_floating_point_precision: 0 | 1 | null = null,
+    use_random_seeding: 0 | 1 | null = null,
+    use_b_spline_smoothing: 0 | 1 | null = null,
+    cortical_thickness_prior_image: InputPathType | null = null,
+    label_propagation: string | null = null,
+    additional_priors_for_thickness: string | null = null,
+    use_quick_registration_parameters: 0 | 1 | null = null,
+    atropos_iterations: number | null = null,
+    script_stage_to_run: number | null = null,
+    test_debug_mode: number | null = null,
 ): AntsCorticalThicknessShParameters {
     /**
      * Build parameters.
@@ -102,6 +140,25 @@ function ants_cortical_thickness_sh_params(
      * @param brain_extraction_probability_mask Brain probability mask in the segmentation template space. A binary mask is acceptable.
      * @param brain_segmentation_priors Tissue probability priors corresponding to the template image specified with the -e option. At least four priors must exist, corresponding to CSF, Cortical GM, WM, Subcortical GM.
      * @param output_prefix Output prefix for the generated filenames.
+     * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
+     * @param template_for_t1_registration Anatomical intensity template. This template must be skull-stripped.
+     * @param extraction_registration_mask Binary metric mask defined in the segmentation template space (-e). Only used in brain extraction registration.
+     * @param keep_temporary_files Keep brain extraction/segmentation warps, etc (default = 0).
+     * @param denoise_anatomical_images Denoise anatomical images (default = 0).
+     * @param max_iterations_for_registration ANTS registration max iterations (default = 100x100x70x20).
+     * @param atropos_prior_segmentation_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
+     * @param number_of_segmentation_iterations N4 -> Atropos -> N4 iterations during segmentation (default = 3).
+     * @param posterior_formulation Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.
+     * @param use_floating_point_precision Use single float precision in registrations (default = 0).
+     * @param use_random_seeding Use random number generated from system clock (default = 1).
+     * @param use_b_spline_smoothing Use B-spline SyN for registrations and B-spline exponential mapping in DiReCT (default = 0).
+     * @param cortical_thickness_prior_image Cortical thickness prior image in the template space, with an estimated upper limit of cortical thickness at each voxel.
+     * @param label_propagation Incorporate a distance prior on the posterior formulation.
+     * @param additional_priors_for_thickness Add segmentation classes for thickness estimation.
+     * @param use_quick_registration_parameters Use antsRegistrationSyNQuick.sh for registrations (default = 0).
+     * @param atropos_iterations Number of iterations within Atropos (default = 5).
+     * @param script_stage_to_run Which stage of ACT to run (default = 0, run all).
+     * @param test_debug_mode If > 0, runs a faster version of the script. Only for testing (default = 0).
     
      * @returns Parameter dictionary
      */
@@ -114,6 +171,63 @@ function ants_cortical_thickness_sh_params(
         "brain_segmentation_priors": brain_segmentation_priors,
         "output_prefix": output_prefix,
     };
+    if (image_file_suffix !== null) {
+        params["image_file_suffix"] = image_file_suffix;
+    }
+    if (template_for_t1_registration !== null) {
+        params["template_for_t1_registration"] = template_for_t1_registration;
+    }
+    if (extraction_registration_mask !== null) {
+        params["extraction_registration_mask"] = extraction_registration_mask;
+    }
+    if (keep_temporary_files !== null) {
+        params["keep_temporary_files"] = keep_temporary_files;
+    }
+    if (denoise_anatomical_images !== null) {
+        params["denoise_anatomical_images"] = denoise_anatomical_images;
+    }
+    if (max_iterations_for_registration !== null) {
+        params["max_iterations_for_registration"] = max_iterations_for_registration;
+    }
+    if (atropos_prior_segmentation_weight !== null) {
+        params["atropos_prior_segmentation_weight"] = atropos_prior_segmentation_weight;
+    }
+    if (number_of_segmentation_iterations !== null) {
+        params["number_of_segmentation_iterations"] = number_of_segmentation_iterations;
+    }
+    if (posterior_formulation !== null) {
+        params["posterior_formulation"] = posterior_formulation;
+    }
+    if (use_floating_point_precision !== null) {
+        params["use_floating_point_precision"] = use_floating_point_precision;
+    }
+    if (use_random_seeding !== null) {
+        params["use_random_seeding"] = use_random_seeding;
+    }
+    if (use_b_spline_smoothing !== null) {
+        params["use_b_spline_smoothing"] = use_b_spline_smoothing;
+    }
+    if (cortical_thickness_prior_image !== null) {
+        params["cortical_thickness_prior_image"] = cortical_thickness_prior_image;
+    }
+    if (label_propagation !== null) {
+        params["label_propagation"] = label_propagation;
+    }
+    if (additional_priors_for_thickness !== null) {
+        params["additional_priors_for_thickness"] = additional_priors_for_thickness;
+    }
+    if (use_quick_registration_parameters !== null) {
+        params["use_quick_registration_parameters"] = use_quick_registration_parameters;
+    }
+    if (atropos_iterations !== null) {
+        params["atropos_iterations"] = atropos_iterations;
+    }
+    if (script_stage_to_run !== null) {
+        params["script_stage_to_run"] = script_stage_to_run;
+    }
+    if (test_debug_mode !== null) {
+        params["test_debug_mode"] = test_debug_mode;
+    }
     return params;
 }
 
@@ -152,11 +266,124 @@ function ants_cortical_thickness_sh_cargs(
         "-p",
         (params["brain_segmentation_priors"] ?? null)
     );
-    cargs.push("[ADDITIONAL_PARAMETERS]");
     cargs.push(
         "-o",
         (params["output_prefix"] ?? null)
     );
+    if ((params["image_file_suffix"] ?? null) !== null) {
+        cargs.push(
+            "-s",
+            (params["image_file_suffix"] ?? null)
+        );
+    }
+    if ((params["template_for_t1_registration"] ?? null) !== null) {
+        cargs.push(
+            "-t",
+            execution.inputFile((params["template_for_t1_registration"] ?? null))
+        );
+    }
+    if ((params["extraction_registration_mask"] ?? null) !== null) {
+        cargs.push(
+            "-f",
+            execution.inputFile((params["extraction_registration_mask"] ?? null))
+        );
+    }
+    if ((params["keep_temporary_files"] ?? null) !== null) {
+        cargs.push(
+            "-k",
+            String((params["keep_temporary_files"] ?? null))
+        );
+    }
+    if ((params["denoise_anatomical_images"] ?? null) !== null) {
+        cargs.push(
+            "-g",
+            String((params["denoise_anatomical_images"] ?? null))
+        );
+    }
+    if ((params["max_iterations_for_registration"] ?? null) !== null) {
+        cargs.push(
+            "-i",
+            (params["max_iterations_for_registration"] ?? null)
+        );
+    }
+    if ((params["atropos_prior_segmentation_weight"] ?? null) !== null) {
+        cargs.push(
+            "-w",
+            String((params["atropos_prior_segmentation_weight"] ?? null))
+        );
+    }
+    if ((params["number_of_segmentation_iterations"] ?? null) !== null) {
+        cargs.push(
+            "-n",
+            String((params["number_of_segmentation_iterations"] ?? null))
+        );
+    }
+    if ((params["posterior_formulation"] ?? null) !== null) {
+        cargs.push(
+            "-b",
+            (params["posterior_formulation"] ?? null)
+        );
+    }
+    if ((params["use_floating_point_precision"] ?? null) !== null) {
+        cargs.push(
+            "-j",
+            String((params["use_floating_point_precision"] ?? null))
+        );
+    }
+    if ((params["use_random_seeding"] ?? null) !== null) {
+        cargs.push(
+            "-u",
+            String((params["use_random_seeding"] ?? null))
+        );
+    }
+    if ((params["use_b_spline_smoothing"] ?? null) !== null) {
+        cargs.push(
+            "-v",
+            String((params["use_b_spline_smoothing"] ?? null))
+        );
+    }
+    if ((params["cortical_thickness_prior_image"] ?? null) !== null) {
+        cargs.push(
+            "-r",
+            execution.inputFile((params["cortical_thickness_prior_image"] ?? null))
+        );
+    }
+    if ((params["label_propagation"] ?? null) !== null) {
+        cargs.push(
+            "-l",
+            (params["label_propagation"] ?? null)
+        );
+    }
+    if ((params["additional_priors_for_thickness"] ?? null) !== null) {
+        cargs.push(
+            "-c",
+            (params["additional_priors_for_thickness"] ?? null)
+        );
+    }
+    if ((params["use_quick_registration_parameters"] ?? null) !== null) {
+        cargs.push(
+            "-q",
+            String((params["use_quick_registration_parameters"] ?? null))
+        );
+    }
+    if ((params["atropos_iterations"] ?? null) !== null) {
+        cargs.push(
+            "-x",
+            String((params["atropos_iterations"] ?? null))
+        );
+    }
+    if ((params["script_stage_to_run"] ?? null) !== null) {
+        cargs.push(
+            "-y",
+            String((params["script_stage_to_run"] ?? null))
+        );
+    }
+    if ((params["test_debug_mode"] ?? null) !== null) {
+        cargs.push(
+            "-z",
+            String((params["test_debug_mode"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -215,6 +442,25 @@ function ants_cortical_thickness_sh(
     brain_extraction_probability_mask: InputPathType,
     brain_segmentation_priors: string,
     output_prefix: string,
+    image_file_suffix: string | null = null,
+    template_for_t1_registration: InputPathType | null = null,
+    extraction_registration_mask: InputPathType | null = null,
+    keep_temporary_files: 0 | 1 | null = null,
+    denoise_anatomical_images: 0 | 1 | null = null,
+    max_iterations_for_registration: string | null = null,
+    atropos_prior_segmentation_weight: number | null = null,
+    number_of_segmentation_iterations: number | null = null,
+    posterior_formulation: string | null = null,
+    use_floating_point_precision: 0 | 1 | null = null,
+    use_random_seeding: 0 | 1 | null = null,
+    use_b_spline_smoothing: 0 | 1 | null = null,
+    cortical_thickness_prior_image: InputPathType | null = null,
+    label_propagation: string | null = null,
+    additional_priors_for_thickness: string | null = null,
+    use_quick_registration_parameters: 0 | 1 | null = null,
+    atropos_iterations: number | null = null,
+    script_stage_to_run: number | null = null,
+    test_debug_mode: number | null = null,
     runner: Runner | null = null,
 ): AntsCorticalThicknessShOutputs {
     /**
@@ -230,13 +476,32 @@ function ants_cortical_thickness_sh(
      * @param brain_extraction_probability_mask Brain probability mask in the segmentation template space. A binary mask is acceptable.
      * @param brain_segmentation_priors Tissue probability priors corresponding to the template image specified with the -e option. At least four priors must exist, corresponding to CSF, Cortical GM, WM, Subcortical GM.
      * @param output_prefix Output prefix for the generated filenames.
+     * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
+     * @param template_for_t1_registration Anatomical intensity template. This template must be skull-stripped.
+     * @param extraction_registration_mask Binary metric mask defined in the segmentation template space (-e). Only used in brain extraction registration.
+     * @param keep_temporary_files Keep brain extraction/segmentation warps, etc (default = 0).
+     * @param denoise_anatomical_images Denoise anatomical images (default = 0).
+     * @param max_iterations_for_registration ANTS registration max iterations (default = 100x100x70x20).
+     * @param atropos_prior_segmentation_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
+     * @param number_of_segmentation_iterations N4 -> Atropos -> N4 iterations during segmentation (default = 3).
+     * @param posterior_formulation Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.
+     * @param use_floating_point_precision Use single float precision in registrations (default = 0).
+     * @param use_random_seeding Use random number generated from system clock (default = 1).
+     * @param use_b_spline_smoothing Use B-spline SyN for registrations and B-spline exponential mapping in DiReCT (default = 0).
+     * @param cortical_thickness_prior_image Cortical thickness prior image in the template space, with an estimated upper limit of cortical thickness at each voxel.
+     * @param label_propagation Incorporate a distance prior on the posterior formulation.
+     * @param additional_priors_for_thickness Add segmentation classes for thickness estimation.
+     * @param use_quick_registration_parameters Use antsRegistrationSyNQuick.sh for registrations (default = 0).
+     * @param atropos_iterations Number of iterations within Atropos (default = 5).
+     * @param script_stage_to_run Which stage of ACT to run (default = 0, run all).
+     * @param test_debug_mode If > 0, runs a faster version of the script. Only for testing (default = 0).
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `AntsCorticalThicknessShOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_CORTICAL_THICKNESS_SH_METADATA);
-    const params = ants_cortical_thickness_sh_params(image_dimension, anatomical_image, brain_template, brain_extraction_probability_mask, brain_segmentation_priors, output_prefix)
+    const params = ants_cortical_thickness_sh_params(image_dimension, anatomical_image, brain_template, brain_extraction_probability_mask, brain_segmentation_priors, output_prefix, image_file_suffix, template_for_t1_registration, extraction_registration_mask, keep_temporary_files, denoise_anatomical_images, max_iterations_for_registration, atropos_prior_segmentation_weight, number_of_segmentation_iterations, posterior_formulation, use_floating_point_precision, use_random_seeding, use_b_spline_smoothing, cortical_thickness_prior_image, label_propagation, additional_priors_for_thickness, use_quick_registration_parameters, atropos_iterations, script_stage_to_run, test_debug_mode)
     return ants_cortical_thickness_sh_execute(params, execution);
 }
 

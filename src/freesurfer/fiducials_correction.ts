@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIDUCIALS_CORRECTION_METADATA: Metadata = {
-    id: "4c8ff34a05a460d57cf9bd6ab63606fa5145834f.boutiques",
+    id: "6353e9d7f0b132461e7ac43f5dc929e2584cbb0a.boutiques",
     name: "fiducials_correction",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,6 +14,7 @@ const FIDUCIALS_CORRECTION_METADATA: Metadata = {
 interface FiducialsCorrectionParameters {
     "__STYXTYPE__": "fiducials_correction";
     "input_file": InputPathType;
+    "output_file": string;
 }
 
 
@@ -70,17 +71,20 @@ interface FiducialsCorrectionOutputs {
 
 function fiducials_correction_params(
     input_file: InputPathType,
+    output_file: string,
 ): FiducialsCorrectionParameters {
     /**
      * Build parameters.
     
      * @param input_file Input file containing imaging data with fiducial markers to correct.
+     * @param output_file Output file with corrected fiducial markers.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "fiducials_correction" as const,
         "input_file": input_file,
+        "output_file": output_file,
     };
     return params;
 }
@@ -101,7 +105,7 @@ function fiducials_correction_cargs(
     const cargs: string[] = [];
     cargs.push("fiducials_correction");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    cargs.push("[OUTPUT_FILE]");
+    cargs.push((params["output_file"] ?? null));
     return cargs;
 }
 
@@ -120,7 +124,7 @@ function fiducials_correction_outputs(
      */
     const ret: FiducialsCorrectionOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile(["[OUTPUT_FILE]"].join('')),
+        output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
     };
     return ret;
 }
@@ -152,6 +156,7 @@ function fiducials_correction_execute(
 
 function fiducials_correction(
     input_file: InputPathType,
+    output_file: string,
     runner: Runner | null = null,
 ): FiducialsCorrectionOutputs {
     /**
@@ -162,13 +167,14 @@ function fiducials_correction(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param input_file Input file containing imaging data with fiducial markers to correct.
+     * @param output_file Output file with corrected fiducial markers.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FiducialsCorrectionOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIDUCIALS_CORRECTION_METADATA);
-    const params = fiducials_correction_params(input_file)
+    const params = fiducials_correction_params(input_file, output_file)
     return fiducials_correction_execute(params, execution);
 }
 

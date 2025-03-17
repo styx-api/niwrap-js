@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_MOTION_CORRECT_FSL_METADATA: Metadata = {
-    id: "e4429f150e08917f7317e164c448c83b94352eed.boutiques",
+    id: "6c57f46ee1043d8990bc1a457e12e529aa3aae0d.boutiques",
     name: "mri_motion_correct.fsl",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -106,7 +106,6 @@ function mri_motion_correct_fsl_cargs(
     cargs.push("mri_motion_correct.fsl");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push((params["output_image"] ?? null));
-    cargs.push("[OPTIONS]");
     return cargs;
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FS_SPMREG_GLNXA64_METADATA: Metadata = {
-    id: "d96fd1d83e2b7bf77ac2922d1bead84c42091878.boutiques",
+    id: "92aa0f707d8268c4082f03447b8e27b77445669e.boutiques",
     name: "fs_spmreg.glnxa64",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,8 @@ const FS_SPMREG_GLNXA64_METADATA: Metadata = {
 
 interface FsSpmregGlnxa64Parameters {
     "__STYXTYPE__": "fs_spmreg.glnxa64";
+    "input_volume": InputPathType;
+    "output_matrix": string;
 }
 
 
@@ -68,14 +70,21 @@ interface FsSpmregGlnxa64Outputs {
 
 
 function fs_spmreg_glnxa64_params(
+    input_volume: InputPathType,
+    output_matrix: string = "output.mat",
 ): FsSpmregGlnxa64Parameters {
     /**
      * Build parameters.
+    
+     * @param input_volume Input anatomical volume
+     * @param output_matrix Output registration matrix
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "fs_spmreg.glnxa64" as const,
+        "input_volume": input_volume,
+        "output_matrix": output_matrix,
     };
     return params;
 }
@@ -94,8 +103,9 @@ function fs_spmreg_glnxa64_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("fs_spmreg");
-    cargs.push("[OPTIONS]");
+    cargs.push("fs_spmreg.glnxa64");
+    cargs.push(execution.inputFile((params["input_volume"] ?? null)));
+    cargs.push((params["output_matrix"] ?? null));
     return cargs;
 }
 
@@ -114,7 +124,7 @@ function fs_spmreg_glnxa64_outputs(
      */
     const ret: FsSpmregGlnxa64Outputs = {
         root: execution.outputFile("."),
-        output_matrix_file: execution.outputFile(["[OUTPUT_MATRIX]"].join('')),
+        output_matrix_file: execution.outputFile([(params["output_matrix"] ?? null)].join('')),
     };
     return ret;
 }
@@ -145,6 +155,8 @@ function fs_spmreg_glnxa64_execute(
 
 
 function fs_spmreg_glnxa64(
+    input_volume: InputPathType,
+    output_matrix: string = "output.mat",
     runner: Runner | null = null,
 ): FsSpmregGlnxa64Outputs {
     /**
@@ -154,13 +166,15 @@ function fs_spmreg_glnxa64(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param input_volume Input anatomical volume
+     * @param output_matrix Output registration matrix
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FsSpmregGlnxa64Outputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_SPMREG_GLNXA64_METADATA);
-    const params = fs_spmreg_glnxa64_params()
+    const params = fs_spmreg_glnxa64_params(input_volume, output_matrix)
     return fs_spmreg_glnxa64_execute(params, execution);
 }
 

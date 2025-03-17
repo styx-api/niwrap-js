@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_PLACE_SURFACE_METADATA: Metadata = {
-    id: "e4e973bfe64ca5b7e38915757ccc306ea96b6327.boutiques",
+    id: "e71154f3ac212ed67a529db481c0c3cb77247351.boutiques",
     name: "mris_place_surface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -519,7 +519,6 @@ function mris_place_surface_cargs(
             ...(params["fill_lateral_ventricles"] ?? null).map(String)
         );
     }
-    cargs.push("[COST_FUNCTION_ARGS]");
     return cargs;
 }
 

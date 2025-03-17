@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_FUSE_SEGMENTATIONS_METADATA: Metadata = {
-    id: "b42ea2ffd32b62f852b2f074e21005b3ac5e5519.boutiques",
+    id: "67b2cf4ce2e0dc86fa5a749705372f955d1fc276.boutiques",
     name: "mri_fuse_segmentations",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -19,6 +19,7 @@ interface MriFuseSegmentationsParameters {
     "transforms"?: Array<InputPathType> | null | undefined;
     "sigma"?: number | null | undefined;
     "input_file": InputPathType;
+    "output_file": string;
 }
 
 
@@ -78,6 +79,7 @@ function mri_fuse_segmentations_params(
     nocc_asegs: Array<InputPathType>,
     norm_volumes: Array<InputPathType>,
     input_file: InputPathType,
+    output_file: string,
     transforms: Array<InputPathType> | null = null,
     sigma: number | null = 3.0,
 ): MriFuseSegmentationsParameters {
@@ -88,6 +90,7 @@ function mri_fuse_segmentations_params(
      * @param nocc_asegs Path to aseg.auto_noCCseg.mgz files without CC labels, one per TP
      * @param norm_volumes Path to norm.mgz files, one per TP
      * @param input_file Input norm.mgz file
+     * @param output_file Resulting fused segmentation as aseg.fused.mgz file
      * @param transforms Transform files from each TP to the input norm.mgz, can be LTA, M3Z or identity.nofile
      * @param sigma Cross-time sigma (default 3.0)
     
@@ -99,6 +102,7 @@ function mri_fuse_segmentations_params(
         "nocc_asegs": nocc_asegs,
         "norm_volumes": norm_volumes,
         "input_file": input_file,
+        "output_file": output_file,
     };
     if (transforms !== null) {
         params["transforms"] = transforms;
@@ -149,7 +153,7 @@ function mri_fuse_segmentations_cargs(
         );
     }
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    cargs.push("[OUTPUT]");
+    cargs.push((params["output_file"] ?? null));
     return cargs;
 }
 
@@ -168,7 +172,7 @@ function mri_fuse_segmentations_outputs(
      */
     const ret: MriFuseSegmentationsOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile(["[OUTPUT]"].join('')),
+        output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
     };
     return ret;
 }
@@ -203,6 +207,7 @@ function mri_fuse_segmentations(
     nocc_asegs: Array<InputPathType>,
     norm_volumes: Array<InputPathType>,
     input_file: InputPathType,
+    output_file: string,
     transforms: Array<InputPathType> | null = null,
     sigma: number | null = 3.0,
     runner: Runner | null = null,
@@ -218,6 +223,7 @@ function mri_fuse_segmentations(
      * @param nocc_asegs Path to aseg.auto_noCCseg.mgz files without CC labels, one per TP
      * @param norm_volumes Path to norm.mgz files, one per TP
      * @param input_file Input norm.mgz file
+     * @param output_file Resulting fused segmentation as aseg.fused.mgz file
      * @param transforms Transform files from each TP to the input norm.mgz, can be LTA, M3Z or identity.nofile
      * @param sigma Cross-time sigma (default 3.0)
      * @param runner Command runner
@@ -226,7 +232,7 @@ function mri_fuse_segmentations(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FUSE_SEGMENTATIONS_METADATA);
-    const params = mri_fuse_segmentations_params(asegs, nocc_asegs, norm_volumes, input_file, transforms, sigma)
+    const params = mri_fuse_segmentations_params(asegs, nocc_asegs, norm_volumes, input_file, output_file, transforms, sigma)
     return mri_fuse_segmentations_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BBREGISTER_METADATA: Metadata = {
-    id: "06a9a3d42999005484cd3e30d110e491b2d7dca8.boutiques",
+    id: "dc717dfae108a6dd8224d23542be08c7135f2602.boutiques",
     name: "bbregister",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,7 +16,19 @@ interface BbregisterParameters {
     "subject": string;
     "moveable_volume": InputPathType;
     "reg_file": string;
+    "contrast_type_t1": boolean;
     "contrast_type_t2": boolean;
+    "vsm"?: InputPathType | null | undefined;
+    "init_coreg": boolean;
+    "no_coreg_ref_mask": boolean;
+    "init_header": boolean;
+    "init_reg"?: InputPathType | null | undefined;
+    "intvol"?: InputPathType | null | undefined;
+    "mid_frame": boolean;
+    "frame_no"?: number | null | undefined;
+    "template_out"?: string | null | undefined;
+    "o_outvol"?: string | null | undefined;
+    "s_from_reg": boolean;
 }
 
 
@@ -71,7 +83,7 @@ interface BbregisterOutputs {
     /**
      * Resampled moveable volume.
      */
-    out_volume: OutputPathType;
+    out_volume: OutputPathType | null;
 }
 
 
@@ -79,7 +91,19 @@ function bbregister_params(
     subject: string,
     moveable_volume: InputPathType,
     reg_file: string,
+    contrast_type_t1: boolean = false,
     contrast_type_t2: boolean = false,
+    vsm: InputPathType | null = null,
+    init_coreg: boolean = false,
+    no_coreg_ref_mask: boolean = false,
+    init_header: boolean = false,
+    init_reg: InputPathType | null = null,
+    intvol: InputPathType | null = null,
+    mid_frame: boolean = false,
+    frame_no: number | null = null,
+    template_out: string | null = null,
+    o_outvol: string | null = null,
+    s_from_reg: boolean = false,
 ): BbregisterParameters {
     /**
      * Build parameters.
@@ -87,7 +111,19 @@ function bbregister_params(
      * @param subject FreeSurfer subject name as found in $SUBJECTS_DIR.
      * @param moveable_volume "Moveable" volume template for cross-modal volume. E.g., fMRI volume used for motion correction.
      * @param reg_file Output FreeSurfer registration file (tkregister-style or LTA format).
+     * @param contrast_type_t1 Assume T1 contrast, White Matter brighter than Grey Matter.
      * @param contrast_type_t2 Assume T2 contrast, Grey Matter brighter than White Matter. Same as --bold and --dti.
+     * @param vsm Include B0 distortion correction. A voxel shift map can be created with the epidewarp.fsl script.
+     * @param init_coreg Initialize with FreeSurfer mri_coreg program.
+     * @param no_coreg_ref_mask Do not use aparc+aseg.mgz as a reference mask.
+     * @param init_header Use geometry info for close voxel-to-voxel registration. Typically valid if acquired in same session.
+     * @param init_reg Supply an initial registration matrix; can be LTA format.
+     * @param intvol Volume used as an intermediate during registration. Useful for partial field-of-view volumes.
+     * @param mid_frame Register to middle frame (not with --frame option).
+     * @param frame_no Register to specified frame (default is 0=1st).
+     * @param template_out Save template (beneficial with --frame).
+     * @param o_outvol Resample moveable volume and save as specified output volume.
+     * @param s_from_reg Get subject name from registration file.
     
      * @returns Parameter dictionary
      */
@@ -96,8 +132,32 @@ function bbregister_params(
         "subject": subject,
         "moveable_volume": moveable_volume,
         "reg_file": reg_file,
+        "contrast_type_t1": contrast_type_t1,
         "contrast_type_t2": contrast_type_t2,
+        "init_coreg": init_coreg,
+        "no_coreg_ref_mask": no_coreg_ref_mask,
+        "init_header": init_header,
+        "mid_frame": mid_frame,
+        "s_from_reg": s_from_reg,
     };
+    if (vsm !== null) {
+        params["vsm"] = vsm;
+    }
+    if (init_reg !== null) {
+        params["init_reg"] = init_reg;
+    }
+    if (intvol !== null) {
+        params["intvol"] = intvol;
+    }
+    if (frame_no !== null) {
+        params["frame_no"] = frame_no;
+    }
+    if (template_out !== null) {
+        params["template_out"] = template_out;
+    }
+    if (o_outvol !== null) {
+        params["o_outvol"] = o_outvol;
+    }
     return params;
 }
 
@@ -128,10 +188,63 @@ function bbregister_cargs(
         "--reg",
         (params["reg_file"] ?? null)
     );
+    if ((params["contrast_type_t1"] ?? null)) {
+        cargs.push("--t1");
+    }
     if ((params["contrast_type_t2"] ?? null)) {
         cargs.push("--t2");
     }
-    cargs.push("[OPTIONS]");
+    if ((params["vsm"] ?? null) !== null) {
+        cargs.push(
+            "--vsm",
+            execution.inputFile((params["vsm"] ?? null))
+        );
+    }
+    if ((params["init_coreg"] ?? null)) {
+        cargs.push("--init-coreg");
+    }
+    if ((params["no_coreg_ref_mask"] ?? null)) {
+        cargs.push("--no-coreg-ref-mask");
+    }
+    if ((params["init_header"] ?? null)) {
+        cargs.push("--init-header");
+    }
+    if ((params["init_reg"] ?? null) !== null) {
+        cargs.push(
+            "--init-reg",
+            execution.inputFile((params["init_reg"] ?? null))
+        );
+    }
+    if ((params["intvol"] ?? null) !== null) {
+        cargs.push(
+            "--int",
+            execution.inputFile((params["intvol"] ?? null))
+        );
+    }
+    if ((params["mid_frame"] ?? null)) {
+        cargs.push("--mid-frame");
+    }
+    if ((params["frame_no"] ?? null) !== null) {
+        cargs.push(
+            "--frame",
+            String((params["frame_no"] ?? null))
+        );
+    }
+    if ((params["template_out"] ?? null) !== null) {
+        cargs.push(
+            "--template-out",
+            (params["template_out"] ?? null)
+        );
+    }
+    if ((params["o_outvol"] ?? null) !== null) {
+        cargs.push(
+            "--o",
+            (params["o_outvol"] ?? null)
+        );
+    }
+    if ((params["s_from_reg"] ?? null)) {
+        cargs.push("--s-from-reg");
+    }
     return cargs;
 }
 
@@ -151,7 +264,7 @@ function bbregister_outputs(
     const ret: BbregisterOutputs = {
         root: execution.outputFile("."),
         reg_output: execution.outputFile([(params["reg_file"] ?? null)].join('')),
-        out_volume: execution.outputFile(["[O_OUTVOL]"].join('')),
+        out_volume: ((params["o_outvol"] ?? null) !== null) ? execution.outputFile([(params["o_outvol"] ?? null)].join('')) : null,
     };
     return ret;
 }
@@ -185,7 +298,19 @@ function bbregister(
     subject: string,
     moveable_volume: InputPathType,
     reg_file: string,
+    contrast_type_t1: boolean = false,
     contrast_type_t2: boolean = false,
+    vsm: InputPathType | null = null,
+    init_coreg: boolean = false,
+    no_coreg_ref_mask: boolean = false,
+    init_header: boolean = false,
+    init_reg: InputPathType | null = null,
+    intvol: InputPathType | null = null,
+    mid_frame: boolean = false,
+    frame_no: number | null = null,
+    template_out: string | null = null,
+    o_outvol: string | null = null,
+    s_from_reg: boolean = false,
     runner: Runner | null = null,
 ): BbregisterOutputs {
     /**
@@ -198,14 +323,26 @@ function bbregister(
      * @param subject FreeSurfer subject name as found in $SUBJECTS_DIR.
      * @param moveable_volume "Moveable" volume template for cross-modal volume. E.g., fMRI volume used for motion correction.
      * @param reg_file Output FreeSurfer registration file (tkregister-style or LTA format).
+     * @param contrast_type_t1 Assume T1 contrast, White Matter brighter than Grey Matter.
      * @param contrast_type_t2 Assume T2 contrast, Grey Matter brighter than White Matter. Same as --bold and --dti.
+     * @param vsm Include B0 distortion correction. A voxel shift map can be created with the epidewarp.fsl script.
+     * @param init_coreg Initialize with FreeSurfer mri_coreg program.
+     * @param no_coreg_ref_mask Do not use aparc+aseg.mgz as a reference mask.
+     * @param init_header Use geometry info for close voxel-to-voxel registration. Typically valid if acquired in same session.
+     * @param init_reg Supply an initial registration matrix; can be LTA format.
+     * @param intvol Volume used as an intermediate during registration. Useful for partial field-of-view volumes.
+     * @param mid_frame Register to middle frame (not with --frame option).
+     * @param frame_no Register to specified frame (default is 0=1st).
+     * @param template_out Save template (beneficial with --frame).
+     * @param o_outvol Resample moveable volume and save as specified output volume.
+     * @param s_from_reg Get subject name from registration file.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `BbregisterOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BBREGISTER_METADATA);
-    const params = bbregister_params(subject, moveable_volume, reg_file, contrast_type_t2)
+    const params = bbregister_params(subject, moveable_volume, reg_file, contrast_type_t1, contrast_type_t2, vsm, init_coreg, no_coreg_ref_mask, init_header, init_reg, intvol, mid_frame, frame_no, template_out, o_outvol, s_from_reg)
     return bbregister_execute(params, execution);
 }
 

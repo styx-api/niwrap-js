@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const HIAM_MAKE_SURFACES_METADATA: Metadata = {
-    id: "eedce2967ed9d851c796ec7ce683d74d056d3684.boutiques",
+    id: "1b161d9791e99b79bc12c2e006b7a1a47156fb9f.boutiques",
     name: "hiam_make_surfaces",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -99,7 +99,6 @@ function hiam_make_surfaces_cargs(
      */
     const cargs: string[] = [];
     cargs.push("hiam_make_surfaces");
-    cargs.push("[OPTIONS]");
     cargs.push((params["subject_name"] ?? null));
     cargs.push((params["structure"] ?? null));
     return cargs;

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_THICKNESS_DIFF_METADATA: Metadata = {
-    id: "fbc123e8965a3bb3509ca33036327b032bbd57be.boutiques",
+    id: "9296419cd2bc81214ca3b7a9b2157195a7f31223.boutiques",
     name: "mris_thickness_diff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -170,10 +170,6 @@ function mris_thickness_diff_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mris_thickness_diff");
-    cargs.push("[SURFACE1]");
-    cargs.push("[DATA1]");
-    cargs.push("[SURFACE2]");
-    cargs.push("[DATA2]");
     if ((params["src_type"] ?? null) !== null) {
         cargs.push(
             "-src_type",

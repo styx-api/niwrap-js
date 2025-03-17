@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_NUDGE_METADATA: Metadata = {
-    id: "6f298ed7d045a2ce709015d0cecce0980607d9d6.boutiques",
+    id: "95de4ed7ce38c1344db48e4487148e75d7cd5ac7.boutiques",
     name: "mris_nudge",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -121,7 +121,6 @@ function mris_nudge_cargs(
     cargs.push(String((params["vertex"] ?? null)));
     cargs.push(String((params["target_val"] ?? null)));
     cargs.push(String((params["nbhd"] ?? null)));
-    cargs.push("[OUTPUT_SURF]");
     return cargs;
 }
 

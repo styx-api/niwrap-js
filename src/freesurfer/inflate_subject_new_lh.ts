@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const INFLATE_SUBJECT_NEW_LH_METADATA: Metadata = {
-    id: "08307c12a50c2ff8603980e07c1bcf6e9a16f2e1.boutiques",
+    id: "2e5d93e0cd0ec7e2b630ed81133b9ac7aefe52f9.boutiques",
     name: "inflate_subject_new-lh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -99,11 +99,11 @@ function inflate_subject_new_lh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("inflate_subject_new");
     cargs.push(
         "-lh",
-        ["inflate_subject_new", (params["subject_dir"] ?? null)].join('')
+        (params["subject_dir"] ?? null)
     );
-    cargs.push("[OPTIONS]");
     return cargs;
 }
 

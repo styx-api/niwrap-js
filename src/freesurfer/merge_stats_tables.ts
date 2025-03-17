@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MERGE_STATS_TABLES_METADATA: Metadata = {
-    id: "004967733986569ad699b7fcfc4e0e899cb02c90.boutiques",
+    id: "35129fec9b70b3cf111ebb349d44b5a25140111b.boutiques",
     name: "merge_stats_tables",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,16 +13,18 @@ const MERGE_STATS_TABLES_METADATA: Metadata = {
 
 interface MergeStatsTablesParameters {
     "__STYXTYPE__": "merge_stats_tables";
+    "subjects"?: Array<string> | null | undefined;
     "subject"?: string | null | undefined;
+    "subjectsfile"?: InputPathType | null | undefined;
+    "inputs"?: Array<InputPathType> | null | undefined;
     "input"?: InputPathType | null | undefined;
     "outputfile": string;
     "meas": string;
-    "subjectsfile"?: InputPathType | null | undefined;
+    "common_segs": boolean;
+    "all_segs": boolean;
     "intable"?: InputPathType | null | undefined;
     "subdir"?: string | null | undefined;
     "delimiter"?: string | null | undefined;
-    "common_segs": boolean;
-    "all_segs": boolean;
     "transpose": boolean;
     "skip": boolean;
     "debug": boolean;
@@ -83,14 +85,16 @@ interface MergeStatsTablesOutputs {
 function merge_stats_tables_params(
     outputfile: string,
     meas: string,
+    subjects: Array<string> | null = null,
     subject: string | null = null,
-    input: InputPathType | null = null,
     subjectsfile: InputPathType | null = null,
+    inputs: Array<InputPathType> | null = null,
+    input: InputPathType | null = null,
+    common_segs: boolean = false,
+    all_segs: boolean = false,
     intable: InputPathType | null = null,
     subdir: string | null = null,
     delimiter: string | null = null,
-    common_segs: boolean = false,
-    all_segs: boolean = false,
     transpose: boolean = false,
     skip: boolean = false,
     debug: boolean = false,
@@ -100,14 +104,16 @@ function merge_stats_tables_params(
     
      * @param outputfile The output table file
      * @param meas Measure to write in output table
+     * @param subjects Specify the subjects names
      * @param subject Specify a single subject name
-     * @param input Specify a single input stat file
      * @param subjectsfile Name of the file which has the list of subjects (one subject per line)
+     * @param inputs Specify all the input stat files
+     * @param input Specify a single input stat file
+     * @param common_segs Output only the common segmentations of all the statsfiles given
+     * @param all_segs Output all the segmentations of the statsfiles given
      * @param intable Use `fname` as input (REQUIRED when passing subject ids)
      * @param subdir Use `subdir` instead of default "stats/" when passing subject ids
      * @param delimiter Delimiter between measures in the table. Options are 'tab', 'space', 'comma', and 'semicolon'. Default is 'space'.
-     * @param common_segs Output only the common segmentations of all the statsfiles given
-     * @param all_segs Output all the segmentations of the statsfiles given
      * @param transpose Transpose the table (default is subjects in rows and segmentations in cols)
      * @param skip If a subject does not have a stats file, skip it instead of exiting.
      * @param debug Increase verbosity for debugging purposes.
@@ -124,14 +130,20 @@ function merge_stats_tables_params(
         "skip": skip,
         "debug": debug,
     };
+    if (subjects !== null) {
+        params["subjects"] = subjects;
+    }
     if (subject !== null) {
         params["subject"] = subject;
     }
-    if (input !== null) {
-        params["input"] = input;
-    }
     if (subjectsfile !== null) {
         params["subjectsfile"] = subjectsfile;
+    }
+    if (inputs !== null) {
+        params["inputs"] = inputs;
+    }
+    if (input !== null) {
+        params["input"] = input;
     }
     if (intable !== null) {
         params["intable"] = intable;
@@ -160,10 +172,28 @@ function merge_stats_tables_cargs(
      */
     const cargs: string[] = [];
     cargs.push("merge_stats_tables");
+    if ((params["subjects"] ?? null) !== null) {
+        cargs.push(
+            "--subjects",
+            ...(params["subjects"] ?? null)
+        );
+    }
     if ((params["subject"] ?? null) !== null) {
         cargs.push(
             "-s",
             (params["subject"] ?? null)
+        );
+    }
+    if ((params["subjectsfile"] ?? null) !== null) {
+        cargs.push(
+            "--subjectsfile",
+            execution.inputFile((params["subjectsfile"] ?? null))
+        );
+    }
+    if ((params["inputs"] ?? null) !== null) {
+        cargs.push(
+            "--inputs",
+            ...(params["inputs"] ?? null).map(f => execution.inputFile(f))
         );
     }
     if ((params["input"] ?? null) !== null) {
@@ -180,11 +210,11 @@ function merge_stats_tables_cargs(
         "-m",
         (params["meas"] ?? null)
     );
-    if ((params["subjectsfile"] ?? null) !== null) {
-        cargs.push(
-            "--subjectsfile",
-            execution.inputFile((params["subjectsfile"] ?? null))
-        );
+    if ((params["common_segs"] ?? null)) {
+        cargs.push("--common-segs");
+    }
+    if ((params["all_segs"] ?? null)) {
+        cargs.push("--all-segs");
     }
     if ((params["intable"] ?? null) !== null) {
         cargs.push(
@@ -204,15 +234,6 @@ function merge_stats_tables_cargs(
             (params["delimiter"] ?? null)
         );
     }
-    if ((params["common_segs"] ?? null)) {
-        cargs.push("--common-segs");
-    }
-    if ((params["all_segs"] ?? null)) {
-        cargs.push("--all-segs");
-    }
-    cargs.push("[SEGIDS_FROM_FILE]");
-    cargs.push("[SEGNO]");
-    cargs.push("[NO_SEGNO_FLAG]");
     if ((params["transpose"] ?? null)) {
         cargs.push("--transpose");
     }
@@ -273,14 +294,16 @@ function merge_stats_tables_execute(
 function merge_stats_tables(
     outputfile: string,
     meas: string,
+    subjects: Array<string> | null = null,
     subject: string | null = null,
-    input: InputPathType | null = null,
     subjectsfile: InputPathType | null = null,
+    inputs: Array<InputPathType> | null = null,
+    input: InputPathType | null = null,
+    common_segs: boolean = false,
+    all_segs: boolean = false,
     intable: InputPathType | null = null,
     subdir: string | null = null,
     delimiter: string | null = null,
-    common_segs: boolean = false,
-    all_segs: boolean = false,
     transpose: boolean = false,
     skip: boolean = false,
     debug: boolean = false,
@@ -295,14 +318,16 @@ function merge_stats_tables(
     
      * @param outputfile The output table file
      * @param meas Measure to write in output table
+     * @param subjects Specify the subjects names
      * @param subject Specify a single subject name
-     * @param input Specify a single input stat file
      * @param subjectsfile Name of the file which has the list of subjects (one subject per line)
+     * @param inputs Specify all the input stat files
+     * @param input Specify a single input stat file
+     * @param common_segs Output only the common segmentations of all the statsfiles given
+     * @param all_segs Output all the segmentations of the statsfiles given
      * @param intable Use `fname` as input (REQUIRED when passing subject ids)
      * @param subdir Use `subdir` instead of default "stats/" when passing subject ids
      * @param delimiter Delimiter between measures in the table. Options are 'tab', 'space', 'comma', and 'semicolon'. Default is 'space'.
-     * @param common_segs Output only the common segmentations of all the statsfiles given
-     * @param all_segs Output all the segmentations of the statsfiles given
      * @param transpose Transpose the table (default is subjects in rows and segmentations in cols)
      * @param skip If a subject does not have a stats file, skip it instead of exiting.
      * @param debug Increase verbosity for debugging purposes.
@@ -312,7 +337,7 @@ function merge_stats_tables(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MERGE_STATS_TABLES_METADATA);
-    const params = merge_stats_tables_params(outputfile, meas, subject, input, subjectsfile, intable, subdir, delimiter, common_segs, all_segs, transpose, skip, debug)
+    const params = merge_stats_tables_params(outputfile, meas, subjects, subject, subjectsfile, inputs, input, common_segs, all_segs, intable, subdir, delimiter, transpose, skip, debug)
     return merge_stats_tables_execute(params, execution);
 }
 

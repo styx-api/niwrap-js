@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_CA_LABEL_METADATA: Metadata = {
-    id: "035eecaadad51f1937fb29e024f977f0c081a952.boutiques",
+    id: "c1394ffdf41a9c43fe2d194cfb7472bc5e4fc8a8.boutiques",
     name: "mri_ca_label",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -17,6 +17,54 @@ interface MriCaLabelParameters {
     "transform_file": InputPathType;
     "gca_file": InputPathType;
     "output_volume": string;
+    "cross_sequence": boolean;
+    "no_gibbs": boolean;
+    "wm_segmentation"?: string | null | undefined;
+    "conform": boolean;
+    "topo_dist_thresh"?: number | null | undefined;
+    "topo_volume_thresh1"?: number | null | undefined;
+    "topo_volume_thresh2"?: number | null | undefined;
+    "norm_pd": boolean;
+    "thin_temporal_lobe"?: string | null | undefined;
+    "debug_voxel"?: Array<number> | null | undefined;
+    "debug_node"?: Array<number> | null | undefined;
+    "debug_label"?: number | null | undefined;
+    "tr"?: number | null | undefined;
+    "te"?: number | null | undefined;
+    "alpha"?: number | null | undefined;
+    "example"?: Array<InputPathType> | null | undefined;
+    "pthresh"?: number | null | undefined;
+    "niter"?: number | null | undefined;
+    "write_probs"?: string | null | undefined;
+    "novar": boolean;
+    "regularize"?: number | null | undefined;
+    "nohippo": boolean;
+    "fixed_white_matter"?: string | null | undefined;
+    "mri"?: InputPathType | null | undefined;
+    "histogram_equalization"?: InputPathType | null | undefined;
+    "renorm"?: InputPathType | null | undefined;
+    "flash": boolean;
+    "flash_params"?: InputPathType | null | undefined;
+    "renormalize"?: string | null | undefined;
+    "set_input_volume"?: InputPathType | null | undefined;
+    "histogram_normalize": boolean;
+    "mean_filter"?: number | null | undefined;
+    "write_snapshots"?: string | null | undefined;
+    "mask_final_labeling"?: InputPathType | null | undefined;
+    "expand"?: number | null | undefined;
+    "max_iterations"?: number | null | undefined;
+    "filter_labeled_volume"?: string | null | undefined;
+    "longitudinal_processing"?: string | null | undefined;
+    "relabel_unlikely"?: string | null | undefined;
+    "disables_wmsa": boolean;
+    "fix_ventricle"?: string | null | undefined;
+    "insert_wm_bet_putctx"?: string | null | undefined;
+    "sa_insert_wm_bet_putctx"?: string | null | undefined;
+    "insert_from_seg"?: string | null | undefined;
+    "sa_insert_from_seg"?: string | null | undefined;
+    "cblum_from_seg"?: string | null | undefined;
+    "sa_cblum_from_seg"?: string | null | undefined;
+    "threads"?: number | null | undefined;
 }
 
 
@@ -76,6 +124,54 @@ function mri_ca_label_params(
     transform_file: InputPathType,
     gca_file: InputPathType,
     output_volume: string,
+    cross_sequence: boolean = false,
+    no_gibbs: boolean = false,
+    wm_segmentation: string | null = null,
+    conform: boolean = false,
+    topo_dist_thresh: number | null = null,
+    topo_volume_thresh1: number | null = null,
+    topo_volume_thresh2: number | null = null,
+    norm_pd: boolean = false,
+    thin_temporal_lobe: string | null = null,
+    debug_voxel: Array<number> | null = null,
+    debug_node: Array<number> | null = null,
+    debug_label: number | null = null,
+    tr: number | null = null,
+    te: number | null = null,
+    alpha: number | null = null,
+    example: Array<InputPathType> | null = null,
+    pthresh: number | null = null,
+    niter: number | null = null,
+    write_probs: string | null = null,
+    novar: boolean = false,
+    regularize: number | null = null,
+    nohippo: boolean = false,
+    fixed_white_matter: string | null = null,
+    mri: InputPathType | null = null,
+    histogram_equalization: InputPathType | null = null,
+    renorm: InputPathType | null = null,
+    flash: boolean = false,
+    flash_params: InputPathType | null = null,
+    renormalize: string | null = null,
+    set_input_volume: InputPathType | null = null,
+    histogram_normalize: boolean = false,
+    mean_filter: number | null = null,
+    write_snapshots: string | null = null,
+    mask_final_labeling: InputPathType | null = null,
+    expand: number | null = null,
+    max_iterations: number | null = null,
+    filter_labeled_volume: string | null = null,
+    longitudinal_processing: string | null = null,
+    relabel_unlikely: string | null = null,
+    disables_wmsa: boolean = false,
+    fix_ventricle: string | null = null,
+    insert_wm_bet_putctx: string | null = null,
+    sa_insert_wm_bet_putctx: string | null = null,
+    insert_from_seg: string | null = null,
+    sa_insert_from_seg: string | null = null,
+    cblum_from_seg: string | null = null,
+    sa_cblum_from_seg: string | null = null,
+    threads: number | null = null,
 ): MriCaLabelParameters {
     /**
      * Build parameters.
@@ -84,6 +180,54 @@ function mri_ca_label_params(
      * @param transform_file Transform file for the registration.
      * @param gca_file GCA file for the atlas.
      * @param output_volume Output labeled volume.
+     * @param cross_sequence Label a volume acquired with sequence different than atlas
+     * @param no_gibbs Disable gibbs priors
+     * @param wm_segmentation Use wm segmentation
+     * @param conform Interpolate volume to be isotropic 1mm^3
+     * @param topo_dist_thresh Ventricle segments distance threshold
+     * @param topo_volume_thresh1 First ventricle segments volume threshold
+     * @param topo_volume_thresh2 Second ventricle segments volume threshold
+     * @param norm_pd Normalize PD image to GCA means
+     * @param thin_temporal_lobe Use file to label thin temporal lobe
+     * @param debug_voxel Debug voxel coordinates
+     * @param debug_node Debug node coordinates
+     * @param debug_label Debug label
+     * @param tr Set TR in msec
+     * @param te Set TE in msec
+     * @param alpha Set alpha in radians
+     * @param example Use T1 and segmentation as example
+     * @param pthresh P threshold for adaptive renormalization
+     * @param niter Number of iterations for max likelihood
+     * @param write_probs Write label probabilities to filename
+     * @param novar Do not use variance in classification
+     * @param regularize Regularize variance to be sigma+nC(noise)
+     * @param nohippo Do not auto-edit hippocampus
+     * @param fixed_white_matter Use fixed white matter segmentation
+     * @param mri Write most likely MR volume to file
+     * @param histogram_equalization Use histogram equalization from volume
+     * @param renorm Renormalize using predicted intensity values
+     * @param flash Use FLASH forward model to predict intensity values
+     * @param flash_params Use FLASH forward model and tissue params to predict
+     * @param renormalize Renormalize class means iter times after initial label with window of wsize
+     * @param set_input_volume Set input volume
+     * @param histogram_normalize Use GCA to histogram normalize input image
+     * @param mean_filter Mean filter n time to conditional densities
+     * @param write_snapshots Write snapshots of gibbs process every n times to filename
+     * @param mask_final_labeling Use mri_vol to mask final labeling
+     * @param expand Expand
+     * @param max_iterations Set max iterations
+     * @param filter_labeled_volume Filter labeled volume with threshold t
+     * @param longitudinal_processing Longitudinal processing with registrations
+     * @param relabel_unlikely Reclassify unlikely voxels
+     * @param disables_wmsa Disables WMSA labels
+     * @param fix_ventricle Fix underlabeled ventricle
+     * @param insert_wm_bet_putctx Insert WM between putamen and cortex
+     * @param sa_insert_wm_bet_putctx Stand-alone operation to insert WM between putamen and cortex
+     * @param insert_from_seg Insert given indices from segmentation volume
+     * @param sa_insert_from_seg Stand-alone insert given indices from segmentation volume
+     * @param cblum_from_seg Insert indices into segmentation volume with default label set
+     * @param sa_cblum_from_seg Stand-alone operation to insert indices into segmentation with default label set
+     * @param threads Set the number of open mp threads
     
      * @returns Parameter dictionary
      */
@@ -93,7 +237,133 @@ function mri_ca_label_params(
         "transform_file": transform_file,
         "gca_file": gca_file,
         "output_volume": output_volume,
+        "cross_sequence": cross_sequence,
+        "no_gibbs": no_gibbs,
+        "conform": conform,
+        "norm_pd": norm_pd,
+        "novar": novar,
+        "nohippo": nohippo,
+        "flash": flash,
+        "histogram_normalize": histogram_normalize,
+        "disables_wmsa": disables_wmsa,
     };
+    if (wm_segmentation !== null) {
+        params["wm_segmentation"] = wm_segmentation;
+    }
+    if (topo_dist_thresh !== null) {
+        params["topo_dist_thresh"] = topo_dist_thresh;
+    }
+    if (topo_volume_thresh1 !== null) {
+        params["topo_volume_thresh1"] = topo_volume_thresh1;
+    }
+    if (topo_volume_thresh2 !== null) {
+        params["topo_volume_thresh2"] = topo_volume_thresh2;
+    }
+    if (thin_temporal_lobe !== null) {
+        params["thin_temporal_lobe"] = thin_temporal_lobe;
+    }
+    if (debug_voxel !== null) {
+        params["debug_voxel"] = debug_voxel;
+    }
+    if (debug_node !== null) {
+        params["debug_node"] = debug_node;
+    }
+    if (debug_label !== null) {
+        params["debug_label"] = debug_label;
+    }
+    if (tr !== null) {
+        params["tr"] = tr;
+    }
+    if (te !== null) {
+        params["te"] = te;
+    }
+    if (alpha !== null) {
+        params["alpha"] = alpha;
+    }
+    if (example !== null) {
+        params["example"] = example;
+    }
+    if (pthresh !== null) {
+        params["pthresh"] = pthresh;
+    }
+    if (niter !== null) {
+        params["niter"] = niter;
+    }
+    if (write_probs !== null) {
+        params["write_probs"] = write_probs;
+    }
+    if (regularize !== null) {
+        params["regularize"] = regularize;
+    }
+    if (fixed_white_matter !== null) {
+        params["fixed_white_matter"] = fixed_white_matter;
+    }
+    if (mri !== null) {
+        params["mri"] = mri;
+    }
+    if (histogram_equalization !== null) {
+        params["histogram_equalization"] = histogram_equalization;
+    }
+    if (renorm !== null) {
+        params["renorm"] = renorm;
+    }
+    if (flash_params !== null) {
+        params["flash_params"] = flash_params;
+    }
+    if (renormalize !== null) {
+        params["renormalize"] = renormalize;
+    }
+    if (set_input_volume !== null) {
+        params["set_input_volume"] = set_input_volume;
+    }
+    if (mean_filter !== null) {
+        params["mean_filter"] = mean_filter;
+    }
+    if (write_snapshots !== null) {
+        params["write_snapshots"] = write_snapshots;
+    }
+    if (mask_final_labeling !== null) {
+        params["mask_final_labeling"] = mask_final_labeling;
+    }
+    if (expand !== null) {
+        params["expand"] = expand;
+    }
+    if (max_iterations !== null) {
+        params["max_iterations"] = max_iterations;
+    }
+    if (filter_labeled_volume !== null) {
+        params["filter_labeled_volume"] = filter_labeled_volume;
+    }
+    if (longitudinal_processing !== null) {
+        params["longitudinal_processing"] = longitudinal_processing;
+    }
+    if (relabel_unlikely !== null) {
+        params["relabel_unlikely"] = relabel_unlikely;
+    }
+    if (fix_ventricle !== null) {
+        params["fix_ventricle"] = fix_ventricle;
+    }
+    if (insert_wm_bet_putctx !== null) {
+        params["insert_wm_bet_putctx"] = insert_wm_bet_putctx;
+    }
+    if (sa_insert_wm_bet_putctx !== null) {
+        params["sa_insert_wm_bet_putctx"] = sa_insert_wm_bet_putctx;
+    }
+    if (insert_from_seg !== null) {
+        params["insert_from_seg"] = insert_from_seg;
+    }
+    if (sa_insert_from_seg !== null) {
+        params["sa_insert_from_seg"] = sa_insert_from_seg;
+    }
+    if (cblum_from_seg !== null) {
+        params["cblum_from_seg"] = cblum_from_seg;
+    }
+    if (sa_cblum_from_seg !== null) {
+        params["sa_cblum_from_seg"] = sa_cblum_from_seg;
+    }
+    if (threads !== null) {
+        params["threads"] = threads;
+    }
     return params;
 }
 
@@ -116,7 +386,267 @@ function mri_ca_label_cargs(
     cargs.push(execution.inputFile((params["transform_file"] ?? null)));
     cargs.push(execution.inputFile((params["gca_file"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
-    cargs.push("[OPTIONS]");
+    if ((params["cross_sequence"] ?? null)) {
+        cargs.push("-cross-sequence");
+    }
+    if ((params["no_gibbs"] ?? null)) {
+        cargs.push("-nogibbs");
+    }
+    if ((params["wm_segmentation"] ?? null) !== null) {
+        cargs.push(
+            "-wm",
+            (params["wm_segmentation"] ?? null)
+        );
+    }
+    if ((params["conform"] ?? null)) {
+        cargs.push("-conform");
+    }
+    if ((params["topo_dist_thresh"] ?? null) !== null) {
+        cargs.push(
+            "-topo_dist_thresh",
+            String((params["topo_dist_thresh"] ?? null))
+        );
+    }
+    if ((params["topo_volume_thresh1"] ?? null) !== null) {
+        cargs.push(
+            "-topo_volume_thresh1",
+            String((params["topo_volume_thresh1"] ?? null))
+        );
+    }
+    if ((params["topo_volume_thresh2"] ?? null) !== null) {
+        cargs.push(
+            "-topo_volume_thresh2",
+            String((params["topo_volume_thresh2"] ?? null))
+        );
+    }
+    if ((params["norm_pd"] ?? null)) {
+        cargs.push("-normpd");
+    }
+    if ((params["thin_temporal_lobe"] ?? null) !== null) {
+        cargs.push(
+            "-tl",
+            (params["thin_temporal_lobe"] ?? null)
+        );
+    }
+    if ((params["debug_voxel"] ?? null) !== null) {
+        cargs.push(
+            "-debug_voxel",
+            ...(params["debug_voxel"] ?? null).map(String)
+        );
+    }
+    if ((params["debug_node"] ?? null) !== null) {
+        cargs.push(
+            "-debug_node",
+            ...(params["debug_node"] ?? null).map(String)
+        );
+    }
+    if ((params["debug_label"] ?? null) !== null) {
+        cargs.push(
+            "-debug_label",
+            String((params["debug_label"] ?? null))
+        );
+    }
+    if ((params["tr"] ?? null) !== null) {
+        cargs.push(
+            "-tr",
+            String((params["tr"] ?? null))
+        );
+    }
+    if ((params["te"] ?? null) !== null) {
+        cargs.push(
+            "-te",
+            String((params["te"] ?? null))
+        );
+    }
+    if ((params["alpha"] ?? null) !== null) {
+        cargs.push(
+            "-alpha",
+            String((params["alpha"] ?? null))
+        );
+    }
+    if ((params["example"] ?? null) !== null) {
+        cargs.push(
+            "-example",
+            ...(params["example"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["pthresh"] ?? null) !== null) {
+        cargs.push(
+            "-pthresh",
+            String((params["pthresh"] ?? null))
+        );
+    }
+    if ((params["niter"] ?? null) !== null) {
+        cargs.push(
+            "-niter",
+            String((params["niter"] ?? null))
+        );
+    }
+    if ((params["write_probs"] ?? null) !== null) {
+        cargs.push(
+            "-write_probs",
+            (params["write_probs"] ?? null)
+        );
+    }
+    if ((params["novar"] ?? null)) {
+        cargs.push("-novar");
+    }
+    if ((params["regularize"] ?? null) !== null) {
+        cargs.push(
+            "-regularize",
+            String((params["regularize"] ?? null))
+        );
+    }
+    if ((params["nohippo"] ?? null)) {
+        cargs.push("-nohippo");
+    }
+    if ((params["fixed_white_matter"] ?? null) !== null) {
+        cargs.push(
+            "-fwm",
+            (params["fixed_white_matter"] ?? null)
+        );
+    }
+    if ((params["mri"] ?? null) !== null) {
+        cargs.push(
+            "-mri",
+            execution.inputFile((params["mri"] ?? null))
+        );
+    }
+    if ((params["histogram_equalization"] ?? null) !== null) {
+        cargs.push(
+            "-heq",
+            execution.inputFile((params["histogram_equalization"] ?? null))
+        );
+    }
+    if ((params["renorm"] ?? null) !== null) {
+        cargs.push(
+            "-renorm",
+            execution.inputFile((params["renorm"] ?? null))
+        );
+    }
+    if ((params["flash"] ?? null)) {
+        cargs.push("-flash");
+    }
+    if ((params["flash_params"] ?? null) !== null) {
+        cargs.push(
+            "-flash_params",
+            execution.inputFile((params["flash_params"] ?? null))
+        );
+    }
+    if ((params["renormalize"] ?? null) !== null) {
+        cargs.push(
+            "-renormalize",
+            (params["renormalize"] ?? null)
+        );
+    }
+    if ((params["set_input_volume"] ?? null) !== null) {
+        cargs.push(
+            "-r",
+            execution.inputFile((params["set_input_volume"] ?? null))
+        );
+    }
+    if ((params["histogram_normalize"] ?? null)) {
+        cargs.push("-h");
+    }
+    if ((params["mean_filter"] ?? null) !== null) {
+        cargs.push(
+            "-a",
+            String((params["mean_filter"] ?? null))
+        );
+    }
+    if ((params["write_snapshots"] ?? null) !== null) {
+        cargs.push(
+            "-w",
+            (params["write_snapshots"] ?? null)
+        );
+    }
+    if ((params["mask_final_labeling"] ?? null) !== null) {
+        cargs.push(
+            "-m",
+            execution.inputFile((params["mask_final_labeling"] ?? null))
+        );
+    }
+    if ((params["expand"] ?? null) !== null) {
+        cargs.push(
+            "-e",
+            String((params["expand"] ?? null))
+        );
+    }
+    if ((params["max_iterations"] ?? null) !== null) {
+        cargs.push(
+            "-n",
+            String((params["max_iterations"] ?? null))
+        );
+    }
+    if ((params["filter_labeled_volume"] ?? null) !== null) {
+        cargs.push(
+            "-f",
+            (params["filter_labeled_volume"] ?? null)
+        );
+    }
+    if ((params["longitudinal_processing"] ?? null) !== null) {
+        cargs.push(
+            "-L",
+            (params["longitudinal_processing"] ?? null)
+        );
+    }
+    if ((params["relabel_unlikely"] ?? null) !== null) {
+        cargs.push(
+            "-RELABEL_UNLIKELY",
+            (params["relabel_unlikely"] ?? null)
+        );
+    }
+    if ((params["disables_wmsa"] ?? null)) {
+        cargs.push("-nowmsa");
+    }
+    if ((params["fix_ventricle"] ?? null) !== null) {
+        cargs.push(
+            "-vent-fix",
+            (params["fix_ventricle"] ?? null)
+        );
+    }
+    if ((params["insert_wm_bet_putctx"] ?? null) !== null) {
+        cargs.push(
+            "-insert-wm-bet-putctx",
+            (params["insert_wm_bet_putctx"] ?? null)
+        );
+    }
+    if ((params["sa_insert_wm_bet_putctx"] ?? null) !== null) {
+        cargs.push(
+            "-sa-insert-wm-bet-putctx",
+            (params["sa_insert_wm_bet_putctx"] ?? null)
+        );
+    }
+    if ((params["insert_from_seg"] ?? null) !== null) {
+        cargs.push(
+            "-insert-from-seg",
+            (params["insert_from_seg"] ?? null)
+        );
+    }
+    if ((params["sa_insert_from_seg"] ?? null) !== null) {
+        cargs.push(
+            "-sa-insert-from-seg",
+            (params["sa_insert_from_seg"] ?? null)
+        );
+    }
+    if ((params["cblum_from_seg"] ?? null) !== null) {
+        cargs.push(
+            "-cblum-from-seg",
+            (params["cblum_from_seg"] ?? null)
+        );
+    }
+    if ((params["sa_cblum_from_seg"] ?? null) !== null) {
+        cargs.push(
+            "-sa-cblum-from-seg",
+            (params["sa_cblum_from_seg"] ?? null)
+        );
+    }
+    if ((params["threads"] ?? null) !== null) {
+        cargs.push(
+            "-threads",
+            String((params["threads"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -170,6 +700,54 @@ function mri_ca_label(
     transform_file: InputPathType,
     gca_file: InputPathType,
     output_volume: string,
+    cross_sequence: boolean = false,
+    no_gibbs: boolean = false,
+    wm_segmentation: string | null = null,
+    conform: boolean = false,
+    topo_dist_thresh: number | null = null,
+    topo_volume_thresh1: number | null = null,
+    topo_volume_thresh2: number | null = null,
+    norm_pd: boolean = false,
+    thin_temporal_lobe: string | null = null,
+    debug_voxel: Array<number> | null = null,
+    debug_node: Array<number> | null = null,
+    debug_label: number | null = null,
+    tr: number | null = null,
+    te: number | null = null,
+    alpha: number | null = null,
+    example: Array<InputPathType> | null = null,
+    pthresh: number | null = null,
+    niter: number | null = null,
+    write_probs: string | null = null,
+    novar: boolean = false,
+    regularize: number | null = null,
+    nohippo: boolean = false,
+    fixed_white_matter: string | null = null,
+    mri: InputPathType | null = null,
+    histogram_equalization: InputPathType | null = null,
+    renorm: InputPathType | null = null,
+    flash: boolean = false,
+    flash_params: InputPathType | null = null,
+    renormalize: string | null = null,
+    set_input_volume: InputPathType | null = null,
+    histogram_normalize: boolean = false,
+    mean_filter: number | null = null,
+    write_snapshots: string | null = null,
+    mask_final_labeling: InputPathType | null = null,
+    expand: number | null = null,
+    max_iterations: number | null = null,
+    filter_labeled_volume: string | null = null,
+    longitudinal_processing: string | null = null,
+    relabel_unlikely: string | null = null,
+    disables_wmsa: boolean = false,
+    fix_ventricle: string | null = null,
+    insert_wm_bet_putctx: string | null = null,
+    sa_insert_wm_bet_putctx: string | null = null,
+    insert_from_seg: string | null = null,
+    sa_insert_from_seg: string | null = null,
+    cblum_from_seg: string | null = null,
+    sa_cblum_from_seg: string | null = null,
+    threads: number | null = null,
     runner: Runner | null = null,
 ): MriCaLabelOutputs {
     /**
@@ -183,13 +761,61 @@ function mri_ca_label(
      * @param transform_file Transform file for the registration.
      * @param gca_file GCA file for the atlas.
      * @param output_volume Output labeled volume.
+     * @param cross_sequence Label a volume acquired with sequence different than atlas
+     * @param no_gibbs Disable gibbs priors
+     * @param wm_segmentation Use wm segmentation
+     * @param conform Interpolate volume to be isotropic 1mm^3
+     * @param topo_dist_thresh Ventricle segments distance threshold
+     * @param topo_volume_thresh1 First ventricle segments volume threshold
+     * @param topo_volume_thresh2 Second ventricle segments volume threshold
+     * @param norm_pd Normalize PD image to GCA means
+     * @param thin_temporal_lobe Use file to label thin temporal lobe
+     * @param debug_voxel Debug voxel coordinates
+     * @param debug_node Debug node coordinates
+     * @param debug_label Debug label
+     * @param tr Set TR in msec
+     * @param te Set TE in msec
+     * @param alpha Set alpha in radians
+     * @param example Use T1 and segmentation as example
+     * @param pthresh P threshold for adaptive renormalization
+     * @param niter Number of iterations for max likelihood
+     * @param write_probs Write label probabilities to filename
+     * @param novar Do not use variance in classification
+     * @param regularize Regularize variance to be sigma+nC(noise)
+     * @param nohippo Do not auto-edit hippocampus
+     * @param fixed_white_matter Use fixed white matter segmentation
+     * @param mri Write most likely MR volume to file
+     * @param histogram_equalization Use histogram equalization from volume
+     * @param renorm Renormalize using predicted intensity values
+     * @param flash Use FLASH forward model to predict intensity values
+     * @param flash_params Use FLASH forward model and tissue params to predict
+     * @param renormalize Renormalize class means iter times after initial label with window of wsize
+     * @param set_input_volume Set input volume
+     * @param histogram_normalize Use GCA to histogram normalize input image
+     * @param mean_filter Mean filter n time to conditional densities
+     * @param write_snapshots Write snapshots of gibbs process every n times to filename
+     * @param mask_final_labeling Use mri_vol to mask final labeling
+     * @param expand Expand
+     * @param max_iterations Set max iterations
+     * @param filter_labeled_volume Filter labeled volume with threshold t
+     * @param longitudinal_processing Longitudinal processing with registrations
+     * @param relabel_unlikely Reclassify unlikely voxels
+     * @param disables_wmsa Disables WMSA labels
+     * @param fix_ventricle Fix underlabeled ventricle
+     * @param insert_wm_bet_putctx Insert WM between putamen and cortex
+     * @param sa_insert_wm_bet_putctx Stand-alone operation to insert WM between putamen and cortex
+     * @param insert_from_seg Insert given indices from segmentation volume
+     * @param sa_insert_from_seg Stand-alone insert given indices from segmentation volume
+     * @param cblum_from_seg Insert indices into segmentation volume with default label set
+     * @param sa_cblum_from_seg Stand-alone operation to insert indices into segmentation with default label set
+     * @param threads Set the number of open mp threads
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MriCaLabelOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CA_LABEL_METADATA);
-    const params = mri_ca_label_params(input_volumes, transform_file, gca_file, output_volume)
+    const params = mri_ca_label_params(input_volumes, transform_file, gca_file, output_volume, cross_sequence, no_gibbs, wm_segmentation, conform, topo_dist_thresh, topo_volume_thresh1, topo_volume_thresh2, norm_pd, thin_temporal_lobe, debug_voxel, debug_node, debug_label, tr, te, alpha, example, pthresh, niter, write_probs, novar, regularize, nohippo, fixed_white_matter, mri, histogram_equalization, renorm, flash, flash_params, renormalize, set_input_volume, histogram_normalize, mean_filter, write_snapshots, mask_final_labeling, expand, max_iterations, filter_labeled_volume, longitudinal_processing, relabel_unlikely, disables_wmsa, fix_ventricle, insert_wm_bet_putctx, sa_insert_wm_bet_putctx, insert_from_seg, sa_insert_from_seg, cblum_from_seg, sa_cblum_from_seg, threads)
     return mri_ca_label_execute(params, execution);
 }
 

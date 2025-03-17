@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_APPLY_BIAS_METADATA: Metadata = {
-    id: "b81c79a708e537c2c711365f270f39010a6db69c.boutiques",
+    id: "8cf82e2100484415318613b93b2e614090b1cce0.boutiques",
     name: "mri_apply_bias",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -108,7 +108,6 @@ function mri_apply_bias_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mri_apply_bias");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
     cargs.push(execution.inputFile((params["bias_volume"] ?? null)));
     cargs.push((params["output_volume"] ?? null));

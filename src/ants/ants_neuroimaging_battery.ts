@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_NEUROIMAGING_BATTERY_METADATA: Metadata = {
-    id: "8d5f7d9ec665c8a4728e1d76b9ae72be2a9a3489.boutiques",
+    id: "d7414671299662e421a52be2b7c3ae669c337c31.boutiques",
     name: "antsNeuroimagingBattery",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -18,6 +18,20 @@ interface AntsNeuroimagingBatteryParameters {
     "output_name": string;
     "anatomical_image": InputPathType;
     "anatomical_mask": InputPathType;
+    "template"?: InputPathType | null | undefined;
+    "template_transform_name"?: string | null | undefined;
+    "template_labels"?: InputPathType | null | undefined;
+    "dti_flag"?: string | null | undefined;
+    "pcasl_flag"?: string | null | undefined;
+    "pasl_flag"?: string | null | undefined;
+    "pasl_m0_flag"?: string | null | undefined;
+    "bold_flag"?: string | null | undefined;
+    "rsbold_flag"?: string | null | undefined;
+    "mt_flag"?: string | null | undefined;
+    "no_mt_flag"?: string | null | undefined;
+    "temp_directory"?: string | null | undefined;
+    "help": boolean;
+    "info_only": boolean;
 }
 
 
@@ -78,6 +92,20 @@ function ants_neuroimaging_battery_params(
     output_name: string,
     anatomical_image: InputPathType,
     anatomical_mask: InputPathType,
+    template: InputPathType | null = null,
+    template_transform_name: string | null = null,
+    template_labels: InputPathType | null = null,
+    dti_flag: string | null = null,
+    pcasl_flag: string | null = null,
+    pasl_flag: string | null = null,
+    pasl_m0_flag: string | null = null,
+    bold_flag: string | null = null,
+    rsbold_flag: string | null = null,
+    mt_flag: string | null = null,
+    no_mt_flag: string | null = null,
+    temp_directory: string | null = null,
+    help: boolean = false,
+    info_only: boolean = false,
 ): AntsNeuroimagingBatteryParameters {
     /**
      * Build parameters.
@@ -87,6 +115,20 @@ function ants_neuroimaging_battery_params(
      * @param output_name File prefix for outputs.
      * @param anatomical_image Reference subject image (usually T1).
      * @param anatomical_mask Mask of anatomical image, should contain cerebrum, cerebellum, and brainstem.
+     * @param template Template image.
+     * @param template_transform_name Basename of transforms from anatomical to template space (must be in output base dir).
+     * @param template_labels Labels in template space.
+     * @param dti_flag DTI flag in DIRNAME/fileflag/outid format.
+     * @param pcasl_flag pCASL flag in DIRNAME/fileflag/outid format.
+     * @param pasl_flag PASL flag in DIRNAME/fileflag/outid format.
+     * @param pasl_m0_flag PASL M0 flag in DIRNAME/fileflag/outid format.
+     * @param bold_flag BOLD flag in DIRNAME/fileflag/outid format.
+     * @param rsbold_flag RSBOLD flag in DIRNAME/fileflag/outid format.
+     * @param mt_flag MT flag in DIRNAME/fileflag/outid format.
+     * @param no_mt_flag No MT flag in DIRNAME/fileflag/outid format.
+     * @param temp_directory Temporary directory.
+     * @param help Display help information.
+     * @param info_only Look for inputs, output what is there, but don't process any data.
     
      * @returns Parameter dictionary
      */
@@ -97,7 +139,45 @@ function ants_neuroimaging_battery_params(
         "output_name": output_name,
         "anatomical_image": anatomical_image,
         "anatomical_mask": anatomical_mask,
+        "help": help,
+        "info_only": info_only,
     };
+    if (template !== null) {
+        params["template"] = template;
+    }
+    if (template_transform_name !== null) {
+        params["template_transform_name"] = template_transform_name;
+    }
+    if (template_labels !== null) {
+        params["template_labels"] = template_labels;
+    }
+    if (dti_flag !== null) {
+        params["dti_flag"] = dti_flag;
+    }
+    if (pcasl_flag !== null) {
+        params["pcasl_flag"] = pcasl_flag;
+    }
+    if (pasl_flag !== null) {
+        params["pasl_flag"] = pasl_flag;
+    }
+    if (pasl_m0_flag !== null) {
+        params["pasl_m0_flag"] = pasl_m0_flag;
+    }
+    if (bold_flag !== null) {
+        params["bold_flag"] = bold_flag;
+    }
+    if (rsbold_flag !== null) {
+        params["rsbold_flag"] = rsbold_flag;
+    }
+    if (mt_flag !== null) {
+        params["mt_flag"] = mt_flag;
+    }
+    if (no_mt_flag !== null) {
+        params["no_mt_flag"] = no_mt_flag;
+    }
+    if (temp_directory !== null) {
+        params["temp_directory"] = temp_directory;
+    }
     return params;
 }
 
@@ -115,7 +195,7 @@ function ants_neuroimaging_battery_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("antsNeuroimagingBattery.pl");
+    cargs.push("antsNeuroimagingBattery");
     cargs.push(
         "--input-directory",
         (params["input_directory"] ?? null)
@@ -136,7 +216,84 @@ function ants_neuroimaging_battery_cargs(
         "--anatomical-mask",
         execution.inputFile((params["anatomical_mask"] ?? null))
     );
-    cargs.push("[OPTIONAL_INPUTS]");
+    if ((params["template"] ?? null) !== null) {
+        cargs.push(
+            "--template",
+            execution.inputFile((params["template"] ?? null))
+        );
+    }
+    if ((params["template_transform_name"] ?? null) !== null) {
+        cargs.push(
+            "--template-transform-name",
+            (params["template_transform_name"] ?? null)
+        );
+    }
+    if ((params["template_labels"] ?? null) !== null) {
+        cargs.push(
+            "--template-labels",
+            execution.inputFile((params["template_labels"] ?? null))
+        );
+    }
+    if ((params["dti_flag"] ?? null) !== null) {
+        cargs.push(
+            "--dti-flag",
+            (params["dti_flag"] ?? null)
+        );
+    }
+    if ((params["pcasl_flag"] ?? null) !== null) {
+        cargs.push(
+            "--pcasl-flag",
+            (params["pcasl_flag"] ?? null)
+        );
+    }
+    if ((params["pasl_flag"] ?? null) !== null) {
+        cargs.push(
+            "--pasl-flag",
+            (params["pasl_flag"] ?? null)
+        );
+    }
+    if ((params["pasl_m0_flag"] ?? null) !== null) {
+        cargs.push(
+            "--pasl-m0-flag",
+            (params["pasl_m0_flag"] ?? null)
+        );
+    }
+    if ((params["bold_flag"] ?? null) !== null) {
+        cargs.push(
+            "--bold-flag",
+            (params["bold_flag"] ?? null)
+        );
+    }
+    if ((params["rsbold_flag"] ?? null) !== null) {
+        cargs.push(
+            "--rsbold-flag",
+            (params["rsbold_flag"] ?? null)
+        );
+    }
+    if ((params["mt_flag"] ?? null) !== null) {
+        cargs.push(
+            "--mt-flag",
+            (params["mt_flag"] ?? null)
+        );
+    }
+    if ((params["no_mt_flag"] ?? null) !== null) {
+        cargs.push(
+            "--no-mt-flag",
+            (params["no_mt_flag"] ?? null)
+        );
+    }
+    if ((params["temp_directory"] ?? null) !== null) {
+        cargs.push(
+            "--temp-directory",
+            (params["temp_directory"] ?? null)
+        );
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("--help");
+    }
+    if ((params["info_only"] ?? null)) {
+        cargs.push("--info-only");
+    }
     return cargs;
 }
 
@@ -191,6 +348,20 @@ function ants_neuroimaging_battery(
     output_name: string,
     anatomical_image: InputPathType,
     anatomical_mask: InputPathType,
+    template: InputPathType | null = null,
+    template_transform_name: string | null = null,
+    template_labels: InputPathType | null = null,
+    dti_flag: string | null = null,
+    pcasl_flag: string | null = null,
+    pasl_flag: string | null = null,
+    pasl_m0_flag: string | null = null,
+    bold_flag: string | null = null,
+    rsbold_flag: string | null = null,
+    mt_flag: string | null = null,
+    no_mt_flag: string | null = null,
+    temp_directory: string | null = null,
+    help: boolean = false,
+    info_only: boolean = false,
     runner: Runner | null = null,
 ): AntsNeuroimagingBatteryOutputs {
     /**
@@ -205,13 +376,27 @@ function ants_neuroimaging_battery(
      * @param output_name File prefix for outputs.
      * @param anatomical_image Reference subject image (usually T1).
      * @param anatomical_mask Mask of anatomical image, should contain cerebrum, cerebellum, and brainstem.
+     * @param template Template image.
+     * @param template_transform_name Basename of transforms from anatomical to template space (must be in output base dir).
+     * @param template_labels Labels in template space.
+     * @param dti_flag DTI flag in DIRNAME/fileflag/outid format.
+     * @param pcasl_flag pCASL flag in DIRNAME/fileflag/outid format.
+     * @param pasl_flag PASL flag in DIRNAME/fileflag/outid format.
+     * @param pasl_m0_flag PASL M0 flag in DIRNAME/fileflag/outid format.
+     * @param bold_flag BOLD flag in DIRNAME/fileflag/outid format.
+     * @param rsbold_flag RSBOLD flag in DIRNAME/fileflag/outid format.
+     * @param mt_flag MT flag in DIRNAME/fileflag/outid format.
+     * @param no_mt_flag No MT flag in DIRNAME/fileflag/outid format.
+     * @param temp_directory Temporary directory.
+     * @param help Display help information.
+     * @param info_only Look for inputs, output what is there, but don't process any data.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `AntsNeuroimagingBatteryOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_NEUROIMAGING_BATTERY_METADATA);
-    const params = ants_neuroimaging_battery_params(input_directory, output_directory, output_name, anatomical_image, anatomical_mask)
+    const params = ants_neuroimaging_battery_params(input_directory, output_directory, output_name, anatomical_image, anatomical_mask, template, template_transform_name, template_labels, dti_flag, pcasl_flag, pasl_flag, pasl_m0_flag, bold_flag, rsbold_flag, mt_flag, no_mt_flag, temp_directory, help, info_only)
     return ants_neuroimaging_battery_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const HISTO_SYNTHESIZE_METADATA: Metadata = {
-    id: "ebfa527b23cadea769992b1ad756ebe6c1f58512.boutiques",
+    id: "7ba52ad8ca54fc771c31d5fba965b50932dba8fe.boutiques",
     name: "histo_synthesize",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -108,7 +108,6 @@ function histo_synthesize_cargs(
      */
     const cargs: string[] = [];
     cargs.push("histo_synthesize");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["mri_volume"] ?? null)));
     cargs.push(execution.inputFile((params["histo_volume"] ?? null)));
     cargs.push((params["synthetic_histo"] ?? null));

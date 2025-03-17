@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_MAP_CUTS_METADATA: Metadata = {
-    id: "779b9e3d194c64fbf7ebe1bfe928f56ccdd44441.boutiques",
+    id: "c694d790811be0a427c0f191c8203d1e2914b980.boutiques",
     name: "mris_map_cuts",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -99,7 +99,6 @@ function mris_map_cuts_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mris_map_cuts");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["input_patch"] ?? null)));
     cargs.push((params["output_patch"] ?? null));
     return cargs;

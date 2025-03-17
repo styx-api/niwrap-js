@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LISTSUBJ_METADATA: Metadata = {
-    id: "e9369381138405e14a70273bc76d2a91dd2f8045.boutiques",
+    id: "a18d8b3140e25407e3ae5f429d4a4ba694996847.boutiques",
     name: "listsubj",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,6 +14,15 @@ const LISTSUBJ_METADATA: Metadata = {
 interface ListsubjParameters {
     "__STYXTYPE__": "listsubj";
     "subject_dir": string;
+    "cross": boolean;
+    "base": boolean;
+    "long": boolean;
+    "done": boolean;
+    "error": boolean;
+    "running": boolean;
+    "full_path": boolean;
+    "count": boolean;
+    "help": boolean;
 }
 
 
@@ -65,17 +74,44 @@ interface ListsubjOutputs {
 
 function listsubj_params(
     subject_dir: string,
+    cross: boolean = false,
+    base: boolean = false,
+    long: boolean = false,
+    done: boolean = false,
+    error: boolean = false,
+    running: boolean = false,
+    full_path: boolean = false,
+    count: boolean = false,
+    help: boolean = false,
 ): ListsubjParameters {
     /**
      * Build parameters.
     
      * @param subject_dir Directory where subjects are stored
+     * @param cross Only cross-sectional stream
+     * @param base Only base stream
+     * @param long Only longitudinal stream
+     * @param done Only subject IDs with scripts/recon-all.done
+     * @param error Only subject IDs with scripts/recon-all.error
+     * @param running Only subject IDs with scripts/IsRunning.?h
+     * @param full_path Prepend full absolute path
+     * @param count Print number of subjects found
+     * @param help Show this help text
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "listsubj" as const,
         "subject_dir": subject_dir,
+        "cross": cross,
+        "base": base,
+        "long": long,
+        "done": done,
+        "error": error,
+        "running": running,
+        "full_path": full_path,
+        "count": count,
+        "help": help,
     };
     return params;
 }
@@ -95,8 +131,34 @@ function listsubj_cargs(
      */
     const cargs: string[] = [];
     cargs.push("listsubj");
-    cargs.push("[OPTIONS]");
     cargs.push((params["subject_dir"] ?? null));
+    if ((params["cross"] ?? null)) {
+        cargs.push("-c");
+    }
+    if ((params["base"] ?? null)) {
+        cargs.push("-b");
+    }
+    if ((params["long"] ?? null)) {
+        cargs.push("-l");
+    }
+    if ((params["done"] ?? null)) {
+        cargs.push("-d");
+    }
+    if ((params["error"] ?? null)) {
+        cargs.push("-e");
+    }
+    if ((params["running"] ?? null)) {
+        cargs.push("-r");
+    }
+    if ((params["full_path"] ?? null)) {
+        cargs.push("-f");
+    }
+    if ((params["count"] ?? null)) {
+        cargs.push("-n");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-h");
+    }
     return cargs;
 }
 
@@ -146,6 +208,15 @@ function listsubj_execute(
 
 function listsubj(
     subject_dir: string,
+    cross: boolean = false,
+    base: boolean = false,
+    long: boolean = false,
+    done: boolean = false,
+    error: boolean = false,
+    running: boolean = false,
+    full_path: boolean = false,
+    count: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): ListsubjOutputs {
     /**
@@ -156,13 +227,22 @@ function listsubj(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param subject_dir Directory where subjects are stored
+     * @param cross Only cross-sectional stream
+     * @param base Only base stream
+     * @param long Only longitudinal stream
+     * @param done Only subject IDs with scripts/recon-all.done
+     * @param error Only subject IDs with scripts/recon-all.error
+     * @param running Only subject IDs with scripts/IsRunning.?h
+     * @param full_path Prepend full absolute path
+     * @param count Print number of subjects found
+     * @param help Show this help text
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `ListsubjOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LISTSUBJ_METADATA);
-    const params = listsubj_params(subject_dir)
+    const params = listsubj_params(subject_dir, cross, base, long, done, error, running, full_path, count, help)
     return listsubj_execute(params, execution);
 }
 

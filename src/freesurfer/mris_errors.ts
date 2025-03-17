@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_ERRORS_METADATA: Metadata = {
-    id: "ef9b47e313219e97d7f5d816c34ec14bc6f35660.boutiques",
+    id: "84c4666dcea46df17569c6e5d435ebf2cb451d60.boutiques",
     name: "mris_errors",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -95,7 +95,6 @@ function mris_errors_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mris_errors");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["input_image_file"] ?? null)));
     return cargs;
 }

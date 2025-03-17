@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const INFLATE_SUBJECT_SC_METADATA: Metadata = {
-    id: "bdd6f4bcc49d0163426eb09c58fe6f94a9a23109.boutiques",
+    id: "0813ce358c83e50fc62e002b6de9508d35f9a2be.boutiques",
     name: "inflate_subject_sc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,9 @@ const INFLATE_SUBJECT_SC_METADATA: Metadata = {
 
 interface InflateSubjectScParameters {
     "__STYXTYPE__": "inflate_subject_sc";
+    "subject_dir": string;
+    "verbose": boolean;
+    "debug": boolean;
 }
 
 
@@ -68,14 +71,24 @@ interface InflateSubjectScOutputs {
 
 
 function inflate_subject_sc_params(
+    subject_dir: string,
+    verbose: boolean = false,
+    debug: boolean = false,
 ): InflateSubjectScParameters {
     /**
      * Build parameters.
+    
+     * @param subject_dir Path to the subject directory.
+     * @param verbose Enable verbose output.
+     * @param debug Enable debug mode.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "inflate_subject_sc" as const,
+        "subject_dir": subject_dir,
+        "verbose": verbose,
+        "debug": debug,
     };
     return params;
 }
@@ -95,7 +108,13 @@ function inflate_subject_sc_cargs(
      */
     const cargs: string[] = [];
     cargs.push("inflate_subject_sc");
-    cargs.push("[OPTIONS]");
+    cargs.push((params["subject_dir"] ?? null));
+    if ((params["verbose"] ?? null)) {
+        cargs.push("--verbose");
+    }
+    if ((params["debug"] ?? null)) {
+        cargs.push("--debug");
+    }
     return cargs;
 }
 
@@ -114,7 +133,7 @@ function inflate_subject_sc_outputs(
      */
     const ret: InflateSubjectScOutputs = {
         root: execution.outputFile("."),
-        inflated_output: execution.outputFile(["[SUBJECT_DIR]/inflated_output"].join('')),
+        inflated_output: execution.outputFile([(params["subject_dir"] ?? null), "/inflated_output"].join('')),
     };
     return ret;
 }
@@ -145,6 +164,9 @@ function inflate_subject_sc_execute(
 
 
 function inflate_subject_sc(
+    subject_dir: string,
+    verbose: boolean = false,
+    debug: boolean = false,
     runner: Runner | null = null,
 ): InflateSubjectScOutputs {
     /**
@@ -154,13 +176,16 @@ function inflate_subject_sc(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param subject_dir Path to the subject directory.
+     * @param verbose Enable verbose output.
+     * @param debug Enable debug mode.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `InflateSubjectScOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INFLATE_SUBJECT_SC_METADATA);
-    const params = inflate_subject_sc_params()
+    const params = inflate_subject_sc_params(subject_dir, verbose, debug)
     return inflate_subject_sc_execute(params, execution);
 }
 

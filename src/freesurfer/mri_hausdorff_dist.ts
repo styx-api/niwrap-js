@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_HAUSDORFF_DIST_METADATA: Metadata = {
-    id: "44ae0e98e23c4f3e6ba34eebfe000f22002a6a97.boutiques",
+    id: "fcb951f6d5703b00765f951fbd55babee3db2ce4.boutiques",
     name: "mri_hausdorff_dist",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -137,7 +137,6 @@ function mri_hausdorff_dist_cargs(
     cargs.push(execution.inputFile((params["vol1"] ?? null)));
     cargs.push(execution.inputFile((params["vol2"] ?? null)));
     cargs.push((params["output_text_file"] ?? null));
-    cargs.push("[BINARIZE_FLAG]");
     if ((params["threshold"] ?? null) !== null) {
         cargs.push(
             "-b",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_TRANSFORM_FILE_METADATA: Metadata = {
-    id: "224c137774aff43d94d1fecb5c8b4a19ae81816c.boutiques",
+    id: "d418439c73661bae3620741d30dc78169c5a445e.boutiques",
     name: "ConvertTransformFile",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -16,6 +16,10 @@ interface ConvertTransformFileParameters {
     "dimensions": number;
     "input_transform_file": InputPathType;
     "output_transform_file": string;
+    "matrix": boolean;
+    "homogeneous_matrix": boolean;
+    "RAS": boolean;
+    "convert_to_affine_type": boolean;
 }
 
 
@@ -69,6 +73,10 @@ function convert_transform_file_params(
     dimensions: number,
     input_transform_file: InputPathType,
     output_transform_file: string,
+    matrix: boolean = false,
+    homogeneous_matrix: boolean = false,
+    ras: boolean = false,
+    convert_to_affine_type: boolean = false,
 ): ConvertTransformFileParameters {
     /**
      * Build parameters.
@@ -76,6 +84,10 @@ function convert_transform_file_params(
      * @param dimensions Dimensionality of the transform file.
      * @param input_transform_file Path to the input transform file.
      * @param output_transform_file Path for the output transform file.
+     * @param matrix Output only the transform matrix to a text file, one row per line with space-delimited values. Only works for specific transform types.
+     * @param homogeneous_matrix Output an N+1 square homogeneous matrix from the transform matrix and offset. Only works for specific transform types.
+     * @param ras Convert the output into the RAS coordinate system if combined with 'matrix' or 'homogeneousMatrix'.
+     * @param convert_to_affine_type Convert the input transform type to AffineTransform and output again as a binary transform file.
     
      * @returns Parameter dictionary
      */
@@ -84,6 +96,10 @@ function convert_transform_file_params(
         "dimensions": dimensions,
         "input_transform_file": input_transform_file,
         "output_transform_file": output_transform_file,
+        "matrix": matrix,
+        "homogeneous_matrix": homogeneous_matrix,
+        "RAS": ras,
+        "convert_to_affine_type": convert_to_affine_type,
     };
     return params;
 }
@@ -106,7 +122,18 @@ function convert_transform_file_cargs(
     cargs.push(String((params["dimensions"] ?? null)));
     cargs.push(execution.inputFile((params["input_transform_file"] ?? null)));
     cargs.push((params["output_transform_file"] ?? null));
-    cargs.push("[OPTIONS]");
+    if ((params["matrix"] ?? null)) {
+        cargs.push("--matrix");
+    }
+    if ((params["homogeneous_matrix"] ?? null)) {
+        cargs.push("--homogeneousMatrix");
+    }
+    if ((params["RAS"] ?? null)) {
+        cargs.push("--RAS");
+    }
+    if ((params["convert_to_affine_type"] ?? null)) {
+        cargs.push("--convertToAffineType");
+    }
     return cargs;
 }
 
@@ -158,6 +185,10 @@ function convert_transform_file(
     dimensions: number,
     input_transform_file: InputPathType,
     output_transform_file: string,
+    matrix: boolean = false,
+    homogeneous_matrix: boolean = false,
+    ras: boolean = false,
+    convert_to_affine_type: boolean = false,
     runner: Runner | null = null,
 ): ConvertTransformFileOutputs {
     /**
@@ -170,13 +201,17 @@ function convert_transform_file(
      * @param dimensions Dimensionality of the transform file.
      * @param input_transform_file Path to the input transform file.
      * @param output_transform_file Path for the output transform file.
+     * @param matrix Output only the transform matrix to a text file, one row per line with space-delimited values. Only works for specific transform types.
+     * @param homogeneous_matrix Output an N+1 square homogeneous matrix from the transform matrix and offset. Only works for specific transform types.
+     * @param ras Convert the output into the RAS coordinate system if combined with 'matrix' or 'homogeneousMatrix'.
+     * @param convert_to_affine_type Convert the input transform type to AffineTransform and output again as a binary transform file.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `ConvertTransformFileOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_TRANSFORM_FILE_METADATA);
-    const params = convert_transform_file_params(dimensions, input_transform_file, output_transform_file)
+    const params = convert_transform_file_params(dimensions, input_transform_file, output_transform_file, matrix, homogeneous_matrix, ras, convert_to_affine_type)
     return convert_transform_file_execute(params, execution);
 }
 

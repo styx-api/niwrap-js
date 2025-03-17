@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_CURVATURE_STATS_METADATA: Metadata = {
-    id: "471b147c9e4a5986d26ffc5619a8d1ade9f883a3.boutiques",
+    id: "685caf4bb7ec6024d76b04e41ee81910490c86e0.boutiques",
     name: "mris_curvature_stats",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -15,6 +15,41 @@ interface MrisCurvatureStatsParameters {
     "__STYXTYPE__": "mris_curvature_stats";
     "subject_name": string;
     "hemisphere": string;
+    "curvature_files"?: Array<InputPathType> | null | undefined;
+    "number_of_averages"?: number | null | undefined;
+    "principal_curvatures": boolean;
+    "discrete_method": boolean;
+    "continuous_method": boolean;
+    "signed_principals": boolean;
+    "vertex_area_weigh": boolean;
+    "vertex_area_normalize": boolean;
+    "vertex_area_weigh_frac": boolean;
+    "vertex_area_normalize_frac": boolean;
+    "post_scale"?: number | null | undefined;
+    "write_curvature_files": boolean;
+    "shape_index": boolean;
+    "output_file_stem"?: string | null | undefined;
+    "histogram_bins"?: number | null | undefined;
+    "percentage_histogram_bins"?: number | null | undefined;
+    "bin_size"?: number | null | undefined;
+    "bin_start_curvature"?: number | null | undefined;
+    "bin_end_curvature"?: number | null | undefined;
+    "label_file"?: InputPathType | null | undefined;
+    "regional_percentages": boolean;
+    "high_pass_filter"?: number | null | undefined;
+    "low_pass_filter"?: number | null | undefined;
+    "high_pass_filter_gaussian"?: number | null | undefined;
+    "low_pass_filter_gaussian"?: number | null | undefined;
+    "filter_label"?: InputPathType | null | undefined;
+    "min_max_info": boolean;
+    "normalize_curvature": boolean;
+    "summary_condition"?: string | null | undefined;
+    "min_curvature_scale"?: number | null | undefined;
+    "max_curvature_scale"?: number | null | undefined;
+    "scale_factor"?: number | null | undefined;
+    "version": boolean;
+    "set_zero_vertex"?: number | null | undefined;
+    "max_ulps"?: number | null | undefined;
 }
 
 
@@ -46,7 +81,6 @@ function dynOutputs(
      * @returns Build outputs function.
      */
     const outputsFuncs = {
-        "mris_curvature_stats": mris_curvature_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -62,22 +96,88 @@ interface MrisCurvatureStatsOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Scaled curvature file.
-     */
-    scaled_curvature_file: OutputPathType;
 }
 
 
 function mris_curvature_stats_params(
     subject_name: string,
     hemisphere: string,
+    curvature_files: Array<InputPathType> | null = null,
+    number_of_averages: number | null = null,
+    principal_curvatures: boolean = false,
+    discrete_method: boolean = false,
+    continuous_method: boolean = false,
+    signed_principals: boolean = false,
+    vertex_area_weigh: boolean = false,
+    vertex_area_normalize: boolean = false,
+    vertex_area_weigh_frac: boolean = false,
+    vertex_area_normalize_frac: boolean = false,
+    post_scale: number | null = null,
+    write_curvature_files: boolean = false,
+    shape_index: boolean = false,
+    output_file_stem: string | null = null,
+    histogram_bins: number | null = null,
+    percentage_histogram_bins: number | null = null,
+    bin_size: number | null = null,
+    bin_start_curvature: number | null = null,
+    bin_end_curvature: number | null = null,
+    label_file: InputPathType | null = null,
+    regional_percentages: boolean = false,
+    high_pass_filter: number | null = null,
+    low_pass_filter: number | null = null,
+    high_pass_filter_gaussian: number | null = null,
+    low_pass_filter_gaussian: number | null = null,
+    filter_label: InputPathType | null = null,
+    min_max_info: boolean = false,
+    normalize_curvature: boolean = false,
+    summary_condition: string | null = null,
+    min_curvature_scale: number | null = null,
+    max_curvature_scale: number | null = null,
+    scale_factor: number | null = null,
+    version: boolean = false,
+    set_zero_vertex: number | null = null,
+    max_ulps: number | null = null,
 ): MrisCurvatureStatsParameters {
     /**
      * Build parameters.
     
      * @param subject_name Subject name defined in the SUBJECTS_DIR
      * @param hemisphere Hemisphere, can be 'lh' or 'rh'
+     * @param curvature_files Optional list of curvature files to process
+     * @param number_of_averages Average the curvature number of times.
+     * @param principal_curvatures Calculate principal curvatures and derived maps.
+     * @param discrete_method Use discrete calculation method for principal curvatures.
+     * @param continuous_method Use continuous calculation method for principal curvatures.
+     * @param signed_principals Assign signed max and min to principal curvature K1 and K2.
+     * @param vertex_area_weigh Multiply curvature value by the area of its vertex.
+     * @param vertex_area_normalize Divide curvature value by the area of its vertex.
+     * @param vertex_area_weigh_frac Weigh curvature by the fractional vertex area.
+     * @param vertex_area_normalize_frac Normalize curvature by the fractional vertex area.
+     * @param post_scale Scale the mean and areaNorm integrals by a factor.
+     * @param write_curvature_files Write the calculated curvature values to files in FreeSurfer format.
+     * @param shape_index Calculate shape index despite potential atan issues.
+     * @param output_file_stem Output file stem for results.
+     * @param histogram_bins Number of bins for curvature histogram.
+     * @param percentage_histogram_bins Number of bins for percentage-based curvature histogram.
+     * @param bin_size Size of each histogram bin.
+     * @param bin_start_curvature Histogram bin start value.
+     * @param bin_end_curvature Histogram bin end value.
+     * @param label_file Label file to constrain statistics to a region.
+     * @param regional_percentages Report integral percentages relative to the region.
+     * @param high_pass_filter High pass filter for curvature values.
+     * @param low_pass_filter Low pass filter for curvature values.
+     * @param high_pass_filter_gaussian High pass filter for Gaussian curvature values.
+     * @param low_pass_filter_gaussian Low pass filter for Gaussian curvature values.
+     * @param filter_label Store processed surface vertices in a label file.
+     * @param min_max_info Output min/max information for the processed curvature.
+     * @param normalize_curvature Normalize the curvature before computation.
+     * @param summary_condition Write out stats as a summary condition.
+     * @param min_curvature_scale Scale curvature values between min and max curvature.
+     * @param max_curvature_scale End value for curvature scaling.
+     * @param scale_factor Scale curvature values with a factor.
+     * @param version Print out version number.
+     * @param set_zero_vertex Sets the curvature values at that index to zero.
+     * @param max_ulps Toggle a more rigorous floating point comparison operation.
     
      * @returns Parameter dictionary
      */
@@ -85,7 +185,84 @@ function mris_curvature_stats_params(
         "__STYXTYPE__": "mris_curvature_stats" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
+        "principal_curvatures": principal_curvatures,
+        "discrete_method": discrete_method,
+        "continuous_method": continuous_method,
+        "signed_principals": signed_principals,
+        "vertex_area_weigh": vertex_area_weigh,
+        "vertex_area_normalize": vertex_area_normalize,
+        "vertex_area_weigh_frac": vertex_area_weigh_frac,
+        "vertex_area_normalize_frac": vertex_area_normalize_frac,
+        "write_curvature_files": write_curvature_files,
+        "shape_index": shape_index,
+        "regional_percentages": regional_percentages,
+        "min_max_info": min_max_info,
+        "normalize_curvature": normalize_curvature,
+        "version": version,
     };
+    if (curvature_files !== null) {
+        params["curvature_files"] = curvature_files;
+    }
+    if (number_of_averages !== null) {
+        params["number_of_averages"] = number_of_averages;
+    }
+    if (post_scale !== null) {
+        params["post_scale"] = post_scale;
+    }
+    if (output_file_stem !== null) {
+        params["output_file_stem"] = output_file_stem;
+    }
+    if (histogram_bins !== null) {
+        params["histogram_bins"] = histogram_bins;
+    }
+    if (percentage_histogram_bins !== null) {
+        params["percentage_histogram_bins"] = percentage_histogram_bins;
+    }
+    if (bin_size !== null) {
+        params["bin_size"] = bin_size;
+    }
+    if (bin_start_curvature !== null) {
+        params["bin_start_curvature"] = bin_start_curvature;
+    }
+    if (bin_end_curvature !== null) {
+        params["bin_end_curvature"] = bin_end_curvature;
+    }
+    if (label_file !== null) {
+        params["label_file"] = label_file;
+    }
+    if (high_pass_filter !== null) {
+        params["high_pass_filter"] = high_pass_filter;
+    }
+    if (low_pass_filter !== null) {
+        params["low_pass_filter"] = low_pass_filter;
+    }
+    if (high_pass_filter_gaussian !== null) {
+        params["high_pass_filter_gaussian"] = high_pass_filter_gaussian;
+    }
+    if (low_pass_filter_gaussian !== null) {
+        params["low_pass_filter_gaussian"] = low_pass_filter_gaussian;
+    }
+    if (filter_label !== null) {
+        params["filter_label"] = filter_label;
+    }
+    if (summary_condition !== null) {
+        params["summary_condition"] = summary_condition;
+    }
+    if (min_curvature_scale !== null) {
+        params["min_curvature_scale"] = min_curvature_scale;
+    }
+    if (max_curvature_scale !== null) {
+        params["max_curvature_scale"] = max_curvature_scale;
+    }
+    if (scale_factor !== null) {
+        params["scale_factor"] = scale_factor;
+    }
+    if (set_zero_vertex !== null) {
+        params["set_zero_vertex"] = set_zero_vertex;
+    }
+    if (max_ulps !== null) {
+        params["max_ulps"] = max_ulps;
+    }
     return params;
 }
 
@@ -104,10 +281,173 @@ function mris_curvature_stats_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mris_curvature_stats");
-    cargs.push("[OPTIONS]");
     cargs.push((params["subject_name"] ?? null));
     cargs.push((params["hemisphere"] ?? null));
-    cargs.push("[CURVFILE...]");
+    if ((params["curvature_files"] ?? null) !== null) {
+        cargs.push(...(params["curvature_files"] ?? null).map(f => execution.inputFile(f)));
+    }
+    if ((params["number_of_averages"] ?? null) !== null) {
+        cargs.push(
+            "-a",
+            String((params["number_of_averages"] ?? null))
+        );
+    }
+    if ((params["principal_curvatures"] ?? null)) {
+        cargs.push("-G");
+    }
+    if ((params["discrete_method"] ?? null)) {
+        cargs.push("--discrete");
+    }
+    if ((params["continuous_method"] ?? null)) {
+        cargs.push("--continuous");
+    }
+    if ((params["signed_principals"] ?? null)) {
+        cargs.push("--signedPrincipals");
+    }
+    if ((params["vertex_area_weigh"] ?? null)) {
+        cargs.push("--vertexAreaWeigh");
+    }
+    if ((params["vertex_area_normalize"] ?? null)) {
+        cargs.push("--vertexAreaNormalize");
+    }
+    if ((params["vertex_area_weigh_frac"] ?? null)) {
+        cargs.push("--vertexAreaWeighFrac");
+    }
+    if ((params["vertex_area_normalize_frac"] ?? null)) {
+        cargs.push("--vertexAreaNormalizeFrac");
+    }
+    if ((params["post_scale"] ?? null) !== null) {
+        cargs.push(
+            "--postScale",
+            String((params["post_scale"] ?? null))
+        );
+    }
+    if ((params["write_curvature_files"] ?? null)) {
+        cargs.push("--writeCurvatureFiles");
+    }
+    if ((params["shape_index"] ?? null)) {
+        cargs.push("--shapeIndex");
+    }
+    if ((params["output_file_stem"] ?? null) !== null) {
+        cargs.push(
+            "-o",
+            (params["output_file_stem"] ?? null)
+        );
+    }
+    if ((params["histogram_bins"] ?? null) !== null) {
+        cargs.push(
+            "-h",
+            String((params["histogram_bins"] ?? null))
+        );
+    }
+    if ((params["percentage_histogram_bins"] ?? null) !== null) {
+        cargs.push(
+            "-p",
+            String((params["percentage_histogram_bins"] ?? null))
+        );
+    }
+    if ((params["bin_size"] ?? null) !== null) {
+        cargs.push(
+            "-b",
+            String((params["bin_size"] ?? null))
+        );
+    }
+    if ((params["bin_start_curvature"] ?? null) !== null) {
+        cargs.push(
+            "-i",
+            String((params["bin_start_curvature"] ?? null))
+        );
+    }
+    if ((params["bin_end_curvature"] ?? null) !== null) {
+        cargs.push(
+            "-j",
+            String((params["bin_end_curvature"] ?? null))
+        );
+    }
+    if ((params["label_file"] ?? null) !== null) {
+        cargs.push(
+            "-l",
+            execution.inputFile((params["label_file"] ?? null))
+        );
+    }
+    if ((params["regional_percentages"] ?? null)) {
+        cargs.push("--regionalPercentages");
+    }
+    if ((params["high_pass_filter"] ?? null) !== null) {
+        cargs.push(
+            "--highPassFilter",
+            String((params["high_pass_filter"] ?? null))
+        );
+    }
+    if ((params["low_pass_filter"] ?? null) !== null) {
+        cargs.push(
+            "--lowPassFilter",
+            String((params["low_pass_filter"] ?? null))
+        );
+    }
+    if ((params["high_pass_filter_gaussian"] ?? null) !== null) {
+        cargs.push(
+            "--highPassFilterGaussian",
+            String((params["high_pass_filter_gaussian"] ?? null))
+        );
+    }
+    if ((params["low_pass_filter_gaussian"] ?? null) !== null) {
+        cargs.push(
+            "--lowPassFilterGaussian",
+            String((params["low_pass_filter_gaussian"] ?? null))
+        );
+    }
+    if ((params["filter_label"] ?? null) !== null) {
+        cargs.push(
+            "--filterLabel",
+            execution.inputFile((params["filter_label"] ?? null))
+        );
+    }
+    if ((params["min_max_info"] ?? null)) {
+        cargs.push("-m");
+    }
+    if ((params["normalize_curvature"] ?? null)) {
+        cargs.push("-n");
+    }
+    if ((params["summary_condition"] ?? null) !== null) {
+        cargs.push(
+            "-s",
+            (params["summary_condition"] ?? null)
+        );
+    }
+    if ((params["min_curvature_scale"] ?? null) !== null) {
+        cargs.push(
+            "-d",
+            String((params["min_curvature_scale"] ?? null))
+        );
+    }
+    if ((params["max_curvature_scale"] ?? null) !== null) {
+        cargs.push(
+            "-e",
+            String((params["max_curvature_scale"] ?? null))
+        );
+    }
+    if ((params["scale_factor"] ?? null) !== null) {
+        cargs.push(
+            "-c",
+            String((params["scale_factor"] ?? null))
+        );
+    }
+    if ((params["version"] ?? null)) {
+        cargs.push("-version");
+    }
+    if ((params["set_zero_vertex"] ?? null) !== null) {
+        cargs.push(
+            "-z",
+            String((params["set_zero_vertex"] ?? null))
+        );
+    }
+    if ((params["max_ulps"] ?? null) !== null) {
+        cargs.push(
+            "-q",
+            String((params["max_ulps"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -126,7 +466,6 @@ function mris_curvature_stats_outputs(
      */
     const ret: MrisCurvatureStatsOutputs = {
         root: execution.outputFile("."),
-        scaled_curvature_file: execution.outputFile([(params["subject_name"] ?? null), "/surf/", (params["hemisphere"] ?? null), ".[CURVATURE_FILES].scaled.crv"].join('')),
     };
     return ret;
 }
@@ -159,6 +498,41 @@ function mris_curvature_stats_execute(
 function mris_curvature_stats(
     subject_name: string,
     hemisphere: string,
+    curvature_files: Array<InputPathType> | null = null,
+    number_of_averages: number | null = null,
+    principal_curvatures: boolean = false,
+    discrete_method: boolean = false,
+    continuous_method: boolean = false,
+    signed_principals: boolean = false,
+    vertex_area_weigh: boolean = false,
+    vertex_area_normalize: boolean = false,
+    vertex_area_weigh_frac: boolean = false,
+    vertex_area_normalize_frac: boolean = false,
+    post_scale: number | null = null,
+    write_curvature_files: boolean = false,
+    shape_index: boolean = false,
+    output_file_stem: string | null = null,
+    histogram_bins: number | null = null,
+    percentage_histogram_bins: number | null = null,
+    bin_size: number | null = null,
+    bin_start_curvature: number | null = null,
+    bin_end_curvature: number | null = null,
+    label_file: InputPathType | null = null,
+    regional_percentages: boolean = false,
+    high_pass_filter: number | null = null,
+    low_pass_filter: number | null = null,
+    high_pass_filter_gaussian: number | null = null,
+    low_pass_filter_gaussian: number | null = null,
+    filter_label: InputPathType | null = null,
+    min_max_info: boolean = false,
+    normalize_curvature: boolean = false,
+    summary_condition: string | null = null,
+    min_curvature_scale: number | null = null,
+    max_curvature_scale: number | null = null,
+    scale_factor: number | null = null,
+    version: boolean = false,
+    set_zero_vertex: number | null = null,
+    max_ulps: number | null = null,
     runner: Runner | null = null,
 ): MrisCurvatureStatsOutputs {
     /**
@@ -170,13 +544,48 @@ function mris_curvature_stats(
     
      * @param subject_name Subject name defined in the SUBJECTS_DIR
      * @param hemisphere Hemisphere, can be 'lh' or 'rh'
+     * @param curvature_files Optional list of curvature files to process
+     * @param number_of_averages Average the curvature number of times.
+     * @param principal_curvatures Calculate principal curvatures and derived maps.
+     * @param discrete_method Use discrete calculation method for principal curvatures.
+     * @param continuous_method Use continuous calculation method for principal curvatures.
+     * @param signed_principals Assign signed max and min to principal curvature K1 and K2.
+     * @param vertex_area_weigh Multiply curvature value by the area of its vertex.
+     * @param vertex_area_normalize Divide curvature value by the area of its vertex.
+     * @param vertex_area_weigh_frac Weigh curvature by the fractional vertex area.
+     * @param vertex_area_normalize_frac Normalize curvature by the fractional vertex area.
+     * @param post_scale Scale the mean and areaNorm integrals by a factor.
+     * @param write_curvature_files Write the calculated curvature values to files in FreeSurfer format.
+     * @param shape_index Calculate shape index despite potential atan issues.
+     * @param output_file_stem Output file stem for results.
+     * @param histogram_bins Number of bins for curvature histogram.
+     * @param percentage_histogram_bins Number of bins for percentage-based curvature histogram.
+     * @param bin_size Size of each histogram bin.
+     * @param bin_start_curvature Histogram bin start value.
+     * @param bin_end_curvature Histogram bin end value.
+     * @param label_file Label file to constrain statistics to a region.
+     * @param regional_percentages Report integral percentages relative to the region.
+     * @param high_pass_filter High pass filter for curvature values.
+     * @param low_pass_filter Low pass filter for curvature values.
+     * @param high_pass_filter_gaussian High pass filter for Gaussian curvature values.
+     * @param low_pass_filter_gaussian Low pass filter for Gaussian curvature values.
+     * @param filter_label Store processed surface vertices in a label file.
+     * @param min_max_info Output min/max information for the processed curvature.
+     * @param normalize_curvature Normalize the curvature before computation.
+     * @param summary_condition Write out stats as a summary condition.
+     * @param min_curvature_scale Scale curvature values between min and max curvature.
+     * @param max_curvature_scale End value for curvature scaling.
+     * @param scale_factor Scale curvature values with a factor.
+     * @param version Print out version number.
+     * @param set_zero_vertex Sets the curvature values at that index to zero.
+     * @param max_ulps Toggle a more rigorous floating point comparison operation.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MrisCurvatureStatsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_CURVATURE_STATS_METADATA);
-    const params = mris_curvature_stats_params(subject_name, hemisphere)
+    const params = mris_curvature_stats_params(subject_name, hemisphere, curvature_files, number_of_averages, principal_curvatures, discrete_method, continuous_method, signed_principals, vertex_area_weigh, vertex_area_normalize, vertex_area_weigh_frac, vertex_area_normalize_frac, post_scale, write_curvature_files, shape_index, output_file_stem, histogram_bins, percentage_histogram_bins, bin_size, bin_start_curvature, bin_end_curvature, label_file, regional_percentages, high_pass_filter, low_pass_filter, high_pass_filter_gaussian, low_pass_filter_gaussian, filter_label, min_max_info, normalize_curvature, summary_condition, min_curvature_scale, max_curvature_scale, scale_factor, version, set_zero_vertex, max_ulps)
     return mris_curvature_stats_execute(params, execution);
 }
 

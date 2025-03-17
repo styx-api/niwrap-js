@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_PREPROC_METADATA: Metadata = {
-    id: "dd5edb4541571b929ce3905d2cb09807c8f4d850.boutiques",
+    id: "19354ad334d567c1cc3b6d8c8a574e514f9d7eec.boutiques",
     name: "mris_preproc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -25,6 +25,7 @@ interface MrisPreprocParameters {
     "qdec"?: InputPathType | null | undefined;
     "qdec_long"?: InputPathType | null | undefined;
     "surfmeasfile"?: Array<InputPathType> | null | undefined;
+    "volmeasfile_reg"?: Array<string> | null | undefined;
     "projfrac"?: number | null | undefined;
     "projfrac_max"?: Array<number> | null | undefined;
     "projfrac_avg"?: Array<number> | null | undefined;
@@ -123,6 +124,7 @@ function mris_preproc_params(
     qdec: InputPathType | null = null,
     qdec_long: InputPathType | null = null,
     surfmeasfile: Array<InputPathType> | null = null,
+    volmeasfile_reg: Array<string> | null = null,
     projfrac: number | null = null,
     projfrac_max: Array<number> | null = null,
     projfrac_avg: Array<number> | null = null,
@@ -175,6 +177,7 @@ function mris_preproc_params(
      * @param qdec Specify list of subjects via qdec table file. Assumes the first column is the "fsid".
      * @param qdec_long Specify list of subjects via longitudinal qdec table file.
      * @param surfmeasfile Specify full path to input surface measure file.
+     * @param volmeasfile_reg Specify full path to a volume file and its registration matrix file.
      * @param projfrac When sampling a volume onto the surface, sample a fraction of the thickness along the surface normal.
      * @param projfrac_max When sampling a volume onto the surface, find max along projection for vol2surf.
      * @param projfrac_avg Compute average along projection for vol2surf.
@@ -263,6 +266,9 @@ function mris_preproc_params(
     }
     if (surfmeasfile !== null) {
         params["surfmeasfile"] = surfmeasfile;
+    }
+    if (volmeasfile_reg !== null) {
+        params["volmeasfile_reg"] = volmeasfile_reg;
     }
     if (projfrac !== null) {
         params["projfrac"] = projfrac;
@@ -405,7 +411,12 @@ function mris_preproc_cargs(
             ...(params["surfmeasfile"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    cargs.push("[VOLMEASFILE]");
+    if ((params["volmeasfile_reg"] ?? null) !== null) {
+        cargs.push(
+            "--iv",
+            ...(params["volmeasfile_reg"] ?? null)
+        );
+    }
     if ((params["projfrac"] ?? null) !== null) {
         cargs.push(
             "--projfrac",
@@ -631,6 +642,7 @@ function mris_preproc(
     qdec: InputPathType | null = null,
     qdec_long: InputPathType | null = null,
     surfmeasfile: Array<InputPathType> | null = null,
+    volmeasfile_reg: Array<string> | null = null,
     projfrac: number | null = null,
     projfrac_max: Array<number> | null = null,
     projfrac_avg: Array<number> | null = null,
@@ -688,6 +700,7 @@ function mris_preproc(
      * @param qdec Specify list of subjects via qdec table file. Assumes the first column is the "fsid".
      * @param qdec_long Specify list of subjects via longitudinal qdec table file.
      * @param surfmeasfile Specify full path to input surface measure file.
+     * @param volmeasfile_reg Specify full path to a volume file and its registration matrix file.
      * @param projfrac When sampling a volume onto the surface, sample a fraction of the thickness along the surface normal.
      * @param projfrac_max When sampling a volume onto the surface, find max along projection for vol2surf.
      * @param projfrac_avg Compute average along projection for vol2surf.
@@ -730,7 +743,7 @@ function mris_preproc(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_PREPROC_METADATA);
-    const params = mris_preproc_params(outfile, target_subject, hemi, meas, label, measdir, subjects, fsgd, subjectlist, qdec, qdec_long, surfmeasfile, projfrac, projfrac_max, projfrac_avg, no_mask_non_cortex, session_file, dir_file, analysis, contrast, cvar_flag, offset_flag, map, etiv_flag, fwhm, fwhm_src, niters, niters_src, cortex_only, mgz_flag, no_jac_flag, paired_diff_flag, cache_out, cache_in, cache_out_only, no_prune_flag, mean_flag, std_flag, reshape_flag, surfreg, subjects_dir, synth_flag, tmpdir, nocleanup_flag, cleanup_flag, log, nolog_flag, debug_flag)
+    const params = mris_preproc_params(outfile, target_subject, hemi, meas, label, measdir, subjects, fsgd, subjectlist, qdec, qdec_long, surfmeasfile, volmeasfile_reg, projfrac, projfrac_max, projfrac_avg, no_mask_non_cortex, session_file, dir_file, analysis, contrast, cvar_flag, offset_flag, map, etiv_flag, fwhm, fwhm_src, niters, niters_src, cortex_only, mgz_flag, no_jac_flag, paired_diff_flag, cache_out, cache_in, cache_out_only, no_prune_flag, mean_flag, std_flag, reshape_flag, surfreg, subjects_dir, synth_flag, tmpdir, nocleanup_flag, cleanup_flag, log, nolog_flag, debug_flag)
     return mris_preproc_execute(params, execution);
 }
 

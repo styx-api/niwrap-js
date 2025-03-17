@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_INFO_METADATA: Metadata = {
-    id: "f8473bd4b6a90f8c8b3dbe8a7c1e45f9016b4d73.boutiques",
+    id: "8c4d52b8480a8839ff1677fa53139a6b9fbea64a.boutiques",
     name: "mris_info",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,23 +16,23 @@ interface MrisInfoParameters {
     "surfacefile": InputPathType;
     "outfile"?: InputPathType | null | undefined;
     "subject_hemi_surfname"?: string | null | undefined;
+    "talairach_xfm_flag": boolean;
+    "rescale_flag": boolean;
     "patchfile"?: InputPathType | null | undefined;
     "vertex_number"?: number | null | undefined;
     "extended_vertex_number"?: number | null | undefined;
     "curvfile"?: InputPathType | null | undefined;
     "annotfile"?: InputPathType | null | undefined;
+    "area_stats_flag": boolean;
     "edge_stats_id"?: string | null | undefined;
     "edge_number"?: number | null | undefined;
     "vtxno"?: string | null | undefined;
     "matrix_format"?: string | null | undefined;
+    "quality_stats_flag": boolean;
+    "intersections_flag": boolean;
     "mask_file"?: InputPathType | null | undefined;
     "label_file"?: InputPathType | null | undefined;
     "edge_file"?: InputPathType | null | undefined;
-    "talairach_xfm_flag": boolean;
-    "rescale_flag": boolean;
-    "area_stats_flag": boolean;
-    "quality_stats_flag": boolean;
-    "intersections_flag": boolean;
     "nogifti_flag": boolean;
     "version_flag": boolean;
     "help_flag": boolean;
@@ -98,23 +98,23 @@ function mris_info_params(
     surfacefile: InputPathType,
     outfile: InputPathType | null = null,
     subject_hemi_surfname: string | null = null,
+    talairach_xfm_flag: boolean = false,
+    rescale_flag: boolean = false,
     patchfile: InputPathType | null = null,
     vertex_number: number | null = null,
     extended_vertex_number: number | null = null,
     curvfile: InputPathType | null = null,
     annotfile: InputPathType | null = null,
+    area_stats_flag: boolean = false,
     edge_stats_id: string | null = null,
     edge_number: number | null = null,
     vtxno: string | null = null,
     matrix_format: string | null = null,
+    quality_stats_flag: boolean = false,
+    intersections_flag: boolean = false,
     mask_file: InputPathType | null = null,
     label_file: InputPathType | null = null,
     edge_file: InputPathType | null = null,
-    talairach_xfm_flag: boolean = false,
-    rescale_flag: boolean = false,
-    area_stats_flag: boolean = false,
-    quality_stats_flag: boolean = false,
-    intersections_flag: boolean = false,
     nogifti_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
@@ -125,23 +125,23 @@ function mris_info_params(
      * @param surfacefile Surface file to process
      * @param outfile Save some data to outfile
      * @param subject_hemi_surfname Instead of surfacefile
+     * @param talairach_xfm_flag Apply talairach xfm before reporting info
+     * @param rescale_flag Rescale group surface to match average metrics
      * @param patchfile Load patch before reporting
      * @param vertex_number Print out vertex information for vertex vnum
      * @param extended_vertex_number Print out extended vertex information for vertex vnum
      * @param curvfile Check if curvature file vertices match surface vertices
      * @param annotfile Check if annotation file vertices match surface vertices; dump colortable
+     * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
      * @param edge_stats_id Compute stats on edge metric (n, mean, std, min, max); id=0=length, id=1=dot, id=2=angle, id<0= all
      * @param edge_number Print out extended information about edge
      * @param vtxno Write Matlab file to plot vertex neighborhood
      * @param matrix_format Set format for matrix printing (e.g., %12.8f)
+     * @param quality_stats_flag Print out surface quality stats
+     * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
      * @param mask_file Only compute edge and area stats using vertices in mask
      * @param label_file Only compute edge and area stats using vertices in label
      * @param edge_file Print edge info for all edges into file
-     * @param talairach_xfm_flag Apply talairach xfm before reporting info
-     * @param rescale_flag Rescale group surface to match average metrics
-     * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
-     * @param quality_stats_flag Print out surface quality stats
-     * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
      * @param nogifti_flag No dump of GIFTI struct, read .gii as surface instead
      * @param version_flag Print version and exits
      * @param help_flag No clue what this does
@@ -233,6 +233,12 @@ function mris_info_cargs(
             (params["subject_hemi_surfname"] ?? null)
         );
     }
+    if ((params["talairach_xfm_flag"] ?? null)) {
+        cargs.push("--t");
+    }
+    if ((params["rescale_flag"] ?? null)) {
+        cargs.push("--r");
+    }
     if ((params["patchfile"] ?? null) !== null) {
         cargs.push(
             "--patch",
@@ -263,6 +269,9 @@ function mris_info_cargs(
             execution.inputFile((params["annotfile"] ?? null))
         );
     }
+    if ((params["area_stats_flag"] ?? null)) {
+        cargs.push("--area-stats");
+    }
     if ((params["edge_stats_id"] ?? null) !== null) {
         cargs.push(
             "--edge-stats",
@@ -287,6 +296,12 @@ function mris_info_cargs(
             (params["matrix_format"] ?? null)
         );
     }
+    if ((params["quality_stats_flag"] ?? null)) {
+        cargs.push("--quality");
+    }
+    if ((params["intersections_flag"] ?? null)) {
+        cargs.push("--intersections");
+    }
     if ((params["mask_file"] ?? null) !== null) {
         cargs.push(
             "--mask",
@@ -304,22 +319,6 @@ function mris_info_cargs(
             "--edge-file",
             execution.inputFile((params["edge_file"] ?? null))
         );
-    }
-    if ((params["talairach_xfm_flag"] ?? null)) {
-        cargs.push("--t");
-    }
-    if ((params["rescale_flag"] ?? null)) {
-        cargs.push("--r");
-    }
-    if ((params["area_stats_flag"] ?? null)) {
-        cargs.push("--area-stats");
-    }
-    cargs.push("[EDGE_STATS_FLAG]");
-    if ((params["quality_stats_flag"] ?? null)) {
-        cargs.push("--quality");
-    }
-    if ((params["intersections_flag"] ?? null)) {
-        cargs.push("--intersections");
     }
     if ((params["nogifti_flag"] ?? null)) {
         cargs.push("--nogifti-disp-image");
@@ -383,23 +382,23 @@ function mris_info(
     surfacefile: InputPathType,
     outfile: InputPathType | null = null,
     subject_hemi_surfname: string | null = null,
+    talairach_xfm_flag: boolean = false,
+    rescale_flag: boolean = false,
     patchfile: InputPathType | null = null,
     vertex_number: number | null = null,
     extended_vertex_number: number | null = null,
     curvfile: InputPathType | null = null,
     annotfile: InputPathType | null = null,
+    area_stats_flag: boolean = false,
     edge_stats_id: string | null = null,
     edge_number: number | null = null,
     vtxno: string | null = null,
     matrix_format: string | null = null,
+    quality_stats_flag: boolean = false,
+    intersections_flag: boolean = false,
     mask_file: InputPathType | null = null,
     label_file: InputPathType | null = null,
     edge_file: InputPathType | null = null,
-    talairach_xfm_flag: boolean = false,
-    rescale_flag: boolean = false,
-    area_stats_flag: boolean = false,
-    quality_stats_flag: boolean = false,
-    intersections_flag: boolean = false,
     nogifti_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
@@ -415,23 +414,23 @@ function mris_info(
      * @param surfacefile Surface file to process
      * @param outfile Save some data to outfile
      * @param subject_hemi_surfname Instead of surfacefile
+     * @param talairach_xfm_flag Apply talairach xfm before reporting info
+     * @param rescale_flag Rescale group surface to match average metrics
      * @param patchfile Load patch before reporting
      * @param vertex_number Print out vertex information for vertex vnum
      * @param extended_vertex_number Print out extended vertex information for vertex vnum
      * @param curvfile Check if curvature file vertices match surface vertices
      * @param annotfile Check if annotation file vertices match surface vertices; dump colortable
+     * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
      * @param edge_stats_id Compute stats on edge metric (n, mean, std, min, max); id=0=length, id=1=dot, id=2=angle, id<0= all
      * @param edge_number Print out extended information about edge
      * @param vtxno Write Matlab file to plot vertex neighborhood
      * @param matrix_format Set format for matrix printing (e.g., %12.8f)
+     * @param quality_stats_flag Print out surface quality stats
+     * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
      * @param mask_file Only compute edge and area stats using vertices in mask
      * @param label_file Only compute edge and area stats using vertices in label
      * @param edge_file Print edge info for all edges into file
-     * @param talairach_xfm_flag Apply talairach xfm before reporting info
-     * @param rescale_flag Rescale group surface to match average metrics
-     * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
-     * @param quality_stats_flag Print out surface quality stats
-     * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
      * @param nogifti_flag No dump of GIFTI struct, read .gii as surface instead
      * @param version_flag Print version and exits
      * @param help_flag No clue what this does
@@ -441,7 +440,7 @@ function mris_info(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_INFO_METADATA);
-    const params = mris_info_params(surfacefile, outfile, subject_hemi_surfname, patchfile, vertex_number, extended_vertex_number, curvfile, annotfile, edge_stats_id, edge_number, vtxno, matrix_format, mask_file, label_file, edge_file, talairach_xfm_flag, rescale_flag, area_stats_flag, quality_stats_flag, intersections_flag, nogifti_flag, version_flag, help_flag)
+    const params = mris_info_params(surfacefile, outfile, subject_hemi_surfname, talairach_xfm_flag, rescale_flag, patchfile, vertex_number, extended_vertex_number, curvfile, annotfile, area_stats_flag, edge_stats_id, edge_number, vtxno, matrix_format, quality_stats_flag, intersections_flag, mask_file, label_file, edge_file, nogifti_flag, version_flag, help_flag)
     return mris_info_execute(params, execution);
 }
 
