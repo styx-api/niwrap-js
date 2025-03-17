@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SKULL_STRIP_TOUCH_UP_METADATA: Metadata = {
-    id: "b6fb601a41c80b9729bd9c95da0d4f3540060f61.boutiques",
+    id: "460010f2b657da6818c5cc52af6697286e7b7fd3.boutiques",
     name: "@SkullStrip_TouchUp",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -18,6 +18,7 @@ interface VSkullStripTouchUpParameters {
     "head_dataset": InputPathType;
     "mask_out": boolean;
     "orig_dim": boolean;
+    "help": boolean;
 }
 
 
@@ -82,6 +83,7 @@ function v__skull_strip_touch_up_params(
     head_dataset: InputPathType,
     mask_out: boolean = false,
     orig_dim: boolean = false,
+    help: boolean = false,
 ): VSkullStripTouchUpParameters {
     /**
      * Build parameters.
@@ -91,6 +93,7 @@ function v__skull_strip_touch_up_params(
      * @param head_dataset Whole head anatomical data set
      * @param mask_out Output a binary mask in addition to actual data
      * @param orig_dim Edit in the original image dimensions
+     * @param help Show this help message
     
      * @returns Parameter dictionary
      */
@@ -101,6 +104,7 @@ function v__skull_strip_touch_up_params(
         "head_dataset": head_dataset,
         "mask_out": mask_out,
         "orig_dim": orig_dim,
+        "help": help,
     };
     return params;
 }
@@ -137,6 +141,9 @@ function v__skull_strip_touch_up_cargs(
     }
     if ((params["orig_dim"] ?? null)) {
         cargs.push("-orig_dim");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
     }
     return cargs;
 }
@@ -193,6 +200,7 @@ function v__skull_strip_touch_up(
     head_dataset: InputPathType,
     mask_out: boolean = false,
     orig_dim: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): VSkullStripTouchUpOutputs {
     /**
@@ -207,13 +215,14 @@ function v__skull_strip_touch_up(
      * @param head_dataset Whole head anatomical data set
      * @param mask_out Output a binary mask in addition to actual data
      * @param orig_dim Edit in the original image dimensions
+     * @param help Show this help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `VSkullStripTouchUpOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SKULL_STRIP_TOUCH_UP_METADATA);
-    const params = v__skull_strip_touch_up_params(prefix, brain_dataset, head_dataset, mask_out, orig_dim)
+    const params = v__skull_strip_touch_up_params(prefix, brain_dataset, head_dataset, mask_out, orig_dim, help)
     return v__skull_strip_touch_up_execute(params, execution);
 }
 

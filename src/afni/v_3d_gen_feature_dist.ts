@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_GEN_FEATURE_DIST_METADATA: Metadata = {
-    id: "306602359a0090c4e74a2cc38f89a25555f89cc6.boutiques",
+    id: "4e2a6d02fd6017cbe5c9c54a1a9c65bd9ea7921c.boutiques",
     name: "3dGenFeatureDist",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -20,6 +20,10 @@ interface V3dGenFeatureDistParameters {
     "debug_level"?: number | null | undefined;
     "other": boolean;
     "no_other": boolean;
+    "samp"?: Array<string> | null | undefined;
+    "sig"?: Array<string> | null | undefined;
+    "hspec"?: Array<string> | null | undefined;
+    "labeltable"?: InputPathType | null | undefined;
     "show_histograms"?: string | null | undefined;
 }
 
@@ -83,6 +87,10 @@ function v_3d_gen_feature_dist_params(
     debug_level: number | null = null,
     other: boolean = false,
     no_other: boolean = false,
+    samp: Array<string> | null = null,
+    sig: Array<string> | null = null,
+    hspec: Array<string> | null = null,
+    labeltable: InputPathType | null = null,
     show_histograms: string | null = null,
 ): V3dGenFeatureDistParameters {
     /**
@@ -95,6 +103,10 @@ function v_3d_gen_feature_dist_params(
      * @param debug_level Debugging level.
      * @param other Add histograms for an 'OTHER' class that has a uniform pdf.
      * @param no_other Opposite of -OTHER.
+     * @param samp Specify which voxels belong to each class of interest.
+     * @param sig Specify volumes that define the features.
+     * @param hspec Set histogram parameters for a specific feature.
+     * @param labeltable Specify the label table.
      * @param show_histograms Show specified histograms and quit.
     
      * @returns Parameter dictionary
@@ -112,6 +124,18 @@ function v_3d_gen_feature_dist_params(
     }
     if (debug_level !== null) {
         params["debug_level"] = debug_level;
+    }
+    if (samp !== null) {
+        params["samp"] = samp;
+    }
+    if (sig !== null) {
+        params["sig"] = sig;
+    }
+    if (hspec !== null) {
+        params["hspec"] = hspec;
+    }
+    if (labeltable !== null) {
+        params["labeltable"] = labeltable;
     }
     if (show_histograms !== null) {
         params["show_histograms"] = show_histograms;
@@ -162,6 +186,30 @@ function v_3d_gen_feature_dist_cargs(
     }
     if ((params["no_other"] ?? null)) {
         cargs.push("-no_OTHER");
+    }
+    if ((params["samp"] ?? null) !== null) {
+        cargs.push(
+            "-samp",
+            ...(params["samp"] ?? null)
+        );
+    }
+    if ((params["sig"] ?? null) !== null) {
+        cargs.push(
+            "-sig",
+            ...(params["sig"] ?? null)
+        );
+    }
+    if ((params["hspec"] ?? null) !== null) {
+        cargs.push(
+            "-hspec",
+            ...(params["hspec"] ?? null)
+        );
+    }
+    if ((params["labeltable"] ?? null) !== null) {
+        cargs.push(
+            "-labeltable",
+            execution.inputFile((params["labeltable"] ?? null))
+        );
     }
     if ((params["show_histograms"] ?? null) !== null) {
         cargs.push(
@@ -225,6 +273,10 @@ function v_3d_gen_feature_dist(
     debug_level: number | null = null,
     other: boolean = false,
     no_other: boolean = false,
+    samp: Array<string> | null = null,
+    sig: Array<string> | null = null,
+    hspec: Array<string> | null = null,
+    labeltable: InputPathType | null = null,
     show_histograms: string | null = null,
     runner: Runner | null = null,
 ): V3dGenFeatureDistOutputs {
@@ -242,6 +294,10 @@ function v_3d_gen_feature_dist(
      * @param debug_level Debugging level.
      * @param other Add histograms for an 'OTHER' class that has a uniform pdf.
      * @param no_other Opposite of -OTHER.
+     * @param samp Specify which voxels belong to each class of interest.
+     * @param sig Specify volumes that define the features.
+     * @param hspec Set histogram parameters for a specific feature.
+     * @param labeltable Specify the label table.
      * @param show_histograms Show specified histograms and quit.
      * @param runner Command runner
     
@@ -249,7 +305,7 @@ function v_3d_gen_feature_dist(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_GEN_FEATURE_DIST_METADATA);
-    const params = v_3d_gen_feature_dist_params(features_string, class_string, prefix, overwrite, debug_level, other, no_other, show_histograms)
+    const params = v_3d_gen_feature_dist_params(features_string, class_string, prefix, overwrite, debug_level, other, no_other, samp, sig, hspec, labeltable, show_histograms)
     return v_3d_gen_feature_dist_execute(params, execution);
 }
 

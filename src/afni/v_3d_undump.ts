@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_UNDUMP_METADATA: Metadata = {
-    id: "d8ab76cb95ed8dc992c00cf2e9245c240a475a40.boutiques",
+    id: "f0b8af447cf310eefc98d5d8262aaf16f8069930.boutiques",
     name: "3dUndump",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -21,6 +21,7 @@ interface V3dUndumpParameters {
     "datatype"?: string | null | undefined;
     "dval"?: number | null | undefined;
     "fval"?: number | null | undefined;
+    "ijk": boolean;
     "xyz": boolean;
     "sphere_radius"?: number | null | undefined;
     "cube_mode": boolean;
@@ -91,6 +92,7 @@ function v_3d_undump_params(
     datatype: string | null = null,
     dval: number | null = null,
     fval: number | null = null,
+    ijk: boolean = false,
     xyz: boolean = false,
     sphere_radius: number | null = null,
     cube_mode: boolean = false,
@@ -110,6 +112,7 @@ function v_3d_undump_params(
      * @param datatype 'type' determines the voxel data type of the output, which may be byte, short, or float [default = short].
      * @param dval 'vvv' is the default value stored in each input voxel that does not have a value supplied in the input file [default = 1].
      * @param fval 'fff' is the fill value, used for each voxel in the output dataset that is NOT listed in the input file [default = 0].
+     * @param ijk Coordinates in the input file are (i,j,k) index triples.
      * @param xyz Coordinates in the input file are (x,y,z) spatial coordinates, in mm.
      * @param sphere_radius Specifies that a sphere of radius 'rrr' will be filled about each input (x,y,z) or (i,j,k) voxel.
      * @param cube_mode Put cubes down instead of spheres. The 'radius' then is half the length of a side.
@@ -123,6 +126,7 @@ function v_3d_undump_params(
     const params = {
         "__STYXTYPE__": "3dUndump" as const,
         "input_files": input_files,
+        "ijk": ijk,
         "xyz": xyz,
         "cube_mode": cube_mode,
         "head_only": head_only,
@@ -219,6 +223,9 @@ function v_3d_undump_cargs(
             String((params["fval"] ?? null))
         );
     }
+    if ((params["ijk"] ?? null)) {
+        cargs.push("-ijk");
+    }
     if ((params["xyz"] ?? null)) {
         cargs.push("-xyz");
     }
@@ -306,6 +313,7 @@ function v_3d_undump(
     datatype: string | null = null,
     dval: number | null = null,
     fval: number | null = null,
+    ijk: boolean = false,
     xyz: boolean = false,
     sphere_radius: number | null = null,
     cube_mode: boolean = false,
@@ -330,6 +338,7 @@ function v_3d_undump(
      * @param datatype 'type' determines the voxel data type of the output, which may be byte, short, or float [default = short].
      * @param dval 'vvv' is the default value stored in each input voxel that does not have a value supplied in the input file [default = 1].
      * @param fval 'fff' is the fill value, used for each voxel in the output dataset that is NOT listed in the input file [default = 0].
+     * @param ijk Coordinates in the input file are (i,j,k) index triples.
      * @param xyz Coordinates in the input file are (x,y,z) spatial coordinates, in mm.
      * @param sphere_radius Specifies that a sphere of radius 'rrr' will be filled about each input (x,y,z) or (i,j,k) voxel.
      * @param cube_mode Put cubes down instead of spheres. The 'radius' then is half the length of a side.
@@ -343,7 +352,7 @@ function v_3d_undump(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_UNDUMP_METADATA);
-    const params = v_3d_undump_params(input_files, prefix, master, dimensions, mask, datatype, dval, fval, xyz, sphere_radius, cube_mode, orient, head_only, roimask, allow_nan)
+    const params = v_3d_undump_params(input_files, prefix, master, dimensions, mask, datatype, dval, fval, ijk, xyz, sphere_radius, cube_mode, orient, head_only, roimask, allow_nan)
     return v_3d_undump_execute(params, execution);
 }
 

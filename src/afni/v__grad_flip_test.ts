@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__GRAD_FLIP_TEST_METADATA: Metadata = {
-    id: "83d02b240a4d1a85f3fc3038b96542312f180177.boutiques",
+    id: "dda0017b4db56e4bd18047650c9ce39bfa2dacfb.boutiques",
     name: "@GradFlipTest",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,10 +14,10 @@ const V__GRAD_FLIP_TEST_METADATA: Metadata = {
 interface VGradFlipTestParameters {
     "__STYXTYPE__": "@GradFlipTest";
     "dwi": InputPathType;
+    "grad_row_vec"?: InputPathType | null | undefined;
+    "grad_col_vec"?: InputPathType | null | undefined;
+    "grad_col_matA"?: InputPathType | null | undefined;
     "grad_col_matT"?: InputPathType | null | undefined;
-    "grad_col_matT_1"?: InputPathType | null | undefined;
-    "grad_col_matT_2"?: InputPathType | null | undefined;
-    "grad_col_matT_3"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "bvals"?: InputPathType | null | undefined;
     "thresh_fa"?: number | null | undefined;
@@ -87,10 +87,10 @@ interface VGradFlipTestOutputs {
 
 function v__grad_flip_test_params(
     dwi: InputPathType,
+    grad_row_vec: InputPathType | null = null,
+    grad_col_vec: InputPathType | null = null,
+    grad_col_mat_a: InputPathType | null = null,
     grad_col_mat_t: InputPathType | null = null,
-    grad_col_mat_t_1: InputPathType | null = null,
-    grad_col_mat_t_2: InputPathType | null = null,
-    grad_col_mat_t_3: InputPathType | null = null,
     mask: InputPathType | null = null,
     bvals: InputPathType | null = null,
     thresh_fa: number | null = null,
@@ -105,10 +105,10 @@ function v__grad_flip_test_params(
      * Build parameters.
     
      * @param dwi Set of DWIs (N total volumes)
+     * @param grad_row_vec Set of row-wise gradient vectors
+     * @param grad_col_vec Set of column-wise gradient vectors
+     * @param grad_col_mat_a Set of column-wise g- or b-matrix elements ("AFNI"-style format, "diagonal-first")
      * @param grad_col_mat_t Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param grad_col_mat_t_1 Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param grad_col_mat_t_2 Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param grad_col_mat_t_3 Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
      * @param mask Optional mask (probably whole brain); otherwise, automasking is performed
      * @param bvals Can input bvals, if necessary (but shouldn't be necessary?)
      * @param thresh_fa Set minimum FA value for tracking (default X=0.2)
@@ -127,17 +127,17 @@ function v__grad_flip_test_params(
         "scale_out_1000": scale_out_1000,
         "do_clean": do_clean,
     };
+    if (grad_row_vec !== null) {
+        params["grad_row_vec"] = grad_row_vec;
+    }
+    if (grad_col_vec !== null) {
+        params["grad_col_vec"] = grad_col_vec;
+    }
+    if (grad_col_mat_a !== null) {
+        params["grad_col_matA"] = grad_col_mat_a;
+    }
     if (grad_col_mat_t !== null) {
         params["grad_col_matT"] = grad_col_mat_t;
-    }
-    if (grad_col_mat_t_1 !== null) {
-        params["grad_col_matT_1"] = grad_col_mat_t_1;
-    }
-    if (grad_col_mat_t_2 !== null) {
-        params["grad_col_matT_2"] = grad_col_mat_t_2;
-    }
-    if (grad_col_mat_t_3 !== null) {
-        params["grad_col_matT_3"] = grad_col_mat_t_3;
     }
     if (mask !== null) {
         params["mask"] = mask;
@@ -182,28 +182,28 @@ function v__grad_flip_test_cargs(
         "-in_dwi",
         execution.inputFile((params["dwi"] ?? null))
     );
+    if ((params["grad_row_vec"] ?? null) !== null) {
+        cargs.push(
+            "-in_row_vec",
+            execution.inputFile((params["grad_row_vec"] ?? null))
+        );
+    }
+    if ((params["grad_col_vec"] ?? null) !== null) {
+        cargs.push(
+            "-in_col_vec",
+            execution.inputFile((params["grad_col_vec"] ?? null))
+        );
+    }
+    if ((params["grad_col_matA"] ?? null) !== null) {
+        cargs.push(
+            "-in_col_matA",
+            execution.inputFile((params["grad_col_matA"] ?? null))
+        );
+    }
     if ((params["grad_col_matT"] ?? null) !== null) {
         cargs.push(
             "-in_col_matT",
             execution.inputFile((params["grad_col_matT"] ?? null))
-        );
-    }
-    if ((params["grad_col_matT_1"] ?? null) !== null) {
-        cargs.push(
-            "-in_col_matT",
-            execution.inputFile((params["grad_col_matT_1"] ?? null))
-        );
-    }
-    if ((params["grad_col_matT_2"] ?? null) !== null) {
-        cargs.push(
-            "-in_col_matT",
-            execution.inputFile((params["grad_col_matT_2"] ?? null))
-        );
-    }
-    if ((params["grad_col_matT_3"] ?? null) !== null) {
-        cargs.push(
-            "-in_col_matT",
-            execution.inputFile((params["grad_col_matT_3"] ?? null))
         );
     }
     if ((params["mask"] ?? null) !== null) {
@@ -305,10 +305,10 @@ function v__grad_flip_test_execute(
 
 function v__grad_flip_test(
     dwi: InputPathType,
+    grad_row_vec: InputPathType | null = null,
+    grad_col_vec: InputPathType | null = null,
+    grad_col_mat_a: InputPathType | null = null,
     grad_col_mat_t: InputPathType | null = null,
-    grad_col_mat_t_1: InputPathType | null = null,
-    grad_col_mat_t_2: InputPathType | null = null,
-    grad_col_mat_t_3: InputPathType | null = null,
     mask: InputPathType | null = null,
     bvals: InputPathType | null = null,
     thresh_fa: number | null = null,
@@ -328,10 +328,10 @@ function v__grad_flip_test(
      * URL: https://afni.nimh.nih.gov/
     
      * @param dwi Set of DWIs (N total volumes)
+     * @param grad_row_vec Set of row-wise gradient vectors
+     * @param grad_col_vec Set of column-wise gradient vectors
+     * @param grad_col_mat_a Set of column-wise g- or b-matrix elements ("AFNI"-style format, "diagonal-first")
      * @param grad_col_mat_t Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param grad_col_mat_t_1 Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param grad_col_mat_t_2 Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param grad_col_mat_t_3 Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
      * @param mask Optional mask (probably whole brain); otherwise, automasking is performed
      * @param bvals Can input bvals, if necessary (but shouldn't be necessary?)
      * @param thresh_fa Set minimum FA value for tracking (default X=0.2)
@@ -347,7 +347,7 @@ function v__grad_flip_test(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GRAD_FLIP_TEST_METADATA);
-    const params = v__grad_flip_test_params(dwi, grad_col_mat_t, grad_col_mat_t_1, grad_col_mat_t_2, grad_col_mat_t_3, mask, bvals, thresh_fa, thresh_len, prefix, check_abs_min, scale_out_1000, wdir, do_clean)
+    const params = v__grad_flip_test_params(dwi, grad_row_vec, grad_col_vec, grad_col_mat_a, grad_col_mat_t, mask, bvals, thresh_fa, thresh_len, prefix, check_abs_min, scale_out_1000, wdir, do_clean)
     return v__grad_flip_test_execute(params, execution);
 }
 

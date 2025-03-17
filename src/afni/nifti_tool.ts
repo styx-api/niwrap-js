@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NIFTI_TOOL_METADATA: Metadata = {
-    id: "3d62871ad5a6df5a56027e145232bf726b83d960.boutiques",
+    id: "38a2d9449adee7d6233168e977d87d95385ebe37.boutiques",
     name: "nifti_tool",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -161,7 +161,8 @@ function nifti_tool_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push(["nifti_tool", (params["action"] ?? null)].join(''));
+    cargs.push("nifti_tool");
+    cargs.push((params["action"] ?? null));
     if ((params["input_files"] ?? null) !== null) {
         cargs.push(
             "-infiles",

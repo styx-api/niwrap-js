@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BRAIN_SKIN_METADATA: Metadata = {
-    id: "4f110568466cb173a0801348ecaabe46ca587148.boutiques",
+    id: "b29116757bd00299a9e042bed62f178844c81d0f.boutiques",
     name: "BrainSkin",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -22,6 +22,7 @@ interface BrainSkinParameters {
     "voxelize"?: string | null | undefined;
     "infill"?: string | null | undefined;
     "out_file"?: InputPathType | null | undefined;
+    "vol_skin"?: InputPathType | null | undefined;
     "vol_hull"?: InputPathType | null | undefined;
     "no_zero_attraction": boolean;
     "node_dbg"?: number | null | undefined;
@@ -129,6 +130,7 @@ function brain_skin_params(
     voxelize: string | null = null,
     infill: string | null = null,
     out_file: InputPathType | null = null,
+    vol_skin: InputPathType | null = null,
     vol_hull: InputPathType | null = null,
     no_zero_attraction: boolean = false,
     node_dbg: number | null = null,
@@ -145,6 +147,7 @@ function brain_skin_params(
      * @param voxelize Voxelization method. Choose from: slow: Sure footed but slow, fast: Faster and works OK, mask: Fastest and works OK too (default).
      * @param infill Infill method. Choose from: slow: proper infill, but not needed, fast: brutish infill, all we need (default).
      * @param out_file Output intermediary results from skin forming step.
+     * @param vol_skin Deform an Icosahedron to match the outer boundary of a mask volume.
      * @param vol_hull Deform an Icosahedron to match the convex hull of a mask volume.
      * @param no_zero_attraction With vol_skin, the surface will try to shrink aggressively, even if there is no promise of non-zero values below.
      * @param node_dbg Output debugging information for node N for -vol_skin and -vol_hull options.
@@ -175,6 +178,9 @@ function brain_skin_params(
     }
     if (out_file !== null) {
         params["out_file"] = out_file;
+    }
+    if (vol_skin !== null) {
+        params["vol_skin"] = vol_skin;
     }
     if (vol_hull !== null) {
         params["vol_hull"] = vol_hull;
@@ -243,6 +249,12 @@ function brain_skin_cargs(
         cargs.push(
             "-out",
             execution.inputFile((params["out_file"] ?? null))
+        );
+    }
+    if ((params["vol_skin"] ?? null) !== null) {
+        cargs.push(
+            "-vol_skin",
+            execution.inputFile((params["vol_skin"] ?? null))
         );
     }
     if ((params["vol_hull"] ?? null) !== null) {
@@ -328,6 +340,7 @@ function brain_skin(
     voxelize: string | null = null,
     infill: string | null = null,
     out_file: InputPathType | null = null,
+    vol_skin: InputPathType | null = null,
     vol_hull: InputPathType | null = null,
     no_zero_attraction: boolean = false,
     node_dbg: number | null = null,
@@ -349,6 +362,7 @@ function brain_skin(
      * @param voxelize Voxelization method. Choose from: slow: Sure footed but slow, fast: Faster and works OK, mask: Fastest and works OK too (default).
      * @param infill Infill method. Choose from: slow: proper infill, but not needed, fast: brutish infill, all we need (default).
      * @param out_file Output intermediary results from skin forming step.
+     * @param vol_skin Deform an Icosahedron to match the outer boundary of a mask volume.
      * @param vol_hull Deform an Icosahedron to match the convex hull of a mask volume.
      * @param no_zero_attraction With vol_skin, the surface will try to shrink aggressively, even if there is no promise of non-zero values below.
      * @param node_dbg Output debugging information for node N for -vol_skin and -vol_hull options.
@@ -358,7 +372,7 @@ function brain_skin(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BRAIN_SKIN_METADATA);
-    const params = brain_skin_params(surface, skingrid_volume, prefix, plimit, dlimit, segdo, voxelize, infill, out_file, vol_hull, no_zero_attraction, node_dbg)
+    const params = brain_skin_params(surface, skingrid_volume, prefix, plimit, dlimit, segdo, voxelize, infill, out_file, vol_skin, vol_hull, no_zero_attraction, node_dbg)
     return brain_skin_execute(params, execution);
 }
 

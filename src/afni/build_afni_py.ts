@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BUILD_AFNI_PY_METADATA: Metadata = {
-    id: "8b01bbfc26acb4a73b16110f6849bc381629f972.boutiques",
+    id: "e6c59cd0d5e67711746b75a7e41644183586e675.boutiques",
     name: "build_afni.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -25,6 +25,9 @@ interface BuildAfniPyParameters {
     "run_cmake"?: string | null | undefined;
     "run_make"?: string | null | undefined;
     "verbose_level"?: number | null | undefined;
+    "help": boolean;
+    "history": boolean;
+    "show_valid_opts": boolean;
     "version": boolean;
 }
 
@@ -97,6 +100,9 @@ function build_afni_py_params(
     run_cmake: string | null = null,
     run_make: string | null = null,
     verbose_level: number | null = null,
+    help: boolean = false,
+    history: boolean = false,
+    show_valid_opts: boolean = false,
     version: boolean = false,
 ): BuildAfniPyParameters {
     /**
@@ -114,6 +120,9 @@ function build_afni_py_params(
      * @param run_cmake Choose whether to run a cmake build. Default is no.
      * @param run_make Choose whether to run a make build. Default is yes.
      * @param verbose_level Set the verbosity level. Default is 1.
+     * @param help Show help message
+     * @param history Show module history
+     * @param show_valid_opts List valid options
      * @param version Show the current version
     
      * @returns Parameter dictionary
@@ -122,6 +131,9 @@ function build_afni_py_params(
         "__STYXTYPE__": "build_afni.py" as const,
         "build_root": build_root,
         "prep_only": prep_only,
+        "help": help,
+        "history": history,
+        "show_valid_opts": show_valid_opts,
         "version": version,
     };
     if (clean_root !== null) {
@@ -239,6 +251,15 @@ function build_afni_py_cargs(
             String((params["verbose_level"] ?? null))
         );
     }
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
+    }
+    if ((params["history"] ?? null)) {
+        cargs.push("-hist");
+    }
+    if ((params["show_valid_opts"] ?? null)) {
+        cargs.push("-show_valid_opts");
+    }
     if ((params["version"] ?? null)) {
         cargs.push("-ver");
     }
@@ -304,6 +325,9 @@ function build_afni_py(
     run_cmake: string | null = null,
     run_make: string | null = null,
     verbose_level: number | null = null,
+    help: boolean = false,
+    history: boolean = false,
+    show_valid_opts: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
 ): BuildAfniPyOutputs {
@@ -326,6 +350,9 @@ function build_afni_py(
      * @param run_cmake Choose whether to run a cmake build. Default is no.
      * @param run_make Choose whether to run a make build. Default is yes.
      * @param verbose_level Set the verbosity level. Default is 1.
+     * @param help Show help message
+     * @param history Show module history
+     * @param show_valid_opts List valid options
      * @param version Show the current version
      * @param runner Command runner
     
@@ -333,7 +360,7 @@ function build_afni_py(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BUILD_AFNI_PY_METADATA);
-    const params = build_afni_py_params(build_root, clean_root, git_branch, git_tag, git_update, make_target, makefile, package_, prep_only, run_cmake, run_make, verbose_level, version)
+    const params = build_afni_py_params(build_root, clean_root, git_branch, git_tag, git_update, make_target, makefile, package_, prep_only, run_cmake, run_make, verbose_level, help, history, show_valid_opts, version)
     return build_afni_py_execute(params, execution);
 }
 

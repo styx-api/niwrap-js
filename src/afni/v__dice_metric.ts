@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__DICE_METRIC_METADATA: Metadata = {
-    id: "98eaa1a4d4837bef42b0135a72612d83719e6632.boutiques",
+    id: "f304dc18b4f65735b81cfb996e5968c559cf2e3d.boutiques",
     name: "@DiceMetric",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,8 +16,8 @@ interface VDiceMetricParameters {
     "base": InputPathType;
     "dsets": Array<InputPathType>;
     "max_roi"?: number | null | undefined;
+    "labeltable"?: InputPathType | null | undefined;
     "forceoutput"?: InputPathType | null | undefined;
-    "forceoutput_1"?: InputPathType | null | undefined;
     "echo": boolean;
     "save_match": boolean;
     "save_diff": boolean;
@@ -79,8 +79,8 @@ function v__dice_metric_params(
     base: InputPathType,
     dsets: Array<InputPathType>,
     max_roi: number | null = null,
+    labeltable: InputPathType | null = null,
     forceoutput: InputPathType | null = null,
-    forceoutput_1: InputPathType | null = null,
     echo: boolean = false,
     save_match: boolean = false,
     save_diff: boolean = false,
@@ -96,8 +96,8 @@ function v__dice_metric_params(
      * @param base Name of base (reference) segmentation
      * @param dsets Data sets for which the Dice Metric with BASE is computed. This should be the last option on the command line.
      * @param max_roi The maximum possible ROI index. Default is 12 or based on LTFILE if specified.
+     * @param labeltable If given, the labeltable is used to set the default MAX_ROI parameter. Also, this option forces an output for each key in the LTFILE.
      * @param forceoutput If given, force output for each class in LTFILE.
-     * @param forceoutput_1 If given, force output for each class in LTFILE.
      * @param echo Set echo.
      * @param save_match Save volume showing BASE*equals(BASE,DSET).
      * @param save_diff Save volume showing BASE*(1-equals(BASE,DSET)).
@@ -124,11 +124,11 @@ function v__dice_metric_params(
     if (max_roi !== null) {
         params["max_roi"] = max_roi;
     }
+    if (labeltable !== null) {
+        params["labeltable"] = labeltable;
+    }
     if (forceoutput !== null) {
         params["forceoutput"] = forceoutput;
-    }
-    if (forceoutput_1 !== null) {
-        params["forceoutput_1"] = forceoutput_1;
     }
     if (prefix !== null) {
         params["prefix"] = prefix;
@@ -165,16 +165,16 @@ function v__dice_metric_cargs(
             String((params["max_roi"] ?? null))
         );
     }
+    if ((params["labeltable"] ?? null) !== null) {
+        cargs.push(
+            "-labeltable",
+            execution.inputFile((params["labeltable"] ?? null))
+        );
+    }
     if ((params["forceoutput"] ?? null) !== null) {
         cargs.push(
             "-forceoutput",
             execution.inputFile((params["forceoutput"] ?? null))
-        );
-    }
-    if ((params["forceoutput_1"] ?? null) !== null) {
-        cargs.push(
-            "-forceoutput",
-            execution.inputFile((params["forceoutput_1"] ?? null))
         );
     }
     if ((params["echo"] ?? null)) {
@@ -255,8 +255,8 @@ function v__dice_metric(
     base: InputPathType,
     dsets: Array<InputPathType>,
     max_roi: number | null = null,
+    labeltable: InputPathType | null = null,
     forceoutput: InputPathType | null = null,
-    forceoutput_1: InputPathType | null = null,
     echo: boolean = false,
     save_match: boolean = false,
     save_diff: boolean = false,
@@ -277,8 +277,8 @@ function v__dice_metric(
      * @param base Name of base (reference) segmentation
      * @param dsets Data sets for which the Dice Metric with BASE is computed. This should be the last option on the command line.
      * @param max_roi The maximum possible ROI index. Default is 12 or based on LTFILE if specified.
+     * @param labeltable If given, the labeltable is used to set the default MAX_ROI parameter. Also, this option forces an output for each key in the LTFILE.
      * @param forceoutput If given, force output for each class in LTFILE.
-     * @param forceoutput_1 If given, force output for each class in LTFILE.
      * @param echo Set echo.
      * @param save_match Save volume showing BASE*equals(BASE,DSET).
      * @param save_diff Save volume showing BASE*(1-equals(BASE,DSET)).
@@ -293,7 +293,7 @@ function v__dice_metric(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DICE_METRIC_METADATA);
-    const params = v__dice_metric_params(base, dsets, max_roi, forceoutput, forceoutput_1, echo, save_match, save_diff, do_not_mask_by_base, mask_by_base, prefix, ignore_bad, keep_tmp)
+    const params = v__dice_metric_params(base, dsets, max_roi, labeltable, forceoutput, echo, save_match, save_diff, do_not_mask_by_base, mask_by_base, prefix, ignore_bad, keep_tmp)
     return v__dice_metric_execute(params, execution);
 }
 

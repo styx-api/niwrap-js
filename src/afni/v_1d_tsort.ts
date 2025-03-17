@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_TSORT_METADATA: Metadata = {
-    id: "731309e5236007bd69df120b6a0494a5de798eeb.boutiques",
+    id: "f4d144dd2a33cb2a0c2516cb757ba2a8c82c7262.boutiques",
     name: "1dTsort",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,7 @@ const V_1D_TSORT_METADATA: Metadata = {
 
 interface V1dTsortParameters {
     "__STYXTYPE__": "1dTsort";
+    "inc_order": boolean;
     "dec_order": boolean;
     "transpose": boolean;
     "column"?: number | null | undefined;
@@ -69,6 +70,7 @@ interface V1dTsortOutputs {
 
 function v_1d_tsort_params(
     infile: InputPathType,
+    inc_order: boolean = false,
     dec_order: boolean = false,
     transpose: boolean = false,
     column: number | null = null,
@@ -78,6 +80,7 @@ function v_1d_tsort_params(
      * Build parameters.
     
      * @param infile Input 1D file to be sorted.
+     * @param inc_order Sort into increasing order [default]
      * @param dec_order Sort into decreasing order
      * @param transpose Transpose the file before output.
      * @param column Sort only on column #j (counting starts at 0), and carry the rest of the columns with it.
@@ -87,6 +90,7 @@ function v_1d_tsort_params(
      */
     const params = {
         "__STYXTYPE__": "1dTsort" as const,
+        "inc_order": inc_order,
         "dec_order": dec_order,
         "transpose": transpose,
         "imode": imode,
@@ -113,6 +117,9 @@ function v_1d_tsort_cargs(
      */
     const cargs: string[] = [];
     cargs.push("1dTsort");
+    if ((params["inc_order"] ?? null)) {
+        cargs.push("-inc");
+    }
     if ((params["dec_order"] ?? null)) {
         cargs.push("-dec");
     }
@@ -178,6 +185,7 @@ function v_1d_tsort_execute(
 
 function v_1d_tsort(
     infile: InputPathType,
+    inc_order: boolean = false,
     dec_order: boolean = false,
     transpose: boolean = false,
     column: number | null = null,
@@ -192,6 +200,7 @@ function v_1d_tsort(
      * URL: https://afni.nimh.nih.gov/
     
      * @param infile Input 1D file to be sorted.
+     * @param inc_order Sort into increasing order [default]
      * @param dec_order Sort into decreasing order
      * @param transpose Transpose the file before output.
      * @param column Sort only on column #j (counting starts at 0), and carry the rest of the columns with it.
@@ -202,7 +211,7 @@ function v_1d_tsort(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_TSORT_METADATA);
-    const params = v_1d_tsort_params(infile, dec_order, transpose, column, imode)
+    const params = v_1d_tsort_params(infile, inc_order, dec_order, transpose, column, imode)
     return v_1d_tsort_execute(params, execution);
 }
 

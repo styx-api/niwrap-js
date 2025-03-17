@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ADJUNCT_MAKE_SCRIPT_AND_RST_PY_METADATA: Metadata = {
-    id: "b713438ba08e71d534cca42445c2bcd23acbc3af.boutiques",
+    id: "5cd9b08bee37168399c0b35d303c4cdeaaeeffeb.boutiques",
     name: "adjunct_make_script_and_rst.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -126,7 +126,7 @@ function adjunct_make_script_and_rst_py_cargs(
     cargs.push("adjunct_make_script_and_rst.py");
     cargs.push(
         "-input",
-        ["-", execution.inputFile((params["input_script"] ?? null))].join('')
+        execution.inputFile((params["input_script"] ?? null))
     );
     cargs.push(
         "--prefix_rst",

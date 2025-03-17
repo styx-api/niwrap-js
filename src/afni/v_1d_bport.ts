@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_BPORT_METADATA: Metadata = {
-    id: "4be892d519b77ae339eb9adf3a74b7d897d73650.boutiques",
+    id: "3e21c923df63dc56e984c041d63c42544214ee22.boutiques",
     name: "1dBport",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,7 @@ interface V1dBportParameters {
     "__STYXTYPE__": "1dBport";
     "band": Array<number>;
     "invert": boolean;
+    "nozero": boolean;
     "noconst": boolean;
     "quad": boolean;
     "input_dataset"?: InputPathType | null | undefined;
@@ -79,6 +80,7 @@ interface V1dBportOutputs {
 function v_1d_bport_params(
     band: Array<number>,
     invert: boolean = false,
+    nozero: boolean = false,
     noconst: boolean = false,
     quad: boolean = false,
     input_dataset: InputPathType | null = null,
@@ -92,6 +94,7 @@ function v_1d_bport_params(
     
      * @param band Specify lowest and highest frequencies in the passband.
      * @param invert Invert the selection after computing which frequency indexes correspond to the input band(s).
+     * @param nozero Do NOT generate the 0 frequency (constant) component when fbot = 0.
      * @param noconst Same as -nozero. Do NOT generate the 0 frequency (constant) component when fbot = 0.
      * @param quad Add regressors for linear and quadratic trends.
      * @param input_dataset Specify the dataset input.
@@ -106,6 +109,7 @@ function v_1d_bport_params(
         "__STYXTYPE__": "1dBport" as const,
         "band": band,
         "invert": invert,
+        "nozero": nozero,
         "noconst": noconst,
         "quad": quad,
     };
@@ -148,6 +152,9 @@ function v_1d_bport_cargs(
     );
     if ((params["invert"] ?? null)) {
         cargs.push("-invert");
+    }
+    if ((params["nozero"] ?? null)) {
+        cargs.push("-nozero");
     }
     if ((params["noconst"] ?? null)) {
         cargs.push("-noconst");
@@ -236,6 +243,7 @@ function v_1d_bport_execute(
 function v_1d_bport(
     band: Array<number>,
     invert: boolean = false,
+    nozero: boolean = false,
     noconst: boolean = false,
     quad: boolean = false,
     input_dataset: InputPathType | null = null,
@@ -254,6 +262,7 @@ function v_1d_bport(
     
      * @param band Specify lowest and highest frequencies in the passband.
      * @param invert Invert the selection after computing which frequency indexes correspond to the input band(s).
+     * @param nozero Do NOT generate the 0 frequency (constant) component when fbot = 0.
      * @param noconst Same as -nozero. Do NOT generate the 0 frequency (constant) component when fbot = 0.
      * @param quad Add regressors for linear and quadratic trends.
      * @param input_dataset Specify the dataset input.
@@ -267,7 +276,7 @@ function v_1d_bport(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_BPORT_METADATA);
-    const params = v_1d_bport_params(band, invert, noconst, quad, input_dataset, input_1d_file, nodata, tr, concat)
+    const params = v_1d_bport_params(band, invert, nozero, noconst, quad, input_dataset, input_1d_file, nodata, tr, concat)
     return v_1d_bport_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__DEBLANK_FILE_NAMES_METADATA: Metadata = {
-    id: "da8da0abd18b50263679955b0ea74ae940b81571.boutiques",
+    id: "68ddb73b60e7fe7159ec6fd9653bf2405c5c6592.boutiques",
     name: "@DeblankFileNames",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -18,6 +18,7 @@ interface VDeblankFileNamesParameters {
     "demo_set": boolean;
     "echo": boolean;
     "help": boolean;
+    "files"?: Array<InputPathType> | null | undefined;
 }
 
 
@@ -73,6 +74,7 @@ function v__deblank_file_names_params(
     demo_set: boolean = false,
     echo: boolean = false,
     help: boolean = false,
+    files: Array<InputPathType> | null = null,
 ): VDeblankFileNamesParameters {
     /**
      * Build parameters.
@@ -82,6 +84,7 @@ function v__deblank_file_names_params(
      * @param demo_set Create a toy directory with bad names for testing.
      * @param echo Turn on script echo.
      * @param help Display help message.
+     * @param files Specify files to fix as opposed to letting it fix all the names in the current directory.
     
      * @returns Parameter dictionary
      */
@@ -93,6 +96,9 @@ function v__deblank_file_names_params(
         "echo": echo,
         "help": help,
     };
+    if (files !== null) {
+        params["files"] = files;
+    }
     return params;
 }
 
@@ -126,7 +132,9 @@ function v__deblank_file_names_cargs(
     if ((params["help"] ?? null)) {
         cargs.push("-help");
     }
-    cargs.push("[FILES...]");
+    if ((params["files"] ?? null) !== null) {
+        cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
+    }
     return cargs;
 }
 
@@ -180,6 +188,7 @@ function v__deblank_file_names(
     demo_set: boolean = false,
     echo: boolean = false,
     help: boolean = false,
+    files: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): VDeblankFileNamesOutputs {
     /**
@@ -194,13 +203,14 @@ function v__deblank_file_names(
      * @param demo_set Create a toy directory with bad names for testing.
      * @param echo Turn on script echo.
      * @param help Display help message.
+     * @param files Specify files to fix as opposed to letting it fix all the names in the current directory.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `VDeblankFileNamesOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DEBLANK_FILE_NAMES_METADATA);
-    const params = v__deblank_file_names_params(move, nobrac, demo_set, echo, help)
+    const params = v__deblank_file_names_params(move, nobrac, demo_set, echo, help, files)
     return v__deblank_file_names_execute(params, execution);
 }
 

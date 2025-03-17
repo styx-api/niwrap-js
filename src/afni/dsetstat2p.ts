@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DSETSTAT2P_METADATA: Metadata = {
-    id: "b07011bb5bdd8084543d33f9a06e2ddf0d7fd9f2.boutiques",
+    id: "7f3cbe6fcd6916e0065f078f2d35efc0d9307028.boutiques",
     name: "dsetstat2p",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,8 @@ interface Dsetstat2pParameters {
     "__STYXTYPE__": "dsetstat2p";
     "dataset": string;
     "statval": number;
+    "bisided": boolean;
+    "two_sided": boolean;
     "one_sided": boolean;
     "quiet": boolean;
 }
@@ -74,6 +76,8 @@ interface Dsetstat2pOutputs {
 function dsetstat2p_params(
     dataset: string,
     statval: number,
+    bisided: boolean = false,
+    two_sided: boolean = false,
     one_sided: boolean = false,
     quiet: boolean = false,
 ): Dsetstat2pParameters {
@@ -82,6 +86,8 @@ function dsetstat2p_params(
     
      * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). Note that 'i' can be either a number of a string label selector.
      * @param statval Input stat-value S, which MUST be in the interval [0, infinity).
+     * @param bisided Choose one-sided or bi-sided/two-sided testing
+     * @param two_sided Choose one-sided or bi-sided/two-sided testing
      * @param one_sided Choose one-sided or bi-sided/two-sided testing
      * @param quiet An optional flag so that output ONLY the final statistic value output to standard output; this can be then be viewed, redirected to a text file or saved as a shell variable. (Default: display supplementary text.)
     
@@ -91,6 +97,8 @@ function dsetstat2p_params(
         "__STYXTYPE__": "dsetstat2p" as const,
         "dataset": dataset,
         "statval": statval,
+        "bisided": bisided,
+        "two_sided": two_sided,
         "one_sided": one_sided,
         "quiet": quiet,
     };
@@ -114,6 +122,12 @@ function dsetstat2p_cargs(
     cargs.push("dsetstat2p");
     cargs.push((params["dataset"] ?? null));
     cargs.push(String((params["statval"] ?? null)));
+    if ((params["bisided"] ?? null)) {
+        cargs.push("-bisided");
+    }
+    if ((params["two_sided"] ?? null)) {
+        cargs.push("-2sided");
+    }
     if ((params["one_sided"] ?? null)) {
         cargs.push("-1sided");
     }
@@ -171,6 +185,8 @@ function dsetstat2p_execute(
 function dsetstat2p(
     dataset: string,
     statval: number,
+    bisided: boolean = false,
+    two_sided: boolean = false,
     one_sided: boolean = false,
     quiet: boolean = false,
     runner: Runner | null = null,
@@ -184,6 +200,8 @@ function dsetstat2p(
     
      * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). Note that 'i' can be either a number of a string label selector.
      * @param statval Input stat-value S, which MUST be in the interval [0, infinity).
+     * @param bisided Choose one-sided or bi-sided/two-sided testing
+     * @param two_sided Choose one-sided or bi-sided/two-sided testing
      * @param one_sided Choose one-sided or bi-sided/two-sided testing
      * @param quiet An optional flag so that output ONLY the final statistic value output to standard output; this can be then be viewed, redirected to a text file or saved as a shell variable. (Default: display supplementary text.)
      * @param runner Command runner
@@ -192,7 +210,7 @@ function dsetstat2p(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DSETSTAT2P_METADATA);
-    const params = dsetstat2p_params(dataset, statval, one_sided, quiet)
+    const params = dsetstat2p_params(dataset, statval, bisided, two_sided, one_sided, quiet)
     return dsetstat2p_execute(params, execution);
 }
 

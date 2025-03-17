@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TCAT_METADATA: Metadata = {
-    id: "857f0c4b1d6c6ff7212eb0f219b0756a253e1817.boutiques",
+    id: "023823c816c61a89ea1bb113572154f5901d616f.boutiques",
     name: "3dTcat",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,7 +15,9 @@ interface V3dTcatParameters {
     "__STYXTYPE__": "3dTcat";
     "rlt"?: "" | "+" | "++" | null | undefined;
     "in_files": InputPathType;
+    "out_file"?: string | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
+    "num_threads"?: number | null | undefined;
     "verbose": boolean;
 }
 
@@ -68,17 +70,15 @@ interface V3dTcatOutputs {
      * Output image file name.
      */
     out_file: OutputPathType;
-    /**
-     * Output file.
-     */
-    out_file_: OutputPathType;
 }
 
 
 function v_3d_tcat_params(
     in_files: InputPathType,
     rlt: "" | "+" | "++" | null = null,
+    out_file: string | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
+    num_threads: number | null = null,
     verbose: boolean = false,
 ): V3dTcatParameters {
     /**
@@ -86,7 +86,9 @@ function v_3d_tcat_params(
     
      * @param in_files Input file to 3dtcat.
      * @param rlt '' or '+' or '++'. Remove linear trends in each voxel time series loaded from each input dataset, separately. option -rlt removes the least squares fit of 'a+b*t' to each voxel time series. option -rlt+ adds dataset mean back in. option -rlt++ adds overall mean of all dataset timeseries back in.
+     * @param out_file Output image file name.
      * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+     * @param num_threads Set number of threads.
      * @param verbose Print out some verbose output as the program.
     
      * @returns Parameter dictionary
@@ -99,8 +101,14 @@ function v_3d_tcat_params(
     if (rlt !== null) {
         params["rlt"] = rlt;
     }
+    if (out_file !== null) {
+        params["out_file"] = out_file;
+    }
     if (outputtype !== null) {
         params["outputtype"] = outputtype;
+    }
+    if (num_threads !== null) {
+        params["num_threads"] = num_threads;
     }
     return params;
 }
@@ -126,9 +134,17 @@ function v_3d_tcat_cargs(
             [(params["rlt"] ?? null), execution.inputFile((params["in_files"] ?? null))].join('')
         );
     }
-    cargs.push("[OUT_FILE]");
+    if ((params["out_file"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["out_file"] ?? null)
+        );
+    }
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
+    }
+    if ((params["num_threads"] ?? null) !== null) {
+        cargs.push(String((params["num_threads"] ?? null)));
     }
     if ((params["verbose"] ?? null)) {
         cargs.push("-verb");
@@ -152,7 +168,6 @@ function v_3d_tcat_outputs(
     const ret: V3dTcatOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_files"] ?? null)), "_tcat"].join('')),
-        out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;
 }
@@ -186,7 +201,9 @@ function v_3d_tcat_execute(
 function v_3d_tcat(
     in_files: InputPathType,
     rlt: "" | "+" | "++" | null = null,
+    out_file: string | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
+    num_threads: number | null = null,
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dTcatOutputs {
@@ -200,7 +217,9 @@ function v_3d_tcat(
     
      * @param in_files Input file to 3dtcat.
      * @param rlt '' or '+' or '++'. Remove linear trends in each voxel time series loaded from each input dataset, separately. option -rlt removes the least squares fit of 'a+b*t' to each voxel time series. option -rlt+ adds dataset mean back in. option -rlt++ adds overall mean of all dataset timeseries back in.
+     * @param out_file Output image file name.
      * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+     * @param num_threads Set number of threads.
      * @param verbose Print out some verbose output as the program.
      * @param runner Command runner
     
@@ -208,7 +227,7 @@ function v_3d_tcat(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TCAT_METADATA);
-    const params = v_3d_tcat_params(in_files, rlt, outputtype, verbose)
+    const params = v_3d_tcat_params(in_files, rlt, out_file, outputtype, num_threads, verbose)
     return v_3d_tcat_execute(params, execution);
 }
 

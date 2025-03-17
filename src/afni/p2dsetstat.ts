@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const P2DSETSTAT_METADATA: Metadata = {
-    id: "425596bb580582f82bf97f7e288cb9c38b721949.boutiques",
+    id: "23edaf6df2aa7e769c710a218ab8bd8e6572d021.boutiques",
     name: "p2dsetstat",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,8 @@ interface P2dsetstatParameters {
     "__STYXTYPE__": "p2dsetstat";
     "dataset": string;
     "pvalue": number;
+    "bisided": boolean;
+    "twosided": boolean;
     "onesided": boolean;
     "quiet": boolean;
 }
@@ -74,6 +76,8 @@ interface P2dsetstatOutputs {
 function p2dsetstat_params(
     dataset: string,
     pvalue: number,
+    bisided: boolean = false,
+    twosided: boolean = false,
     onesided: boolean = false,
     quiet: boolean = false,
 ): P2dsetstatParameters {
@@ -82,6 +86,8 @@ function p2dsetstat_params(
     
      * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). 'i' can be either a number or a string label selector.
      * @param pvalue Input p-value P, which MUST be in the interval [0,1].
+     * @param bisided Two-sided test.
+     * @param twosided Two-sided test.
      * @param onesided One-sided test.
      * @param quiet Output only the final statistic value.
     
@@ -91,6 +97,8 @@ function p2dsetstat_params(
         "__STYXTYPE__": "p2dsetstat" as const,
         "dataset": dataset,
         "pvalue": pvalue,
+        "bisided": bisided,
+        "twosided": twosided,
         "onesided": onesided,
         "quiet": quiet,
     };
@@ -120,6 +128,12 @@ function p2dsetstat_cargs(
         "-pval",
         String((params["pvalue"] ?? null))
     );
+    if ((params["bisided"] ?? null)) {
+        cargs.push("-bisided");
+    }
+    if ((params["twosided"] ?? null)) {
+        cargs.push("-2sided");
+    }
     if ((params["onesided"] ?? null)) {
         cargs.push("-1sided");
     }
@@ -177,6 +191,8 @@ function p2dsetstat_execute(
 function p2dsetstat(
     dataset: string,
     pvalue: number,
+    bisided: boolean = false,
+    twosided: boolean = false,
     onesided: boolean = false,
     quiet: boolean = false,
     runner: Runner | null = null,
@@ -190,6 +206,8 @@ function p2dsetstat(
     
      * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). 'i' can be either a number or a string label selector.
      * @param pvalue Input p-value P, which MUST be in the interval [0,1].
+     * @param bisided Two-sided test.
+     * @param twosided Two-sided test.
      * @param onesided One-sided test.
      * @param quiet Output only the final statistic value.
      * @param runner Command runner
@@ -198,7 +216,7 @@ function p2dsetstat(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(P2DSETSTAT_METADATA);
-    const params = p2dsetstat_params(dataset, pvalue, onesided, quiet)
+    const params = p2dsetstat_params(dataset, pvalue, bisided, twosided, onesided, quiet)
     return p2dsetstat_execute(params, execution);
 }
 

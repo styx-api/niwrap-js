@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DDOT_METADATA: Metadata = {
-    id: "89e3bea294b27fb22b4f6d2f28db83dbf8daea66.boutiques",
+    id: "3b57cf09716c42dc28cccea1c8b49a4f626abd0b.boutiques",
     name: "1ddot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -68,6 +68,10 @@ interface V1ddotOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
+    /**
+     * output text file
+     */
+    stdout: string[];
     /**
      * Output correlation or covariance matrix printed to stdout.
      */
@@ -150,8 +154,6 @@ function v_1ddot_cargs(
         cargs.push("-okzero");
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push(">");
-    cargs.push("stdout.txt");
     return cargs;
 }
 
@@ -170,6 +172,7 @@ function v_1ddot_outputs(
      */
     const ret: V1ddotOutputs = {
         root: execution.outputFile("."),
+        stdout: [],
         stdout_output: execution.outputFile(["stdout.txt"].join('')),
     };
     return ret;
@@ -195,7 +198,7 @@ function v_1ddot_execute(
     params = execution.params(params)
     const cargs = v_1ddot_cargs(params, execution)
     const ret = v_1ddot_outputs(params, execution)
-    execution.run(cargs, undefined);
+    execution.run(cargs, s => ret.stdout.push(s));
     return ret;
 }
 

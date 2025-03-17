@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MEMA_METADATA: Metadata = {
-    id: "3e49aad2d71d54e4f942b7cc6311a0fe4225ef3f.boutiques",
+    id: "706a67099d952759ecce32973deff0aa7728837d.boutiques",
     name: "3dMEMA",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,33 @@ const V_3D_MEMA_METADATA: Metadata = {
 
 interface V3dMemaParameters {
     "__STYXTYPE__": "3dMEMA";
+    "prefix": string;
+    "jobs"?: number | null | undefined;
+    "set": Array<string>;
+    "covariates"?: InputPathType | null | undefined;
+    "covariates_center"?: string | null | undefined;
+    "covariates_model"?: string | null | undefined;
+    "covariates_name"?: Array<string> | null | undefined;
+    "groups"?: Array<string> | null | undefined;
+    "cio": boolean;
+    "HKtest": boolean;
+    "mask"?: InputPathType | null | undefined;
+    "max_zeros"?: number | null | undefined;
+    "missing_data"?: Array<string> | null | undefined;
+    "model_outliers": boolean;
+    "n_nonzero"?: number | null | undefined;
+    "no_HKtest": boolean;
+    "no_model_outliers": boolean;
+    "no_residual_Z": boolean;
+    "residual_Z": boolean;
+    "Rio": boolean;
+    "equal_variance": boolean;
+    "unequal_variance": boolean;
+    "verb"?: number | null | undefined;
+    "dbgArgs": boolean;
+    "help": boolean;
+    "conditions"?: Array<string> | null | undefined;
+    "no_tstat": boolean;
 }
 
 
@@ -68,15 +95,121 @@ interface V3dMemaOutputs {
 
 
 function v_3d_mema_params(
+    prefix: string,
+    set_: Array<string>,
+    jobs: number | null = null,
+    covariates: InputPathType | null = null,
+    covariates_center: string | null = null,
+    covariates_model: string | null = null,
+    covariates_name: Array<string> | null = null,
+    groups: Array<string> | null = null,
+    cio: boolean = false,
+    hktest: boolean = false,
+    mask: InputPathType | null = null,
+    max_zeros: number | null = null,
+    missing_data: Array<string> | null = null,
+    model_outliers: boolean = false,
+    n_nonzero: number | null = null,
+    no_hktest: boolean = false,
+    no_model_outliers: boolean = false,
+    no_residual_z: boolean = false,
+    residual_z: boolean = false,
+    rio: boolean = false,
+    equal_variance: boolean = false,
+    unequal_variance: boolean = false,
+    verb: number | null = null,
+    dbg_args: boolean = false,
+    help: boolean = false,
+    conditions: Array<string> | null = null,
+    no_tstat: boolean = false,
 ): V3dMemaParameters {
     /**
      * Build parameters.
+    
+     * @param prefix Output prefix (just prefix, no view+suffix needed)
+     * @param set_ Set data for one of the test variables
+     * @param jobs Number of jobs for parallel computing
+     * @param covariates Specify the name of a text file containing a table for the covariate(s).
+     * @param covariates_center Specify the center values for covariates.
+     * @param covariates_model Specify how covariates should be modeled.
+     * @param covariates_name Specify the name of each covariate.
+     * @param groups Label of groups, used for output naming.
+     * @param cio Use AFNI's C io functions.
+     * @param hktest Perform Hartung-Knapp adjustment for the output t-statistic.
+     * @param mask Only process voxels inside the specified mask.
+     * @param max_zeros Specify how many beta/t-statistics can be zero.
+     * @param missing_data Specify missing data handling.
+     * @param model_outliers Model outliers with a Laplace distribution.
+     * @param n_nonzero Number of non-zero beta values required.
+     * @param no_hktest Specify not to use Hartung-Knapp adjustment.
+     * @param no_model_outliers Specify not to model outliers.
+     * @param no_residual_z Do not output residuals and their Z values.
+     * @param residual_z Output residuals and their Z values.
+     * @param rio Use R's io functions.
+     * @param equal_variance Assume same cross-subjects variability between groups.
+     * @param unequal_variance Model cross-subject variability difference between groups.
+     * @param verb Specify verbosity level
+     * @param dbg_args Output missing data debug file.
+     * @param help Show help message
+     * @param conditions Name of 1 or 2 conditions, tasks, or GLTs
+     * @param no_tstat Do not compute t-statistics
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dMEMA" as const,
+        "prefix": prefix,
+        "set": set_,
+        "cio": cio,
+        "HKtest": hktest,
+        "model_outliers": model_outliers,
+        "no_HKtest": no_hktest,
+        "no_model_outliers": no_model_outliers,
+        "no_residual_Z": no_residual_z,
+        "residual_Z": residual_z,
+        "Rio": rio,
+        "equal_variance": equal_variance,
+        "unequal_variance": unequal_variance,
+        "dbgArgs": dbg_args,
+        "help": help,
+        "no_tstat": no_tstat,
     };
+    if (jobs !== null) {
+        params["jobs"] = jobs;
+    }
+    if (covariates !== null) {
+        params["covariates"] = covariates;
+    }
+    if (covariates_center !== null) {
+        params["covariates_center"] = covariates_center;
+    }
+    if (covariates_model !== null) {
+        params["covariates_model"] = covariates_model;
+    }
+    if (covariates_name !== null) {
+        params["covariates_name"] = covariates_name;
+    }
+    if (groups !== null) {
+        params["groups"] = groups;
+    }
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (max_zeros !== null) {
+        params["max_zeros"] = max_zeros;
+    }
+    if (missing_data !== null) {
+        params["missing_data"] = missing_data;
+    }
+    if (n_nonzero !== null) {
+        params["n_nonzero"] = n_nonzero;
+    }
+    if (verb !== null) {
+        params["verb"] = verb;
+    }
+    if (conditions !== null) {
+        params["conditions"] = conditions;
+    }
     return params;
 }
 
@@ -95,7 +228,125 @@ function v_3d_mema_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dMEMA");
-    cargs.push("[OPTIONS]");
+    cargs.push(
+        "-prefix",
+        (params["prefix"] ?? null)
+    );
+    if ((params["jobs"] ?? null) !== null) {
+        cargs.push(
+            "-jobs",
+            String((params["jobs"] ?? null))
+        );
+    }
+    cargs.push(
+        "-set",
+        ...(params["set"] ?? null)
+    );
+    if ((params["covariates"] ?? null) !== null) {
+        cargs.push(
+            "-covariates",
+            execution.inputFile((params["covariates"] ?? null))
+        );
+    }
+    if ((params["covariates_center"] ?? null) !== null) {
+        cargs.push(
+            "-covariates_center",
+            (params["covariates_center"] ?? null)
+        );
+    }
+    if ((params["covariates_model"] ?? null) !== null) {
+        cargs.push(
+            "-covariates_model",
+            (params["covariates_model"] ?? null)
+        );
+    }
+    if ((params["covariates_name"] ?? null) !== null) {
+        cargs.push(
+            "-covariates_name",
+            ...(params["covariates_name"] ?? null)
+        );
+    }
+    if ((params["groups"] ?? null) !== null) {
+        cargs.push(
+            "-groups",
+            ...(params["groups"] ?? null)
+        );
+    }
+    if ((params["cio"] ?? null)) {
+        cargs.push("-cio");
+    }
+    if ((params["HKtest"] ?? null)) {
+        cargs.push("-HKtest");
+    }
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["max_zeros"] ?? null) !== null) {
+        cargs.push(
+            "-max_zeros",
+            String((params["max_zeros"] ?? null))
+        );
+    }
+    if ((params["missing_data"] ?? null) !== null) {
+        cargs.push(
+            "-missing_data",
+            ...(params["missing_data"] ?? null)
+        );
+    }
+    if ((params["model_outliers"] ?? null)) {
+        cargs.push("-model_outliers");
+    }
+    if ((params["n_nonzero"] ?? null) !== null) {
+        cargs.push(
+            "-n_nonzero",
+            String((params["n_nonzero"] ?? null))
+        );
+    }
+    if ((params["no_HKtest"] ?? null)) {
+        cargs.push("-no_HKtest");
+    }
+    if ((params["no_model_outliers"] ?? null)) {
+        cargs.push("-no_model_outliers");
+    }
+    if ((params["no_residual_Z"] ?? null)) {
+        cargs.push("-no_residual_Z");
+    }
+    if ((params["residual_Z"] ?? null)) {
+        cargs.push("-residual_Z");
+    }
+    if ((params["Rio"] ?? null)) {
+        cargs.push("-Rio");
+    }
+    if ((params["equal_variance"] ?? null)) {
+        cargs.push("-equal_variance");
+    }
+    if ((params["unequal_variance"] ?? null)) {
+        cargs.push("-unequal_variance");
+    }
+    if ((params["verb"] ?? null) !== null) {
+        cargs.push(
+            "-verb",
+            String((params["verb"] ?? null))
+        );
+    }
+    if ((params["dbgArgs"] ?? null)) {
+        cargs.push("-dbgArgs");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
+    }
+    if ((params["conditions"] ?? null) !== null) {
+        cargs.push(
+            "-conditions",
+            ...(params["conditions"] ?? null)
+        );
+    }
+    if ((params["no_tstat"] ?? null)) {
+        cargs.push("-no_tstat");
+    }
     return cargs;
 }
 
@@ -114,7 +365,7 @@ function v_3d_mema_outputs(
      */
     const ret: V3dMemaOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile(["[PREFIX].nii.gz"].join('')),
+        output_file: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
     };
     return ret;
 }
@@ -145,6 +396,33 @@ function v_3d_mema_execute(
 
 
 function v_3d_mema(
+    prefix: string,
+    set_: Array<string>,
+    jobs: number | null = null,
+    covariates: InputPathType | null = null,
+    covariates_center: string | null = null,
+    covariates_model: string | null = null,
+    covariates_name: Array<string> | null = null,
+    groups: Array<string> | null = null,
+    cio: boolean = false,
+    hktest: boolean = false,
+    mask: InputPathType | null = null,
+    max_zeros: number | null = null,
+    missing_data: Array<string> | null = null,
+    model_outliers: boolean = false,
+    n_nonzero: number | null = null,
+    no_hktest: boolean = false,
+    no_model_outliers: boolean = false,
+    no_residual_z: boolean = false,
+    residual_z: boolean = false,
+    rio: boolean = false,
+    equal_variance: boolean = false,
+    unequal_variance: boolean = false,
+    verb: number | null = null,
+    dbg_args: boolean = false,
+    help: boolean = false,
+    conditions: Array<string> | null = null,
+    no_tstat: boolean = false,
     runner: Runner | null = null,
 ): V3dMemaOutputs {
     /**
@@ -154,13 +432,40 @@ function v_3d_mema(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param prefix Output prefix (just prefix, no view+suffix needed)
+     * @param set_ Set data for one of the test variables
+     * @param jobs Number of jobs for parallel computing
+     * @param covariates Specify the name of a text file containing a table for the covariate(s).
+     * @param covariates_center Specify the center values for covariates.
+     * @param covariates_model Specify how covariates should be modeled.
+     * @param covariates_name Specify the name of each covariate.
+     * @param groups Label of groups, used for output naming.
+     * @param cio Use AFNI's C io functions.
+     * @param hktest Perform Hartung-Knapp adjustment for the output t-statistic.
+     * @param mask Only process voxels inside the specified mask.
+     * @param max_zeros Specify how many beta/t-statistics can be zero.
+     * @param missing_data Specify missing data handling.
+     * @param model_outliers Model outliers with a Laplace distribution.
+     * @param n_nonzero Number of non-zero beta values required.
+     * @param no_hktest Specify not to use Hartung-Knapp adjustment.
+     * @param no_model_outliers Specify not to model outliers.
+     * @param no_residual_z Do not output residuals and their Z values.
+     * @param residual_z Output residuals and their Z values.
+     * @param rio Use R's io functions.
+     * @param equal_variance Assume same cross-subjects variability between groups.
+     * @param unequal_variance Model cross-subject variability difference between groups.
+     * @param verb Specify verbosity level
+     * @param dbg_args Output missing data debug file.
+     * @param help Show help message
+     * @param conditions Name of 1 or 2 conditions, tasks, or GLTs
+     * @param no_tstat Do not compute t-statistics
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dMemaOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MEMA_METADATA);
-    const params = v_3d_mema_params()
+    const params = v_3d_mema_params(prefix, set_, jobs, covariates, covariates_center, covariates_model, covariates_name, groups, cio, hktest, mask, max_zeros, missing_data, model_outliers, n_nonzero, no_hktest, no_model_outliers, no_residual_z, residual_z, rio, equal_variance, unequal_variance, verb, dbg_args, help, conditions, no_tstat)
     return v_3d_mema_execute(params, execution);
 }
 

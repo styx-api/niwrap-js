@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3_DROIMAKER_METADATA: Metadata = {
-    id: "52994e672a5f137f27dbb8bbd59f66cee7093ffe.boutiques",
+    id: "16b5bd8ed0bd228cb0f4654876f7baea2f4af429.boutiques",
     name: "3DROIMaker",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -18,6 +18,7 @@ interface V3DroimakerParameters {
     "prefix": string;
     "refset"?: InputPathType | null | undefined;
     "volthr"?: number | null | undefined;
+    "only_some_top"?: number | null | undefined;
     "only_conn_top"?: number | null | undefined;
     "inflate"?: number | null | undefined;
     "trim_off_wm": boolean;
@@ -96,6 +97,7 @@ function v_3_droimaker_params(
     prefix: string,
     refset: InputPathType | null = null,
     volthr: number | null = null,
+    only_some_top: number | null = null,
     only_conn_top: number | null = null,
     inflate: number | null = null,
     trim_off_wm: boolean = false,
@@ -119,6 +121,7 @@ function v_3_droimaker_params(
      * @param prefix Prefix of output name, with output files being: PREFIX_GM* and PREFIX_GMI*
      * @param refset 3D (or multi-subbrick) volume containing integer values with which to label specific GM ROIs after thresholding.
      * @param volthr Minimum size a cluster of voxels must have in order to remain a GM ROI after thresholding. Can reduce 'noisy' clusters.
+     * @param only_some_top Restrict each found region to keep only N voxels with the highest inset values.
      * @param only_conn_top Select N max contiguous voxels in a region starting from peak voxel and expanding.
      * @param inflate Number of voxels to pad each found ROI in order to turn GM ROIs into inflated (GMI) ROIs.
      * @param trim_off_wm Trim the INSET to exclude voxels in WM by excluding those which overlap an input WM skeleton.
@@ -153,6 +156,9 @@ function v_3_droimaker_params(
     }
     if (volthr !== null) {
         params["volthr"] = volthr;
+    }
+    if (only_some_top !== null) {
+        params["only_some_top"] = only_some_top;
     }
     if (only_conn_top !== null) {
         params["only_conn_top"] = only_conn_top;
@@ -215,6 +221,12 @@ function v_3_droimaker_cargs(
         cargs.push(
             "-volthr",
             String((params["volthr"] ?? null))
+        );
+    }
+    if ((params["only_some_top"] ?? null) !== null) {
+        cargs.push(
+            "-only_some_top",
+            String((params["only_some_top"] ?? null))
         );
     }
     if ((params["only_conn_top"] ?? null) !== null) {
@@ -338,6 +350,7 @@ function v_3_droimaker(
     prefix: string,
     refset: InputPathType | null = null,
     volthr: number | null = null,
+    only_some_top: number | null = null,
     only_conn_top: number | null = null,
     inflate: number | null = null,
     trim_off_wm: boolean = false,
@@ -366,6 +379,7 @@ function v_3_droimaker(
      * @param prefix Prefix of output name, with output files being: PREFIX_GM* and PREFIX_GMI*
      * @param refset 3D (or multi-subbrick) volume containing integer values with which to label specific GM ROIs after thresholding.
      * @param volthr Minimum size a cluster of voxels must have in order to remain a GM ROI after thresholding. Can reduce 'noisy' clusters.
+     * @param only_some_top Restrict each found region to keep only N voxels with the highest inset values.
      * @param only_conn_top Select N max contiguous voxels in a region starting from peak voxel and expanding.
      * @param inflate Number of voxels to pad each found ROI in order to turn GM ROIs into inflated (GMI) ROIs.
      * @param trim_off_wm Trim the INSET to exclude voxels in WM by excluding those which overlap an input WM skeleton.
@@ -386,7 +400,7 @@ function v_3_droimaker(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3_DROIMAKER_METADATA);
-    const params = v_3_droimaker_params(inset, thresh, prefix, refset, volthr, only_conn_top, inflate, trim_off_wm, wm_skel, skel_thr, skel_stop, skel_stop_strict, csf_skel, mask, neigh_upto_vert, nifti, preinfl_inset, preinfl_inflate, dump_no_labtab)
+    const params = v_3_droimaker_params(inset, thresh, prefix, refset, volthr, only_some_top, only_conn_top, inflate, trim_off_wm, wm_skel, skel_thr, skel_stop, skel_stop_strict, csf_skel, mask, neigh_upto_vert, nifti, preinfl_inset, preinfl_inflate, dump_no_labtab)
     return v_3_droimaker_execute(params, execution);
 }
 

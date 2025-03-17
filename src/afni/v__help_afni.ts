@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__HELP_AFNI_METADATA: Metadata = {
-    id: "87ebd1e4083856099825a6ef50fde5abb2dad615.boutiques",
+    id: "feadd2af7149741e9f9192b504b7c09e3ad50dc5.boutiques",
     name: "@help.AFNI",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,12 @@ const V__HELP_AFNI_METADATA: Metadata = {
 
 interface VHelpAfniParameters {
     "__STYXTYPE__": "@help.AFNI";
+    "match"?: string | null | undefined;
+    "lynx": boolean;
+    "vi": boolean;
+    "less": boolean;
+    "nedit": boolean;
+    "noview": boolean;
 }
 
 
@@ -63,15 +69,36 @@ interface VHelpAfniOutputs {
 
 
 function v__help_afni_params(
+    match: string | null = null,
+    lynx: boolean = false,
+    vi: boolean = false,
+    less: boolean = false,
+    nedit: boolean = false,
+    noview: boolean = false,
 ): VHelpAfniParameters {
     /**
      * Build parameters.
+    
+     * @param match Looks for occurrence of each word in the list in the help file. For a match with multiple words, all the words must be on the same line of text in the help file.
+     * @param lynx Set viewer to lynx
+     * @param vi Set viewer to vi
+     * @param less Set viewer to less (default)
+     * @param nedit Set viewer to nedit
+     * @param noview Set viewer to no view
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "@help.AFNI" as const,
+        "lynx": lynx,
+        "vi": vi,
+        "less": less,
+        "nedit": nedit,
+        "noview": noview,
     };
+    if (match !== null) {
+        params["match"] = match;
+    }
     return params;
 }
 
@@ -90,7 +117,27 @@ function v__help_afni_cargs(
      */
     const cargs: string[] = [];
     cargs.push("@help.AFNI");
-    cargs.push("[OPTIONS]");
+    if ((params["match"] ?? null) !== null) {
+        cargs.push(
+            "-match",
+            (params["match"] ?? null)
+        );
+    }
+    if ((params["lynx"] ?? null)) {
+        cargs.push("-lynx");
+    }
+    if ((params["vi"] ?? null)) {
+        cargs.push("-vi");
+    }
+    if ((params["less"] ?? null)) {
+        cargs.push("-less");
+    }
+    if ((params["nedit"] ?? null)) {
+        cargs.push("-nedit");
+    }
+    if ((params["noview"] ?? null)) {
+        cargs.push("-noview");
+    }
     return cargs;
 }
 
@@ -139,6 +186,12 @@ function v__help_afni_execute(
 
 
 function v__help_afni(
+    match: string | null = null,
+    lynx: boolean = false,
+    vi: boolean = false,
+    less: boolean = false,
+    nedit: boolean = false,
+    noview: boolean = false,
     runner: Runner | null = null,
 ): VHelpAfniOutputs {
     /**
@@ -148,13 +201,19 @@ function v__help_afni(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param match Looks for occurrence of each word in the list in the help file. For a match with multiple words, all the words must be on the same line of text in the help file.
+     * @param lynx Set viewer to lynx
+     * @param vi Set viewer to vi
+     * @param less Set viewer to less (default)
+     * @param nedit Set viewer to nedit
+     * @param noview Set viewer to no view
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `VHelpAfniOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__HELP_AFNI_METADATA);
-    const params = v__help_afni_params()
+    const params = v__help_afni_params(match, lynx, vi, less, nedit, noview)
     return v__help_afni_execute(params, execution);
 }
 

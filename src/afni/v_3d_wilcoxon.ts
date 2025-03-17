@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_WILCOXON_METADATA: Metadata = {
-    id: "463bd0c7f172cd1b8be0a6f1adaeefb51a0010ea.boutiques",
+    id: "ab0873d1df66a8478516e2a9302c8e42a90d10ec.boutiques",
     name: "3dWilcoxon",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -132,12 +132,14 @@ function v_3d_wilcoxon_cargs(
             String((params["voxel"] ?? null))
         );
     }
-    cargs.push("-dset");
-    cargs.push("1");
-    cargs.push(...(params["dset1_x"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push("-dset");
-    cargs.push("2");
-    cargs.push(...(params["dset2_y"] ?? null).map(f => execution.inputFile(f)));
+    cargs.push(
+        "-dset 1",
+        ...(params["dset1_x"] ?? null).map(f => execution.inputFile(f))
+    );
+    cargs.push(
+        "-dset 2",
+        ...(params["dset2_y"] ?? null).map(f => execution.inputFile(f))
+    );
     cargs.push(
         "-out",
         (params["output_prefix"] ?? null)

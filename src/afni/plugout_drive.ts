@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PLUGOUT_DRIVE_METADATA: Metadata = {
-    id: "65a44f6f7d92c1ad9ba4ed1d48f6c277a7f935fb.boutiques",
+    id: "322abb84ee04acd16878a832336aea8a4c964855.boutiques",
     name: "plugout_drive",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,12 +14,20 @@ const PLUGOUT_DRIVE_METADATA: Metadata = {
 interface PlugoutDriveParameters {
     "__STYXTYPE__": "plugout_drive";
     "host"?: string | null | undefined;
+    "shm": boolean;
     "verbose": boolean;
     "port"?: number | null | undefined;
     "maxwait"?: number | null | undefined;
     "name"?: string | null | undefined;
     "command"?: Array<string> | null | undefined;
     "quit": boolean;
+    "np"?: number | null | undefined;
+    "npq"?: number | null | undefined;
+    "npb"?: number | null | undefined;
+    "max_port_bloc": boolean;
+    "max_port_bloc_quiet": boolean;
+    "num_assigned_ports": boolean;
+    "num_assigned_ports_quiet": boolean;
 }
 
 
@@ -71,30 +79,51 @@ interface PlugoutDriveOutputs {
 
 function plugout_drive_params(
     host: string | null = null,
+    shm: boolean = false,
     verbose: boolean = false,
     port: number | null = null,
     maxwait: number | null = null,
     name: string | null = null,
     command: Array<string> | null = null,
     quit: boolean = false,
+    np: number | null = null,
+    npq: number | null = null,
+    npb: number | null = null,
+    max_port_bloc: boolean = false,
+    max_port_bloc_quiet: boolean = false,
+    num_assigned_ports: boolean = false,
+    num_assigned_ports_quiet: boolean = false,
 ): PlugoutDriveParameters {
     /**
      * Build parameters.
     
      * @param host Connect to AFNI running on the specified host using TCP/IP. Default is 'localhost'.
+     * @param shm Connect to the current host using shared memory for large data transfers.
      * @param verbose Verbose mode.
      * @param port Use TCP/IP port number. Default is 8099.
      * @param maxwait Maximum wait time in seconds for AFNI to connect. Default is 9 seconds.
      * @param name Name that AFNI assigns to this plugout. Default is a pre-defined name.
      * @param command Command to be executed on AFNI. Example: '-com "SET_FUNCTION SomeFunction"'.
      * @param quit Quit after executing all -com commands. Default is to wait for more commands.
+     * @param np Provide a port offset to allow multiple instances of AFNI <--> SUMA, etc., on the same machine.
+     * @param npq Like -np but quieter in the face of adversity.
+     * @param npb Similar to -np, but using a block for easier usage.
+     * @param max_port_bloc Print the current value of MAX_BLOC and exit.
+     * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
+     * @param num_assigned_ports Print the number of assigned ports used by AFNI and exit.
+     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI and exit quietly.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "plugout_drive" as const,
+        "shm": shm,
         "verbose": verbose,
         "quit": quit,
+        "max_port_bloc": max_port_bloc,
+        "max_port_bloc_quiet": max_port_bloc_quiet,
+        "num_assigned_ports": num_assigned_ports,
+        "num_assigned_ports_quiet": num_assigned_ports_quiet,
     };
     if (host !== null) {
         params["host"] = host;
@@ -110,6 +139,15 @@ function plugout_drive_params(
     }
     if (command !== null) {
         params["command"] = command;
+    }
+    if (np !== null) {
+        params["np"] = np;
+    }
+    if (npq !== null) {
+        params["npq"] = npq;
+    }
+    if (npb !== null) {
+        params["npb"] = npb;
     }
     return params;
 }
@@ -134,6 +172,9 @@ function plugout_drive_cargs(
             "-host",
             (params["host"] ?? null)
         );
+    }
+    if ((params["shm"] ?? null)) {
+        cargs.push("-shm");
     }
     if ((params["verbose"] ?? null)) {
         cargs.push("-v");
@@ -164,6 +205,36 @@ function plugout_drive_cargs(
     }
     if ((params["quit"] ?? null)) {
         cargs.push("-quit");
+    }
+    if ((params["np"] ?? null) !== null) {
+        cargs.push(
+            "-np",
+            String((params["np"] ?? null))
+        );
+    }
+    if ((params["npq"] ?? null) !== null) {
+        cargs.push(
+            "-npq",
+            String((params["npq"] ?? null))
+        );
+    }
+    if ((params["npb"] ?? null) !== null) {
+        cargs.push(
+            "-npb",
+            String((params["npb"] ?? null))
+        );
+    }
+    if ((params["max_port_bloc"] ?? null)) {
+        cargs.push("-max_port_bloc");
+    }
+    if ((params["max_port_bloc_quiet"] ?? null)) {
+        cargs.push("-max_port_bloc_quiet");
+    }
+    if ((params["num_assigned_ports"] ?? null)) {
+        cargs.push("-num_assigned_ports");
+    }
+    if ((params["num_assigned_ports_quiet"] ?? null)) {
+        cargs.push("-num_assigned_ports_quiet");
     }
     return cargs;
 }
@@ -214,12 +285,20 @@ function plugout_drive_execute(
 
 function plugout_drive(
     host: string | null = null,
+    shm: boolean = false,
     verbose: boolean = false,
     port: number | null = null,
     maxwait: number | null = null,
     name: string | null = null,
     command: Array<string> | null = null,
     quit: boolean = false,
+    np: number | null = null,
+    npq: number | null = null,
+    npb: number | null = null,
+    max_port_bloc: boolean = false,
+    max_port_bloc_quiet: boolean = false,
+    num_assigned_ports: boolean = false,
+    num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutDriveOutputs {
     /**
@@ -230,19 +309,27 @@ function plugout_drive(
      * URL: https://afni.nimh.nih.gov/
     
      * @param host Connect to AFNI running on the specified host using TCP/IP. Default is 'localhost'.
+     * @param shm Connect to the current host using shared memory for large data transfers.
      * @param verbose Verbose mode.
      * @param port Use TCP/IP port number. Default is 8099.
      * @param maxwait Maximum wait time in seconds for AFNI to connect. Default is 9 seconds.
      * @param name Name that AFNI assigns to this plugout. Default is a pre-defined name.
      * @param command Command to be executed on AFNI. Example: '-com "SET_FUNCTION SomeFunction"'.
      * @param quit Quit after executing all -com commands. Default is to wait for more commands.
+     * @param np Provide a port offset to allow multiple instances of AFNI <--> SUMA, etc., on the same machine.
+     * @param npq Like -np but quieter in the face of adversity.
+     * @param npb Similar to -np, but using a block for easier usage.
+     * @param max_port_bloc Print the current value of MAX_BLOC and exit.
+     * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
+     * @param num_assigned_ports Print the number of assigned ports used by AFNI and exit.
+     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI and exit quietly.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `PlugoutDriveOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PLUGOUT_DRIVE_METADATA);
-    const params = plugout_drive_params(host, verbose, port, maxwait, name, command, quit)
+    const params = plugout_drive_params(host, shm, verbose, port, maxwait, name, command, quit, np, npq, npb, max_port_bloc, max_port_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
     return plugout_drive_execute(params, execution);
 }
 

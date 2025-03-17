@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MYGET_METADATA: Metadata = {
-    id: "2f6d3f9ad29fa84e230f411a821134ff68c91853.boutiques",
+    id: "10043a869267d2f44f577e75349933f7e7bb0e5e.boutiques",
     name: "myget",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,7 @@ interface MygetParameters {
     "__STYXTYPE__": "myget";
     "protocol_version"?: "-1" | "-1.1" | null | undefined;
     "url": string;
+    "output_file": string;
 }
 
 
@@ -71,12 +72,14 @@ interface MygetOutputs {
 
 function myget_params(
     url: string,
+    output_file: string,
     protocol_version: "-1" | "-1.1" | null = null,
 ): MygetParameters {
     /**
      * Build parameters.
     
      * @param url The URL to download the file from
+     * @param output_file The filename to save the downloaded file
      * @param protocol_version Specify protocol version. You can choose between -1 or -1.1
     
      * @returns Parameter dictionary
@@ -84,6 +87,7 @@ function myget_params(
     const params = {
         "__STYXTYPE__": "myget" as const,
         "url": url,
+        "output_file": output_file,
     };
     if (protocol_version !== null) {
         params["protocol_version"] = protocol_version;
@@ -105,9 +109,15 @@ function myget_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("myget");
     if ((params["protocol_version"] ?? null) !== null) {
-        cargs.push(["myget", (params["protocol_version"] ?? null), (params["url"] ?? null)].join(''));
+        cargs.push((params["protocol_version"] ?? null));
     }
+    cargs.push((params["url"] ?? null));
+    cargs.push(
+        ">",
+        (params["output_file"] ?? null)
+    );
     return cargs;
 }
 
@@ -126,7 +136,7 @@ function myget_outputs(
      */
     const ret: MygetOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile(["[OUTPUT_FILE]"].join('')),
+        output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
     };
     return ret;
 }
@@ -158,6 +168,7 @@ function myget_execute(
 
 function myget(
     url: string,
+    output_file: string,
     protocol_version: "-1" | "-1.1" | null = null,
     runner: Runner | null = null,
 ): MygetOutputs {
@@ -169,6 +180,7 @@ function myget(
      * URL: https://afni.nimh.nih.gov/
     
      * @param url The URL to download the file from
+     * @param output_file The filename to save the downloaded file
      * @param protocol_version Specify protocol version. You can choose between -1 or -1.1
      * @param runner Command runner
     
@@ -176,7 +188,7 @@ function myget(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MYGET_METADATA);
-    const params = myget_params(url, protocol_version)
+    const params = myget_params(url, output_file, protocol_version)
     return myget_execute(params, execution);
 }
 

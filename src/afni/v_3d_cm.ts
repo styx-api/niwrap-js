@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_CM_METADATA: Metadata = {
-    id: "b067b12b1032c8b1f441c220e6f5349f1cfe1370.boutiques",
+    id: "63ca74289af452584f6dd9b272bc4b15b6ffb8b0.boutiques",
     name: "3dCM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,14 @@ const V_3D_CM_METADATA: Metadata = {
 interface V3dCmParameters {
     "__STYXTYPE__": "3dCM";
     "dset": InputPathType;
+    "mask"?: InputPathType | null | undefined;
+    "automask": boolean;
+    "set_origin"?: Array<number> | null | undefined;
+    "local_ijk": boolean;
+    "roi_vals"?: Array<number> | null | undefined;
+    "all_rois": boolean;
+    "icent": boolean;
+    "dcent": boolean;
 }
 
 
@@ -70,18 +78,48 @@ interface V3dCmOutputs {
 
 function v_3d_cm_params(
     dset: InputPathType,
+    mask: InputPathType | null = null,
+    automask: boolean = false,
+    set_origin: Array<number> | null = null,
+    local_ijk: boolean = false,
+    roi_vals: Array<number> | null = null,
+    all_rois: boolean = false,
+    icent: boolean = false,
+    dcent: boolean = false,
 ): V3dCmParameters {
     /**
      * Build parameters.
     
      * @param dset Input dataset.
+     * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. Both datasets must have the same number of voxels.
+     * @param automask Generate the mask automatically.
+     * @param set_origin After computing the CM of the dataset, set the origin fields in the header so that the CM will be at (x,y,z) in DICOM coordinates.
+     * @param local_ijk Output values as (i,j,k) in local orientation.
+     * @param roi_vals Compute center of mass for each blob with specified voxel values.
+     * @param all_rois Automatically find all ROI values and compute their centers of mass.
+     * @param icent Compute Internal Center, which finds the center voxel closest to the center of mass.
+     * @param dcent Compute Distance Center, the center voxel with the shortest average distance to all other voxels. This is computationally expensive.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dCM" as const,
         "dset": dset,
+        "automask": automask,
+        "local_ijk": local_ijk,
+        "all_rois": all_rois,
+        "icent": icent,
+        "dcent": dcent,
     };
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (set_origin !== null) {
+        params["set_origin"] = set_origin;
+    }
+    if (roi_vals !== null) {
+        params["roi_vals"] = roi_vals;
+    }
     return params;
 }
 
@@ -100,8 +138,40 @@ function v_3d_cm_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dCM");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["dset"] ?? null)));
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["automask"] ?? null)) {
+        cargs.push("-automask");
+    }
+    if ((params["set_origin"] ?? null) !== null) {
+        cargs.push(
+            "-set",
+            ...(params["set_origin"] ?? null).map(String)
+        );
+    }
+    if ((params["local_ijk"] ?? null)) {
+        cargs.push("-local_ijk");
+    }
+    if ((params["roi_vals"] ?? null) !== null) {
+        cargs.push(
+            "-roi_vals",
+            ...(params["roi_vals"] ?? null).map(String)
+        );
+    }
+    if ((params["all_rois"] ?? null)) {
+        cargs.push("-all_rois");
+    }
+    if ((params["icent"] ?? null)) {
+        cargs.push("-Icent");
+    }
+    if ((params["dcent"] ?? null)) {
+        cargs.push("-Dcent");
+    }
     return cargs;
 }
 
@@ -152,6 +222,14 @@ function v_3d_cm_execute(
 
 function v_3d_cm(
     dset: InputPathType,
+    mask: InputPathType | null = null,
+    automask: boolean = false,
+    set_origin: Array<number> | null = null,
+    local_ijk: boolean = false,
+    roi_vals: Array<number> | null = null,
+    all_rois: boolean = false,
+    icent: boolean = false,
+    dcent: boolean = false,
     runner: Runner | null = null,
 ): V3dCmOutputs {
     /**
@@ -162,13 +240,21 @@ function v_3d_cm(
      * URL: https://afni.nimh.nih.gov/
     
      * @param dset Input dataset.
+     * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. Both datasets must have the same number of voxels.
+     * @param automask Generate the mask automatically.
+     * @param set_origin After computing the CM of the dataset, set the origin fields in the header so that the CM will be at (x,y,z) in DICOM coordinates.
+     * @param local_ijk Output values as (i,j,k) in local orientation.
+     * @param roi_vals Compute center of mass for each blob with specified voxel values.
+     * @param all_rois Automatically find all ROI values and compute their centers of mass.
+     * @param icent Compute Internal Center, which finds the center voxel closest to the center of mass.
+     * @param dcent Compute Distance Center, the center voxel with the shortest average distance to all other voxels. This is computationally expensive.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dCmOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CM_METADATA);
-    const params = v_3d_cm_params(dset)
+    const params = v_3d_cm_params(dset, mask, automask, set_origin, local_ijk, roi_vals, all_rois, icent, dcent)
     return v_3d_cm_execute(params, execution);
 }
 

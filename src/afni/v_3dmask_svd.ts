@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DMASK_SVD_METADATA: Metadata = {
-    id: "5cc0ef9b4df81bcbe1689588ddbddf9e81594730.boutiques",
+    id: "eecbee0a49ddb248abb1a5cc5b60e995c855df15.boutiques",
     name: "3dmaskSVD",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,14 @@ const V_3DMASK_SVD_METADATA: Metadata = {
 interface V3dmaskSvdParameters {
     "__STYXTYPE__": "3dmaskSVD";
     "input_dataset": InputPathType;
+    "vnorm": boolean;
+    "sval"?: number | null | undefined;
+    "mask_file"?: InputPathType | null | undefined;
+    "automask": boolean;
+    "polort"?: number | null | undefined;
+    "bandpass"?: Array<string> | null | undefined;
+    "ort"?: Array<InputPathType> | null | undefined;
+    "alt_input"?: InputPathType | null | undefined;
 }
 
 
@@ -70,18 +78,54 @@ interface V3dmaskSvdOutputs {
 
 function v_3dmask_svd_params(
     input_dataset: InputPathType,
+    vnorm: boolean = false,
+    sval: number | null = null,
+    mask_file: InputPathType | null = null,
+    automask: boolean = false,
+    polort: number | null = null,
+    bandpass: Array<string> | null = null,
+    ort: Array<InputPathType> | null = null,
+    alt_input: InputPathType | null = null,
 ): V3dmaskSvdParameters {
     /**
      * Build parameters.
     
      * @param input_dataset Input dataset
+     * @param vnorm L2 normalize all time series before SVD
+     * @param sval Output singular vectors 0 .. a (default a=0 = first one only)
+     * @param mask_file Define the mask (default is entire dataset)
+     * @param automask Automatic mask definition
+     * @param polort Remove polynomial trend (default 0 if not specified)
+     * @param bandpass Bandpass filter (mutually exclusive with -polort)
+     * @param ort Time series to remove from the data before SVD-ization. You can give more than 1 '-ort' option. 'xx.1D' can contain more than 1 column.
+     * @param alt_input Alternative way to give the input dataset name
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dmaskSVD" as const,
         "input_dataset": input_dataset,
+        "vnorm": vnorm,
+        "automask": automask,
     };
+    if (sval !== null) {
+        params["sval"] = sval;
+    }
+    if (mask_file !== null) {
+        params["mask_file"] = mask_file;
+    }
+    if (polort !== null) {
+        params["polort"] = polort;
+    }
+    if (bandpass !== null) {
+        params["bandpass"] = bandpass;
+    }
+    if (ort !== null) {
+        params["ort"] = ort;
+    }
+    if (alt_input !== null) {
+        params["alt_input"] = alt_input;
+    }
     return params;
 }
 
@@ -100,8 +144,49 @@ function v_3dmask_svd_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dmaskSVD");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
+    if ((params["vnorm"] ?? null)) {
+        cargs.push("-vnorm");
+    }
+    if ((params["sval"] ?? null) !== null) {
+        cargs.push(
+            "-sval",
+            String((params["sval"] ?? null))
+        );
+    }
+    if ((params["mask_file"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask_file"] ?? null))
+        );
+    }
+    if ((params["automask"] ?? null)) {
+        cargs.push("-automask");
+    }
+    if ((params["polort"] ?? null) !== null) {
+        cargs.push(
+            "-polort",
+            String((params["polort"] ?? null))
+        );
+    }
+    if ((params["bandpass"] ?? null) !== null) {
+        cargs.push(
+            "-bpass",
+            ...(params["bandpass"] ?? null)
+        );
+    }
+    if ((params["ort"] ?? null) !== null) {
+        cargs.push(
+            "-ort",
+            ...(params["ort"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["alt_input"] ?? null) !== null) {
+        cargs.push(
+            "-input",
+            execution.inputFile((params["alt_input"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -152,6 +237,14 @@ function v_3dmask_svd_execute(
 
 function v_3dmask_svd(
     input_dataset: InputPathType,
+    vnorm: boolean = false,
+    sval: number | null = null,
+    mask_file: InputPathType | null = null,
+    automask: boolean = false,
+    polort: number | null = null,
+    bandpass: Array<string> | null = null,
+    ort: Array<InputPathType> | null = null,
+    alt_input: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dmaskSvdOutputs {
     /**
@@ -162,13 +255,21 @@ function v_3dmask_svd(
      * URL: https://afni.nimh.nih.gov/
     
      * @param input_dataset Input dataset
+     * @param vnorm L2 normalize all time series before SVD
+     * @param sval Output singular vectors 0 .. a (default a=0 = first one only)
+     * @param mask_file Define the mask (default is entire dataset)
+     * @param automask Automatic mask definition
+     * @param polort Remove polynomial trend (default 0 if not specified)
+     * @param bandpass Bandpass filter (mutually exclusive with -polort)
+     * @param ort Time series to remove from the data before SVD-ization. You can give more than 1 '-ort' option. 'xx.1D' can contain more than 1 column.
+     * @param alt_input Alternative way to give the input dataset name
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dmaskSvdOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMASK_SVD_METADATA);
-    const params = v_3dmask_svd_params(input_dataset)
+    const params = v_3dmask_svd_params(input_dataset, vnorm, sval, mask_file, automask, polort, bandpass, ort, alt_input)
     return v_3dmask_svd_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_METRICS_METADATA: Metadata = {
-    id: "5e58dccd9bd1540ac2ae342efc61a7a9fc45c4c2.boutiques",
+    id: "4e6e190bf1b36c5ffeddbab85844677bc3f68fe2.boutiques",
     name: "SurfaceMetrics",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,26 +13,25 @@ const SURFACE_METRICS_METADATA: Metadata = {
 
 interface SurfaceMetricsParameters {
     "__STYXTYPE__": "SurfaceMetrics";
+    "volume": boolean;
+    "convexity": boolean;
+    "closest_node"?: InputPathType | null | undefined;
+    "area": boolean;
+    "tri_sines": boolean;
+    "tri_CoSines": boolean;
+    "tri_angles": boolean;
+    "node_angles": boolean;
+    "curvature": boolean;
+    "edges": boolean;
+    "node_normals": boolean;
+    "face_normals": boolean;
+    "normals_scale"?: number | null | undefined;
+    "coords": boolean;
+    "sph_coords": boolean;
+    "sph_coords_center"?: Array<number> | null | undefined;
+    "boundary_nodes": boolean;
+    "boundary_triangles": boolean;
     "internal_nodes": boolean;
-    "internal_nodes_1": boolean;
-    "internal_nodes_2": boolean;
-    "internal_nodes_3": boolean;
-    "internal_nodes_4": boolean;
-    "internal_nodes_5": boolean;
-    "internal_nodes_6": boolean;
-    "internal_nodes_7": boolean;
-    "internal_nodes_8": boolean;
-    "internal_nodes_9": boolean;
-    "internal_nodes_10": boolean;
-    "internal_nodes_11": boolean;
-    "internal_nodes_12": boolean;
-    "internal_nodes_13": boolean;
-    "internal_nodes_14": boolean;
-    "internal_nodes_15": boolean;
-    "internal_nodes_16": boolean;
-    "internal_nodes_17": boolean;
-    "internal_nodes_18": boolean;
-    "internal_nodes_19": boolean;
     "surf1": string;
     "tlrc": boolean;
     "prefix"?: string | null | undefined;
@@ -87,26 +86,25 @@ interface SurfaceMetricsOutputs {
 
 function surface_metrics_params(
     surf1: string,
+    volume: boolean = false,
+    convexity: boolean = false,
+    closest_node: InputPathType | null = null,
+    area: boolean = false,
+    tri_sines: boolean = false,
+    tri_co_sines: boolean = false,
+    tri_angles: boolean = false,
+    node_angles: boolean = false,
+    curvature: boolean = false,
+    edges: boolean = false,
+    node_normals: boolean = false,
+    face_normals: boolean = false,
+    normals_scale: number | null = null,
+    coords: boolean = false,
+    sph_coords: boolean = false,
+    sph_coords_center: Array<number> | null = null,
+    boundary_nodes: boolean = false,
+    boundary_triangles: boolean = false,
     internal_nodes: boolean = false,
-    internal_nodes_1: boolean = false,
-    internal_nodes_2: boolean = false,
-    internal_nodes_3: boolean = false,
-    internal_nodes_4: boolean = false,
-    internal_nodes_5: boolean = false,
-    internal_nodes_6: boolean = false,
-    internal_nodes_7: boolean = false,
-    internal_nodes_8: boolean = false,
-    internal_nodes_9: boolean = false,
-    internal_nodes_10: boolean = false,
-    internal_nodes_11: boolean = false,
-    internal_nodes_12: boolean = false,
-    internal_nodes_13: boolean = false,
-    internal_nodes_14: boolean = false,
-    internal_nodes_15: boolean = false,
-    internal_nodes_16: boolean = false,
-    internal_nodes_17: boolean = false,
-    internal_nodes_18: boolean = false,
-    internal_nodes_19: boolean = false,
     tlrc: boolean = false,
     prefix: string | null = null,
 ): SurfaceMetricsParameters {
@@ -114,26 +112,25 @@ function surface_metrics_params(
      * Build parameters.
     
      * @param surf1 Specifies the input surface.
+     * @param volume Calculates the volume of a surface.
+     * @param convexity Output surface convexity at each node.
+     * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
+     * @param area Output area of each triangle.
+     * @param tri_sines Output sine of angles at nodes forming triangles.
+     * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
+     * @param tri_angles Unsigned angles in radians of triangles.
+     * @param node_angles Unsigned angles in radians at nodes of surface.
+     * @param curvature Output curvature at each node.
+     * @param edges Outputs info on each edge.
+     * @param node_normals Outputs segments along node normals.
+     * @param face_normals Outputs segments along triangle normals.
+     * @param normals_scale Scale the normals by a given factor.
+     * @param coords Output coordinates of each node after any transformation.
+     * @param sph_coords Output spherical coordinates of each node.
+     * @param sph_coords_center Shift each node by x y z before calculating spherical coordinates.
+     * @param boundary_nodes Output nodes that form a boundary of a surface.
+     * @param boundary_triangles Output triangles that form a boundary of a surface.
      * @param internal_nodes Output nodes that are not a boundary.
-     * @param internal_nodes_1 Output nodes that are not a boundary.
-     * @param internal_nodes_2 Output nodes that are not a boundary.
-     * @param internal_nodes_3 Output nodes that are not a boundary.
-     * @param internal_nodes_4 Output nodes that are not a boundary.
-     * @param internal_nodes_5 Output nodes that are not a boundary.
-     * @param internal_nodes_6 Output nodes that are not a boundary.
-     * @param internal_nodes_7 Output nodes that are not a boundary.
-     * @param internal_nodes_8 Output nodes that are not a boundary.
-     * @param internal_nodes_9 Output nodes that are not a boundary.
-     * @param internal_nodes_10 Output nodes that are not a boundary.
-     * @param internal_nodes_11 Output nodes that are not a boundary.
-     * @param internal_nodes_12 Output nodes that are not a boundary.
-     * @param internal_nodes_13 Output nodes that are not a boundary.
-     * @param internal_nodes_14 Output nodes that are not a boundary.
-     * @param internal_nodes_15 Output nodes that are not a boundary.
-     * @param internal_nodes_16 Output nodes that are not a boundary.
-     * @param internal_nodes_17 Output nodes that are not a boundary.
-     * @param internal_nodes_18 Output nodes that are not a boundary.
-     * @param internal_nodes_19 Output nodes that are not a boundary.
      * @param tlrc Apply Talairach transform to surface.
      * @param prefix Use prefix for output files.
     
@@ -141,29 +138,34 @@ function surface_metrics_params(
      */
     const params = {
         "__STYXTYPE__": "SurfaceMetrics" as const,
+        "volume": volume,
+        "convexity": convexity,
+        "area": area,
+        "tri_sines": tri_sines,
+        "tri_CoSines": tri_co_sines,
+        "tri_angles": tri_angles,
+        "node_angles": node_angles,
+        "curvature": curvature,
+        "edges": edges,
+        "node_normals": node_normals,
+        "face_normals": face_normals,
+        "coords": coords,
+        "sph_coords": sph_coords,
+        "boundary_nodes": boundary_nodes,
+        "boundary_triangles": boundary_triangles,
         "internal_nodes": internal_nodes,
-        "internal_nodes_1": internal_nodes_1,
-        "internal_nodes_2": internal_nodes_2,
-        "internal_nodes_3": internal_nodes_3,
-        "internal_nodes_4": internal_nodes_4,
-        "internal_nodes_5": internal_nodes_5,
-        "internal_nodes_6": internal_nodes_6,
-        "internal_nodes_7": internal_nodes_7,
-        "internal_nodes_8": internal_nodes_8,
-        "internal_nodes_9": internal_nodes_9,
-        "internal_nodes_10": internal_nodes_10,
-        "internal_nodes_11": internal_nodes_11,
-        "internal_nodes_12": internal_nodes_12,
-        "internal_nodes_13": internal_nodes_13,
-        "internal_nodes_14": internal_nodes_14,
-        "internal_nodes_15": internal_nodes_15,
-        "internal_nodes_16": internal_nodes_16,
-        "internal_nodes_17": internal_nodes_17,
-        "internal_nodes_18": internal_nodes_18,
-        "internal_nodes_19": internal_nodes_19,
         "surf1": surf1,
         "tlrc": tlrc,
     };
+    if (closest_node !== null) {
+        params["closest_node"] = closest_node;
+    }
+    if (normals_scale !== null) {
+        params["normals_scale"] = normals_scale;
+    }
+    if (sph_coords_center !== null) {
+        params["sph_coords_center"] = sph_coords_center;
+    }
     if (prefix !== null) {
         params["prefix"] = prefix;
     }
@@ -185,64 +187,70 @@ function surface_metrics_cargs(
      */
     const cargs: string[] = [];
     cargs.push("SurfaceMetrics");
+    if ((params["volume"] ?? null)) {
+        cargs.push("-vol");
+    }
+    if ((params["convexity"] ?? null)) {
+        cargs.push("-conv");
+    }
+    if ((params["closest_node"] ?? null) !== null) {
+        cargs.push(
+            "-closest_node",
+            execution.inputFile((params["closest_node"] ?? null))
+        );
+    }
+    if ((params["area"] ?? null)) {
+        cargs.push("-area");
+    }
+    if ((params["tri_sines"] ?? null)) {
+        cargs.push("-tri_sines");
+    }
+    if ((params["tri_CoSines"] ?? null)) {
+        cargs.push("-tri_CoSines");
+    }
+    if ((params["tri_angles"] ?? null)) {
+        cargs.push("-tri_angles");
+    }
+    if ((params["node_angles"] ?? null)) {
+        cargs.push("-node_angles");
+    }
+    if ((params["curvature"] ?? null)) {
+        cargs.push("-curv");
+    }
+    if ((params["edges"] ?? null)) {
+        cargs.push("-edges");
+    }
+    if ((params["node_normals"] ?? null)) {
+        cargs.push("-node_normals");
+    }
+    if ((params["face_normals"] ?? null)) {
+        cargs.push("-face_normals");
+    }
+    if ((params["normals_scale"] ?? null) !== null) {
+        cargs.push(
+            "-normals_scale",
+            String((params["normals_scale"] ?? null))
+        );
+    }
+    if ((params["coords"] ?? null)) {
+        cargs.push("-coords");
+    }
+    if ((params["sph_coords"] ?? null)) {
+        cargs.push("-sph_coords");
+    }
+    if ((params["sph_coords_center"] ?? null) !== null) {
+        cargs.push(
+            "-sph_coords_center",
+            ...(params["sph_coords_center"] ?? null).map(String)
+        );
+    }
+    if ((params["boundary_nodes"] ?? null)) {
+        cargs.push("-boundary_nodes");
+    }
+    if ((params["boundary_triangles"] ?? null)) {
+        cargs.push("-boundary_triangles");
+    }
     if ((params["internal_nodes"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_1"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_2"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_3"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_4"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_5"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_6"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_7"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_8"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_9"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_10"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_11"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_12"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_13"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_14"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_15"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_16"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_17"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_18"] ?? null)) {
-        cargs.push("-internal_nodes");
-    }
-    if ((params["internal_nodes_19"] ?? null)) {
         cargs.push("-internal_nodes");
     }
     cargs.push(
@@ -307,26 +315,25 @@ function surface_metrics_execute(
 
 function surface_metrics(
     surf1: string,
+    volume: boolean = false,
+    convexity: boolean = false,
+    closest_node: InputPathType | null = null,
+    area: boolean = false,
+    tri_sines: boolean = false,
+    tri_co_sines: boolean = false,
+    tri_angles: boolean = false,
+    node_angles: boolean = false,
+    curvature: boolean = false,
+    edges: boolean = false,
+    node_normals: boolean = false,
+    face_normals: boolean = false,
+    normals_scale: number | null = null,
+    coords: boolean = false,
+    sph_coords: boolean = false,
+    sph_coords_center: Array<number> | null = null,
+    boundary_nodes: boolean = false,
+    boundary_triangles: boolean = false,
     internal_nodes: boolean = false,
-    internal_nodes_1: boolean = false,
-    internal_nodes_2: boolean = false,
-    internal_nodes_3: boolean = false,
-    internal_nodes_4: boolean = false,
-    internal_nodes_5: boolean = false,
-    internal_nodes_6: boolean = false,
-    internal_nodes_7: boolean = false,
-    internal_nodes_8: boolean = false,
-    internal_nodes_9: boolean = false,
-    internal_nodes_10: boolean = false,
-    internal_nodes_11: boolean = false,
-    internal_nodes_12: boolean = false,
-    internal_nodes_13: boolean = false,
-    internal_nodes_14: boolean = false,
-    internal_nodes_15: boolean = false,
-    internal_nodes_16: boolean = false,
-    internal_nodes_17: boolean = false,
-    internal_nodes_18: boolean = false,
-    internal_nodes_19: boolean = false,
     tlrc: boolean = false,
     prefix: string | null = null,
     runner: Runner | null = null,
@@ -339,26 +346,25 @@ function surface_metrics(
      * URL: https://afni.nimh.nih.gov/
     
      * @param surf1 Specifies the input surface.
+     * @param volume Calculates the volume of a surface.
+     * @param convexity Output surface convexity at each node.
+     * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
+     * @param area Output area of each triangle.
+     * @param tri_sines Output sine of angles at nodes forming triangles.
+     * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
+     * @param tri_angles Unsigned angles in radians of triangles.
+     * @param node_angles Unsigned angles in radians at nodes of surface.
+     * @param curvature Output curvature at each node.
+     * @param edges Outputs info on each edge.
+     * @param node_normals Outputs segments along node normals.
+     * @param face_normals Outputs segments along triangle normals.
+     * @param normals_scale Scale the normals by a given factor.
+     * @param coords Output coordinates of each node after any transformation.
+     * @param sph_coords Output spherical coordinates of each node.
+     * @param sph_coords_center Shift each node by x y z before calculating spherical coordinates.
+     * @param boundary_nodes Output nodes that form a boundary of a surface.
+     * @param boundary_triangles Output triangles that form a boundary of a surface.
      * @param internal_nodes Output nodes that are not a boundary.
-     * @param internal_nodes_1 Output nodes that are not a boundary.
-     * @param internal_nodes_2 Output nodes that are not a boundary.
-     * @param internal_nodes_3 Output nodes that are not a boundary.
-     * @param internal_nodes_4 Output nodes that are not a boundary.
-     * @param internal_nodes_5 Output nodes that are not a boundary.
-     * @param internal_nodes_6 Output nodes that are not a boundary.
-     * @param internal_nodes_7 Output nodes that are not a boundary.
-     * @param internal_nodes_8 Output nodes that are not a boundary.
-     * @param internal_nodes_9 Output nodes that are not a boundary.
-     * @param internal_nodes_10 Output nodes that are not a boundary.
-     * @param internal_nodes_11 Output nodes that are not a boundary.
-     * @param internal_nodes_12 Output nodes that are not a boundary.
-     * @param internal_nodes_13 Output nodes that are not a boundary.
-     * @param internal_nodes_14 Output nodes that are not a boundary.
-     * @param internal_nodes_15 Output nodes that are not a boundary.
-     * @param internal_nodes_16 Output nodes that are not a boundary.
-     * @param internal_nodes_17 Output nodes that are not a boundary.
-     * @param internal_nodes_18 Output nodes that are not a boundary.
-     * @param internal_nodes_19 Output nodes that are not a boundary.
      * @param tlrc Apply Talairach transform to surface.
      * @param prefix Use prefix for output files.
      * @param runner Command runner
@@ -367,7 +373,7 @@ function surface_metrics(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_METRICS_METADATA);
-    const params = surface_metrics_params(surf1, internal_nodes, internal_nodes_1, internal_nodes_2, internal_nodes_3, internal_nodes_4, internal_nodes_5, internal_nodes_6, internal_nodes_7, internal_nodes_8, internal_nodes_9, internal_nodes_10, internal_nodes_11, internal_nodes_12, internal_nodes_13, internal_nodes_14, internal_nodes_15, internal_nodes_16, internal_nodes_17, internal_nodes_18, internal_nodes_19, tlrc, prefix)
+    const params = surface_metrics_params(surf1, volume, convexity, closest_node, area, tri_sines, tri_co_sines, tri_angles, node_angles, curvature, edges, node_normals, face_normals, normals_scale, coords, sph_coords, sph_coords_center, boundary_nodes, boundary_triangles, internal_nodes, tlrc, prefix)
     return surface_metrics_execute(params, execution);
 }
 

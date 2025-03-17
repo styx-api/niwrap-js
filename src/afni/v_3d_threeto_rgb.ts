@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_THREETO_RGB_METADATA: Metadata = {
-    id: "0e50efb1e4d4adac2b47669f62f58516c895a1cf.boutiques",
+    id: "66d33991278e852be51fc79205b5a24fbb651ea3.boutiques",
     name: "3dThreetoRGB",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -167,7 +167,6 @@ function v_3d_threeto_rgb_cargs(
         cargs.push("-anat");
     }
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
-    cargs.push("[DATASET1]");
     if ((params["input_dataset2"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["input_dataset2"] ?? null)));
     }

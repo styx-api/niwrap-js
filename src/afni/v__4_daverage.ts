@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__4_DAVERAGE_METADATA: Metadata = {
-    id: "539f6118b726725db3041382540750353fc522e5.boutiques",
+    id: "48ae0996463928a201144da1e797f6f4415ed5c4.boutiques",
     name: "@4Daverage",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,7 @@ const V__4_DAVERAGE_METADATA: Metadata = {
 interface V4DaverageParameters {
     "__STYXTYPE__": "@4Daverage";
     "output_prefix": string;
+    "input_files": Array<InputPathType>;
 }
 
 
@@ -65,17 +66,20 @@ interface V4DaverageOutputs {
 
 function v__4_daverage_params(
     output_prefix: string,
+    input_files: Array<InputPathType>,
 ): V4DaverageParameters {
     /**
      * Build parameters.
     
      * @param output_prefix Prefix for the output 3D+t brick
+     * @param input_files List of 3D+t brick filenames to be averaged (e.g., brick1+orig, brick2+orig). Can use wildcards.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "@4Daverage" as const,
         "output_prefix": output_prefix,
+        "input_files": input_files,
     };
     return params;
 }
@@ -96,7 +100,7 @@ function v__4_daverage_cargs(
     const cargs: string[] = [];
     cargs.push("@4Daverage");
     cargs.push((params["output_prefix"] ?? null));
-    cargs.push("[INPUT_FILES...]");
+    cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
     return cargs;
 }
 
@@ -146,6 +150,7 @@ function v__4_daverage_execute(
 
 function v__4_daverage(
     output_prefix: string,
+    input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): V4DaverageOutputs {
     /**
@@ -156,13 +161,14 @@ function v__4_daverage(
      * URL: https://afni.nimh.nih.gov/
     
      * @param output_prefix Prefix for the output 3D+t brick
+     * @param input_files List of 3D+t brick filenames to be averaged (e.g., brick1+orig, brick2+orig). Can use wildcards.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V4DaverageOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__4_DAVERAGE_METADATA);
-    const params = v__4_daverage_params(output_prefix)
+    const params = v__4_daverage_params(output_prefix, input_files)
     return v__4_daverage_execute(params, execution);
 }
 

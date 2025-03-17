@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SAMP_BIAS_METADATA: Metadata = {
-    id: "6e470934bf7282b84b4830d0577fb44d56bf39e3.boutiques",
+    id: "e1325d010e905394733e9c7b189375c71f01d74b.boutiques",
     name: "SampBias",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -19,6 +19,7 @@ interface SampBiasParameters {
     "dlimit"?: number | null | undefined;
     "outfile": string;
     "prefix"?: string | null | undefined;
+    "segdo"?: string | null | undefined;
 }
 
 
@@ -84,6 +85,7 @@ function samp_bias_params(
     plimit: number | null = null,
     dlimit: number | null = null,
     prefix: string | null = null,
+    segdo: string | null = null,
 ): SampBiasParameters {
     /**
      * Build parameters.
@@ -94,6 +96,7 @@ function samp_bias_params(
      * @param plimit Maximum length of path along surface in mm. Default is 50 mm.
      * @param dlimit Maximum length of euclidean distance in mm. Default is 1000 mm.
      * @param prefix Output results into a proper surface-based dataset.
+     * @param segdo Output a displayable object file that contains segments between paired nodes.
     
      * @returns Parameter dictionary
      */
@@ -111,6 +114,9 @@ function samp_bias_params(
     }
     if (prefix !== null) {
         params["prefix"] = prefix;
+    }
+    if (segdo !== null) {
+        params["segdo"] = segdo;
     }
     return params;
 }
@@ -158,6 +164,12 @@ function samp_bias_cargs(
         cargs.push(
             "-prefix",
             (params["prefix"] ?? null)
+        );
+    }
+    if ((params["segdo"] ?? null) !== null) {
+        cargs.push(
+            "-segdo",
+            (params["segdo"] ?? null)
         );
     }
     return cargs;
@@ -216,6 +228,7 @@ function samp_bias(
     plimit: number | null = null,
     dlimit: number | null = null,
     prefix: string | null = null,
+    segdo: string | null = null,
     runner: Runner | null = null,
 ): SampBiasOutputs {
     /**
@@ -231,13 +244,14 @@ function samp_bias(
      * @param plimit Maximum length of path along surface in mm. Default is 50 mm.
      * @param dlimit Maximum length of euclidean distance in mm. Default is 1000 mm.
      * @param prefix Output results into a proper surface-based dataset.
+     * @param segdo Output a displayable object file that contains segments between paired nodes.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `SampBiasOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMP_BIAS_METADATA);
-    const params = samp_bias_params(specfile, surfname, outfile, plimit, dlimit, prefix)
+    const params = samp_bias_params(specfile, surfname, outfile, plimit, dlimit, prefix, segdo)
     return samp_bias_execute(params, execution);
 }
 

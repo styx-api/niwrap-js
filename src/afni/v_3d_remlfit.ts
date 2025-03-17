@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_REMLFIT_METADATA: Metadata = {
-    id: "847ea79f5b61b9773e10438597e56d4e78c62c2e.boutiques",
+    id: "9a5a03ff4aea32e95390547c4573b680ae1ca04b.boutiques",
     name: "3dREMLfit",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -20,10 +20,14 @@ interface V3dRemlfitParameters {
     "temp_storage": boolean;
     "mask"?: InputPathType | null | undefined;
     "output_prefix"?: string | null | undefined;
+    "no_fdr_curve": boolean;
     "go_for_it": boolean;
+    "max_a_param"?: number | null | undefined;
     "max_b_param"?: number | null | undefined;
     "grid_param"?: number | null | undefined;
     "negative_corr": boolean;
+    "quiet": boolean;
+    "verbose": boolean;
 }
 
 
@@ -106,10 +110,14 @@ function v_3d_remlfit_params(
     temp_storage: boolean = false,
     mask: InputPathType | null = null,
     output_prefix: string | null = null,
+    no_fdr_curve: boolean = false,
     go_for_it: boolean = false,
+    max_a_param: number | null = null,
     max_b_param: number | null = null,
     grid_param: number | null = null,
     negative_corr: boolean = false,
+    quiet: boolean = false,
+    verbose: boolean = false,
 ): V3dRemlfitParameters {
     /**
      * Build parameters.
@@ -121,10 +129,14 @@ function v_3d_remlfit_params(
      * @param temp_storage Write intermediate output to disk, to economize on RAM.
      * @param mask Read dataset as a mask for the input; voxels outside the mask will not be fit by the regression model.
      * @param output_prefix Dataset prefix for saving REML variance parameters.
+     * @param no_fdr_curve Do not add FDR curve data to bucket datasets.
      * @param go_for_it Force the program to continue past a failed collinearity check.
+     * @param max_a_param Set max allowed AR a parameter.
      * @param max_b_param Set max allowed MA b parameter.
      * @param grid_param Set the number of grid divisions in the (a,b) grid.
      * @param negative_corr Allows negative correlations to be used.
+     * @param quiet Turn off most progress messages
+     * @param verbose Turn on more progress messages
     
      * @returns Parameter dictionary
      */
@@ -134,8 +146,11 @@ function v_3d_remlfit_params(
         "regression_matrix": regression_matrix,
         "sort_nods": sort_nods,
         "temp_storage": temp_storage,
+        "no_fdr_curve": no_fdr_curve,
         "go_for_it": go_for_it,
         "negative_corr": negative_corr,
+        "quiet": quiet,
+        "verbose": verbose,
     };
     if (baseline_files !== null) {
         params["baseline_files"] = baseline_files;
@@ -145,6 +160,9 @@ function v_3d_remlfit_params(
     }
     if (output_prefix !== null) {
         params["output_prefix"] = output_prefix;
+    }
+    if (max_a_param !== null) {
+        params["max_a_param"] = max_a_param;
     }
     if (max_b_param !== null) {
         params["max_b_param"] = max_b_param;
@@ -202,8 +220,17 @@ function v_3d_remlfit_cargs(
             (params["output_prefix"] ?? null)
         );
     }
+    if ((params["no_fdr_curve"] ?? null)) {
+        cargs.push("-noFDR");
+    }
     if ((params["go_for_it"] ?? null)) {
         cargs.push("-GOFORIT");
+    }
+    if ((params["max_a_param"] ?? null) !== null) {
+        cargs.push(
+            "-MAXa",
+            String((params["max_a_param"] ?? null))
+        );
     }
     if ((params["max_b_param"] ?? null) !== null) {
         cargs.push(
@@ -219,6 +246,12 @@ function v_3d_remlfit_cargs(
     }
     if ((params["negative_corr"] ?? null)) {
         cargs.push("-NEGcor");
+    }
+    if ((params["quiet"] ?? null)) {
+        cargs.push("quiet");
+    }
+    if ((params["verbose"] ?? null)) {
+        cargs.push("-verb");
     }
     return cargs;
 }
@@ -281,10 +314,14 @@ function v_3d_remlfit(
     temp_storage: boolean = false,
     mask: InputPathType | null = null,
     output_prefix: string | null = null,
+    no_fdr_curve: boolean = false,
     go_for_it: boolean = false,
+    max_a_param: number | null = null,
     max_b_param: number | null = null,
     grid_param: number | null = null,
     negative_corr: boolean = false,
+    quiet: boolean = false,
+    verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dRemlfitOutputs {
     /**
@@ -301,17 +338,21 @@ function v_3d_remlfit(
      * @param temp_storage Write intermediate output to disk, to economize on RAM.
      * @param mask Read dataset as a mask for the input; voxels outside the mask will not be fit by the regression model.
      * @param output_prefix Dataset prefix for saving REML variance parameters.
+     * @param no_fdr_curve Do not add FDR curve data to bucket datasets.
      * @param go_for_it Force the program to continue past a failed collinearity check.
+     * @param max_a_param Set max allowed AR a parameter.
      * @param max_b_param Set max allowed MA b parameter.
      * @param grid_param Set the number of grid divisions in the (a,b) grid.
      * @param negative_corr Allows negative correlations to be used.
+     * @param quiet Turn off most progress messages
+     * @param verbose Turn on more progress messages
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dRemlfitOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_REMLFIT_METADATA);
-    const params = v_3d_remlfit_params(input_file, regression_matrix, baseline_files, sort_nods, temp_storage, mask, output_prefix, go_for_it, max_b_param, grid_param, negative_corr)
+    const params = v_3d_remlfit_params(input_file, regression_matrix, baseline_files, sort_nods, temp_storage, mask, output_prefix, no_fdr_curve, go_for_it, max_a_param, max_b_param, grid_param, negative_corr, quiet, verbose)
     return v_3d_remlfit_execute(params, execution);
 }
 

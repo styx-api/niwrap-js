@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LOCAL_HISTOG_METADATA: Metadata = {
-    id: "de01f1dbbd5bfe5031e2c7c493ec364d82e32012.boutiques",
+    id: "b6fca81642196b74e87aaa904d948945eae79fdd.boutiques",
     name: "3dLocalHistog",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -18,7 +18,10 @@ interface V3dLocalHistogParameters {
     "hsave"?: string | null | undefined;
     "lab_file"?: InputPathType | null | undefined;
     "exclude"?: Array<string> | null | undefined;
+    "exc_nonlab": boolean;
     "mincount"?: number | null | undefined;
+    "probability": boolean;
+    "quiet": boolean;
     "input_datasets": Array<InputPathType>;
 }
 
@@ -89,7 +92,10 @@ function v_3d_local_histog_params(
     hsave: string | null = null,
     lab_file: InputPathType | null = null,
     exclude: Array<string> | null = null,
+    exc_nonlab: boolean = false,
     mincount: number | null = null,
+    probability: boolean = false,
+    quiet: boolean = false,
 ): V3dLocalHistogParameters {
     /**
      * Build parameters.
@@ -100,13 +106,19 @@ function v_3d_local_histog_params(
      * @param hsave Save the overall histogram into file 'sss'. This file will have 2 columns: value and count.
      * @param lab_file Use file 'LL' as a label file.
      * @param exclude Exclude values from 'a' to 'b' from the counting. This option can be used more than once.
+     * @param exc_nonlab If '-lab_file' is used, then exclude all values that are NOT in the label file (except for 0).
      * @param mincount Exclude values which appear in the overall histogram fewer than 'mm' times.
+     * @param probability Convert each count to a probability by dividing by the total number of counts at each voxel.
+     * @param quiet Stop the highly informative progress reports.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dLocalHistog" as const,
         "prefix": prefix,
+        "exc_nonlab": exc_nonlab,
+        "probability": probability,
+        "quiet": quiet,
         "input_datasets": input_datasets,
     };
     if (nbhd_option !== null) {
@@ -170,11 +182,20 @@ function v_3d_local_histog_cargs(
             ...(params["exclude"] ?? null)
         );
     }
+    if ((params["exc_nonlab"] ?? null)) {
+        cargs.push("-excNONLAB");
+    }
     if ((params["mincount"] ?? null) !== null) {
         cargs.push(
             "-mincount",
             String((params["mincount"] ?? null))
         );
+    }
+    if ((params["probability"] ?? null)) {
+        cargs.push("-prob");
+    }
+    if ((params["quiet"] ?? null)) {
+        cargs.push("-quiet");
     }
     cargs.push(...(params["input_datasets"] ?? null).map(f => execution.inputFile(f)));
     return cargs;
@@ -234,7 +255,10 @@ function v_3d_local_histog(
     hsave: string | null = null,
     lab_file: InputPathType | null = null,
     exclude: Array<string> | null = null,
+    exc_nonlab: boolean = false,
     mincount: number | null = null,
+    probability: boolean = false,
+    quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dLocalHistogOutputs {
     /**
@@ -250,14 +274,17 @@ function v_3d_local_histog(
      * @param hsave Save the overall histogram into file 'sss'. This file will have 2 columns: value and count.
      * @param lab_file Use file 'LL' as a label file.
      * @param exclude Exclude values from 'a' to 'b' from the counting. This option can be used more than once.
+     * @param exc_nonlab If '-lab_file' is used, then exclude all values that are NOT in the label file (except for 0).
      * @param mincount Exclude values which appear in the overall histogram fewer than 'mm' times.
+     * @param probability Convert each count to a probability by dividing by the total number of counts at each voxel.
+     * @param quiet Stop the highly informative progress reports.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dLocalHistogOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LOCAL_HISTOG_METADATA);
-    const params = v_3d_local_histog_params(prefix, input_datasets, nbhd_option, hsave, lab_file, exclude, mincount)
+    const params = v_3d_local_histog_params(prefix, input_datasets, nbhd_option, hsave, lab_file, exclude, exc_nonlab, mincount, probability, quiet)
     return v_3d_local_histog_execute(params, execution);
 }
 

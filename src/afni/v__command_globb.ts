@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__COMMAND_GLOBB_METADATA: Metadata = {
-    id: "c2faf81a08e05a3e16060acc326e418fbdfeaad0.boutiques",
+    id: "a76e1268b2d89b7de3b09ab6908aa83b788189ba.boutiques",
     name: "@CommandGlobb",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -114,13 +114,19 @@ function v__command_globb_cargs(
      */
     const cargs: string[] = [];
     cargs.push("@CommandGlobb");
-    cargs.push("-com");
-    cargs.push((params["program_command"] ?? null));
-    cargs.push("-session");
-    cargs.push((params["output_dir"] ?? null));
-    cargs.push("-newxt");
+    cargs.push(
+        "-com",
+        (params["program_command"] ?? null)
+    );
+    cargs.push(
+        "-session",
+        (params["output_dir"] ?? null)
+    );
     if ((params["extension"] ?? null) !== null) {
-        cargs.push((params["extension"] ?? null));
+        cargs.push(
+            "-newext",
+            (params["extension"] ?? null)
+        );
     }
     cargs.push(
         "-list",

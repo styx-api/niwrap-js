@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ANOVA3_METADATA: Metadata = {
-    id: "fe7391c6cb7a9865c9618e3aa5f2eb36c7ee57f4.boutiques",
+    id: "89d3a37a3aeb7f4c6c360f1bc16bdccd1f3a7f46.boutiques",
     name: "3dANOVA3",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -21,6 +21,28 @@ interface V3dAnova3Parameters {
     "voxel_num"?: number | null | undefined;
     "diskspace": boolean;
     "mask"?: InputPathType | null | undefined;
+    "outfile_fa"?: string | null | undefined;
+    "outfile_fb"?: string | null | undefined;
+    "outfile_fc"?: string | null | undefined;
+    "outfile_fab"?: string | null | undefined;
+    "outfile_fac"?: string | null | undefined;
+    "outfile_fbc"?: string | null | undefined;
+    "outfile_fabc"?: string | null | undefined;
+    "outfile_amean"?: string | null | undefined;
+    "outfile_bmean"?: string | null | undefined;
+    "outfile_cmean"?: string | null | undefined;
+    "outfile_xmean"?: string | null | undefined;
+    "outfile_adiff"?: string | null | undefined;
+    "outfile_bdiff"?: string | null | undefined;
+    "outfile_cdiff"?: string | null | undefined;
+    "outfile_xdiff"?: string | null | undefined;
+    "outfile_acontr"?: string | null | undefined;
+    "outfile_bcontr"?: string | null | undefined;
+    "outfile_ccontr"?: string | null | undefined;
+    "outfile_Abcontr"?: string | null | undefined;
+    "outfile_Abdiff"?: string | null | undefined;
+    "outfile_abmean"?: string | null | undefined;
+    "outfile_bucket"?: string | null | undefined;
     "anova_options"?: Array<string> | null | undefined;
 }
 
@@ -72,39 +94,39 @@ interface V3dAnova3Outputs {
     /**
      * Output file for the main ANOVA result.
      */
-    outfile_fa: OutputPathType;
+    outfile_fa: OutputPathType | null;
     /**
      * Output file for the main B ANOVA result.
      */
-    outfile_fb: OutputPathType;
+    outfile_fb: OutputPathType | null;
     /**
      * Output file for the main C ANOVA result.
      */
-    outfile_fc: OutputPathType;
+    outfile_fc: OutputPathType | null;
     /**
      * Output file for the interaction between A and B.
      */
-    outfile_fab: OutputPathType;
+    outfile_fab: OutputPathType | null;
     /**
      * Output file for the interaction between A and C.
      */
-    outfile_fac: OutputPathType;
+    outfile_fac: OutputPathType | null;
     /**
      * Output file for the interaction between B and C.
      */
-    outfile_fbc: OutputPathType;
+    outfile_fbc: OutputPathType | null;
     /**
      * Output file for the interaction between A, B, and C.
      */
-    outfile_fabc: OutputPathType;
+    outfile_fabc: OutputPathType | null;
     /**
      * Output file for the A mean results.
      */
-    outfile_amean: OutputPathType;
+    outfile_amean: OutputPathType | null;
     /**
      * Output file for the B mean results.
      */
-    outfile_bmean: OutputPathType;
+    outfile_bmean: OutputPathType | null;
 }
 
 
@@ -117,6 +139,28 @@ function v_3d_anova3_params(
     voxel_num: number | null = null,
     diskspace: boolean = false,
     mask: InputPathType | null = null,
+    outfile_fa: string | null = null,
+    outfile_fb: string | null = null,
+    outfile_fc: string | null = null,
+    outfile_fab: string | null = null,
+    outfile_fac: string | null = null,
+    outfile_fbc: string | null = null,
+    outfile_fabc: string | null = null,
+    outfile_amean: string | null = null,
+    outfile_bmean: string | null = null,
+    outfile_cmean: string | null = null,
+    outfile_xmean: string | null = null,
+    outfile_adiff: string | null = null,
+    outfile_bdiff: string | null = null,
+    outfile_cdiff: string | null = null,
+    outfile_xdiff: string | null = null,
+    outfile_acontr: string | null = null,
+    outfile_bcontr: string | null = null,
+    outfile_ccontr: string | null = null,
+    outfile_abcontr: string | null = null,
+    outfile_abdiff: string | null = null,
+    outfile_abmean: string | null = null,
+    outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
 ): V3dAnova3Parameters {
     /**
@@ -130,6 +174,28 @@ function v_3d_anova3_params(
      * @param voxel_num Screen output for specified voxel number.
      * @param diskspace Print out disk space required for program execution.
      * @param mask Use sub-brick #0 of dataset to define which voxels to process.
+     * @param outfile_fa Specify the output file for the main ANOVA result.
+     * @param outfile_fb Specify the output file for the main B ANOVA result.
+     * @param outfile_fc Specify the output file for the main C ANOVA result.
+     * @param outfile_fab Specify the output file for the interaction between A and B.
+     * @param outfile_fac Specify the output file for the interaction between A and C.
+     * @param outfile_fbc Specify the output file for the interaction between B and C.
+     * @param outfile_fabc Specify the output file for the interaction between A, B, and C.
+     * @param outfile_amean Specify the output file for the A mean results.
+     * @param outfile_bmean Specify the output file for the B mean results.
+     * @param outfile_cmean Specify the output file for the C mean results.
+     * @param outfile_xmean Specify the output file for the overall mean results.
+     * @param outfile_adiff Specify the output file for the A difference results.
+     * @param outfile_bdiff Specify the output file for the B difference results.
+     * @param outfile_cdiff Specify the output file for the C difference results.
+     * @param outfile_xdiff Specify the output file for the overall difference results.
+     * @param outfile_acontr Specify the output file for the A contrast results.
+     * @param outfile_bcontr Specify the output file for the B contrast results.
+     * @param outfile_ccontr Specify the output file for the C contrast results.
+     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B (case-sensitive).
+     * @param outfile_abdiff Specify the output file for the interaction difference results between A and B (case-sensitive).
+     * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
+     * @param outfile_bucket Specify the output file for the bucket (combined) results.
      * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
     
      * @returns Parameter dictionary
@@ -148,6 +214,72 @@ function v_3d_anova3_params(
     }
     if (mask !== null) {
         params["mask"] = mask;
+    }
+    if (outfile_fa !== null) {
+        params["outfile_fa"] = outfile_fa;
+    }
+    if (outfile_fb !== null) {
+        params["outfile_fb"] = outfile_fb;
+    }
+    if (outfile_fc !== null) {
+        params["outfile_fc"] = outfile_fc;
+    }
+    if (outfile_fab !== null) {
+        params["outfile_fab"] = outfile_fab;
+    }
+    if (outfile_fac !== null) {
+        params["outfile_fac"] = outfile_fac;
+    }
+    if (outfile_fbc !== null) {
+        params["outfile_fbc"] = outfile_fbc;
+    }
+    if (outfile_fabc !== null) {
+        params["outfile_fabc"] = outfile_fabc;
+    }
+    if (outfile_amean !== null) {
+        params["outfile_amean"] = outfile_amean;
+    }
+    if (outfile_bmean !== null) {
+        params["outfile_bmean"] = outfile_bmean;
+    }
+    if (outfile_cmean !== null) {
+        params["outfile_cmean"] = outfile_cmean;
+    }
+    if (outfile_xmean !== null) {
+        params["outfile_xmean"] = outfile_xmean;
+    }
+    if (outfile_adiff !== null) {
+        params["outfile_adiff"] = outfile_adiff;
+    }
+    if (outfile_bdiff !== null) {
+        params["outfile_bdiff"] = outfile_bdiff;
+    }
+    if (outfile_cdiff !== null) {
+        params["outfile_cdiff"] = outfile_cdiff;
+    }
+    if (outfile_xdiff !== null) {
+        params["outfile_xdiff"] = outfile_xdiff;
+    }
+    if (outfile_acontr !== null) {
+        params["outfile_acontr"] = outfile_acontr;
+    }
+    if (outfile_bcontr !== null) {
+        params["outfile_bcontr"] = outfile_bcontr;
+    }
+    if (outfile_ccontr !== null) {
+        params["outfile_ccontr"] = outfile_ccontr;
+    }
+    if (outfile_abcontr !== null) {
+        params["outfile_Abcontr"] = outfile_abcontr;
+    }
+    if (outfile_abdiff !== null) {
+        params["outfile_Abdiff"] = outfile_abdiff;
+    }
+    if (outfile_abmean !== null) {
+        params["outfile_abmean"] = outfile_abmean;
+    }
+    if (outfile_bucket !== null) {
+        params["outfile_bucket"] = outfile_bucket;
     }
     if (anova_options !== null) {
         params["anova_options"] = anova_options;
@@ -205,7 +337,138 @@ function v_3d_anova3_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    cargs.push("[OUTFILES]");
+    if ((params["outfile_fa"] ?? null) !== null) {
+        cargs.push(
+            "-fa",
+            (params["outfile_fa"] ?? null)
+        );
+    }
+    if ((params["outfile_fb"] ?? null) !== null) {
+        cargs.push(
+            "-fb",
+            (params["outfile_fb"] ?? null)
+        );
+    }
+    if ((params["outfile_fc"] ?? null) !== null) {
+        cargs.push(
+            "-fc",
+            (params["outfile_fc"] ?? null)
+        );
+    }
+    if ((params["outfile_fab"] ?? null) !== null) {
+        cargs.push(
+            "-fab",
+            (params["outfile_fab"] ?? null)
+        );
+    }
+    if ((params["outfile_fac"] ?? null) !== null) {
+        cargs.push(
+            "-fac",
+            (params["outfile_fac"] ?? null)
+        );
+    }
+    if ((params["outfile_fbc"] ?? null) !== null) {
+        cargs.push(
+            "-fbc",
+            (params["outfile_fbc"] ?? null)
+        );
+    }
+    if ((params["outfile_fabc"] ?? null) !== null) {
+        cargs.push(
+            "-fabc",
+            (params["outfile_fabc"] ?? null)
+        );
+    }
+    if ((params["outfile_amean"] ?? null) !== null) {
+        cargs.push(
+            "-amean",
+            (params["outfile_amean"] ?? null)
+        );
+    }
+    if ((params["outfile_bmean"] ?? null) !== null) {
+        cargs.push(
+            "-bmean",
+            (params["outfile_bmean"] ?? null)
+        );
+    }
+    if ((params["outfile_cmean"] ?? null) !== null) {
+        cargs.push(
+            "-cmean",
+            (params["outfile_cmean"] ?? null)
+        );
+    }
+    if ((params["outfile_xmean"] ?? null) !== null) {
+        cargs.push(
+            "-xmean",
+            (params["outfile_xmean"] ?? null)
+        );
+    }
+    if ((params["outfile_adiff"] ?? null) !== null) {
+        cargs.push(
+            "-adiff",
+            (params["outfile_adiff"] ?? null)
+        );
+    }
+    if ((params["outfile_bdiff"] ?? null) !== null) {
+        cargs.push(
+            "-bdiff",
+            (params["outfile_bdiff"] ?? null)
+        );
+    }
+    if ((params["outfile_cdiff"] ?? null) !== null) {
+        cargs.push(
+            "-cdiff",
+            (params["outfile_cdiff"] ?? null)
+        );
+    }
+    if ((params["outfile_xdiff"] ?? null) !== null) {
+        cargs.push(
+            "-xdiff",
+            (params["outfile_xdiff"] ?? null)
+        );
+    }
+    if ((params["outfile_acontr"] ?? null) !== null) {
+        cargs.push(
+            "-acontr",
+            (params["outfile_acontr"] ?? null)
+        );
+    }
+    if ((params["outfile_bcontr"] ?? null) !== null) {
+        cargs.push(
+            "-bcontr",
+            (params["outfile_bcontr"] ?? null)
+        );
+    }
+    if ((params["outfile_ccontr"] ?? null) !== null) {
+        cargs.push(
+            "-ccontr",
+            (params["outfile_ccontr"] ?? null)
+        );
+    }
+    if ((params["outfile_Abcontr"] ?? null) !== null) {
+        cargs.push(
+            "-Abcontr",
+            (params["outfile_Abcontr"] ?? null)
+        );
+    }
+    if ((params["outfile_Abdiff"] ?? null) !== null) {
+        cargs.push(
+            "-Abdiff",
+            (params["outfile_Abdiff"] ?? null)
+        );
+    }
+    if ((params["outfile_abmean"] ?? null) !== null) {
+        cargs.push(
+            "-abmean",
+            (params["outfile_abmean"] ?? null)
+        );
+    }
+    if ((params["outfile_bucket"] ?? null) !== null) {
+        cargs.push(
+            "-bucket",
+            (params["outfile_bucket"] ?? null)
+        );
+    }
     if ((params["anova_options"] ?? null) !== null) {
         cargs.push(
             "-old_method -OK -assume_sph",
@@ -230,15 +493,15 @@ function v_3d_anova3_outputs(
      */
     const ret: V3dAnova3Outputs = {
         root: execution.outputFile("."),
-        outfile_fa: execution.outputFile(["[OUTFILE_FA]"].join('')),
-        outfile_fb: execution.outputFile(["[OUTFILE_FB]"].join('')),
-        outfile_fc: execution.outputFile(["[OUTFILE_FC]"].join('')),
-        outfile_fab: execution.outputFile(["[OUTFILE_FAB]"].join('')),
-        outfile_fac: execution.outputFile(["[OUTFILE_FAC]"].join('')),
-        outfile_fbc: execution.outputFile(["[OUTFILE_FBC]"].join('')),
-        outfile_fabc: execution.outputFile(["[OUTFILE_FABC]"].join('')),
-        outfile_amean: execution.outputFile(["[OUTFILE_AMEAN]"].join('')),
-        outfile_bmean: execution.outputFile(["[OUTFILE_BMEAN]"].join('')),
+        outfile_fa: ((params["outfile_fa"] ?? null) !== null) ? execution.outputFile([(params["outfile_fa"] ?? null)].join('')) : null,
+        outfile_fb: ((params["outfile_fb"] ?? null) !== null) ? execution.outputFile([(params["outfile_fb"] ?? null)].join('')) : null,
+        outfile_fc: ((params["outfile_fc"] ?? null) !== null) ? execution.outputFile([(params["outfile_fc"] ?? null)].join('')) : null,
+        outfile_fab: ((params["outfile_fab"] ?? null) !== null) ? execution.outputFile([(params["outfile_fab"] ?? null)].join('')) : null,
+        outfile_fac: ((params["outfile_fac"] ?? null) !== null) ? execution.outputFile([(params["outfile_fac"] ?? null)].join('')) : null,
+        outfile_fbc: ((params["outfile_fbc"] ?? null) !== null) ? execution.outputFile([(params["outfile_fbc"] ?? null)].join('')) : null,
+        outfile_fabc: ((params["outfile_fabc"] ?? null) !== null) ? execution.outputFile([(params["outfile_fabc"] ?? null)].join('')) : null,
+        outfile_amean: ((params["outfile_amean"] ?? null) !== null) ? execution.outputFile([(params["outfile_amean"] ?? null)].join('')) : null,
+        outfile_bmean: ((params["outfile_bmean"] ?? null) !== null) ? execution.outputFile([(params["outfile_bmean"] ?? null)].join('')) : null,
     };
     return ret;
 }
@@ -277,6 +540,28 @@ function v_3d_anova3(
     voxel_num: number | null = null,
     diskspace: boolean = false,
     mask: InputPathType | null = null,
+    outfile_fa: string | null = null,
+    outfile_fb: string | null = null,
+    outfile_fc: string | null = null,
+    outfile_fab: string | null = null,
+    outfile_fac: string | null = null,
+    outfile_fbc: string | null = null,
+    outfile_fabc: string | null = null,
+    outfile_amean: string | null = null,
+    outfile_bmean: string | null = null,
+    outfile_cmean: string | null = null,
+    outfile_xmean: string | null = null,
+    outfile_adiff: string | null = null,
+    outfile_bdiff: string | null = null,
+    outfile_cdiff: string | null = null,
+    outfile_xdiff: string | null = null,
+    outfile_acontr: string | null = null,
+    outfile_bcontr: string | null = null,
+    outfile_ccontr: string | null = null,
+    outfile_abcontr: string | null = null,
+    outfile_abdiff: string | null = null,
+    outfile_abmean: string | null = null,
+    outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dAnova3Outputs {
@@ -295,6 +580,28 @@ function v_3d_anova3(
      * @param voxel_num Screen output for specified voxel number.
      * @param diskspace Print out disk space required for program execution.
      * @param mask Use sub-brick #0 of dataset to define which voxels to process.
+     * @param outfile_fa Specify the output file for the main ANOVA result.
+     * @param outfile_fb Specify the output file for the main B ANOVA result.
+     * @param outfile_fc Specify the output file for the main C ANOVA result.
+     * @param outfile_fab Specify the output file for the interaction between A and B.
+     * @param outfile_fac Specify the output file for the interaction between A and C.
+     * @param outfile_fbc Specify the output file for the interaction between B and C.
+     * @param outfile_fabc Specify the output file for the interaction between A, B, and C.
+     * @param outfile_amean Specify the output file for the A mean results.
+     * @param outfile_bmean Specify the output file for the B mean results.
+     * @param outfile_cmean Specify the output file for the C mean results.
+     * @param outfile_xmean Specify the output file for the overall mean results.
+     * @param outfile_adiff Specify the output file for the A difference results.
+     * @param outfile_bdiff Specify the output file for the B difference results.
+     * @param outfile_cdiff Specify the output file for the C difference results.
+     * @param outfile_xdiff Specify the output file for the overall difference results.
+     * @param outfile_acontr Specify the output file for the A contrast results.
+     * @param outfile_bcontr Specify the output file for the B contrast results.
+     * @param outfile_ccontr Specify the output file for the C contrast results.
+     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B (case-sensitive).
+     * @param outfile_abdiff Specify the output file for the interaction difference results between A and B (case-sensitive).
+     * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
+     * @param outfile_bucket Specify the output file for the bucket (combined) results.
      * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
      * @param runner Command runner
     
@@ -302,7 +609,7 @@ function v_3d_anova3(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ANOVA3_METADATA);
-    const params = v_3d_anova3_params(type_, alevels, blevels, clevels, dsets, voxel_num, diskspace, mask, anova_options)
+    const params = v_3d_anova3_params(type_, alevels, blevels, clevels, dsets, voxel_num, diskspace, mask, outfile_fa, outfile_fb, outfile_fc, outfile_fab, outfile_fac, outfile_fbc, outfile_fabc, outfile_amean, outfile_bmean, outfile_cmean, outfile_xmean, outfile_adiff, outfile_bdiff, outfile_cdiff, outfile_xdiff, outfile_acontr, outfile_bcontr, outfile_ccontr, outfile_abcontr, outfile_abdiff, outfile_abmean, outfile_bucket, anova_options)
     return v_3d_anova3_execute(params, execution);
 }
 

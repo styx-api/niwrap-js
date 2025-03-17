@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BALLOON_METADATA: Metadata = {
-    id: "d38a0b74f4c93d5365bdded27c362f4ddc6e6b5f.boutiques",
+    id: "efa704edebd4da856d63213685c5a8439a31d101.boutiques",
     name: "balloon",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,7 +16,9 @@ interface BalloonParameters {
     "tr": number;
     "num_scans": number;
     "event_times": InputPathType;
+    "t_rise"?: Array<number> | null | undefined;
     "t_fall"?: Array<number> | null | undefined;
+    "t_sustain"?: Array<number> | null | undefined;
 }
 
 
@@ -70,7 +72,9 @@ function balloon_params(
     tr: number,
     num_scans: number,
     event_times: InputPathType,
+    t_rise: Array<number> | null = null,
     t_fall: Array<number> | null = null,
+    t_sustain: Array<number> | null = null,
 ): BalloonParameters {
     /**
      * Build parameters.
@@ -78,7 +82,9 @@ function balloon_params(
      * @param tr Scan repetition time in seconds (TR), the interval at which the output curve will be sampled.
      * @param num_scans Number of scans (N), the output curve will comprise this number of samples.
      * @param event_times The name of a file containing the event timings, in seconds, as ASCII strings separated by white space, with time 0 being the time at which the initial scan occurred.
+     * @param t_rise Haemodynamic rise time in seconds (typically between 4s and 6s).
      * @param t_fall Haemodynamic fall time in seconds (typically between 4s and 6s).
+     * @param t_sustain Haemodynamic sustain time in seconds (typically between 0s and 4s).
     
      * @returns Parameter dictionary
      */
@@ -88,8 +94,14 @@ function balloon_params(
         "num_scans": num_scans,
         "event_times": event_times,
     };
+    if (t_rise !== null) {
+        params["t_rise"] = t_rise;
+    }
     if (t_fall !== null) {
         params["t_fall"] = t_fall;
+    }
+    if (t_sustain !== null) {
+        params["t_sustain"] = t_sustain;
     }
     return params;
 }
@@ -112,8 +124,14 @@ function balloon_cargs(
     cargs.push(String((params["tr"] ?? null)));
     cargs.push(String((params["num_scans"] ?? null)));
     cargs.push(execution.inputFile((params["event_times"] ?? null)));
+    if ((params["t_rise"] ?? null) !== null) {
+        cargs.push(...(params["t_rise"] ?? null).map(String));
+    }
     if ((params["t_fall"] ?? null) !== null) {
         cargs.push(...(params["t_fall"] ?? null).map(String));
+    }
+    if ((params["t_sustain"] ?? null) !== null) {
+        cargs.push(...(params["t_sustain"] ?? null).map(String));
     }
     return cargs;
 }
@@ -166,7 +184,9 @@ function balloon(
     tr: number,
     num_scans: number,
     event_times: InputPathType,
+    t_rise: Array<number> | null = null,
     t_fall: Array<number> | null = null,
+    t_sustain: Array<number> | null = null,
     runner: Runner | null = null,
 ): BalloonOutputs {
     /**
@@ -179,14 +199,16 @@ function balloon(
      * @param tr Scan repetition time in seconds (TR), the interval at which the output curve will be sampled.
      * @param num_scans Number of scans (N), the output curve will comprise this number of samples.
      * @param event_times The name of a file containing the event timings, in seconds, as ASCII strings separated by white space, with time 0 being the time at which the initial scan occurred.
+     * @param t_rise Haemodynamic rise time in seconds (typically between 4s and 6s).
      * @param t_fall Haemodynamic fall time in seconds (typically between 4s and 6s).
+     * @param t_sustain Haemodynamic sustain time in seconds (typically between 0s and 4s).
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `BalloonOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BALLOON_METADATA);
-    const params = balloon_params(tr, num_scans, event_times, t_fall)
+    const params = balloon_params(tr, num_scans, event_times, t_rise, t_fall, t_sustain)
     return balloon_execute(params, execution);
 }
 

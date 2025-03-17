@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_ROI_ROW_METADATA: Metadata = {
-    id: "027b80948cf0bd1ac046353e98ebb2ca04186002.boutiques",
+    id: "a4a1c061c97d682d3d4d61503f3c28a11502fc06.boutiques",
     name: "fat_roi_row",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -120,21 +120,18 @@ function fat_roi_row_cargs(
         "-r",
         (params["roi"] ?? null)
     );
-    cargs.push("{");
     if ((params["matrix_files"] ?? null) !== null) {
         cargs.push(
             "-m",
             (params["matrix_files"] ?? null)
         );
     }
-    cargs.push("|");
     if ((params["list_file"] ?? null) !== null) {
         cargs.push(
             "-l",
             execution.inputFile((params["list_file"] ?? null))
         );
     }
-    cargs.push("}");
     if ((params["extern_labs_no"] ?? null)) {
         cargs.push("-E");
     }

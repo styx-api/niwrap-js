@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF_INFO_METADATA: Metadata = {
-    id: "91fa2904287da85a4df485d2f8c7ffbc9ba1a073.boutiques",
+    id: "869be3f2fd4b338333ddb5e88a1f6d232910e89e.boutiques",
     name: "SurfInfo",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,12 +17,22 @@ interface SurfInfoParameters {
     "com": boolean;
     "debug_level"?: number | null | undefined;
     "detail_level"?: number | null | undefined;
+    "n_node": boolean;
+    "n_faceset": boolean;
+    "n_tri": boolean;
     "quiet": boolean;
     "separator"?: string | null | undefined;
     "input_surface"?: string | null | undefined;
     "surface_state"?: string | null | undefined;
     "surface_volume"?: InputPathType | null | undefined;
     "spec_file"?: InputPathType | null | undefined;
+    "novolreg": boolean;
+    "noxform": boolean;
+    "setenv"?: string | null | undefined;
+    "trace": boolean;
+    "extreme_trace": boolean;
+    "nomall": boolean;
+    "yesmall": boolean;
 }
 
 
@@ -82,12 +92,22 @@ function surf_info_params(
     com: boolean = false,
     debug_level: number | null = null,
     detail_level: number | null = null,
+    n_node: boolean = false,
+    n_faceset: boolean = false,
+    n_tri: boolean = false,
     quiet: boolean = false,
     separator: string | null = null,
     input_surface: string | null = null,
     surface_state: string | null = null,
     surface_volume: InputPathType | null = null,
     spec_file: InputPathType | null = null,
+    novolreg: boolean = false,
+    noxform: boolean = false,
+    setenv: string | null = null,
+    trace: boolean = false,
+    extreme_trace: boolean = false,
+    nomall: boolean = false,
+    yesmall: boolean = false,
 ): SurfInfoParameters {
     /**
      * Build parameters.
@@ -96,12 +116,22 @@ function surf_info_params(
      * @param com Output the center of mass.
      * @param debug_level Debugging level (2 turns LocalHead ON)
      * @param detail_level Calculate surface metrics. 1=yes, 0=no
+     * @param n_node Output the number of nodes.
+     * @param n_faceset Output the number of face sets.
+     * @param n_tri Output the number of triangles.
      * @param quiet Do not include the name of the parameter in output.
      * @param separator Use string SEP to separate parameter values. Default is ' ; '
      * @param input_surface Specify the input surface type and file.
      * @param surface_state Specify surface type, state, and name.
      * @param surface_volume Specify a surface volume file.
      * @param spec_file Specify a surface specification (spec) file.
+     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+     * @param noxform Same as -novolreg.
+     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+     * @param trace Turns on In/Out debug and Memory tracing.
+     * @param extreme_trace Turns on extreme tracing.
+     * @param nomall Turn off memory tracing.
+     * @param yesmall Turn on memory tracing (default).
     
      * @returns Parameter dictionary
      */
@@ -109,7 +139,16 @@ function surf_info_params(
         "__STYXTYPE__": "SurfInfo" as const,
         "surface": surface,
         "com": com,
+        "n_node": n_node,
+        "n_faceset": n_faceset,
+        "n_tri": n_tri,
         "quiet": quiet,
+        "novolreg": novolreg,
+        "noxform": noxform,
+        "trace": trace,
+        "extreme_trace": extreme_trace,
+        "nomall": nomall,
+        "yesmall": yesmall,
     };
     if (debug_level !== null) {
         params["debug_level"] = debug_level;
@@ -132,6 +171,9 @@ function surf_info_params(
     if (spec_file !== null) {
         params["spec_file"] = spec_file;
     }
+    if (setenv !== null) {
+        params["setenv"] = setenv;
+    }
     return params;
 }
 
@@ -150,7 +192,6 @@ function surf_info_cargs(
      */
     const cargs: string[] = [];
     cargs.push("SurfInfo");
-    cargs.push("[options]");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     if ((params["com"] ?? null)) {
         cargs.push("-COM");
@@ -166,6 +207,15 @@ function surf_info_cargs(
             "-detail",
             String((params["detail_level"] ?? null))
         );
+    }
+    if ((params["n_node"] ?? null)) {
+        cargs.push("-N_Node");
+    }
+    if ((params["n_faceset"] ?? null)) {
+        cargs.push("-N_FaceSet");
+    }
+    if ((params["n_tri"] ?? null)) {
+        cargs.push("-N_Tri");
     }
     if ((params["quiet"] ?? null)) {
         cargs.push("-quiet");
@@ -199,6 +249,30 @@ function surf_info_cargs(
             "-spec",
             execution.inputFile((params["spec_file"] ?? null))
         );
+    }
+    if ((params["novolreg"] ?? null)) {
+        cargs.push("-novolreg");
+    }
+    if ((params["noxform"] ?? null)) {
+        cargs.push("-noxform");
+    }
+    if ((params["setenv"] ?? null) !== null) {
+        cargs.push(
+            "-setenv",
+            (params["setenv"] ?? null)
+        );
+    }
+    if ((params["trace"] ?? null)) {
+        cargs.push("-trace");
+    }
+    if ((params["extreme_trace"] ?? null)) {
+        cargs.push("-TRACE");
+    }
+    if ((params["nomall"] ?? null)) {
+        cargs.push("-nomall");
+    }
+    if ((params["yesmall"] ?? null)) {
+        cargs.push("-yesmall");
     }
     return cargs;
 }
@@ -253,12 +327,22 @@ function surf_info(
     com: boolean = false,
     debug_level: number | null = null,
     detail_level: number | null = null,
+    n_node: boolean = false,
+    n_faceset: boolean = false,
+    n_tri: boolean = false,
     quiet: boolean = false,
     separator: string | null = null,
     input_surface: string | null = null,
     surface_state: string | null = null,
     surface_volume: InputPathType | null = null,
     spec_file: InputPathType | null = null,
+    novolreg: boolean = false,
+    noxform: boolean = false,
+    setenv: string | null = null,
+    trace: boolean = false,
+    extreme_trace: boolean = false,
+    nomall: boolean = false,
+    yesmall: boolean = false,
     runner: Runner | null = null,
 ): SurfInfoOutputs {
     /**
@@ -272,19 +356,29 @@ function surf_info(
      * @param com Output the center of mass.
      * @param debug_level Debugging level (2 turns LocalHead ON)
      * @param detail_level Calculate surface metrics. 1=yes, 0=no
+     * @param n_node Output the number of nodes.
+     * @param n_faceset Output the number of face sets.
+     * @param n_tri Output the number of triangles.
      * @param quiet Do not include the name of the parameter in output.
      * @param separator Use string SEP to separate parameter values. Default is ' ; '
      * @param input_surface Specify the input surface type and file.
      * @param surface_state Specify surface type, state, and name.
      * @param surface_volume Specify a surface volume file.
      * @param spec_file Specify a surface specification (spec) file.
+     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+     * @param noxform Same as -novolreg.
+     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+     * @param trace Turns on In/Out debug and Memory tracing.
+     * @param extreme_trace Turns on extreme tracing.
+     * @param nomall Turn off memory tracing.
+     * @param yesmall Turn on memory tracing (default).
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `SurfInfoOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_INFO_METADATA);
-    const params = surf_info_params(surface, com, debug_level, detail_level, quiet, separator, input_surface, surface_state, surface_volume, spec_file)
+    const params = surf_info_params(surface, com, debug_level, detail_level, n_node, n_faceset, n_tri, quiet, separator, input_surface, surface_state, surface_volume, spec_file, novolreg, noxform, setenv, trace, extreme_trace, nomall, yesmall)
     return surf_info_execute(params, execution);
 }
 

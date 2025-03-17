@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LME_METADATA: Metadata = {
-    id: "e9a80d6729c55d33424066db0a326673e6b70516.boutiques",
+    id: "793d77145ed7716db55eb8665482b6bfad2c1e45.boutiques",
     name: "3dLME",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -330,7 +330,6 @@ function v_3d_lme_cargs(
     if ((params["LOGIT_FLAG"] ?? null)) {
         cargs.push("-LOGIT");
     }
-    cargs.push("-ml");
     if ((params["ML_FLAG"] ?? null)) {
         cargs.push("-ML");
     }
@@ -388,7 +387,6 @@ function v_3d_lme_cargs(
             (params["REPREFIX"] ?? null)
         );
     }
-    cargs.push("-RIO");
     if ((params["RIO_FLAG"] ?? null)) {
         cargs.push("-Rio");
     }

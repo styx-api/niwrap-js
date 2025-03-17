@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_AFNITO3_D_METADATA: Metadata = {
-    id: "51230e7f67f1e0eb607573872e1507d7fe45f41a.boutiques",
+    id: "2e56ef52ac7f3be262fb2b8e920d983be907904e.boutiques",
     name: "3dAFNIto3D",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,9 @@ const V_3D_AFNITO3_D_METADATA: Metadata = {
 interface V3dAfnito3DParameters {
     "__STYXTYPE__": "3dAFNIto3D";
     "dataset": InputPathType;
+    "prefix"?: string | null | undefined;
+    "binary": boolean;
+    "text": boolean;
 }
 
 
@@ -64,24 +67,35 @@ interface V3dAfnito3DOutputs {
     /**
      * Output 3D file, either in binary or text format
      */
-    outfile: OutputPathType;
+    outfile: OutputPathType | null;
 }
 
 
 function v_3d_afnito3_d_params(
     dataset: InputPathType,
+    prefix: string | null = null,
+    binary: boolean = false,
+    text: boolean = false,
 ): V3dAfnito3DParameters {
     /**
      * Build parameters.
     
      * @param dataset AFNI dataset to be converted
+     * @param prefix Write result into file with specified prefix
+     * @param binary Write data in binary format
+     * @param text Write data in text format
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dAFNIto3D" as const,
         "dataset": dataset,
+        "binary": binary,
+        "text": text,
     };
+    if (prefix !== null) {
+        params["prefix"] = prefix;
+    }
     return params;
 }
 
@@ -100,8 +114,19 @@ function v_3d_afnito3_d_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dAFNIto3D");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
+    if ((params["prefix"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["prefix"] ?? null)
+        );
+    }
+    if ((params["binary"] ?? null)) {
+        cargs.push("-bin");
+    }
+    if ((params["text"] ?? null)) {
+        cargs.push("-txt");
+    }
     return cargs;
 }
 
@@ -120,7 +145,7 @@ function v_3d_afnito3_d_outputs(
      */
     const ret: V3dAfnito3DOutputs = {
         root: execution.outputFile("."),
-        outfile: execution.outputFile(["[PREFIX].3D"].join('')),
+        outfile: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".3D"].join('')) : null,
     };
     return ret;
 }
@@ -152,6 +177,9 @@ function v_3d_afnito3_d_execute(
 
 function v_3d_afnito3_d(
     dataset: InputPathType,
+    prefix: string | null = null,
+    binary: boolean = false,
+    text: boolean = false,
     runner: Runner | null = null,
 ): V3dAfnito3DOutputs {
     /**
@@ -162,13 +190,16 @@ function v_3d_afnito3_d(
      * URL: https://afni.nimh.nih.gov/
     
      * @param dataset AFNI dataset to be converted
+     * @param prefix Write result into file with specified prefix
+     * @param binary Write data in binary format
+     * @param text Write data in text format
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dAfnito3DOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AFNITO3_D_METADATA);
-    const params = v_3d_afnito3_d_params(dataset)
+    const params = v_3d_afnito3_d_params(dataset, prefix, binary, text)
     return v_3d_afnito3_d_execute(params, execution);
 }
 

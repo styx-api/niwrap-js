@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__AFNI_ENV_METADATA: Metadata = {
-    id: "b177bf4393f72d4c785c1458de43a3ef880cfb18.boutiques",
+    id: "4ce29310252c070804fde47dcdc6587ffd8a7e8e.boutiques",
     name: "@AfniEnv",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,7 +17,9 @@ interface VAfniEnvParameters {
     "unset_flag"?: string | null | undefined;
     "get_flag"?: string | null | undefined;
     "help_flag": boolean;
+    "help_web_flag": boolean;
     "help_web_flag_alias": boolean;
+    "help_view_flag": boolean;
     "help_view_flag_alias": boolean;
     "all_opts_flag": boolean;
     "help_find_flag"?: string | null | undefined;
@@ -75,7 +77,9 @@ function v__afni_env_params(
     unset_flag: string | null = null,
     get_flag: string | null = null,
     help_flag: boolean = false,
+    help_web_flag: boolean = false,
     help_web_flag_alias: boolean = false,
+    help_view_flag: boolean = false,
     help_view_flag_alias: boolean = false,
     all_opts_flag: boolean = false,
     help_find_flag: string | null = null,
@@ -87,7 +91,9 @@ function v__afni_env_params(
      * @param unset_flag Unset environment variable NAME
      * @param get_flag Get the value of environment variable NAME
      * @param help_flag Display the help message for @AfniEnv script
+     * @param help_web_flag Open webpage with help for this program
      * @param help_web_flag_alias Same as -h_web
+     * @param help_view_flag Open -help output in a GUI editor
      * @param help_view_flag_alias Same as -h_view
      * @param all_opts_flag List all of the options for this script
      * @param help_find_flag Search for lines containing WORD in -help output. Search is approximate.
@@ -97,7 +103,9 @@ function v__afni_env_params(
     const params = {
         "__STYXTYPE__": "@AfniEnv" as const,
         "help_flag": help_flag,
+        "help_web_flag": help_web_flag,
         "help_web_flag_alias": help_web_flag_alias,
+        "help_view_flag": help_view_flag,
         "help_view_flag_alias": help_view_flag_alias,
         "all_opts_flag": all_opts_flag,
     };
@@ -152,8 +160,14 @@ function v__afni_env_cargs(
     if ((params["help_flag"] ?? null)) {
         cargs.push("-help");
     }
+    if ((params["help_web_flag"] ?? null)) {
+        cargs.push("-h_web");
+    }
     if ((params["help_web_flag_alias"] ?? null)) {
         cargs.push("-hweb");
+    }
+    if ((params["help_view_flag"] ?? null)) {
+        cargs.push("-h_view");
     }
     if ((params["help_view_flag_alias"] ?? null)) {
         cargs.push("-hview");
@@ -219,7 +233,9 @@ function v__afni_env(
     unset_flag: string | null = null,
     get_flag: string | null = null,
     help_flag: boolean = false,
+    help_web_flag: boolean = false,
     help_web_flag_alias: boolean = false,
+    help_view_flag: boolean = false,
     help_view_flag_alias: boolean = false,
     all_opts_flag: boolean = false,
     help_find_flag: string | null = null,
@@ -236,7 +252,9 @@ function v__afni_env(
      * @param unset_flag Unset environment variable NAME
      * @param get_flag Get the value of environment variable NAME
      * @param help_flag Display the help message for @AfniEnv script
+     * @param help_web_flag Open webpage with help for this program
      * @param help_web_flag_alias Same as -h_web
+     * @param help_view_flag Open -help output in a GUI editor
      * @param help_view_flag_alias Same as -h_view
      * @param all_opts_flag List all of the options for this script
      * @param help_find_flag Search for lines containing WORD in -help output. Search is approximate.
@@ -246,7 +264,7 @@ function v__afni_env(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_ENV_METADATA);
-    const params = v__afni_env_params(set_flag, unset_flag, get_flag, help_flag, help_web_flag_alias, help_view_flag_alias, all_opts_flag, help_find_flag)
+    const params = v__afni_env_params(set_flag, unset_flag, get_flag, help_flag, help_web_flag, help_web_flag_alias, help_view_flag, help_view_flag_alias, all_opts_flag, help_find_flag)
     return v__afni_env_execute(params, execution);
 }
 

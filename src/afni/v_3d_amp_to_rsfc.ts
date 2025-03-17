@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_AMP_TO_RSFC_METADATA: Metadata = {
-    id: "27e3a8435ad8a4458d62e5fc746c88a2665d19fa.boutiques",
+    id: "942616944d84c853b47e970f882430a015aec06f.boutiques",
     name: "3dAmpToRSFC",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -18,6 +18,7 @@ interface V3dAmpToRsfcParameters {
     "prefix": string;
     "band": Array<number>;
     "mask"?: InputPathType | null | undefined;
+    "nifti": boolean;
 }
 
 
@@ -98,6 +99,7 @@ function v_3d_amp_to_rsfc_params(
     in_amp: InputPathType | null = null,
     in_pow: InputPathType | null = null,
     mask: InputPathType | null = null,
+    nifti: boolean = false,
 ): V3dAmpToRsfcParameters {
     /**
      * Build parameters.
@@ -107,6 +109,7 @@ function v_3d_amp_to_rsfc_params(
      * @param in_amp Input file of one-sided spectral amplitudes, such as output by 3dLombScargle.
      * @param in_pow Input file of a one-sided power spectrum, such as output by 3dLombScargle.
      * @param mask Volume mask of voxels to include for calculations.
+     * @param nifti Output files as *.nii.gz (default is BRIK/HEAD).
     
      * @returns Parameter dictionary
      */
@@ -114,6 +117,7 @@ function v_3d_amp_to_rsfc_params(
         "__STYXTYPE__": "3dAmpToRSFC" as const,
         "prefix": prefix,
         "band": band,
+        "nifti": nifti,
     };
     if (in_amp !== null) {
         params["in_amp"] = in_amp;
@@ -142,21 +146,18 @@ function v_3d_amp_to_rsfc_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dAmpToRSFC");
-    cargs.push("{");
     if ((params["in_amp"] ?? null) !== null) {
         cargs.push(
             "-in_amp",
             execution.inputFile((params["in_amp"] ?? null))
         );
     }
-    cargs.push("|");
     if ((params["in_pow"] ?? null) !== null) {
         cargs.push(
             "-in_pow",
             execution.inputFile((params["in_pow"] ?? null))
         );
     }
-    cargs.push("}");
     cargs.push(
         "-prefix",
         (params["prefix"] ?? null)
@@ -165,17 +166,15 @@ function v_3d_amp_to_rsfc_cargs(
         "-band",
         ...(params["band"] ?? null).map(String)
     );
-    cargs.push("{");
     if ((params["mask"] ?? null) !== null) {
         cargs.push(
             "-mask",
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    cargs.push("}");
-    cargs.push("{");
-    cargs.push("-nifti");
-    cargs.push("}");
+    if ((params["nifti"] ?? null)) {
+        cargs.push("-nifti");
+    }
     return cargs;
 }
 
@@ -235,6 +234,7 @@ function v_3d_amp_to_rsfc(
     in_amp: InputPathType | null = null,
     in_pow: InputPathType | null = null,
     mask: InputPathType | null = null,
+    nifti: boolean = false,
     runner: Runner | null = null,
 ): V3dAmpToRsfcOutputs {
     /**
@@ -249,13 +249,14 @@ function v_3d_amp_to_rsfc(
      * @param in_amp Input file of one-sided spectral amplitudes, such as output by 3dLombScargle.
      * @param in_pow Input file of a one-sided power spectrum, such as output by 3dLombScargle.
      * @param mask Volume mask of voxels to include for calculations.
+     * @param nifti Output files as *.nii.gz (default is BRIK/HEAD).
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dAmpToRsfcOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AMP_TO_RSFC_METADATA);
-    const params = v_3d_amp_to_rsfc_params(prefix, band, in_amp, in_pow, mask)
+    const params = v_3d_amp_to_rsfc_params(prefix, band, in_amp, in_pow, mask, nifti)
     return v_3d_amp_to_rsfc_execute(params, execution);
 }
 

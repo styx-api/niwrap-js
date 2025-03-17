@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MASK_TO_ASCII_METADATA: Metadata = {
-    id: "00c7066c6c38f027299750536983f490b1c220de.boutiques",
+    id: "20970426ca6ec9c84b1d7625189cb189cffb0a2f.boutiques",
     name: "3dMaskToASCII",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,7 @@ interface V3dMaskToAsciiParameters {
     "__STYXTYPE__": "3dMaskToASCII";
     "tobin_flag": boolean;
     "dataset": InputPathType;
+    "outputfile": string;
 }
 
 
@@ -71,12 +72,14 @@ interface V3dMaskToAsciiOutputs {
 
 function v_3d_mask_to_ascii_params(
     dataset: InputPathType,
+    outputfile: string,
     tobin_flag: boolean = false,
 ): V3dMaskToAsciiParameters {
     /**
      * Build parameters.
     
      * @param dataset Input dataset (e.g. mask.nii.gz)
+     * @param outputfile Output file where ASCII string mask or binary mask will be written.
      * @param tobin_flag Read ASCII mask, expand it to byte-valued dataset, and write to stdout.
     
      * @returns Parameter dictionary
@@ -85,6 +88,7 @@ function v_3d_mask_to_ascii_params(
         "__STYXTYPE__": "3dMaskToASCII" as const,
         "tobin_flag": tobin_flag,
         "dataset": dataset,
+        "outputfile": outputfile,
     };
     return params;
 }
@@ -108,8 +112,7 @@ function v_3d_mask_to_ascii_cargs(
         cargs.push("-tobin");
     }
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
-    cargs.push(">");
-    cargs.push("[OUTPUTFILE]");
+    cargs.push(["> ", (params["outputfile"] ?? null)].join(''));
     return cargs;
 }
 
@@ -128,7 +131,7 @@ function v_3d_mask_to_ascii_outputs(
      */
     const ret: V3dMaskToAsciiOutputs = {
         root: execution.outputFile("."),
-        outputfile: execution.outputFile(["[OUTPUTFILE]"].join('')),
+        outputfile: execution.outputFile([(params["outputfile"] ?? null)].join('')),
     };
     return ret;
 }
@@ -160,6 +163,7 @@ function v_3d_mask_to_ascii_execute(
 
 function v_3d_mask_to_ascii(
     dataset: InputPathType,
+    outputfile: string,
     tobin_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dMaskToAsciiOutputs {
@@ -171,6 +175,7 @@ function v_3d_mask_to_ascii(
      * URL: https://afni.nimh.nih.gov/
     
      * @param dataset Input dataset (e.g. mask.nii.gz)
+     * @param outputfile Output file where ASCII string mask or binary mask will be written.
      * @param tobin_flag Read ASCII mask, expand it to byte-valued dataset, and write to stdout.
      * @param runner Command runner
     
@@ -178,7 +183,7 @@ function v_3d_mask_to_ascii(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MASK_TO_ASCII_METADATA);
-    const params = v_3d_mask_to_ascii_params(dataset, tobin_flag)
+    const params = v_3d_mask_to_ascii_params(dataset, outputfile, tobin_flag)
     return v_3d_mask_to_ascii_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_MARRY_METADATA: Metadata = {
-    id: "bf4086d827742de99647b8c529893b01461d76ef.boutiques",
+    id: "7a4e380e9b92893751b846cf2eca95ba7f37ec68.boutiques",
     name: "1dMarry",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -128,7 +128,6 @@ function v_1d_marry_cargs(
         cargs.push("-divorce");
     }
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push("[FILE2]");
     return cargs;
 }
 

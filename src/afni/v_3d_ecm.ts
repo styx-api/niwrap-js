@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ECM_METADATA: Metadata = {
-    id: "c9bc0ce1e3c30699a348a07653407f3b99801a2a.boutiques",
+    id: "fe8e455e00c15b8128839ab77ca8b9a116a3a73b.boutiques",
     name: "3dECM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -22,7 +22,9 @@ interface V3dEcmParameters {
     "mask"?: InputPathType | null | undefined;
     "max_iter"?: number | null | undefined;
     "memory"?: number | null | undefined;
+    "num_threads"?: number | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
+    "out_file"?: string | null | undefined;
     "polort"?: number | null | undefined;
     "scale"?: number | null | undefined;
     "shift"?: number | null | undefined;
@@ -96,7 +98,9 @@ function v_3d_ecm_params(
     mask: InputPathType | null = null,
     max_iter: number | null = null,
     memory: number | null = null,
+    num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
+    out_file: string | null = null,
     polort: number | null = null,
     scale: number | null = null,
     shift: number | null = null,
@@ -115,7 +119,9 @@ function v_3d_ecm_params(
      * @param mask Mask file to mask input data.
      * @param max_iter Sets the maximum number of iterations to use in the power iteration; default = 1000.
      * @param memory Limit memory consumption on system by setting the amount of gb to limit the algorithm to; default = 2gb.
+     * @param num_threads Set number of threads.
      * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+     * @param out_file Output image file name.
      * @param polort No description provided.
      * @param scale Scale correlation coefficients in similarity matrix to after shifting, x >= 0.0; default = 1.0 for -full, 0.5 for -fecm.
      * @param shift Shift correlation coefficients in similarity matrix to enforce non-negativity, s >= 0.0; default = 0.0 for -full, 1.0 for -fecm.
@@ -144,8 +150,14 @@ function v_3d_ecm_params(
     if (memory !== null) {
         params["memory"] = memory;
     }
+    if (num_threads !== null) {
+        params["num_threads"] = num_threads;
+    }
     if (outputtype !== null) {
         params["outputtype"] = outputtype;
+    }
+    if (out_file !== null) {
+        params["out_file"] = out_file;
     }
     if (polort !== null) {
         params["polort"] = polort;
@@ -217,9 +229,17 @@ function v_3d_ecm_cargs(
             String((params["memory"] ?? null))
         );
     }
-    cargs.push("[OUT_FILE]");
+    if ((params["num_threads"] ?? null) !== null) {
+        cargs.push(String((params["num_threads"] ?? null)));
+    }
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
+    }
+    if ((params["out_file"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["out_file"] ?? null)
+        );
     }
     if ((params["polort"] ?? null) !== null) {
         cargs.push(
@@ -310,7 +330,9 @@ function v_3d_ecm(
     mask: InputPathType | null = null,
     max_iter: number | null = null,
     memory: number | null = null,
+    num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
+    out_file: string | null = null,
     polort: number | null = null,
     scale: number | null = null,
     shift: number | null = null,
@@ -334,7 +356,9 @@ function v_3d_ecm(
      * @param mask Mask file to mask input data.
      * @param max_iter Sets the maximum number of iterations to use in the power iteration; default = 1000.
      * @param memory Limit memory consumption on system by setting the amount of gb to limit the algorithm to; default = 2gb.
+     * @param num_threads Set number of threads.
      * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+     * @param out_file Output image file name.
      * @param polort No description provided.
      * @param scale Scale correlation coefficients in similarity matrix to after shifting, x >= 0.0; default = 1.0 for -full, 0.5 for -fecm.
      * @param shift Shift correlation coefficients in similarity matrix to enforce non-negativity, s >= 0.0; default = 0.0 for -full, 1.0 for -fecm.
@@ -346,7 +370,7 @@ function v_3d_ecm(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ECM_METADATA);
-    const params = v_3d_ecm_params(in_file, autoclip, automask, eps, fecm, full, mask, max_iter, memory, outputtype, polort, scale, shift, sparsity, thresh)
+    const params = v_3d_ecm_params(in_file, autoclip, automask, eps, fecm, full, mask, max_iter, memory, num_threads, outputtype, out_file, polort, scale, shift, sparsity, thresh)
     return v_3d_ecm_execute(params, execution);
 }
 

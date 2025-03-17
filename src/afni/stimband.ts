@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const STIMBAND_METADATA: Metadata = {
-    id: "464e80031a1b4a970344b72621a7160776336ad8.boutiques",
+    id: "ca5a92d5ac7d886044df23850ca6ef4054823866.boutiques",
     name: "stimband",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,8 @@ const STIMBAND_METADATA: Metadata = {
 interface StimbandParameters {
     "__STYXTYPE__": "stimband";
     "verbose_flag": boolean;
+    "matrixfiles": Array<InputPathType>;
+    "additional_matrixfiles"?: Array<InputPathType> | null | undefined;
     "min_freq"?: number | null | undefined;
     "min_bwidth"?: number | null | undefined;
     "min_pow"?: number | null | undefined;
@@ -72,7 +74,9 @@ interface StimbandOutputs {
 
 
 function stimband_params(
+    matrixfiles: Array<InputPathType>,
     verbose_flag: boolean = false,
+    additional_matrixfiles: Array<InputPathType> | null = null,
     min_freq: number | null = null,
     min_bwidth: number | null = null,
     min_pow: number | null = null,
@@ -80,7 +84,9 @@ function stimband_params(
     /**
      * Build parameters.
     
+     * @param matrixfiles Path to matrix files.
      * @param verbose_flag Print the power band for each individual stimulus column from each matrix.
+     * @param additional_matrixfiles Another way to read 1 or more matrix files.
      * @param min_freq Set the minimum frequency output for the band. Default value is 0.01.
      * @param min_bwidth Set the minimum bandwidth output (top frequency minus bottom frequency). Default is 0.03.
      * @param min_pow Set the minimum power fraction (percentage) to 'ff' instead of the default 90%. Value must be in the range 50..99.
@@ -90,7 +96,11 @@ function stimband_params(
     const params = {
         "__STYXTYPE__": "stimband" as const,
         "verbose_flag": verbose_flag,
+        "matrixfiles": matrixfiles,
     };
+    if (additional_matrixfiles !== null) {
+        params["additional_matrixfiles"] = additional_matrixfiles;
+    }
     if (min_freq !== null) {
         params["min_freq"] = min_freq;
     }
@@ -121,8 +131,13 @@ function stimband_cargs(
     if ((params["verbose_flag"] ?? null)) {
         cargs.push("-verb");
     }
-    cargs.push("[MATRIXFILES...]");
-    cargs.push("[ADDITIONAL_MATRIXFILES...]");
+    cargs.push(...(params["matrixfiles"] ?? null).map(f => execution.inputFile(f)));
+    if ((params["additional_matrixfiles"] ?? null) !== null) {
+        cargs.push(
+            "-matrix",
+            ...(params["additional_matrixfiles"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
     if ((params["min_freq"] ?? null) !== null) {
         cargs.push(
             "-min_freq",
@@ -190,7 +205,9 @@ function stimband_execute(
 
 
 function stimband(
+    matrixfiles: Array<InputPathType>,
     verbose_flag: boolean = false,
+    additional_matrixfiles: Array<InputPathType> | null = null,
     min_freq: number | null = null,
     min_bwidth: number | null = null,
     min_pow: number | null = null,
@@ -203,7 +220,9 @@ function stimband(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param matrixfiles Path to matrix files.
      * @param verbose_flag Print the power band for each individual stimulus column from each matrix.
+     * @param additional_matrixfiles Another way to read 1 or more matrix files.
      * @param min_freq Set the minimum frequency output for the band. Default value is 0.01.
      * @param min_bwidth Set the minimum bandwidth output (top frequency minus bottom frequency). Default is 0.03.
      * @param min_pow Set the minimum power fraction (percentage) to 'ff' instead of the default 90%. Value must be in the range 50..99.
@@ -213,7 +232,7 @@ function stimband(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STIMBAND_METADATA);
-    const params = stimband_params(verbose_flag, min_freq, min_bwidth, min_pow)
+    const params = stimband_params(matrixfiles, verbose_flag, additional_matrixfiles, min_freq, min_bwidth, min_pow)
     return stimband_execute(params, execution);
 }
 

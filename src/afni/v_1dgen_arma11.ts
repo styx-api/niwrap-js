@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DGEN_ARMA11_METADATA: Metadata = {
-    id: "9fce1559df8cc31e0d2c99d44319f7a47b38ba76.boutiques",
+    id: "db531d2478af899030ee6f05096f794916316ef9.boutiques",
     name: "1dgenARMA11",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,7 @@ const V_1DGEN_ARMA11_METADATA: Metadata = {
 
 interface V1dgenArma11Parameters {
     "__STYXTYPE__": "1dgenARMA11";
+    "length"?: number | null | undefined;
     "length_alt"?: number | null | undefined;
     "num_series"?: number | null | undefined;
     "param_a"?: number | null | undefined;
@@ -79,6 +80,7 @@ interface V1dgenArma11Outputs {
 
 
 function v_1dgen_arma11_params(
+    length: number | null = null,
     length_alt: number | null = null,
     num_series: number | null = null,
     param_a: number | null = null,
@@ -94,6 +96,7 @@ function v_1dgen_arma11_params(
     /**
      * Build parameters.
     
+     * @param length Specify the length of the time series vector to generate (equivalent to -len option).
      * @param length_alt Specify the length of the time series vector to generate (equivalent to -num option).
      * @param num_series The number of time series vectors to generate; defaults to 1 if not given.
      * @param param_a Specify ARMA(1,1) parameters 'a'.
@@ -112,6 +115,9 @@ function v_1dgen_arma11_params(
         "__STYXTYPE__": "1dgenARMA11" as const,
         "normalize": normalize,
     };
+    if (length !== null) {
+        params["length"] = length;
+    }
     if (length_alt !== null) {
         params["length_alt"] = length_alt;
     }
@@ -160,6 +166,12 @@ function v_1dgen_arma11_cargs(
      */
     const cargs: string[] = [];
     cargs.push("1dgenARMA11");
+    if ((params["length"] ?? null) !== null) {
+        cargs.push(
+            "-num",
+            String((params["length"] ?? null))
+        );
+    }
     if ((params["length_alt"] ?? null) !== null) {
         cargs.push(
             "-len",
@@ -272,6 +284,7 @@ function v_1dgen_arma11_execute(
 
 
 function v_1dgen_arma11(
+    length: number | null = null,
     length_alt: number | null = null,
     num_series: number | null = null,
     param_a: number | null = null,
@@ -292,6 +305,7 @@ function v_1dgen_arma11(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param length Specify the length of the time series vector to generate (equivalent to -len option).
      * @param length_alt Specify the length of the time series vector to generate (equivalent to -num option).
      * @param num_series The number of time series vectors to generate; defaults to 1 if not given.
      * @param param_a Specify ARMA(1,1) parameters 'a'.
@@ -309,7 +323,7 @@ function v_1dgen_arma11(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DGEN_ARMA11_METADATA);
-    const params = v_1dgen_arma11_params(length_alt, num_series, param_a, param_b, param_lam, std_dev, normalize, seed, corcut, arma31, arma51)
+    const params = v_1dgen_arma11_params(length, length_alt, num_series, param_a, param_b, param_lam, std_dev, normalize, seed, corcut, arma31, arma51)
     return v_1dgen_arma11_execute(params, execution);
 }
 

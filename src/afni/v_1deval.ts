@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DEVAL_METADATA: Metadata = {
-    id: "da64e5acb6bc6cd359ef137e00f938392ac2b5e3.boutiques",
+    id: "4d289385c575fb0e342e48148cb17a3c5cbf7c68.boutiques",
     name: "1deval",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -19,6 +19,7 @@ interface V1devalParameters {
     "index"?: InputPathType | null | undefined;
     "1D": boolean;
     "symbols"?: Array<InputPathType> | null | undefined;
+    "symbol_values"?: Array<string> | null | undefined;
     "expression": string;
 }
 
@@ -82,6 +83,7 @@ function v_1deval_params(
     index: InputPathType | null = null,
     v_1_d: boolean = false,
     symbols: Array<InputPathType> | null = null,
+    symbol_values: Array<string> | null = null,
 ): V1devalParameters {
     /**
      * Build parameters.
@@ -93,6 +95,7 @@ function v_1deval_params(
      * @param index Read index column from file i.1D and write it out as 1st column of output.
      * @param v_1_d Write output in the form of a single '1D:' string suitable for input on the command line of another program.
      * @param symbols Read time series file and assign it to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
+     * @param symbol_values Assign a fixed numerical value to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
     
      * @returns Parameter dictionary
      */
@@ -115,6 +118,9 @@ function v_1deval_params(
     }
     if (symbols !== null) {
         params["symbols"] = symbols;
+    }
+    if (symbol_values !== null) {
+        params["symbol_values"] = symbol_values;
     }
     return params;
 }
@@ -165,6 +171,12 @@ function v_1deval_cargs(
         cargs.push(
             "-a",
             ...(params["symbols"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["symbol_values"] ?? null) !== null) {
+        cargs.push(
+            "-a=",
+            ...(params["symbol_values"] ?? null)
         );
     }
     cargs.push(
@@ -227,6 +239,7 @@ function v_1deval(
     index: InputPathType | null = null,
     v_1_d: boolean = false,
     symbols: Array<InputPathType> | null = null,
+    symbol_values: Array<string> | null = null,
     runner: Runner | null = null,
 ): V1devalOutputs {
     /**
@@ -243,13 +256,14 @@ function v_1deval(
      * @param index Read index column from file i.1D and write it out as 1st column of output.
      * @param v_1_d Write output in the form of a single '1D:' string suitable for input on the command line of another program.
      * @param symbols Read time series file and assign it to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
+     * @param symbol_values Assign a fixed numerical value to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V1devalOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DEVAL_METADATA);
-    const params = v_1deval_params(expression, del, start, num, index, v_1_d, symbols)
+    const params = v_1deval_params(expression, del, start, num, index, v_1_d, symbols, symbol_values)
     return v_1deval_execute(params, execution);
 }
 

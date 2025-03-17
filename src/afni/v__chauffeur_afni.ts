@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__CHAUFFEUR_AFNI_METADATA: Metadata = {
-    id: "7bd1968eb762331f9eaee48a7484852a7e447634.boutiques",
+    id: "e87442df2b4470f5f153ec6b0890a68052de309c.boutiques",
     name: "@chauffeur_afni",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,6 +16,21 @@ interface VChauffeurAfniParameters {
     "ulay": InputPathType;
     "olay"?: InputPathType | null | undefined;
     "prefix": string;
+    "mode_4D": boolean;
+    "func_range"?: number | null | undefined;
+    "opacity"?: number | null | undefined;
+    "set_subbricks"?: string | null | undefined;
+    "montx"?: number | null | undefined;
+    "monty"?: number | null | undefined;
+    "montgap"?: number | null | undefined;
+    "label_mode"?: number | null | undefined;
+    "label_size"?: number | null | undefined;
+    "label_color"?: string | null | undefined;
+    "label_setback"?: number | null | undefined;
+    "no_clean": boolean;
+    "do_clean": boolean;
+    "help": boolean;
+    "version": boolean;
 }
 
 
@@ -82,6 +97,21 @@ function v__chauffeur_afni_params(
     ulay: InputPathType,
     prefix: string,
     olay: InputPathType | null = null,
+    mode_4_d: boolean = false,
+    func_range: number | null = null,
+    opacity: number | null = null,
+    set_subbricks: string | null = null,
+    montx: number | null = null,
+    monty: number | null = null,
+    montgap: number | null = null,
+    label_mode: number | null = null,
+    label_size: number | null = null,
+    label_color: string | null = null,
+    label_setback: number | null = null,
+    no_clean: boolean = false,
+    do_clean: boolean = false,
+    help: boolean = false,
+    version: boolean = false,
 ): VChauffeurAfniParameters {
     /**
      * Build parameters.
@@ -89,6 +119,21 @@ function v__chauffeur_afni_params(
      * @param ulay Name of underlay dataset (required); can be 3D or 4D set
      * @param prefix Prefix for output files (required)
      * @param olay Name of overlay dataset (optional)
+     * @param mode_4_d For each viewing plane, one slice is selected across all volumes in a 4D dataset
+     * @param func_range Specify upper value of the overlay dataset to be matched to top of colorbar (default: 98%ile non-zero value of dataset)
+     * @param opacity Enter an opacity factor for the overlay (0-9, with 9 being opaque)
+     * @param set_subbricks Specify subbricks for 3D image viewing
+     * @param montx Number of image panels in a row (default: 3)
+     * @param monty Number of image panels in a column (default: 3)
+     * @param montgap Number of pixels as gap between image panels (default: 0)
+     * @param label_mode Control labels, ON/OFF and location (default: 1)
+     * @param label_size Control labels, size (default: 3)
+     * @param label_color Control labels, color (default: white)
+     * @param label_setback Control labels, offset from edge (default: 0.01)
+     * @param no_clean Do not remove the temporary directory of copied/intermediate files
+     * @param do_clean Remove the temporary directory of copied/intermediate files
+     * @param help Display help information
+     * @param version Display version number
     
      * @returns Parameter dictionary
      */
@@ -96,9 +141,44 @@ function v__chauffeur_afni_params(
         "__STYXTYPE__": "@chauffeur_afni" as const,
         "ulay": ulay,
         "prefix": prefix,
+        "mode_4D": mode_4_d,
+        "no_clean": no_clean,
+        "do_clean": do_clean,
+        "help": help,
+        "version": version,
     };
     if (olay !== null) {
         params["olay"] = olay;
+    }
+    if (func_range !== null) {
+        params["func_range"] = func_range;
+    }
+    if (opacity !== null) {
+        params["opacity"] = opacity;
+    }
+    if (set_subbricks !== null) {
+        params["set_subbricks"] = set_subbricks;
+    }
+    if (montx !== null) {
+        params["montx"] = montx;
+    }
+    if (monty !== null) {
+        params["monty"] = monty;
+    }
+    if (montgap !== null) {
+        params["montgap"] = montgap;
+    }
+    if (label_mode !== null) {
+        params["label_mode"] = label_mode;
+    }
+    if (label_size !== null) {
+        params["label_size"] = label_size;
+    }
+    if (label_color !== null) {
+        params["label_color"] = label_color;
+    }
+    if (label_setback !== null) {
+        params["label_setback"] = label_setback;
     }
     return params;
 }
@@ -126,7 +206,81 @@ function v__chauffeur_afni_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    cargs.push("[options]");
+    if ((params["mode_4D"] ?? null)) {
+        cargs.push("-mode_4D");
+    }
+    if ((params["func_range"] ?? null) !== null) {
+        cargs.push(
+            "-func_range",
+            String((params["func_range"] ?? null))
+        );
+    }
+    if ((params["opacity"] ?? null) !== null) {
+        cargs.push(
+            "-opacity",
+            String((params["opacity"] ?? null))
+        );
+    }
+    if ((params["set_subbricks"] ?? null) !== null) {
+        cargs.push(
+            "-set_subbricks",
+            (params["set_subbricks"] ?? null)
+        );
+    }
+    if ((params["montx"] ?? null) !== null) {
+        cargs.push(
+            "-montx",
+            String((params["montx"] ?? null))
+        );
+    }
+    if ((params["monty"] ?? null) !== null) {
+        cargs.push(
+            "-monty",
+            String((params["monty"] ?? null))
+        );
+    }
+    if ((params["montgap"] ?? null) !== null) {
+        cargs.push(
+            "-montgap",
+            String((params["montgap"] ?? null))
+        );
+    }
+    if ((params["label_mode"] ?? null) !== null) {
+        cargs.push(
+            "-label_mode",
+            String((params["label_mode"] ?? null))
+        );
+    }
+    if ((params["label_size"] ?? null) !== null) {
+        cargs.push(
+            "-label_size",
+            String((params["label_size"] ?? null))
+        );
+    }
+    if ((params["label_color"] ?? null) !== null) {
+        cargs.push(
+            "-label_color",
+            (params["label_color"] ?? null)
+        );
+    }
+    if ((params["label_setback"] ?? null) !== null) {
+        cargs.push(
+            "-label_setback",
+            String((params["label_setback"] ?? null))
+        );
+    }
+    if ((params["no_clean"] ?? null)) {
+        cargs.push("-no_clean");
+    }
+    if ((params["do_clean"] ?? null)) {
+        cargs.push("-do_clean");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
+    }
+    if ((params["version"] ?? null)) {
+        cargs.push("-ver");
+    }
     return cargs;
 }
 
@@ -181,6 +335,21 @@ function v__chauffeur_afni(
     ulay: InputPathType,
     prefix: string,
     olay: InputPathType | null = null,
+    mode_4_d: boolean = false,
+    func_range: number | null = null,
+    opacity: number | null = null,
+    set_subbricks: string | null = null,
+    montx: number | null = null,
+    monty: number | null = null,
+    montgap: number | null = null,
+    label_mode: number | null = null,
+    label_size: number | null = null,
+    label_color: string | null = null,
+    label_setback: number | null = null,
+    no_clean: boolean = false,
+    do_clean: boolean = false,
+    help: boolean = false,
+    version: boolean = false,
     runner: Runner | null = null,
 ): VChauffeurAfniOutputs {
     /**
@@ -193,13 +362,28 @@ function v__chauffeur_afni(
      * @param ulay Name of underlay dataset (required); can be 3D or 4D set
      * @param prefix Prefix for output files (required)
      * @param olay Name of overlay dataset (optional)
+     * @param mode_4_d For each viewing plane, one slice is selected across all volumes in a 4D dataset
+     * @param func_range Specify upper value of the overlay dataset to be matched to top of colorbar (default: 98%ile non-zero value of dataset)
+     * @param opacity Enter an opacity factor for the overlay (0-9, with 9 being opaque)
+     * @param set_subbricks Specify subbricks for 3D image viewing
+     * @param montx Number of image panels in a row (default: 3)
+     * @param monty Number of image panels in a column (default: 3)
+     * @param montgap Number of pixels as gap between image panels (default: 0)
+     * @param label_mode Control labels, ON/OFF and location (default: 1)
+     * @param label_size Control labels, size (default: 3)
+     * @param label_color Control labels, color (default: white)
+     * @param label_setback Control labels, offset from edge (default: 0.01)
+     * @param no_clean Do not remove the temporary directory of copied/intermediate files
+     * @param do_clean Remove the temporary directory of copied/intermediate files
+     * @param help Display help information
+     * @param version Display version number
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `VChauffeurAfniOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__CHAUFFEUR_AFNI_METADATA);
-    const params = v__chauffeur_afni_params(ulay, prefix, olay)
+    const params = v__chauffeur_afni_params(ulay, prefix, olay, mode_4_d, func_range, opacity, set_subbricks, montx, monty, montgap, label_mode, label_size, label_color, label_setback, no_clean, do_clean, help, version)
     return v__chauffeur_afni_execute(params, execution);
 }
 

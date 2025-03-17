@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SFIM_METADATA: Metadata = {
-    id: "62032460073e6537145dc05bebbde2400a1cbdbc.boutiques",
+    id: "a13eb6a1647edd69950d6fbc3efb98691eeddce5.boutiques",
     name: "sfim",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,7 @@ const SFIM_METADATA: Metadata = {
 
 interface SfimParameters {
     "__STYXTYPE__": "sfim";
+    "input_images": Array<InputPathType>;
     "sfint_file"?: string | null | undefined;
     "baseline_state"?: string | null | undefined;
     "local_base_option": boolean;
@@ -72,6 +73,7 @@ interface SfimOutputs {
 
 
 function sfim_params(
+    input_images: Array<InputPathType>,
     sfint_file: string | null = null,
     baseline_state: string | null = null,
     local_base_option: boolean = false,
@@ -80,6 +82,7 @@ function sfim_params(
     /**
      * Build parameters.
     
+     * @param input_images Input image files in formats accepted by AFNI
      * @param sfint_file Filename which contains the interval definitions. Default is 'sfint'. Example: '3*# 5*rest 4*A 5*rest 4*B 5*rest 4*A 5*rest'
      * @param baseline_state Task state name to use as the baseline. Default is 'rest'.
      * @param local_base_option Flag to indicate if each non-base task state interval should have the mean of the two nearest base intervals subtracted instead of the grand mean of all the base task intervals.
@@ -89,6 +92,7 @@ function sfim_params(
      */
     const params = {
         "__STYXTYPE__": "sfim" as const,
+        "input_images": input_images,
         "local_base_option": local_base_option,
     };
     if (sfint_file !== null) {
@@ -118,6 +122,7 @@ function sfim_cargs(
      */
     const cargs: string[] = [];
     cargs.push("sfim");
+    cargs.push(...(params["input_images"] ?? null).map(f => execution.inputFile(f)));
     if ((params["sfint_file"] ?? null) !== null) {
         cargs.push(
             "-sfint",
@@ -139,7 +144,6 @@ function sfim_cargs(
             (params["output_prefix"] ?? null)
         );
     }
-    cargs.push("[INPUT_FILES...]");
     return cargs;
 }
 
@@ -189,6 +193,7 @@ function sfim_execute(
 
 
 function sfim(
+    input_images: Array<InputPathType>,
     sfint_file: string | null = null,
     baseline_state: string | null = null,
     local_base_option: boolean = false,
@@ -202,6 +207,7 @@ function sfim(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param input_images Input image files in formats accepted by AFNI
      * @param sfint_file Filename which contains the interval definitions. Default is 'sfint'. Example: '3*# 5*rest 4*A 5*rest 4*B 5*rest 4*A 5*rest'
      * @param baseline_state Task state name to use as the baseline. Default is 'rest'.
      * @param local_base_option Flag to indicate if each non-base task state interval should have the mean of the two nearest base intervals subtracted instead of the grand mean of all the base task intervals.
@@ -212,7 +218,7 @@ function sfim(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SFIM_METADATA);
-    const params = sfim_params(sfint_file, baseline_state, local_base_option, output_prefix)
+    const params = sfim_params(input_images, sfint_file, baseline_state, local_base_option, output_prefix)
     return sfim_execute(params, execution);
 }
 

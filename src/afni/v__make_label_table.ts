@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__MAKE_LABEL_TABLE_METADATA: Metadata = {
-    id: "20feae505751ac89a0b8a088a83f7ee7d488f8c6.boutiques",
+    id: "287075a9705f1e3aa4609a67bab5671fa4e1d6b9.boutiques",
     name: "@MakeLabelTable",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,6 +17,7 @@ interface VMakeLabelTableParameters {
     "atlas_pointlist"?: string | null | undefined;
     "lab_r"?: Array<string> | null | undefined;
     "lab_v"?: Array<string> | null | undefined;
+    "lab_file_delim"?: string | null | undefined;
     "lab_file"?: Array<string> | null | undefined;
     "dset"?: InputPathType | null | undefined;
     "longnames"?: number | null | undefined;
@@ -118,6 +119,7 @@ function v__make_label_table_params(
     atlas_pointlist: string | null = null,
     lab_r: Array<string> | null = null,
     lab_v: Array<string> | null = null,
+    lab_file_delim: string | null = null,
     lab_file: Array<string> | null = null,
     dset: InputPathType | null = null,
     longnames: number | null = null,
@@ -156,6 +158,7 @@ function v__make_label_table_params(
      * @param atlas_pointlist Instead of a label table, produce an atlas point list
      * @param lab_r Define a label with its minimum and maximum key values
      * @param lab_v Define a label and its value
+     * @param lab_file_delim Set column delimiter for -lab_file option
      * @param lab_file Specify labels and keys from a text file
      * @param dset Attach the label table (or atlas point list) to dataset
      * @param longnames Allow for another column of long names for regions
@@ -211,6 +214,9 @@ function v__make_label_table_params(
     }
     if (lab_v !== null) {
         params["lab_v"] = lab_v;
+    }
+    if (lab_file_delim !== null) {
+        params["lab_file_delim"] = lab_file_delim;
     }
     if (lab_file !== null) {
         params["lab_file"] = lab_file;
@@ -310,6 +316,12 @@ function v__make_label_table_cargs(
         cargs.push(
             "-lab_v",
             ...(params["lab_v"] ?? null)
+        );
+    }
+    if ((params["lab_file_delim"] ?? null) !== null) {
+        cargs.push(
+            "-lab_file_delim",
+            (params["lab_file_delim"] ?? null)
         );
     }
     if ((params["lab_file"] ?? null) !== null) {
@@ -518,6 +530,7 @@ function v__make_label_table(
     atlas_pointlist: string | null = null,
     lab_r: Array<string> | null = null,
     lab_v: Array<string> | null = null,
+    lab_file_delim: string | null = null,
     lab_file: Array<string> | null = null,
     dset: InputPathType | null = null,
     longnames: number | null = null,
@@ -561,6 +574,7 @@ function v__make_label_table(
      * @param atlas_pointlist Instead of a label table, produce an atlas point list
      * @param lab_r Define a label with its minimum and maximum key values
      * @param lab_v Define a label and its value
+     * @param lab_file_delim Set column delimiter for -lab_file option
      * @param lab_file Specify labels and keys from a text file
      * @param dset Attach the label table (or atlas point list) to dataset
      * @param longnames Allow for another column of long names for regions
@@ -597,7 +611,7 @@ function v__make_label_table(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__MAKE_LABEL_TABLE_METADATA);
-    const params = v__make_label_table_params(labeltable, atlas_pointlist, lab_r, lab_v, lab_file, dset, longnames, last_longname_col, centers, centertype, centermask, skip_novoxels, all_labels, all_keys, lkeys, rkeys, klabel, match_label, labeltable_of_dset, word_label_match, quiet_death, lt_to_atlas_pl, dset_lt_to_atlas_pl, lt_to_csv, atlasize_labeled_dset, atlas_file, atlas_name, atlas_description, replace, add_atlas_dset, h_web, h_view, all_opts, h_find)
+    const params = v__make_label_table_params(labeltable, atlas_pointlist, lab_r, lab_v, lab_file_delim, lab_file, dset, longnames, last_longname_col, centers, centertype, centermask, skip_novoxels, all_labels, all_keys, lkeys, rkeys, klabel, match_label, labeltable_of_dset, word_label_match, quiet_death, lt_to_atlas_pl, dset_lt_to_atlas_pl, lt_to_csv, atlasize_labeled_dset, atlas_file, atlas_name, atlas_description, replace, add_atlas_dset, h_web, h_view, all_opts, h_find)
     return v__make_label_table_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__AFNI_REFACER_RUN_METADATA: Metadata = {
-    id: "72757fe4907642f44cb063cfa3ee5dc5dda0045b.boutiques",
+    id: "05c4592de14c41d5679adfa648daf4eba8e4cce2.boutiques",
     name: "@afni_refacer_run",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,9 @@ const V__AFNI_REFACER_RUN_METADATA: Metadata = {
 interface VAfniRefacerRunParameters {
     "__STYXTYPE__": "@afni_refacer_run";
     "input_file": InputPathType;
+    "mode_deface": boolean;
+    "mode_reface": boolean;
+    "mode_reface_plus": boolean;
     "mode_all": boolean;
     "prefix": string;
     "anonymize_output": boolean;
@@ -96,6 +99,9 @@ interface VAfniRefacerRunOutputs {
 function v__afni_refacer_run_params(
     input_file: InputPathType,
     prefix: string,
+    mode_deface: boolean = false,
+    mode_reface: boolean = false,
+    mode_reface_plus: boolean = false,
     mode_all: boolean = false,
     anonymize_output: boolean = false,
     cost_function: string | null = null,
@@ -110,6 +116,9 @@ function v__afni_refacer_run_params(
     
      * @param input_file Name of input dataset; can contain path information.
      * @param prefix Name of output dataset
+     * @param mode_deface Replace the computed face+ears voxels with all zeros instead of the artificial face (ears are also removed)
+     * @param mode_reface Replace the subject's face+ears with a scaled set of artificial values
+     * @param mode_reface_plus Replace the subject's face+ears+skull with a scaled set of artificial values (i.e., like 'refacing', but replacing a more complete shell around the subject's brain)
      * @param mode_all Output three volumes: one defaced, one refaced and one reface_plused
      * @param anonymize_output Use 3drefit and nifti_tool to anonymize the output datasets
      * @param cost_function Specify any cost function that is allowed by 3dAllineate (default: lpa)
@@ -124,6 +133,9 @@ function v__afni_refacer_run_params(
     const params = {
         "__STYXTYPE__": "@afni_refacer_run" as const,
         "input_file": input_file,
+        "mode_deface": mode_deface,
+        "mode_reface": mode_reface,
+        "mode_reface_plus": mode_reface_plus,
         "mode_all": mode_all,
         "prefix": prefix,
         "anonymize_output": anonymize_output,
@@ -160,6 +172,15 @@ function v__afni_refacer_run_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
+    if ((params["mode_deface"] ?? null)) {
+        cargs.push("-mode_deface");
+    }
+    if ((params["mode_reface"] ?? null)) {
+        cargs.push("-mode_reface");
+    }
+    if ((params["mode_reface_plus"] ?? null)) {
+        cargs.push("-mode_reface_plus");
+    }
     if ((params["mode_all"] ?? null)) {
         cargs.push("-mode_all");
     }
@@ -249,6 +270,9 @@ function v__afni_refacer_run_execute(
 function v__afni_refacer_run(
     input_file: InputPathType,
     prefix: string,
+    mode_deface: boolean = false,
+    mode_reface: boolean = false,
+    mode_reface_plus: boolean = false,
     mode_all: boolean = false,
     anonymize_output: boolean = false,
     cost_function: string | null = null,
@@ -268,6 +292,9 @@ function v__afni_refacer_run(
     
      * @param input_file Name of input dataset; can contain path information.
      * @param prefix Name of output dataset
+     * @param mode_deface Replace the computed face+ears voxels with all zeros instead of the artificial face (ears are also removed)
+     * @param mode_reface Replace the subject's face+ears with a scaled set of artificial values
+     * @param mode_reface_plus Replace the subject's face+ears+skull with a scaled set of artificial values (i.e., like 'refacing', but replacing a more complete shell around the subject's brain)
      * @param mode_all Output three volumes: one defaced, one refaced and one reface_plused
      * @param anonymize_output Use 3drefit and nifti_tool to anonymize the output datasets
      * @param cost_function Specify any cost function that is allowed by 3dAllineate (default: lpa)
@@ -282,7 +309,7 @@ function v__afni_refacer_run(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_REFACER_RUN_METADATA);
-    const params = v__afni_refacer_run_params(input_file, prefix, mode_all, anonymize_output, cost_function, shell_option, no_clean, no_images, overwrite, verbose)
+    const params = v__afni_refacer_run_params(input_file, prefix, mode_deface, mode_reface, mode_reface_plus, mode_all, anonymize_output, cost_function, shell_option, no_clean, no_images, overwrite, verbose)
     return v__afni_refacer_run_execute(params, execution);
 }
 

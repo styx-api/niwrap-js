@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LSS_METADATA: Metadata = {
-    id: "d793e92300ed18c69c7d31223293711fdbbfaaf7.boutiques",
+    id: "d4c111d4b5225efa7f8cd3f4642fd461a7ab156b.boutiques",
     name: "3dLSS",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,14 @@ const V_3D_LSS_METADATA: Metadata = {
 
 interface V3dLssParameters {
     "__STYXTYPE__": "3dLSS";
+    "matrix": InputPathType;
+    "input"?: InputPathType | null | undefined;
+    "nodata": boolean;
+    "mask"?: InputPathType | null | undefined;
+    "automask": boolean;
+    "prefix"?: string | null | undefined;
+    "save1D"?: string | null | undefined;
+    "verbose": boolean;
 }
 
 
@@ -67,20 +75,53 @@ interface V3dLssOutputs {
     /**
      * Estimator vectors saved in a 1D formatted file.
      */
-    save1_d_output: OutputPathType;
+    save1_d_output: OutputPathType | null;
 }
 
 
 function v_3d_lss_params(
+    matrix: InputPathType,
+    input: InputPathType | null = null,
+    nodata: boolean = false,
+    mask: InputPathType | null = null,
+    automask: boolean = false,
+    prefix: string | null = null,
+    save1_d: string | null = null,
+    verbose: boolean = false,
 ): V3dLssParameters {
     /**
      * Build parameters.
+    
+     * @param matrix Read the matrix 'mmm', which should have been output from 3dDeconvolve via the '-x1D' option. It should have included exactly one '-stim_times_IM' option.
+     * @param input Read time series dataset 'ddd'.
+     * @param nodata Just compute the estimator matrix -- to be saved with '-save1D'.
+     * @param mask Dataset 'MMM' will be used as a mask for the input; voxels outside the mask will not be fit by the regression model.
+     * @param automask If you don't know what this does by now, please don't use this program.
+     * @param prefix Prefix name for the output dataset; this dataset will contain ONLY the LSS estimates of the beta weights for the '-stim_times_IM' stimuli.
+     * @param save1_d Save the estimator vectors to a 1D formatted file named 'qqq'.
+     * @param verbose Write out progress reports.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dLSS" as const,
+        "matrix": matrix,
+        "nodata": nodata,
+        "automask": automask,
+        "verbose": verbose,
     };
+    if (input !== null) {
+        params["input"] = input;
+    }
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (prefix !== null) {
+        params["prefix"] = prefix;
+    }
+    if (save1_d !== null) {
+        params["save1D"] = save1_d;
+    }
     return params;
 }
 
@@ -99,7 +140,43 @@ function v_3d_lss_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dLSS");
-    cargs.push("[OPTIONS]");
+    cargs.push(
+        "-matrix",
+        execution.inputFile((params["matrix"] ?? null))
+    );
+    if ((params["input"] ?? null) !== null) {
+        cargs.push(
+            "-input",
+            execution.inputFile((params["input"] ?? null))
+        );
+    }
+    if ((params["nodata"] ?? null)) {
+        cargs.push("-nodata");
+    }
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["automask"] ?? null)) {
+        cargs.push("-automask");
+    }
+    if ((params["prefix"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["prefix"] ?? null)
+        );
+    }
+    if ((params["save1D"] ?? null) !== null) {
+        cargs.push(
+            "-save1D",
+            (params["save1D"] ?? null)
+        );
+    }
+    if ((params["verbose"] ?? null)) {
+        cargs.push("-verb");
+    }
     return cargs;
 }
 
@@ -119,7 +196,7 @@ function v_3d_lss_outputs(
     const ret: V3dLssOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile(["LSSout+orig.HEAD"].join('')),
-        save1_d_output: execution.outputFile(["[SAVE1D]"].join('')),
+        save1_d_output: ((params["save1D"] ?? null) !== null) ? execution.outputFile([(params["save1D"] ?? null)].join('')) : null,
     };
     return ret;
 }
@@ -150,6 +227,14 @@ function v_3d_lss_execute(
 
 
 function v_3d_lss(
+    matrix: InputPathType,
+    input: InputPathType | null = null,
+    nodata: boolean = false,
+    mask: InputPathType | null = null,
+    automask: boolean = false,
+    prefix: string | null = null,
+    save1_d: string | null = null,
+    verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dLssOutputs {
     /**
@@ -159,13 +244,21 @@ function v_3d_lss(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param matrix Read the matrix 'mmm', which should have been output from 3dDeconvolve via the '-x1D' option. It should have included exactly one '-stim_times_IM' option.
+     * @param input Read time series dataset 'ddd'.
+     * @param nodata Just compute the estimator matrix -- to be saved with '-save1D'.
+     * @param mask Dataset 'MMM' will be used as a mask for the input; voxels outside the mask will not be fit by the regression model.
+     * @param automask If you don't know what this does by now, please don't use this program.
+     * @param prefix Prefix name for the output dataset; this dataset will contain ONLY the LSS estimates of the beta weights for the '-stim_times_IM' stimuli.
+     * @param save1_d Save the estimator vectors to a 1D formatted file named 'qqq'.
+     * @param verbose Write out progress reports.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dLssOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LSS_METADATA);
-    const params = v_3d_lss_params()
+    const params = v_3d_lss_params(matrix, input, nodata, mask, automask, prefix, save1_d, verbose)
     return v_3d_lss_execute(params, execution);
 }
 

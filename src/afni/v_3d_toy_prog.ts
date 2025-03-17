@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TOY_PROG_METADATA: Metadata = {
-    id: "1311a81e171aae35dd519b54379bb3bfad692a46.boutiques",
+    id: "690427ee59940bfcf8d97ee3a7fbced4f0a52ee5.boutiques",
     name: "3dToyProg",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,6 +17,16 @@ interface V3dToyProgParameters {
     "output_prefix"?: string | null | undefined;
     "mask_dataset"?: InputPathType | null | undefined;
     "output_datum"?: "float" | "short" | null | undefined;
+    "mini_help": boolean;
+    "help": boolean;
+    "extreme_help": boolean;
+    "help_view": boolean;
+    "help_web": boolean;
+    "help_find"?: string | null | undefined;
+    "help_raw": boolean;
+    "help_spx": boolean;
+    "help_aspx": boolean;
+    "help_all_opts": boolean;
 }
 
 
@@ -71,6 +81,16 @@ function v_3d_toy_prog_params(
     output_prefix: string | null = null,
     mask_dataset: InputPathType | null = null,
     output_datum: "float" | "short" | null = null,
+    mini_help: boolean = false,
+    help: boolean = false,
+    extreme_help: boolean = false,
+    help_view: boolean = false,
+    help_web: boolean = false,
+    help_find: string | null = null,
+    help_raw: boolean = false,
+    help_spx: boolean = false,
+    help_aspx: boolean = false,
+    help_all_opts: boolean = false,
 ): V3dToyProgParameters {
     /**
      * Build parameters.
@@ -79,12 +99,31 @@ function v_3d_toy_prog_params(
      * @param output_prefix Prefix of the output datasets
      * @param mask_dataset Restrict analysis to non-zero voxels in the mask dataset
      * @param output_datum Output datum type for one of the datasets. Choose from 'float' or 'short'. Default is 'float'.
+     * @param mini_help Mini help, at time, same as -help in many cases.
+     * @param help The entire help output.
+     * @param extreme_help Extreme help, same as -help in majority of cases.
+     * @param help_view Open help in text editor. AFNI will try to find a GUI editor on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+     * @param help_web Open help in web browser. AFNI will try to find a browser on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+     * @param help_find Look for lines in this program's -help output that match (approximately) WORD.
+     * @param help_raw Help string unedited.
+     * @param help_spx Help string in sphinx loveliness, but do not try to autoformat.
+     * @param help_aspx Help string in sphinx with autoformatting of options, etc.
+     * @param help_all_opts Try to identify all options for the program from the output of its -help option. Some options might be missed and others misidentified. Use this output for hints only.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dToyProg" as const,
         "input_dataset": input_dataset,
+        "mini_help": mini_help,
+        "help": help,
+        "extreme_help": extreme_help,
+        "help_view": help_view,
+        "help_web": help_web,
+        "help_raw": help_raw,
+        "help_spx": help_spx,
+        "help_aspx": help_aspx,
+        "help_all_opts": help_all_opts,
     };
     if (output_prefix !== null) {
         params["output_prefix"] = output_prefix;
@@ -94,6 +133,9 @@ function v_3d_toy_prog_params(
     }
     if (output_datum !== null) {
         params["output_datum"] = output_datum;
+    }
+    if (help_find !== null) {
+        params["help_find"] = help_find;
     }
     return params;
 }
@@ -134,6 +176,39 @@ function v_3d_toy_prog_cargs(
             "-datum",
             (params["output_datum"] ?? null)
         );
+    }
+    if ((params["mini_help"] ?? null)) {
+        cargs.push("-h");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
+    }
+    if ((params["extreme_help"] ?? null)) {
+        cargs.push("-HELP");
+    }
+    if ((params["help_view"] ?? null)) {
+        cargs.push("-h_view");
+    }
+    if ((params["help_web"] ?? null)) {
+        cargs.push("-h_web");
+    }
+    if ((params["help_find"] ?? null) !== null) {
+        cargs.push(
+            "-h_find",
+            (params["help_find"] ?? null)
+        );
+    }
+    if ((params["help_raw"] ?? null)) {
+        cargs.push("-h_raw");
+    }
+    if ((params["help_spx"] ?? null)) {
+        cargs.push("-h_spx");
+    }
+    if ((params["help_aspx"] ?? null)) {
+        cargs.push("-h_aspx");
+    }
+    if ((params["help_all_opts"] ?? null)) {
+        cargs.push("-all_opts");
     }
     return cargs;
 }
@@ -187,6 +262,16 @@ function v_3d_toy_prog(
     output_prefix: string | null = null,
     mask_dataset: InputPathType | null = null,
     output_datum: "float" | "short" | null = null,
+    mini_help: boolean = false,
+    help: boolean = false,
+    extreme_help: boolean = false,
+    help_view: boolean = false,
+    help_web: boolean = false,
+    help_find: string | null = null,
+    help_raw: boolean = false,
+    help_spx: boolean = false,
+    help_aspx: boolean = false,
+    help_all_opts: boolean = false,
     runner: Runner | null = null,
 ): V3dToyProgOutputs {
     /**
@@ -200,13 +285,23 @@ function v_3d_toy_prog(
      * @param output_prefix Prefix of the output datasets
      * @param mask_dataset Restrict analysis to non-zero voxels in the mask dataset
      * @param output_datum Output datum type for one of the datasets. Choose from 'float' or 'short'. Default is 'float'.
+     * @param mini_help Mini help, at time, same as -help in many cases.
+     * @param help The entire help output.
+     * @param extreme_help Extreme help, same as -help in majority of cases.
+     * @param help_view Open help in text editor. AFNI will try to find a GUI editor on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+     * @param help_web Open help in web browser. AFNI will try to find a browser on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+     * @param help_find Look for lines in this program's -help output that match (approximately) WORD.
+     * @param help_raw Help string unedited.
+     * @param help_spx Help string in sphinx loveliness, but do not try to autoformat.
+     * @param help_aspx Help string in sphinx with autoformatting of options, etc.
+     * @param help_all_opts Try to identify all options for the program from the output of its -help option. Some options might be missed and others misidentified. Use this output for hints only.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dToyProgOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TOY_PROG_METADATA);
-    const params = v_3d_toy_prog_params(input_dataset, output_prefix, mask_dataset, output_datum)
+    const params = v_3d_toy_prog_params(input_dataset, output_prefix, mask_dataset, output_datum, mini_help, help, extreme_help, help_view, help_web, help_find, help_raw, help_spx, help_aspx, help_all_opts)
     return v_3d_toy_prog_execute(params, execution);
 }
 

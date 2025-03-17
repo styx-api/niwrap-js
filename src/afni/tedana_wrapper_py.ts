@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TEDANA_WRAPPER_PY_METADATA: Metadata = {
-    id: "2a5d2d42a60628be534dad0f8a18d103f5db8377.boutiques",
+    id: "2c08ca0025238427f67e66b767bc36524812cd16.boutiques",
     name: "tedana_wrapper.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -24,6 +24,8 @@ interface TedanaWrapperPyParameters {
     "tedana_is_exec": boolean;
     "ted_label"?: string | null | undefined;
     "tedana_opts"?: string | null | undefined;
+    "help": boolean;
+    "detailed_help": boolean;
 }
 
 
@@ -94,6 +96,8 @@ function tedana_wrapper_py_params(
     tedana_is_exec: boolean = false,
     ted_label: string | null = null,
     tedana_opts: string | null = null,
+    help: boolean = false,
+    detailed_help: boolean = false,
 ): TedanaWrapperPyParameters {
     /**
      * Build parameters.
@@ -109,6 +113,8 @@ function tedana_wrapper_py_params(
      * @param tedana_is_exec Run 'tedana.py' rather than 'python tedana.py'.
      * @param ted_label Suffix for output folder. Adds suffix like TED.LABEL (NOT A PATH).
      * @param tedana_opts Additional options to pass to tedana.py. (In quotes) Example: '--initcost=tanh --conv=2.5e-5'
+     * @param help Show help message and exit.
+     * @param detailed_help Show detailed help and exit.
     
      * @returns Parameter dictionary
      */
@@ -120,6 +126,8 @@ function tedana_wrapper_py_params(
         "save_all": save_all,
         "prep_only": prep_only,
         "tedana_is_exec": tedana_is_exec,
+        "help": help,
+        "detailed_help": detailed_help,
     };
     if (results_dir !== null) {
         params["results_dir"] = results_dir;
@@ -205,6 +213,12 @@ function tedana_wrapper_py_cargs(
             (params["tedana_opts"] ?? null)
         );
     }
+    if ((params["help"] ?? null)) {
+        cargs.push("-h");
+    }
+    if ((params["detailed_help"] ?? null)) {
+        cargs.push("-help");
+    }
     return cargs;
 }
 
@@ -266,6 +280,8 @@ function tedana_wrapper_py(
     tedana_is_exec: boolean = false,
     ted_label: string | null = null,
     tedana_opts: string | null = null,
+    help: boolean = false,
+    detailed_help: boolean = false,
     runner: Runner | null = null,
 ): TedanaWrapperPyOutputs {
     /**
@@ -286,13 +302,15 @@ function tedana_wrapper_py(
      * @param tedana_is_exec Run 'tedana.py' rather than 'python tedana.py'.
      * @param ted_label Suffix for output folder. Adds suffix like TED.LABEL (NOT A PATH).
      * @param tedana_opts Additional options to pass to tedana.py. (In quotes) Example: '--initcost=tanh --conv=2.5e-5'
+     * @param help Show help message and exit.
+     * @param detailed_help Show detailed help and exit.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `TedanaWrapperPyOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TEDANA_WRAPPER_PY_METADATA);
-    const params = tedana_wrapper_py_params(input_files, echo_times, mask, results_dir, prefix, save_all, prep_only, tedana_prog, tedana_is_exec, ted_label, tedana_opts)
+    const params = tedana_wrapper_py_params(input_files, echo_times, mask, results_dir, prefix, save_all, prep_only, tedana_prog, tedana_is_exec, ted_label, tedana_opts, help, detailed_help)
     return tedana_wrapper_py_execute(params, execution);
 }
 

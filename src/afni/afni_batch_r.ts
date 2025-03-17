@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const AFNI_BATCH_R_METADATA: Metadata = {
-    id: "78789aab686dc723a7f6543875033396e8a4b97c.boutiques",
+    id: "8f19b113f220df5c4c707c9f78252bd08a223bb3.boutiques",
     name: "AFNI_Batch_R",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -126,7 +126,6 @@ function afni_batch_r_cargs(
     if ((params["vanilla_mode"] ?? null)) {
         cargs.push("--vanilla");
     }
-    cargs.push("--args");
     if ((params["help"] ?? null)) {
         cargs.push("-help");
     }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_HIST_METADATA: Metadata = {
-    id: "5dff8f7ac913ce4a3781c6d59d7827316323eded.boutiques",
+    id: "848d311049e93b6281b7a88875dd047ad4a77407.boutiques",
     name: "3dHist",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,7 @@ const V_3D_HIST_METADATA: Metadata = {
 interface V3dHistParameters {
     "__STYXTYPE__": "3dHist";
     "input": InputPathType;
+    "dind_subbrick"?: number | null | undefined;
     "mask_dset"?: InputPathType | null | undefined;
     "mask_range"?: Array<number> | null | undefined;
     "cmask"?: string | null | undefined;
@@ -83,6 +84,7 @@ interface V3dHistOutputs {
 
 function v_3d_hist_params(
     input: InputPathType,
+    dind_subbrick: number | null = null,
     mask_dset: InputPathType | null = null,
     mask_range: Array<number> | null = null,
     cmask: string | null = null,
@@ -106,6 +108,7 @@ function v_3d_hist_params(
      * Build parameters.
     
      * @param input Dataset providing values for histogram.
+     * @param dind_subbrick Use sub-brick SB from the input rather than 0
      * @param mask_dset Provide mask dataset to select subset of input.
      * @param mask_range Specify the range of values to consider from MSET. Default is anything non-zero
      * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
@@ -134,6 +137,9 @@ function v_3d_hist_params(
         "showhist": showhist,
         "quiet": quiet,
     };
+    if (dind_subbrick !== null) {
+        params["dind_subbrick"] = dind_subbrick;
+    }
     if (mask_dset !== null) {
         params["mask_dset"] = mask_dset;
     }
@@ -198,6 +204,12 @@ function v_3d_hist_cargs(
     const cargs: string[] = [];
     cargs.push("3dHist");
     cargs.push(execution.inputFile((params["input"] ?? null)));
+    if ((params["dind_subbrick"] ?? null) !== null) {
+        cargs.push(
+            "-dind",
+            String((params["dind_subbrick"] ?? null))
+        );
+    }
     if ((params["mask_dset"] ?? null) !== null) {
         cargs.push(
             "-mask",
@@ -346,6 +358,7 @@ function v_3d_hist_execute(
 
 function v_3d_hist(
     input: InputPathType,
+    dind_subbrick: number | null = null,
     mask_dset: InputPathType | null = null,
     mask_range: Array<number> | null = null,
     cmask: string | null = null,
@@ -374,6 +387,7 @@ function v_3d_hist(
      * URL: https://afni.nimh.nih.gov/
     
      * @param input Dataset providing values for histogram.
+     * @param dind_subbrick Use sub-brick SB from the input rather than 0
      * @param mask_dset Provide mask dataset to select subset of input.
      * @param mask_range Specify the range of values to consider from MSET. Default is anything non-zero
      * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
@@ -398,7 +412,7 @@ function v_3d_hist(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_HIST_METADATA);
-    const params = v_3d_hist_params(input, mask_dset, mask_range, cmask, hist_file, prefix, equalized, nbin, min, max, binwidth, ignore_out, range_hist, showhist, at_val, get_params, voxvol, val_at, quiet)
+    const params = v_3d_hist_params(input, dind_subbrick, mask_dset, mask_range, cmask, hist_file, prefix, equalized, nbin, min, max, binwidth, ignore_out, range_hist, showhist, at_val, get_params, voxvol, val_at, quiet)
     return v_3d_hist_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ICC_METADATA: Metadata = {
-    id: "6b7ec5c6de013c42d47420ebf12a564c200ff8a3.boutiques",
+    id: "1652fdd3c8a77717220b28f06430ccf258c293f3.boutiques",
     name: "3dICC",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,6 +17,16 @@ interface V3dIccParameters {
     "prefix": string;
     "mask"?: InputPathType | null | undefined;
     "data_table": string;
+    "bounds"?: Array<number> | null | undefined;
+    "jobs"?: number | null | undefined;
+    "qVars"?: string | null | undefined;
+    "qVarCenters"?: string | null | undefined;
+    "subj"?: string | null | undefined;
+    "input_file_column"?: string | null | undefined;
+    "tStat"?: string | null | undefined;
+    "dbgArgs": boolean;
+    "cio": boolean;
+    "rio": boolean;
 }
 
 
@@ -76,6 +86,16 @@ function v_3d_icc_params(
     prefix: string,
     data_table: string,
     mask: InputPathType | null = null,
+    bounds: Array<number> | null = null,
+    jobs: number | null = null,
+    q_vars: string | null = null,
+    q_var_centers: string | null = null,
+    subj: string | null = null,
+    input_file_column: string | null = null,
+    t_stat: string | null = null,
+    dbg_args: boolean = false,
+    cio: boolean = false,
+    rio: boolean = false,
 ): V3dIccParameters {
     /**
      * Build parameters.
@@ -84,6 +104,16 @@ function v_3d_icc_params(
      * @param prefix Name of output file. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached, while file name for surface data is expected to end with .niml.dset.
      * @param data_table List the data structure with a header as the first line. The first column is reserved with label 'Subj', and the last is reserved for 'InputFile'.
      * @param mask Path to mask file. Only process voxels inside this mask.
+     * @param bounds Bounds for outlier removal. Provide two numbers: the lower bound (lb) and the upper bound (ub). Input data will be confined within [lb, ub]. Any values beyond the bounds will be treated as missing.
+     * @param jobs Number of jobs for parallel computing. Choose 1 for a single-processor computer.
+     * @param q_vars Identify quantitative variables with this option. List should be separated with comma and surrounded within quotes.
+     * @param q_var_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas and should be surrounded within quotes.
+     * @param subj Specify the column name that is designated as the measuring entity variable (usually subject).
+     * @param input_file_column Specify the last column name that is designated for input files of effect estimate.
+     * @param t_stat Specify the column name that is designated as the t-statistic.
+     * @param dbg_args Enable R to save the parameters in a file called .3dICC.dbg.AFNI.args in the current directory for debugging.
+     * @param cio Use AFNI's C io functions. Default is -cio.
+     * @param rio Use R's io functions.
     
      * @returns Parameter dictionary
      */
@@ -92,9 +122,33 @@ function v_3d_icc_params(
         "model": model,
         "prefix": prefix,
         "data_table": data_table,
+        "dbgArgs": dbg_args,
+        "cio": cio,
+        "rio": rio,
     };
     if (mask !== null) {
         params["mask"] = mask;
+    }
+    if (bounds !== null) {
+        params["bounds"] = bounds;
+    }
+    if (jobs !== null) {
+        params["jobs"] = jobs;
+    }
+    if (q_vars !== null) {
+        params["qVars"] = q_vars;
+    }
+    if (q_var_centers !== null) {
+        params["qVarCenters"] = q_var_centers;
+    }
+    if (subj !== null) {
+        params["subj"] = subj;
+    }
+    if (input_file_column !== null) {
+        params["input_file_column"] = input_file_column;
+    }
+    if (t_stat !== null) {
+        params["tStat"] = t_stat;
     }
     return params;
 }
@@ -129,7 +183,57 @@ function v_3d_icc_cargs(
         "-dataTable",
         (params["data_table"] ?? null)
     );
-    cargs.push("[OPTIONS]");
+    if ((params["bounds"] ?? null) !== null) {
+        cargs.push(
+            "-bounds",
+            ...(params["bounds"] ?? null).map(String)
+        );
+    }
+    if ((params["jobs"] ?? null) !== null) {
+        cargs.push(
+            "-jobs",
+            String((params["jobs"] ?? null))
+        );
+    }
+    if ((params["qVars"] ?? null) !== null) {
+        cargs.push(
+            "-qVars",
+            (params["qVars"] ?? null)
+        );
+    }
+    if ((params["qVarCenters"] ?? null) !== null) {
+        cargs.push(
+            "-qVarCenters",
+            (params["qVarCenters"] ?? null)
+        );
+    }
+    if ((params["subj"] ?? null) !== null) {
+        cargs.push(
+            "-Subj",
+            (params["subj"] ?? null)
+        );
+    }
+    if ((params["input_file_column"] ?? null) !== null) {
+        cargs.push(
+            "-IF",
+            (params["input_file_column"] ?? null)
+        );
+    }
+    if ((params["tStat"] ?? null) !== null) {
+        cargs.push(
+            "-tStat",
+            (params["tStat"] ?? null)
+        );
+    }
+    if ((params["dbgArgs"] ?? null)) {
+        cargs.push("-dbgArgs");
+    }
+    if ((params["cio"] ?? null)) {
+        cargs.push("-cio");
+    }
+    if ((params["rio"] ?? null)) {
+        cargs.push("-Rio");
+    }
     return cargs;
 }
 
@@ -183,6 +287,16 @@ function v_3d_icc(
     prefix: string,
     data_table: string,
     mask: InputPathType | null = null,
+    bounds: Array<number> | null = null,
+    jobs: number | null = null,
+    q_vars: string | null = null,
+    q_var_centers: string | null = null,
+    subj: string | null = null,
+    input_file_column: string | null = null,
+    t_stat: string | null = null,
+    dbg_args: boolean = false,
+    cio: boolean = false,
+    rio: boolean = false,
     runner: Runner | null = null,
 ): V3dIccOutputs {
     /**
@@ -196,13 +310,23 @@ function v_3d_icc(
      * @param prefix Name of output file. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached, while file name for surface data is expected to end with .niml.dset.
      * @param data_table List the data structure with a header as the first line. The first column is reserved with label 'Subj', and the last is reserved for 'InputFile'.
      * @param mask Path to mask file. Only process voxels inside this mask.
+     * @param bounds Bounds for outlier removal. Provide two numbers: the lower bound (lb) and the upper bound (ub). Input data will be confined within [lb, ub]. Any values beyond the bounds will be treated as missing.
+     * @param jobs Number of jobs for parallel computing. Choose 1 for a single-processor computer.
+     * @param q_vars Identify quantitative variables with this option. List should be separated with comma and surrounded within quotes.
+     * @param q_var_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas and should be surrounded within quotes.
+     * @param subj Specify the column name that is designated as the measuring entity variable (usually subject).
+     * @param input_file_column Specify the last column name that is designated for input files of effect estimate.
+     * @param t_stat Specify the column name that is designated as the t-statistic.
+     * @param dbg_args Enable R to save the parameters in a file called .3dICC.dbg.AFNI.args in the current directory for debugging.
+     * @param cio Use AFNI's C io functions. Default is -cio.
+     * @param rio Use R's io functions.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dIccOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ICC_METADATA);
-    const params = v_3d_icc_params(model, prefix, data_table, mask)
+    const params = v_3d_icc_params(model, prefix, data_table, mask, bounds, jobs, q_vars, q_var_centers, subj, input_file_column, t_stat, dbg_args, cio, rio)
     return v_3d_icc_execute(params, execution);
 }
 

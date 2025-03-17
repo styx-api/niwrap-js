@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PROMPT_POPUP_METADATA: Metadata = {
-    id: "56ce96c081577f794f865f7030869659d97db1e1.boutiques",
+    id: "c24519073e7efb98045929a1a4d42a4a25f3e8ef.boutiques",
     name: "prompt_popup",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,8 +13,11 @@ const PROMPT_POPUP_METADATA: Metadata = {
 
 interface PromptPopupParameters {
     "__STYXTYPE__": "prompt_popup";
+    "message": string;
     "message_pause"?: string | null | undefined;
+    "buttons"?: Array<string> | null | undefined;
     "buttons_b"?: Array<string> | null | undefined;
+    "timeout"?: number | null | undefined;
     "timeout_to"?: number | null | undefined;
 }
 
@@ -66,27 +69,40 @@ interface PromptPopupOutputs {
 
 
 function prompt_popup_params(
+    message: string,
     message_pause: string | null = null,
+    buttons: Array<string> | null = null,
     buttons_b: Array<string> | null = null,
+    timeout: number | null = null,
     timeout_to: number | null = null,
 ): PromptPopupParameters {
     /**
      * Build parameters.
     
+     * @param message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
      * @param message_pause Same as -message to match the old prompt_user.
+     * @param buttons What do you want the buttons to say? You can give up to three -button for three buttons. Returns integer 1, 2, or 3. If there is no -button, there will be one button 'Ok'.
      * @param buttons_b Same as -button.
+     * @param timeout Timeout in seconds of prompt message. Default answer is returned if TT seconds elapse without user input.
      * @param timeout_to Same as -timeout TT.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "prompt_popup" as const,
+        "message": message,
     };
     if (message_pause !== null) {
         params["message_pause"] = message_pause;
     }
+    if (buttons !== null) {
+        params["buttons"] = buttons;
+    }
     if (buttons_b !== null) {
         params["buttons_b"] = buttons_b;
+    }
+    if (timeout !== null) {
+        params["timeout"] = timeout;
     }
     if (timeout_to !== null) {
         params["timeout_to"] = timeout_to;
@@ -109,16 +125,32 @@ function prompt_popup_cargs(
      */
     const cargs: string[] = [];
     cargs.push("prompt_popup");
+    cargs.push(
+        "-message",
+        (params["message"] ?? null)
+    );
     if ((params["message_pause"] ?? null) !== null) {
         cargs.push(
             "-pause",
             (params["message_pause"] ?? null)
         );
     }
+    if ((params["buttons"] ?? null) !== null) {
+        cargs.push(
+            "-button",
+            ...(params["buttons"] ?? null)
+        );
+    }
     if ((params["buttons_b"] ?? null) !== null) {
         cargs.push(
             "-b",
             ...(params["buttons_b"] ?? null)
+        );
+    }
+    if ((params["timeout"] ?? null) !== null) {
+        cargs.push(
+            "-timeout",
+            String((params["timeout"] ?? null))
         );
     }
     if ((params["timeout_to"] ?? null) !== null) {
@@ -175,8 +207,11 @@ function prompt_popup_execute(
 
 
 function prompt_popup(
+    message: string,
     message_pause: string | null = null,
+    buttons: Array<string> | null = null,
     buttons_b: Array<string> | null = null,
+    timeout: number | null = null,
     timeout_to: number | null = null,
     runner: Runner | null = null,
 ): PromptPopupOutputs {
@@ -187,8 +222,11 @@ function prompt_popup(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
      * @param message_pause Same as -message to match the old prompt_user.
+     * @param buttons What do you want the buttons to say? You can give up to three -button for three buttons. Returns integer 1, 2, or 3. If there is no -button, there will be one button 'Ok'.
      * @param buttons_b Same as -button.
+     * @param timeout Timeout in seconds of prompt message. Default answer is returned if TT seconds elapse without user input.
      * @param timeout_to Same as -timeout TT.
      * @param runner Command runner
     
@@ -196,7 +234,7 @@ function prompt_popup(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PROMPT_POPUP_METADATA);
-    const params = prompt_popup_params(message_pause, buttons_b, timeout_to)
+    const params = prompt_popup_params(message, message_pause, buttons, buttons_b, timeout, timeout_to)
     return prompt_popup_execute(params, execution);
 }
 

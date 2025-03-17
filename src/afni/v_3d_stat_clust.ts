@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_STAT_CLUST_METADATA: Metadata = {
-    id: "fc722addfbc175c71d3a318d604f19ee64fdb599.boutiques",
+    id: "284f4ab8bc45b6b47b8622cab065942bd38efb9a.boutiques",
     name: "3dStatClust",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,6 +16,8 @@ interface V3dStatClustParameters {
     "prefix"?: string | null | undefined;
     "session_dir"?: string | null | undefined;
     "verbose": boolean;
+    "dist_euc": boolean;
+    "dist_ind": boolean;
     "dist_cor": boolean;
     "thresh": string;
     "nclust": number;
@@ -85,6 +87,8 @@ function v_3d_stat_clust_params(
     prefix: string | null = null,
     session_dir: string | null = null,
     verbose: boolean = false,
+    dist_euc: boolean = false,
+    dist_ind: boolean = false,
     dist_cor: boolean = false,
 ): V3dStatClustParameters {
     /**
@@ -96,6 +100,8 @@ function v_3d_stat_clust_params(
      * @param prefix Use 'pname' for the output dataset prefix name.
      * @param session_dir Use 'dir' for the output dataset session directory.
      * @param verbose Print out verbose output as the program proceeds.
+     * @param dist_euc Calculate Euclidean distance between parameters
+     * @param dist_ind Statistical distance for independent parameters
      * @param dist_cor Statistical distance for correlated parameters
     
      * @returns Parameter dictionary
@@ -103,6 +109,8 @@ function v_3d_stat_clust_params(
     const params = {
         "__STYXTYPE__": "3dStatClust" as const,
         "verbose": verbose,
+        "dist_euc": dist_euc,
+        "dist_ind": dist_ind,
         "dist_cor": dist_cor,
         "thresh": thresh,
         "nclust": nclust,
@@ -146,6 +154,12 @@ function v_3d_stat_clust_cargs(
     }
     if ((params["verbose"] ?? null)) {
         cargs.push("-verb");
+    }
+    if ((params["dist_euc"] ?? null)) {
+        cargs.push("-dist_euc");
+    }
+    if ((params["dist_ind"] ?? null)) {
+        cargs.push("-dist_ind");
     }
     if ((params["dist_cor"] ?? null)) {
         cargs.push("-dist_cor");
@@ -215,6 +229,8 @@ function v_3d_stat_clust(
     prefix: string | null = null,
     session_dir: string | null = null,
     verbose: boolean = false,
+    dist_euc: boolean = false,
+    dist_ind: boolean = false,
     dist_cor: boolean = false,
     runner: Runner | null = null,
 ): V3dStatClustOutputs {
@@ -231,6 +247,8 @@ function v_3d_stat_clust(
      * @param prefix Use 'pname' for the output dataset prefix name.
      * @param session_dir Use 'dir' for the output dataset session directory.
      * @param verbose Print out verbose output as the program proceeds.
+     * @param dist_euc Calculate Euclidean distance between parameters
+     * @param dist_ind Statistical distance for independent parameters
      * @param dist_cor Statistical distance for correlated parameters
      * @param runner Command runner
     
@@ -238,7 +256,7 @@ function v_3d_stat_clust(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_STAT_CLUST_METADATA);
-    const params = v_3d_stat_clust_params(thresh, nclust, datasets, prefix, session_dir, verbose, dist_cor)
+    const params = v_3d_stat_clust_params(thresh, nclust, datasets, prefix, session_dir, verbose, dist_euc, dist_ind, dist_cor)
     return v_3d_stat_clust_execute(params, execution);
 }
 

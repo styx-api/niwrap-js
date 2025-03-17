@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__NO_EXT_METADATA: Metadata = {
-    id: "e146bd1bed02e711ff41cccbd0a20832085fd087.boutiques",
+    id: "b30bcb77c107d7bb2ff272f07e711f98bc966c50.boutiques",
     name: "@NoExt",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,7 @@ const V__NO_EXT_METADATA: Metadata = {
 
 interface VNoExtParameters {
     "__STYXTYPE__": "@NoExt";
+    "inputfile": string;
     "extensions"?: Array<string> | null | undefined;
 }
 
@@ -69,17 +70,20 @@ interface VNoExtOutputs {
 
 
 function v__no_ext_params(
+    inputfile: string,
     extensions: Array<string> | null = null,
 ): VNoExtParameters {
     /**
      * Build parameters.
     
+     * @param inputfile Input file name with extension
      * @param extensions Extensions to be removed
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "@NoExt" as const,
+        "inputfile": inputfile,
     };
     if (extensions !== null) {
         params["extensions"] = extensions;
@@ -102,7 +106,7 @@ function v__no_ext_cargs(
      */
     const cargs: string[] = [];
     cargs.push("@NoExt");
-    cargs.push("<inputfile>");
+    cargs.push((params["inputfile"] ?? null));
     if ((params["extensions"] ?? null) !== null) {
         cargs.push(...(params["extensions"] ?? null));
     }
@@ -155,6 +159,7 @@ function v__no_ext_execute(
 
 
 function v__no_ext(
+    inputfile: string,
     extensions: Array<string> | null = null,
     runner: Runner | null = null,
 ): VNoExtOutputs {
@@ -165,6 +170,7 @@ function v__no_ext(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param inputfile Input file name with extension
      * @param extensions Extensions to be removed
      * @param runner Command runner
     
@@ -172,7 +178,7 @@ function v__no_ext(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__NO_EXT_METADATA);
-    const params = v__no_ext_params(extensions)
+    const params = v__no_ext_params(inputfile, extensions)
     return v__no_ext_execute(params, execution);
 }
 

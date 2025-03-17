@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_NLFIM_METADATA: Metadata = {
-    id: "b2553c2bf57346747079630757e1d16620ea8119.boutiques",
+    id: "c69cac4ff06ad3ead6a60599ed0432b48e04d528.boutiques",
     name: "3dNLfim",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,6 +16,40 @@ interface V3dNlfimParameters {
     "input_file": InputPathType;
     "signal_model": string;
     "noise_model": string;
+    "mask"?: InputPathType | null | undefined;
+    "ignore"?: number | null | undefined;
+    "intr"?: number | null | undefined;
+    "tr"?: number | null | undefined;
+    "time_file"?: InputPathType | null | undefined;
+    "sconstr"?: string | null | undefined;
+    "nconstr"?: string | null | undefined;
+    "nabs": boolean;
+    "nrand"?: number | null | undefined;
+    "nbest"?: number | null | undefined;
+    "rmsmin"?: number | null | undefined;
+    "fdisp"?: number | null | undefined;
+    "progress"?: number | null | undefined;
+    "voxel_count": boolean;
+    "simplex": boolean;
+    "powell": boolean;
+    "both": boolean;
+    "freg"?: string | null | undefined;
+    "frsqr"?: string | null | undefined;
+    "fsmax"?: string | null | undefined;
+    "ftmax"?: string | null | undefined;
+    "fpsmax"?: string | null | undefined;
+    "farea"?: string | null | undefined;
+    "fparea"?: string | null | undefined;
+    "fscoef"?: string | null | undefined;
+    "fncoef"?: string | null | undefined;
+    "tscoef"?: string | null | undefined;
+    "tncoef"?: string | null | undefined;
+    "bucket"?: string | null | undefined;
+    "brick"?: string | null | undefined;
+    "nofdr": boolean;
+    "sfit"?: string | null | undefined;
+    "snfit"?: string | null | undefined;
+    "jobs"?: number | null | undefined;
 }
 
 
@@ -66,59 +100,59 @@ interface V3dNlfimOutputs {
     /**
      * F-test for significance of the regression
      */
-    freg_outfile: OutputPathType;
+    freg_outfile: OutputPathType | null;
     /**
      * R^2 calculation for regression
      */
-    frsqr_outfile: OutputPathType;
+    frsqr_outfile: OutputPathType | null;
     /**
      * Signed maximum signal estimate
      */
-    fsmax_outfile: OutputPathType;
+    fsmax_outfile: OutputPathType | null;
     /**
      * Time of signed maximum estimate
      */
-    ftmax_outfile: OutputPathType;
+    ftmax_outfile: OutputPathType | null;
     /**
      * Maximum percentage change estimate
      */
-    fpsmax_outfile: OutputPathType;
+    fpsmax_outfile: OutputPathType | null;
     /**
      * Area between signal and baseline
      */
-    farea_outfile: OutputPathType;
+    farea_outfile: OutputPathType | null;
     /**
      * Percentage area of signal estimate
      */
-    fparea_outfile: OutputPathType;
+    fparea_outfile: OutputPathType | null;
     /**
      * Signal parameter estimate
      */
-    fscoef_outfile: OutputPathType;
+    fscoef_outfile: OutputPathType | null;
     /**
      * Noise parameter estimate
      */
-    fncoef_outfile: OutputPathType;
+    fncoef_outfile: OutputPathType | null;
     /**
      * T-test for significance of signal parameter
      */
-    tscoef_outfile: OutputPathType;
+    tscoef_outfile: OutputPathType | null;
     /**
      * T-test for significance of noise parameter
      */
-    tncoef_outfile: OutputPathType;
+    tncoef_outfile: OutputPathType | null;
     /**
      * AFNI 'bucket' dataset
      */
-    bucket_outfile: OutputPathType;
+    bucket_outfile: OutputPathType | null;
     /**
      * Output 3d+time signal model fit
      */
-    sfit_outfile: OutputPathType;
+    sfit_outfile: OutputPathType | null;
     /**
      * Output 3d+time signal+noise fit
      */
-    snfit_outfile: OutputPathType;
+    snfit_outfile: OutputPathType | null;
 }
 
 
@@ -126,6 +160,40 @@ function v_3d_nlfim_params(
     input_file: InputPathType,
     signal_model: string,
     noise_model: string,
+    mask: InputPathType | null = null,
+    ignore: number | null = null,
+    intr: number | null = null,
+    tr: number | null = null,
+    time_file: InputPathType | null = null,
+    sconstr: string | null = null,
+    nconstr: string | null = null,
+    nabs: boolean = false,
+    nrand: number | null = null,
+    nbest: number | null = null,
+    rmsmin: number | null = null,
+    fdisp: number | null = null,
+    progress: number | null = null,
+    voxel_count: boolean = false,
+    simplex: boolean = false,
+    powell: boolean = false,
+    both: boolean = false,
+    freg: string | null = null,
+    frsqr: string | null = null,
+    fsmax: string | null = null,
+    ftmax: string | null = null,
+    fpsmax: string | null = null,
+    farea: string | null = null,
+    fparea: string | null = null,
+    fscoef: string | null = null,
+    fncoef: string | null = null,
+    tscoef: string | null = null,
+    tncoef: string | null = null,
+    bucket: string | null = null,
+    brick: string | null = null,
+    nofdr: boolean = false,
+    sfit: string | null = null,
+    snfit: string | null = null,
+    jobs: number | null = null,
 ): V3dNlfimParameters {
     /**
      * Build parameters.
@@ -133,6 +201,40 @@ function v_3d_nlfim_params(
      * @param input_file Filename of 3d+time data file for input
      * @param signal_model Name of the nonlinear signal model
      * @param noise_model Name of the linear noise model
+     * @param mask Use the 0 sub-brick of dataset 'mset' as a mask to indicate which voxels to analyze
+     * @param ignore Skip this number of initial images in the time series for regression analysis; default = 0
+     * @param intr Set the TR of the input 3d+time dataset
+     * @param tr Directly set the TR of the time series model
+     * @param time_file ASCII file containing each time point in the time series.
+     * @param sconstr Constraints for signal parameters; c <= gs[k] <= d
+     * @param nconstr Constraints for noise parameters; c+b[k] <= gn[k] <= d+b[k]
+     * @param nabs Use absolute constraints for noise parameters; c <= gn[k] <= d
+     * @param nrand Number of random test points; default=19999
+     * @param nbest Use b best test points to start; default=9
+     * @param rmsmin Minimum RMS error to reject reduced model
+     * @param fdisp Display results for those voxels whose F-statistic is greater than fval; default=999.0
+     * @param progress Display results every ival number of voxels
+     * @param voxel_count Display the current voxel index
+     * @param simplex Use Nelder-Mead simplex method for least-square minimization (default)
+     * @param powell Use Powell's NEWUOA method instead of Nelder-Mead simplex method
+     * @param both Use both Powell's and Nelder-Mead method
+     * @param freg Perform F-test for significance of the regression; output 'fift' is written to prefix filename fname
+     * @param frsqr Calculate R^2 (coef. of multiple determination); store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fsmax Estimate signed maximum of signal; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param ftmax Estimate time of signed maximum; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fpsmax Calculate (signed) maximum percentage change of signal from baseline; output 'fift' is written to prefix filename fname
+     * @param farea Calculate area between signal and baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fparea Percentage area of signal relative to baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fscoef Estimate kth signal parameter gs[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fncoef Estimate kth noise parameter gn[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param tscoef Perform t-test for significance of kth signal parameter gs[k]; output 'fitt' is written to prefix filename fname
+     * @param tncoef Perform t-test for significance of kth noise parameter gn[k]; output 'fitt' is written to prefix filename fname
+     * @param bucket Create one AFNI 'bucket' dataset containing n sub-bricks; n=0 creates default output; output 'bucket' is written to prefixname
+     * @param brick Specify sub-brick contents for 'bucket' dataset
+     * @param nofdr Don't write the FDR (q vs. threshold) curves into the output dataset.
+     * @param sfit Prefix for output 3d+time signal model fit
+     * @param snfit Prefix for output 3d+time signal+noise fit
+     * @param jobs Run the program with 'J' jobs (sub-processes). 1 to 32.
     
      * @returns Parameter dictionary
      */
@@ -141,7 +243,97 @@ function v_3d_nlfim_params(
         "input_file": input_file,
         "signal_model": signal_model,
         "noise_model": noise_model,
+        "nabs": nabs,
+        "voxel_count": voxel_count,
+        "simplex": simplex,
+        "powell": powell,
+        "both": both,
+        "nofdr": nofdr,
     };
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (ignore !== null) {
+        params["ignore"] = ignore;
+    }
+    if (intr !== null) {
+        params["intr"] = intr;
+    }
+    if (tr !== null) {
+        params["tr"] = tr;
+    }
+    if (time_file !== null) {
+        params["time_file"] = time_file;
+    }
+    if (sconstr !== null) {
+        params["sconstr"] = sconstr;
+    }
+    if (nconstr !== null) {
+        params["nconstr"] = nconstr;
+    }
+    if (nrand !== null) {
+        params["nrand"] = nrand;
+    }
+    if (nbest !== null) {
+        params["nbest"] = nbest;
+    }
+    if (rmsmin !== null) {
+        params["rmsmin"] = rmsmin;
+    }
+    if (fdisp !== null) {
+        params["fdisp"] = fdisp;
+    }
+    if (progress !== null) {
+        params["progress"] = progress;
+    }
+    if (freg !== null) {
+        params["freg"] = freg;
+    }
+    if (frsqr !== null) {
+        params["frsqr"] = frsqr;
+    }
+    if (fsmax !== null) {
+        params["fsmax"] = fsmax;
+    }
+    if (ftmax !== null) {
+        params["ftmax"] = ftmax;
+    }
+    if (fpsmax !== null) {
+        params["fpsmax"] = fpsmax;
+    }
+    if (farea !== null) {
+        params["farea"] = farea;
+    }
+    if (fparea !== null) {
+        params["fparea"] = fparea;
+    }
+    if (fscoef !== null) {
+        params["fscoef"] = fscoef;
+    }
+    if (fncoef !== null) {
+        params["fncoef"] = fncoef;
+    }
+    if (tscoef !== null) {
+        params["tscoef"] = tscoef;
+    }
+    if (tncoef !== null) {
+        params["tncoef"] = tncoef;
+    }
+    if (bucket !== null) {
+        params["bucket"] = bucket;
+    }
+    if (brick !== null) {
+        params["brick"] = brick;
+    }
+    if (sfit !== null) {
+        params["sfit"] = sfit;
+    }
+    if (snfit !== null) {
+        params["snfit"] = snfit;
+    }
+    if (jobs !== null) {
+        params["jobs"] = jobs;
+    }
     return params;
 }
 
@@ -172,7 +364,192 @@ function v_3d_nlfim_cargs(
         "-noise",
         (params["noise_model"] ?? null)
     );
-    cargs.push("[ADDITIONAL_OPTIONS]");
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["ignore"] ?? null) !== null) {
+        cargs.push(
+            "-ignore",
+            String((params["ignore"] ?? null))
+        );
+    }
+    if ((params["intr"] ?? null) !== null) {
+        cargs.push(
+            "-inTR",
+            String((params["intr"] ?? null))
+        );
+    }
+    if ((params["tr"] ?? null) !== null) {
+        cargs.push(
+            "-TR",
+            String((params["tr"] ?? null))
+        );
+    }
+    if ((params["time_file"] ?? null) !== null) {
+        cargs.push(
+            "-time",
+            execution.inputFile((params["time_file"] ?? null))
+        );
+    }
+    if ((params["sconstr"] ?? null) !== null) {
+        cargs.push(
+            "-sconstr",
+            (params["sconstr"] ?? null)
+        );
+    }
+    if ((params["nconstr"] ?? null) !== null) {
+        cargs.push(
+            "-nconstr",
+            (params["nconstr"] ?? null)
+        );
+    }
+    if ((params["nabs"] ?? null)) {
+        cargs.push("-nabs");
+    }
+    if ((params["nrand"] ?? null) !== null) {
+        cargs.push(
+            "-nrand",
+            String((params["nrand"] ?? null))
+        );
+    }
+    if ((params["nbest"] ?? null) !== null) {
+        cargs.push(
+            "-nbest",
+            String((params["nbest"] ?? null))
+        );
+    }
+    if ((params["rmsmin"] ?? null) !== null) {
+        cargs.push(
+            "-rmsmin",
+            String((params["rmsmin"] ?? null))
+        );
+    }
+    if ((params["fdisp"] ?? null) !== null) {
+        cargs.push(
+            "-fdisp",
+            String((params["fdisp"] ?? null))
+        );
+    }
+    if ((params["progress"] ?? null) !== null) {
+        cargs.push(
+            "-progress",
+            String((params["progress"] ?? null))
+        );
+    }
+    if ((params["voxel_count"] ?? null)) {
+        cargs.push("-voxel_count");
+    }
+    if ((params["simplex"] ?? null)) {
+        cargs.push("-SIMPLEX");
+    }
+    if ((params["powell"] ?? null)) {
+        cargs.push("-POWELL");
+    }
+    if ((params["both"] ?? null)) {
+        cargs.push("-BOTH");
+    }
+    if ((params["freg"] ?? null) !== null) {
+        cargs.push(
+            "-freg",
+            (params["freg"] ?? null)
+        );
+    }
+    if ((params["frsqr"] ?? null) !== null) {
+        cargs.push(
+            "-frsqr",
+            (params["frsqr"] ?? null)
+        );
+    }
+    if ((params["fsmax"] ?? null) !== null) {
+        cargs.push(
+            "-fsmax",
+            (params["fsmax"] ?? null)
+        );
+    }
+    if ((params["ftmax"] ?? null) !== null) {
+        cargs.push(
+            "-ftmax",
+            (params["ftmax"] ?? null)
+        );
+    }
+    if ((params["fpsmax"] ?? null) !== null) {
+        cargs.push(
+            "-fpsmax",
+            (params["fpsmax"] ?? null)
+        );
+    }
+    if ((params["farea"] ?? null) !== null) {
+        cargs.push(
+            "-farea",
+            (params["farea"] ?? null)
+        );
+    }
+    if ((params["fparea"] ?? null) !== null) {
+        cargs.push(
+            "-fparea",
+            (params["fparea"] ?? null)
+        );
+    }
+    if ((params["fscoef"] ?? null) !== null) {
+        cargs.push(
+            "-fscoef",
+            (params["fscoef"] ?? null)
+        );
+    }
+    if ((params["fncoef"] ?? null) !== null) {
+        cargs.push(
+            "-fncoef",
+            (params["fncoef"] ?? null)
+        );
+    }
+    if ((params["tscoef"] ?? null) !== null) {
+        cargs.push(
+            "-tscoef",
+            (params["tscoef"] ?? null)
+        );
+    }
+    if ((params["tncoef"] ?? null) !== null) {
+        cargs.push(
+            "-tncoef",
+            (params["tncoef"] ?? null)
+        );
+    }
+    if ((params["bucket"] ?? null) !== null) {
+        cargs.push(
+            "-bucket",
+            (params["bucket"] ?? null)
+        );
+    }
+    if ((params["brick"] ?? null) !== null) {
+        cargs.push(
+            "-brick",
+            (params["brick"] ?? null)
+        );
+    }
+    if ((params["nofdr"] ?? null)) {
+        cargs.push("-noFDR");
+    }
+    if ((params["sfit"] ?? null) !== null) {
+        cargs.push(
+            "-sfit",
+            (params["sfit"] ?? null)
+        );
+    }
+    if ((params["snfit"] ?? null) !== null) {
+        cargs.push(
+            "-snfit",
+            (params["snfit"] ?? null)
+        );
+    }
+    if ((params["jobs"] ?? null) !== null) {
+        cargs.push(
+            "-jobs",
+            String((params["jobs"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -191,20 +568,20 @@ function v_3d_nlfim_outputs(
      */
     const ret: V3dNlfimOutputs = {
         root: execution.outputFile("."),
-        freg_outfile: execution.outputFile(["[FREG].fift"].join('')),
-        frsqr_outfile: execution.outputFile(["[FRSQR].fift"].join('')),
-        fsmax_outfile: execution.outputFile(["[FSMAX].fift"].join('')),
-        ftmax_outfile: execution.outputFile(["[FTMAX].fift"].join('')),
-        fpsmax_outfile: execution.outputFile(["[FPSMAX].fift"].join('')),
-        farea_outfile: execution.outputFile(["[FAREA].fift"].join('')),
-        fparea_outfile: execution.outputFile(["[FPAREA].fift"].join('')),
-        fscoef_outfile: execution.outputFile(["[FSCOEF].fift"].join('')),
-        fncoef_outfile: execution.outputFile(["[FNCOEF].fift"].join('')),
-        tscoef_outfile: execution.outputFile(["[TSCOEF].fitt"].join('')),
-        tncoef_outfile: execution.outputFile(["[TNCOEF].fitt"].join('')),
-        bucket_outfile: execution.outputFile(["[BUCKET].bucket"].join('')),
-        sfit_outfile: execution.outputFile(["[SFIT].sfit"].join('')),
-        snfit_outfile: execution.outputFile(["[SNFIT].snfit"].join('')),
+        freg_outfile: ((params["freg"] ?? null) !== null) ? execution.outputFile([(params["freg"] ?? null), ".fift"].join('')) : null,
+        frsqr_outfile: ((params["frsqr"] ?? null) !== null) ? execution.outputFile([(params["frsqr"] ?? null), ".fift"].join('')) : null,
+        fsmax_outfile: ((params["fsmax"] ?? null) !== null) ? execution.outputFile([(params["fsmax"] ?? null), ".fift"].join('')) : null,
+        ftmax_outfile: ((params["ftmax"] ?? null) !== null) ? execution.outputFile([(params["ftmax"] ?? null), ".fift"].join('')) : null,
+        fpsmax_outfile: ((params["fpsmax"] ?? null) !== null) ? execution.outputFile([(params["fpsmax"] ?? null), ".fift"].join('')) : null,
+        farea_outfile: ((params["farea"] ?? null) !== null) ? execution.outputFile([(params["farea"] ?? null), ".fift"].join('')) : null,
+        fparea_outfile: ((params["fparea"] ?? null) !== null) ? execution.outputFile([(params["fparea"] ?? null), ".fift"].join('')) : null,
+        fscoef_outfile: ((params["fscoef"] ?? null) !== null) ? execution.outputFile([(params["fscoef"] ?? null), ".fift"].join('')) : null,
+        fncoef_outfile: ((params["fncoef"] ?? null) !== null) ? execution.outputFile([(params["fncoef"] ?? null), ".fift"].join('')) : null,
+        tscoef_outfile: ((params["tscoef"] ?? null) !== null) ? execution.outputFile([(params["tscoef"] ?? null), ".fitt"].join('')) : null,
+        tncoef_outfile: ((params["tncoef"] ?? null) !== null) ? execution.outputFile([(params["tncoef"] ?? null), ".fitt"].join('')) : null,
+        bucket_outfile: ((params["bucket"] ?? null) !== null) ? execution.outputFile([(params["bucket"] ?? null), ".bucket"].join('')) : null,
+        sfit_outfile: ((params["sfit"] ?? null) !== null) ? execution.outputFile([(params["sfit"] ?? null), ".sfit"].join('')) : null,
+        snfit_outfile: ((params["snfit"] ?? null) !== null) ? execution.outputFile([(params["snfit"] ?? null), ".snfit"].join('')) : null,
     };
     return ret;
 }
@@ -238,6 +615,40 @@ function v_3d_nlfim(
     input_file: InputPathType,
     signal_model: string,
     noise_model: string,
+    mask: InputPathType | null = null,
+    ignore: number | null = null,
+    intr: number | null = null,
+    tr: number | null = null,
+    time_file: InputPathType | null = null,
+    sconstr: string | null = null,
+    nconstr: string | null = null,
+    nabs: boolean = false,
+    nrand: number | null = null,
+    nbest: number | null = null,
+    rmsmin: number | null = null,
+    fdisp: number | null = null,
+    progress: number | null = null,
+    voxel_count: boolean = false,
+    simplex: boolean = false,
+    powell: boolean = false,
+    both: boolean = false,
+    freg: string | null = null,
+    frsqr: string | null = null,
+    fsmax: string | null = null,
+    ftmax: string | null = null,
+    fpsmax: string | null = null,
+    farea: string | null = null,
+    fparea: string | null = null,
+    fscoef: string | null = null,
+    fncoef: string | null = null,
+    tscoef: string | null = null,
+    tncoef: string | null = null,
+    bucket: string | null = null,
+    brick: string | null = null,
+    nofdr: boolean = false,
+    sfit: string | null = null,
+    snfit: string | null = null,
+    jobs: number | null = null,
     runner: Runner | null = null,
 ): V3dNlfimOutputs {
     /**
@@ -250,13 +661,47 @@ function v_3d_nlfim(
      * @param input_file Filename of 3d+time data file for input
      * @param signal_model Name of the nonlinear signal model
      * @param noise_model Name of the linear noise model
+     * @param mask Use the 0 sub-brick of dataset 'mset' as a mask to indicate which voxels to analyze
+     * @param ignore Skip this number of initial images in the time series for regression analysis; default = 0
+     * @param intr Set the TR of the input 3d+time dataset
+     * @param tr Directly set the TR of the time series model
+     * @param time_file ASCII file containing each time point in the time series.
+     * @param sconstr Constraints for signal parameters; c <= gs[k] <= d
+     * @param nconstr Constraints for noise parameters; c+b[k] <= gn[k] <= d+b[k]
+     * @param nabs Use absolute constraints for noise parameters; c <= gn[k] <= d
+     * @param nrand Number of random test points; default=19999
+     * @param nbest Use b best test points to start; default=9
+     * @param rmsmin Minimum RMS error to reject reduced model
+     * @param fdisp Display results for those voxels whose F-statistic is greater than fval; default=999.0
+     * @param progress Display results every ival number of voxels
+     * @param voxel_count Display the current voxel index
+     * @param simplex Use Nelder-Mead simplex method for least-square minimization (default)
+     * @param powell Use Powell's NEWUOA method instead of Nelder-Mead simplex method
+     * @param both Use both Powell's and Nelder-Mead method
+     * @param freg Perform F-test for significance of the regression; output 'fift' is written to prefix filename fname
+     * @param frsqr Calculate R^2 (coef. of multiple determination); store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fsmax Estimate signed maximum of signal; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param ftmax Estimate time of signed maximum; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fpsmax Calculate (signed) maximum percentage change of signal from baseline; output 'fift' is written to prefix filename fname
+     * @param farea Calculate area between signal and baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fparea Percentage area of signal relative to baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fscoef Estimate kth signal parameter gs[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param fncoef Estimate kth noise parameter gn[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+     * @param tscoef Perform t-test for significance of kth signal parameter gs[k]; output 'fitt' is written to prefix filename fname
+     * @param tncoef Perform t-test for significance of kth noise parameter gn[k]; output 'fitt' is written to prefix filename fname
+     * @param bucket Create one AFNI 'bucket' dataset containing n sub-bricks; n=0 creates default output; output 'bucket' is written to prefixname
+     * @param brick Specify sub-brick contents for 'bucket' dataset
+     * @param nofdr Don't write the FDR (q vs. threshold) curves into the output dataset.
+     * @param sfit Prefix for output 3d+time signal model fit
+     * @param snfit Prefix for output 3d+time signal+noise fit
+     * @param jobs Run the program with 'J' jobs (sub-processes). 1 to 32.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dNlfimOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NLFIM_METADATA);
-    const params = v_3d_nlfim_params(input_file, signal_model, noise_model)
+    const params = v_3d_nlfim_params(input_file, signal_model, noise_model, mask, ignore, intr, tr, time_file, sconstr, nconstr, nabs, nrand, nbest, rmsmin, fdisp, progress, voxel_count, simplex, powell, both, freg, frsqr, fsmax, ftmax, fpsmax, farea, fparea, fscoef, fncoef, tscoef, tncoef, bucket, brick, nofdr, sfit, snfit, jobs)
     return v_3d_nlfim_execute(params, execution);
 }
 

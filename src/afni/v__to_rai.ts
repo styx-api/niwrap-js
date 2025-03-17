@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__TO_RAI_METADATA: Metadata = {
-    id: "ae5bb83cce00bf51d61da1e1b21d495548f69a92.boutiques",
+    id: "8c60899686c3401d179992be9780ca970e04a901.boutiques",
     name: "@ToRAI",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,8 @@ const V__TO_RAI_METADATA: Metadata = {
 
 interface VToRaiParameters {
     "__STYXTYPE__": "@ToRAI";
+    "coordinates": Array<number>;
+    "orientation": string;
 }
 
 
@@ -63,14 +65,21 @@ interface VToRaiOutputs {
 
 
 function v__to_rai_params(
+    coordinates: Array<number>,
+    orientation: string,
 ): VToRaiParameters {
     /**
      * Build parameters.
+    
+     * @param coordinates Specify the X, Y, and Z coordinates
+     * @param orientation Specify the orientation
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "@ToRAI" as const,
+        "coordinates": coordinates,
+        "orientation": orientation,
     };
     return params;
 }
@@ -90,12 +99,14 @@ function v__to_rai_cargs(
      */
     const cargs: string[] = [];
     cargs.push("@ToRAI");
-    cargs.push("<-xyz");
-    cargs.push("X");
-    cargs.push("Y");
-    cargs.push("Z>");
-    cargs.push("<-or");
-    cargs.push("ORIENT>");
+    cargs.push(
+        "-xyz",
+        ...(params["coordinates"] ?? null).map(String)
+    );
+    cargs.push(
+        "-or",
+        (params["orientation"] ?? null)
+    );
     return cargs;
 }
 
@@ -144,6 +155,8 @@ function v__to_rai_execute(
 
 
 function v__to_rai(
+    coordinates: Array<number>,
+    orientation: string,
     runner: Runner | null = null,
 ): VToRaiOutputs {
     /**
@@ -153,13 +166,15 @@ function v__to_rai(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param coordinates Specify the X, Y, and Z coordinates
+     * @param orientation Specify the orientation
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `VToRaiOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__TO_RAI_METADATA);
-    const params = v__to_rai_params()
+    const params = v__to_rai_params(coordinates, orientation)
     return v__to_rai_execute(params, execution);
 }
 

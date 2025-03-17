@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_RPLOT_METADATA: Metadata = {
-    id: "97370e286ceee3c0b1e0eb62c1b51f85396f905d.boutiques",
+    id: "a023c13860bb79baca3021cecec486f2e6d4bf18.boutiques",
     name: "1dRplot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,24 @@ const V_1D_RPLOT_METADATA: Metadata = {
 interface V1dRplotParameters {
     "__STYXTYPE__": "1dRplot";
     "input_file": InputPathType;
+    "output_prefix"?: string | null | undefined;
+    "save_size"?: Array<number> | null | undefined;
+    "TR"?: number | null | undefined;
+    "title"?: string | null | undefined;
+    "input_type"?: "VOLREG" | "XMAT" | null | undefined;
+    "legend_font_size"?: number | null | undefined;
+    "left_y_margin_text"?: string | null | undefined;
+    "right_y_margin_text"?: string | null | undefined;
+    "x_axis_label"?: string | null | undefined;
+    "y_axis_label"?: string | null | undefined;
+    "x_axis_range"?: Array<number> | null | undefined;
+    "y_axis_range"?: Array<number> | null | undefined;
+    "plot_char"?: Array<string> | null | undefined;
+    "group_labels"?: Array<string> | null | undefined;
+    "legend_show": boolean;
+    "legend_position"?: "bottomright" | "bottom" | "bottomleft" | "left" | "topleft" | "top" | "topright" | "right" | "center" | null | undefined;
+    "save_plot": boolean;
+    "column_name_show": boolean;
 }
 
 
@@ -64,24 +82,108 @@ interface V1dRplotOutputs {
     /**
      * Output plot file
      */
-    output_plot: OutputPathType;
+    output_plot: OutputPathType | null;
 }
 
 
 function v_1d_rplot_params(
     input_file: InputPathType,
+    output_prefix: string | null = null,
+    save_size: Array<number> | null = null,
+    tr: number | null = null,
+    title: string | null = null,
+    input_type: "VOLREG" | "XMAT" | null = null,
+    legend_font_size: number | null = null,
+    left_y_margin_text: string | null = null,
+    right_y_margin_text: string | null = null,
+    x_axis_label: string | null = null,
+    y_axis_label: string | null = null,
+    x_axis_range: Array<number> | null = null,
+    y_axis_range: Array<number> | null = null,
+    plot_char: Array<string> | null = null,
+    group_labels: Array<string> | null = null,
+    legend_show: boolean = false,
+    legend_position: "bottomright" | "bottom" | "bottomleft" | "left" | "topleft" | "top" | "topright" | "right" | "center" | null = null,
+    save_plot: boolean = false,
+    column_name_show: boolean = false,
 ): V1dRplotParameters {
     /**
      * Build parameters.
     
      * @param input_file Input 1D file to plot
+     * @param output_prefix Output prefix. See also -save.
+     * @param save_size Save figure size in pixels. Default is 2000 2000.
+     * @param tr Sampling period, in seconds.
+     * @param title Graph title. File name is used by default. Use NONE to be sure no title is used.
+     * @param input_type Type of data in 1D file. Choose from 'VOLREG' or 'XMAT'.
+     * @param legend_font_size Font size for legend text.
+     * @param left_y_margin_text Text to be placed at left Y margin. You need one string per column.
+     * @param right_y_margin_text Text to be placed at right Y margin. You need one string per column.
+     * @param x_axis_label Labels for the X axis.
+     * @param y_axis_label Labels for the Y axis.
+     * @param x_axis_range Range of X axis. STEP is optional.
+     * @param y_axis_range Range of Y axis. STEP is optional.
+     * @param plot_char Symbols for each column in input.
+     * @param group_labels Legends assigned to each group. Default is no labeling.
+     * @param legend_show Show legend.
+     * @param legend_position Legend position. Choose from: bottomright, bottom, bottomleft, left, topleft, top, topright, right, center.
+     * @param save_plot Save plot and quit. No need for -prefix with this option.
+     * @param column_name_show Show names of column in input.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "1dRplot" as const,
         "input_file": input_file,
+        "legend_show": legend_show,
+        "save_plot": save_plot,
+        "column_name_show": column_name_show,
     };
+    if (output_prefix !== null) {
+        params["output_prefix"] = output_prefix;
+    }
+    if (save_size !== null) {
+        params["save_size"] = save_size;
+    }
+    if (tr !== null) {
+        params["TR"] = tr;
+    }
+    if (title !== null) {
+        params["title"] = title;
+    }
+    if (input_type !== null) {
+        params["input_type"] = input_type;
+    }
+    if (legend_font_size !== null) {
+        params["legend_font_size"] = legend_font_size;
+    }
+    if (left_y_margin_text !== null) {
+        params["left_y_margin_text"] = left_y_margin_text;
+    }
+    if (right_y_margin_text !== null) {
+        params["right_y_margin_text"] = right_y_margin_text;
+    }
+    if (x_axis_label !== null) {
+        params["x_axis_label"] = x_axis_label;
+    }
+    if (y_axis_label !== null) {
+        params["y_axis_label"] = y_axis_label;
+    }
+    if (x_axis_range !== null) {
+        params["x_axis_range"] = x_axis_range;
+    }
+    if (y_axis_range !== null) {
+        params["y_axis_range"] = y_axis_range;
+    }
+    if (plot_char !== null) {
+        params["plot_char"] = plot_char;
+    }
+    if (group_labels !== null) {
+        params["group_labels"] = group_labels;
+    }
+    if (legend_position !== null) {
+        params["legend_position"] = legend_position;
+    }
     return params;
 }
 
@@ -104,7 +206,105 @@ function v_1d_rplot_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
-    cargs.push("[OPTIONS]");
+    if ((params["output_prefix"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["output_prefix"] ?? null)
+        );
+    }
+    if ((params["save_size"] ?? null) !== null) {
+        cargs.push(
+            "-save.size",
+            ...(params["save_size"] ?? null).map(String)
+        );
+    }
+    if ((params["TR"] ?? null) !== null) {
+        cargs.push(
+            "-TR",
+            String((params["TR"] ?? null))
+        );
+    }
+    if ((params["title"] ?? null) !== null) {
+        cargs.push(
+            "-title",
+            (params["title"] ?? null)
+        );
+    }
+    if ((params["input_type"] ?? null) !== null) {
+        cargs.push(
+            "-input_type",
+            (params["input_type"] ?? null)
+        );
+    }
+    if ((params["legend_font_size"] ?? null) !== null) {
+        cargs.push(
+            "-leg.fontsize",
+            String((params["legend_font_size"] ?? null))
+        );
+    }
+    if ((params["left_y_margin_text"] ?? null) !== null) {
+        cargs.push(
+            "-col.text.lym",
+            (params["left_y_margin_text"] ?? null)
+        );
+    }
+    if ((params["right_y_margin_text"] ?? null) !== null) {
+        cargs.push(
+            "-col.text.rym",
+            (params["right_y_margin_text"] ?? null)
+        );
+    }
+    if ((params["x_axis_label"] ?? null) !== null) {
+        cargs.push(
+            "-xax.label",
+            (params["x_axis_label"] ?? null)
+        );
+    }
+    if ((params["y_axis_label"] ?? null) !== null) {
+        cargs.push(
+            "-yax.label",
+            (params["y_axis_label"] ?? null)
+        );
+    }
+    if ((params["x_axis_range"] ?? null) !== null) {
+        cargs.push(
+            "-xax.lim",
+            ...(params["x_axis_range"] ?? null).map(String)
+        );
+    }
+    if ((params["y_axis_range"] ?? null) !== null) {
+        cargs.push(
+            "-yax.lim",
+            ...(params["y_axis_range"] ?? null).map(String)
+        );
+    }
+    if ((params["plot_char"] ?? null) !== null) {
+        cargs.push(
+            "-col.plot.char",
+            ...(params["plot_char"] ?? null)
+        );
+    }
+    if ((params["group_labels"] ?? null) !== null) {
+        cargs.push(
+            "-grp.label",
+            ...(params["group_labels"] ?? null)
+        );
+    }
+    if ((params["legend_show"] ?? null)) {
+        cargs.push("-leg.show");
+    }
+    if ((params["legend_position"] ?? null) !== null) {
+        cargs.push(
+            "-leg.position",
+            (params["legend_position"] ?? null)
+        );
+    }
+    if ((params["save_plot"] ?? null)) {
+        cargs.push("-save");
+    }
+    if ((params["column_name_show"] ?? null)) {
+        cargs.push("-col.name.show");
+    }
     return cargs;
 }
 
@@ -123,7 +323,7 @@ function v_1d_rplot_outputs(
      */
     const ret: V1dRplotOutputs = {
         root: execution.outputFile("."),
-        output_plot: execution.outputFile(["[OUTPUT_PREFIX]*.jpg"].join('')),
+        output_plot: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*.jpg"].join('')) : null,
     };
     return ret;
 }
@@ -155,6 +355,24 @@ function v_1d_rplot_execute(
 
 function v_1d_rplot(
     input_file: InputPathType,
+    output_prefix: string | null = null,
+    save_size: Array<number> | null = null,
+    tr: number | null = null,
+    title: string | null = null,
+    input_type: "VOLREG" | "XMAT" | null = null,
+    legend_font_size: number | null = null,
+    left_y_margin_text: string | null = null,
+    right_y_margin_text: string | null = null,
+    x_axis_label: string | null = null,
+    y_axis_label: string | null = null,
+    x_axis_range: Array<number> | null = null,
+    y_axis_range: Array<number> | null = null,
+    plot_char: Array<string> | null = null,
+    group_labels: Array<string> | null = null,
+    legend_show: boolean = false,
+    legend_position: "bottomright" | "bottom" | "bottomleft" | "left" | "topleft" | "top" | "topright" | "right" | "center" | null = null,
+    save_plot: boolean = false,
+    column_name_show: boolean = false,
     runner: Runner | null = null,
 ): V1dRplotOutputs {
     /**
@@ -165,13 +383,31 @@ function v_1d_rplot(
      * URL: https://afni.nimh.nih.gov/
     
      * @param input_file Input 1D file to plot
+     * @param output_prefix Output prefix. See also -save.
+     * @param save_size Save figure size in pixels. Default is 2000 2000.
+     * @param tr Sampling period, in seconds.
+     * @param title Graph title. File name is used by default. Use NONE to be sure no title is used.
+     * @param input_type Type of data in 1D file. Choose from 'VOLREG' or 'XMAT'.
+     * @param legend_font_size Font size for legend text.
+     * @param left_y_margin_text Text to be placed at left Y margin. You need one string per column.
+     * @param right_y_margin_text Text to be placed at right Y margin. You need one string per column.
+     * @param x_axis_label Labels for the X axis.
+     * @param y_axis_label Labels for the Y axis.
+     * @param x_axis_range Range of X axis. STEP is optional.
+     * @param y_axis_range Range of Y axis. STEP is optional.
+     * @param plot_char Symbols for each column in input.
+     * @param group_labels Legends assigned to each group. Default is no labeling.
+     * @param legend_show Show legend.
+     * @param legend_position Legend position. Choose from: bottomright, bottom, bottomleft, left, topleft, top, topright, right, center.
+     * @param save_plot Save plot and quit. No need for -prefix with this option.
+     * @param column_name_show Show names of column in input.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V1dRplotOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_RPLOT_METADATA);
-    const params = v_1d_rplot_params(input_file)
+    const params = v_1d_rplot_params(input_file, output_prefix, save_size, tr, title, input_type, legend_font_size, left_y_margin_text, right_y_margin_text, x_axis_label, y_axis_label, x_axis_range, y_axis_range, plot_char, group_labels, legend_show, legend_position, save_plot, column_name_show)
     return v_1d_rplot_execute(params, execution);
 }
 

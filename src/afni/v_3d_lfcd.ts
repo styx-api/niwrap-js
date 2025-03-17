@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LFCD_METADATA: Metadata = {
-    id: "bf72e901409ebf787635076f27fc633055ebec14.boutiques",
+    id: "7698c7de46741d205ab4763adc29dccd492e943b.boutiques",
     name: "3dLFCD",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,6 +17,8 @@ interface V3dLfcdParameters {
     "autoclip": boolean;
     "automask": boolean;
     "mask"?: InputPathType | null | undefined;
+    "num_threads"?: number | null | undefined;
+    "out_file"?: string | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "polort"?: number | null | undefined;
     "thresh"?: number | null | undefined;
@@ -71,10 +73,6 @@ interface V3dLfcdOutputs {
      * Output image file name.
      */
     out_file: OutputPathType;
-    /**
-     * Output file.
-     */
-    out_file_: OutputPathType;
 }
 
 
@@ -83,6 +81,8 @@ function v_3d_lfcd_params(
     autoclip: boolean = false,
     automask: boolean = false,
     mask: InputPathType | null = null,
+    num_threads: number | null = null,
+    out_file: string | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     polort: number | null = null,
     thresh: number | null = null,
@@ -94,6 +94,8 @@ function v_3d_lfcd_params(
      * @param autoclip Clip off low-intensity regions in the dataset.
      * @param automask Mask the dataset to target brain-only voxels.
      * @param mask Mask file to mask input data.
+     * @param num_threads Set number of threads.
+     * @param out_file Output image file name.
      * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
      * @param polort No description provided.
      * @param thresh Threshold to exclude connections where corr <= thresh.
@@ -108,6 +110,12 @@ function v_3d_lfcd_params(
     };
     if (mask !== null) {
         params["mask"] = mask;
+    }
+    if (num_threads !== null) {
+        params["num_threads"] = num_threads;
+    }
+    if (out_file !== null) {
+        params["out_file"] = out_file;
     }
     if (outputtype !== null) {
         params["outputtype"] = outputtype;
@@ -149,7 +157,15 @@ function v_3d_lfcd_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    cargs.push("[OUT_FILE]");
+    if ((params["num_threads"] ?? null) !== null) {
+        cargs.push(String((params["num_threads"] ?? null)));
+    }
+    if ((params["out_file"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["out_file"] ?? null)
+        );
+    }
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
@@ -184,7 +200,6 @@ function v_3d_lfcd_outputs(
     const ret: V3dLfcdOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_afni"].join('')),
-        out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;
 }
@@ -219,6 +234,8 @@ function v_3d_lfcd(
     autoclip: boolean = false,
     automask: boolean = false,
     mask: InputPathType | null = null,
+    num_threads: number | null = null,
+    out_file: string | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     polort: number | null = null,
     thresh: number | null = null,
@@ -235,6 +252,8 @@ function v_3d_lfcd(
      * @param autoclip Clip off low-intensity regions in the dataset.
      * @param automask Mask the dataset to target brain-only voxels.
      * @param mask Mask file to mask input data.
+     * @param num_threads Set number of threads.
+     * @param out_file Output image file name.
      * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
      * @param polort No description provided.
      * @param thresh Threshold to exclude connections where corr <= thresh.
@@ -244,7 +263,7 @@ function v_3d_lfcd(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LFCD_METADATA);
-    const params = v_3d_lfcd_params(in_file, autoclip, automask, mask, outputtype, polort, thresh)
+    const params = v_3d_lfcd_params(in_file, autoclip, automask, mask, num_threads, out_file, outputtype, polort, thresh)
     return v_3d_lfcd_execute(params, execution);
 }
 

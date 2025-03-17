@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TSORT_METADATA: Metadata = {
-    id: "28c28b79e328ac59d8297a59e0298ad19fb48796.boutiques",
+    id: "0baecbfda8717ca32038a0d906eaab9d406613ee.boutiques",
     name: "3dTsort",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,7 @@ interface V3dTsortParameters {
     "__STYXTYPE__": "3dTsort";
     "input_file": InputPathType;
     "prefix"?: string | null | undefined;
+    "inc": boolean;
     "dec": boolean;
     "rank": boolean;
     "ind": boolean;
@@ -80,6 +81,7 @@ interface V3dTsortOutputs {
 function v_3d_tsort_params(
     input_file: InputPathType,
     prefix: string | null = null,
+    inc: boolean = false,
     dec: boolean = false,
     rank: boolean = false,
     ind: boolean = false,
@@ -94,6 +96,7 @@ function v_3d_tsort_params(
     
      * @param input_file Input dataset to be sorted
      * @param prefix Prefix for the output dataset
+     * @param inc Sort into increasing order (default)
      * @param dec Sort into decreasing order
      * @param rank Output rank instead of sorted values; ranks range from 1 to Nvals
      * @param ind Output sorting index (0 to Nvals -1)
@@ -108,6 +111,7 @@ function v_3d_tsort_params(
     const params = {
         "__STYXTYPE__": "3dTsort" as const,
         "input_file": input_file,
+        "inc": inc,
         "dec": dec,
         "rank": rank,
         "ind": ind,
@@ -146,6 +150,9 @@ function v_3d_tsort_cargs(
             "-prefix",
             (params["prefix"] ?? null)
         );
+    }
+    if ((params["inc"] ?? null)) {
+        cargs.push("-inc");
     }
     if ((params["dec"] ?? null)) {
         cargs.push("-dec");
@@ -225,6 +232,7 @@ function v_3d_tsort_execute(
 function v_3d_tsort(
     input_file: InputPathType,
     prefix: string | null = null,
+    inc: boolean = false,
     dec: boolean = false,
     rank: boolean = false,
     ind: boolean = false,
@@ -244,6 +252,7 @@ function v_3d_tsort(
     
      * @param input_file Input dataset to be sorted
      * @param prefix Prefix for the output dataset
+     * @param inc Sort into increasing order (default)
      * @param dec Sort into decreasing order
      * @param rank Output rank instead of sorted values; ranks range from 1 to Nvals
      * @param ind Output sorting index (0 to Nvals -1)
@@ -258,7 +267,7 @@ function v_3d_tsort(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSORT_METADATA);
-    const params = v_3d_tsort_params(input_file, prefix, dec, rank, ind, val, random, ranfft, randft, datum)
+    const params = v_3d_tsort_params(input_file, prefix, inc, dec, rank, ind, val, random, ranfft, randft, datum)
     return v_3d_tsort_execute(params, execution);
 }
 

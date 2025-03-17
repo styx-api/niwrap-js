@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DBUCKET_METADATA: Metadata = {
-    id: "a07bb3d6d6114eb899f05be41e593f262e6cd274.boutiques",
+    id: "24263e7460b92cc3d7edf73c1101058593a99f03.boutiques",
     name: "3dbucket",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,7 @@ const V_3DBUCKET_METADATA: Metadata = {
 interface V3dbucketParameters {
     "__STYXTYPE__": "3dbucket";
     "prefix"?: string | null | undefined;
+    "output"?: string | null | undefined;
     "session"?: string | null | undefined;
     "glueto"?: string | null | undefined;
     "aglueto"?: string | null | undefined;
@@ -74,6 +75,7 @@ interface V3dbucketOutputs {
 function v_3dbucket_params(
     input_files: Array<string>,
     prefix: string | null = null,
+    output: string | null = null,
     session: string | null = null,
     glueto: string | null = null,
     aglueto: string | null = null,
@@ -87,6 +89,7 @@ function v_3dbucket_params(
     
      * @param input_files Input datasets with optional sub-brick selection.
      * @param prefix Use 'pname' for the output dataset prefix name.
+     * @param output Use 'pname' for the output dataset prefix name.
      * @param session Use 'dir' for the output dataset session directory. [default='./'=current working directory]
      * @param glueto Append bricks to the end of the 'fname' dataset.
      * @param aglueto If fname dataset does not exist, create it (like -prefix). Otherwise append to fname (like -glueto).
@@ -107,6 +110,9 @@ function v_3dbucket_params(
     };
     if (prefix !== null) {
         params["prefix"] = prefix;
+    }
+    if (output !== null) {
+        params["output"] = output;
     }
     if (session !== null) {
         params["session"] = session;
@@ -139,6 +145,12 @@ function v_3dbucket_cargs(
         cargs.push(
             "-prefix",
             (params["prefix"] ?? null)
+        );
+    }
+    if ((params["output"] ?? null) !== null) {
+        cargs.push(
+            "-output",
+            (params["output"] ?? null)
         );
     }
     if ((params["session"] ?? null) !== null) {
@@ -222,6 +234,7 @@ function v_3dbucket_execute(
 function v_3dbucket(
     input_files: Array<string>,
     prefix: string | null = null,
+    output: string | null = null,
     session: string | null = null,
     glueto: string | null = null,
     aglueto: string | null = null,
@@ -240,6 +253,7 @@ function v_3dbucket(
     
      * @param input_files Input datasets with optional sub-brick selection.
      * @param prefix Use 'pname' for the output dataset prefix name.
+     * @param output Use 'pname' for the output dataset prefix name.
      * @param session Use 'dir' for the output dataset session directory. [default='./'=current working directory]
      * @param glueto Append bricks to the end of the 'fname' dataset.
      * @param aglueto If fname dataset does not exist, create it (like -prefix). Otherwise append to fname (like -glueto).
@@ -253,7 +267,7 @@ function v_3dbucket(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DBUCKET_METADATA);
-    const params = v_3dbucket_params(input_files, prefix, session, glueto, aglueto, dry, verbose, fbuc, abuc)
+    const params = v_3dbucket_params(input_files, prefix, output, session, glueto, aglueto, dry, verbose, fbuc, abuc)
     return v_3dbucket_execute(params, execution);
 }
 

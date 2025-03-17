@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LRFLIP_METADATA: Metadata = {
-    id: "b3e8fe43a4546f9996744e159107df5ff817046b.boutiques",
+    id: "cccfbbdb6c5cece891a86f81aefb3b59ea32fe70.boutiques",
     name: "3dLRflip",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,11 @@ const V_3D_LRFLIP_METADATA: Metadata = {
 
 interface V3dLrflipParameters {
     "__STYXTYPE__": "3dLRflip";
+    "flip_lr": boolean;
+    "flip_ap": boolean;
+    "flip_is": boolean;
+    "flip_x": boolean;
+    "flip_y": boolean;
     "flip_z": boolean;
     "output_prefix"?: string | null | undefined;
     "datasets": Array<InputPathType>;
@@ -72,6 +77,11 @@ interface V3dLrflipOutputs {
 
 function v_3d_lrflip_params(
     datasets: Array<InputPathType>,
+    flip_lr: boolean = false,
+    flip_ap: boolean = false,
+    flip_is: boolean = false,
+    flip_x: boolean = false,
+    flip_y: boolean = false,
     flip_z: boolean = false,
     output_prefix: string | null = null,
 ): V3dLrflipParameters {
@@ -79,6 +89,11 @@ function v_3d_lrflip_params(
      * Build parameters.
     
      * @param datasets Datasets to flip
+     * @param flip_lr Flip about Left-Right axis
+     * @param flip_ap Flip about Anterior-Posterior axis
+     * @param flip_is Flip about Inferior-Superior axis
+     * @param flip_x Flip about the 1st direction
+     * @param flip_y Flip about the 2nd direction
      * @param flip_z Flip about the 3rd direction
      * @param output_prefix Prefix to use for output. If multiple datasets are input, the program will choose a prefix for each output.
     
@@ -86,6 +101,11 @@ function v_3d_lrflip_params(
      */
     const params = {
         "__STYXTYPE__": "3dLRflip" as const,
+        "flip_lr": flip_lr,
+        "flip_ap": flip_ap,
+        "flip_is": flip_is,
+        "flip_x": flip_x,
+        "flip_y": flip_y,
         "flip_z": flip_z,
         "datasets": datasets,
     };
@@ -110,6 +130,21 @@ function v_3d_lrflip_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dLRflip");
+    if ((params["flip_lr"] ?? null)) {
+        cargs.push("-LR");
+    }
+    if ((params["flip_ap"] ?? null)) {
+        cargs.push("-AP");
+    }
+    if ((params["flip_is"] ?? null)) {
+        cargs.push("-IS");
+    }
+    if ((params["flip_x"] ?? null)) {
+        cargs.push("-X");
+    }
+    if ((params["flip_y"] ?? null)) {
+        cargs.push("-Y");
+    }
     if ((params["flip_z"] ?? null)) {
         cargs.push("-Z");
     }
@@ -170,6 +205,11 @@ function v_3d_lrflip_execute(
 
 function v_3d_lrflip(
     datasets: Array<InputPathType>,
+    flip_lr: boolean = false,
+    flip_ap: boolean = false,
+    flip_is: boolean = false,
+    flip_x: boolean = false,
+    flip_y: boolean = false,
     flip_z: boolean = false,
     output_prefix: string | null = null,
     runner: Runner | null = null,
@@ -182,6 +222,11 @@ function v_3d_lrflip(
      * URL: https://afni.nimh.nih.gov/
     
      * @param datasets Datasets to flip
+     * @param flip_lr Flip about Left-Right axis
+     * @param flip_ap Flip about Anterior-Posterior axis
+     * @param flip_is Flip about Inferior-Superior axis
+     * @param flip_x Flip about the 1st direction
+     * @param flip_y Flip about the 2nd direction
      * @param flip_z Flip about the 3rd direction
      * @param output_prefix Prefix to use for output. If multiple datasets are input, the program will choose a prefix for each output.
      * @param runner Command runner
@@ -190,7 +235,7 @@ function v_3d_lrflip(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LRFLIP_METADATA);
-    const params = v_3d_lrflip_params(datasets, flip_z, output_prefix)
+    const params = v_3d_lrflip_params(datasets, flip_lr, flip_ap, flip_is, flip_x, flip_y, flip_z, output_prefix)
     return v_3d_lrflip_execute(params, execution);
 }
 

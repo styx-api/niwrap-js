@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_PFM_METADATA: Metadata = {
-    id: "c5e5e30b454a1a81f02535de2e794be7d716492a.boutiques",
+    id: "96e747e1055107a8734dd4f14bdc3fe2e1d0dca3.boutiques",
     name: "3dPFM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,21 @@ const V_3D_PFM_METADATA: Metadata = {
 
 interface V3dPfmParameters {
     "__STYXTYPE__": "3dPFM";
+    "input": InputPathType;
+    "mask"?: InputPathType | null | undefined;
+    "algorithm"?: string | null | undefined;
+    "criteria"?: string | null | undefined;
+    "nonzeros"?: number | null | undefined;
+    "maxiter"?: number | null | undefined;
+    "maxiterfactor"?: number | null | undefined;
+    "tr"?: number | null | undefined;
+    "hrf"?: string | null | undefined;
+    "hrf_vol"?: InputPathType | null | undefined;
+    "idx_hrf"?: InputPathType | null | undefined;
+    "LHS"?: Array<InputPathType> | null | undefined;
+    "jobs"?: number | null | undefined;
+    "nSeg"?: number | null | undefined;
+    "verb"?: number | null | undefined;
 }
 
 
@@ -168,15 +183,89 @@ interface V3dPfmOutputs {
 
 
 function v_3d_pfm_params(
+    input: InputPathType,
+    mask: InputPathType | null = null,
+    algorithm: string | null = null,
+    criteria: string | null = null,
+    nonzeros: number | null = null,
+    maxiter: number | null = null,
+    maxiterfactor: number | null = null,
+    tr: number | null = null,
+    hrf: string | null = null,
+    hrf_vol: InputPathType | null = null,
+    idx_hrf: InputPathType | null = null,
+    lhs: Array<InputPathType> | null = null,
+    jobs: number | null = null,
+    n_seg: number | null = null,
+    verb: number | null = null,
 ): V3dPfmParameters {
     /**
      * Build parameters.
+    
+     * @param input Specify the dataset to analyze (e.g., epi.nii).
+     * @param mask Process voxels inside this mask only. Default is no masking.
+     * @param algorithm Regularization function used for HRF deconvolution (dantzig or lasso).
+     * @param criteria Model selection criterion for HRF deconvolution (BIC or AIC).
+     * @param nonzeros Choose estimate with a fixed number of nonzero coefficients.
+     * @param maxiter Maximum number of iterations in the homotopy procedure (absolute value).
+     * @param maxiterfactor Maximum number of iterations relative to the number of volumes.
+     * @param tr Repetition time or sampling period of the input data.
+     * @param hrf Haemodynamic response function used for deconvolution.
+     * @param hrf_vol 3D+time dataset with voxel/nodes/vertex -dependent HRFs.
+     * @param idx_hrf 3D dataset with voxel-dependent indexes for HRF.
+     * @param lhs Additional regressors to be fitted to the dataset.
+     * @param jobs Number of parallel jobs to use in processing.
+     * @param n_seg Divide into segments to report progress.
+     * @param verb Verbosity level (0 for quiet, 1 for talkative).
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dPFM" as const,
+        "input": input,
     };
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (algorithm !== null) {
+        params["algorithm"] = algorithm;
+    }
+    if (criteria !== null) {
+        params["criteria"] = criteria;
+    }
+    if (nonzeros !== null) {
+        params["nonzeros"] = nonzeros;
+    }
+    if (maxiter !== null) {
+        params["maxiter"] = maxiter;
+    }
+    if (maxiterfactor !== null) {
+        params["maxiterfactor"] = maxiterfactor;
+    }
+    if (tr !== null) {
+        params["tr"] = tr;
+    }
+    if (hrf !== null) {
+        params["hrf"] = hrf;
+    }
+    if (hrf_vol !== null) {
+        params["hrf_vol"] = hrf_vol;
+    }
+    if (idx_hrf !== null) {
+        params["idx_hrf"] = idx_hrf;
+    }
+    if (lhs !== null) {
+        params["LHS"] = lhs;
+    }
+    if (jobs !== null) {
+        params["jobs"] = jobs;
+    }
+    if (n_seg !== null) {
+        params["nSeg"] = n_seg;
+    }
+    if (verb !== null) {
+        params["verb"] = verb;
+    }
     return params;
 }
 
@@ -195,7 +284,94 @@ function v_3d_pfm_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dPFM");
-    cargs.push("[PARAMETERS]");
+    cargs.push(
+        "-input",
+        execution.inputFile((params["input"] ?? null))
+    );
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["algorithm"] ?? null) !== null) {
+        cargs.push(
+            "-algorithm",
+            (params["algorithm"] ?? null)
+        );
+    }
+    if ((params["criteria"] ?? null) !== null) {
+        cargs.push(
+            "-criteria",
+            (params["criteria"] ?? null)
+        );
+    }
+    if ((params["nonzeros"] ?? null) !== null) {
+        cargs.push(
+            "-nonzeros",
+            String((params["nonzeros"] ?? null))
+        );
+    }
+    if ((params["maxiter"] ?? null) !== null) {
+        cargs.push(
+            "-maxiter",
+            String((params["maxiter"] ?? null))
+        );
+    }
+    if ((params["maxiterfactor"] ?? null) !== null) {
+        cargs.push(
+            "-maxiterfactor",
+            String((params["maxiterfactor"] ?? null))
+        );
+    }
+    if ((params["tr"] ?? null) !== null) {
+        cargs.push(
+            "-TR",
+            String((params["tr"] ?? null))
+        );
+    }
+    if ((params["hrf"] ?? null) !== null) {
+        cargs.push(
+            "-hrf",
+            (params["hrf"] ?? null)
+        );
+    }
+    if ((params["hrf_vol"] ?? null) !== null) {
+        cargs.push(
+            "-hrf_vol",
+            execution.inputFile((params["hrf_vol"] ?? null))
+        );
+    }
+    if ((params["idx_hrf"] ?? null) !== null) {
+        cargs.push(
+            "-idx_hrf",
+            execution.inputFile((params["idx_hrf"] ?? null))
+        );
+    }
+    if ((params["LHS"] ?? null) !== null) {
+        cargs.push(
+            "-LHS",
+            ...(params["LHS"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["jobs"] ?? null) !== null) {
+        cargs.push(
+            "-jobs",
+            String((params["jobs"] ?? null))
+        );
+    }
+    if ((params["nSeg"] ?? null) !== null) {
+        cargs.push(
+            "-nSeg",
+            String((params["nSeg"] ?? null))
+        );
+    }
+    if ((params["verb"] ?? null) !== null) {
+        cargs.push(
+            "-verb",
+            String((params["verb"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -270,6 +446,21 @@ function v_3d_pfm_execute(
 
 
 function v_3d_pfm(
+    input: InputPathType,
+    mask: InputPathType | null = null,
+    algorithm: string | null = null,
+    criteria: string | null = null,
+    nonzeros: number | null = null,
+    maxiter: number | null = null,
+    maxiterfactor: number | null = null,
+    tr: number | null = null,
+    hrf: string | null = null,
+    hrf_vol: InputPathType | null = null,
+    idx_hrf: InputPathType | null = null,
+    lhs: Array<InputPathType> | null = null,
+    jobs: number | null = null,
+    n_seg: number | null = null,
+    verb: number | null = null,
     runner: Runner | null = null,
 ): V3dPfmOutputs {
     /**
@@ -279,13 +470,28 @@ function v_3d_pfm(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param input Specify the dataset to analyze (e.g., epi.nii).
+     * @param mask Process voxels inside this mask only. Default is no masking.
+     * @param algorithm Regularization function used for HRF deconvolution (dantzig or lasso).
+     * @param criteria Model selection criterion for HRF deconvolution (BIC or AIC).
+     * @param nonzeros Choose estimate with a fixed number of nonzero coefficients.
+     * @param maxiter Maximum number of iterations in the homotopy procedure (absolute value).
+     * @param maxiterfactor Maximum number of iterations relative to the number of volumes.
+     * @param tr Repetition time or sampling period of the input data.
+     * @param hrf Haemodynamic response function used for deconvolution.
+     * @param hrf_vol 3D+time dataset with voxel/nodes/vertex -dependent HRFs.
+     * @param idx_hrf 3D dataset with voxel-dependent indexes for HRF.
+     * @param lhs Additional regressors to be fitted to the dataset.
+     * @param jobs Number of parallel jobs to use in processing.
+     * @param n_seg Divide into segments to report progress.
+     * @param verb Verbosity level (0 for quiet, 1 for talkative).
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dPfmOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_PFM_METADATA);
-    const params = v_3d_pfm_params()
+    const params = v_3d_pfm_params(input, mask, algorithm, criteria, nonzeros, maxiter, maxiterfactor, tr, hrf, hrf_vol, idx_hrf, lhs, jobs, n_seg, verb)
     return v_3d_pfm_execute(params, execution);
 }
 

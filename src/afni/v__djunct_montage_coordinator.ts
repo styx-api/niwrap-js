@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__DJUNCT_MONTAGE_COORDINATOR_METADATA: Metadata = {
-    id: "9c2cbb473d95421a680be52f18d9f90f2ec86dfb.boutiques",
+    id: "8d747f7169ee7e4179813dc1818309f1663d903c.boutiques",
     name: "@djunct_montage_coordinator",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,6 +16,7 @@ interface VDjunctMontageCoordinatorParameters {
     "input_file": InputPathType;
     "montx": number;
     "monty": number;
+    "out_ijk": boolean;
     "out_xyz": boolean;
     "help": boolean;
     "version": boolean;
@@ -77,6 +78,7 @@ function v__djunct_montage_coordinator_params(
     input_file: InputPathType,
     montx: number,
     monty: number,
+    out_ijk: boolean = false,
     out_xyz: boolean = false,
     help: boolean = false,
     version: boolean = false,
@@ -87,6 +89,7 @@ function v__djunct_montage_coordinator_params(
      * @param input_file Name of input dataset
      * @param montx Montage dimension: number of panels along x-axis (i.e., number of cols)
      * @param monty Montage dimension: number of panels along y-axis (i.e., number of rows)
+     * @param out_ijk Make program output 'I J K' values.
      * @param out_xyz Make program output 'X Y Z' values.
      * @param help See helpfile.
      * @param version See version number.
@@ -98,6 +101,7 @@ function v__djunct_montage_coordinator_params(
         "input_file": input_file,
         "montx": montx,
         "monty": monty,
+        "out_ijk": out_ijk,
         "out_xyz": out_xyz,
         "help": help,
         "version": version,
@@ -132,6 +136,9 @@ function v__djunct_montage_coordinator_cargs(
         "-monty",
         String((params["monty"] ?? null))
     );
+    if ((params["out_ijk"] ?? null)) {
+        cargs.push("-out_ijk");
+    }
     if ((params["out_xyz"] ?? null)) {
         cargs.push("-out_xyz");
     }
@@ -193,6 +200,7 @@ function v__djunct_montage_coordinator(
     input_file: InputPathType,
     montx: number,
     monty: number,
+    out_ijk: boolean = false,
     out_xyz: boolean = false,
     help: boolean = false,
     version: boolean = false,
@@ -208,6 +216,7 @@ function v__djunct_montage_coordinator(
      * @param input_file Name of input dataset
      * @param montx Montage dimension: number of panels along x-axis (i.e., number of cols)
      * @param monty Montage dimension: number of panels along y-axis (i.e., number of rows)
+     * @param out_ijk Make program output 'I J K' values.
      * @param out_xyz Make program output 'X Y Z' values.
      * @param help See helpfile.
      * @param version See version number.
@@ -217,7 +226,7 @@ function v__djunct_montage_coordinator(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_MONTAGE_COORDINATOR_METADATA);
-    const params = v__djunct_montage_coordinator_params(input_file, montx, monty, out_xyz, help, version)
+    const params = v__djunct_montage_coordinator_params(input_file, montx, monty, out_ijk, out_xyz, help, version)
     return v__djunct_montage_coordinator_execute(params, execution);
 }
 

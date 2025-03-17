@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__COMPUTE_OC_WEIGHTS_METADATA: Metadata = {
-    id: "4427220e56bd9be0b0fb6b294b7d2992dca6669c.boutiques",
+    id: "ebfead8518bbfa4656b258644c98429751538187.boutiques",
     name: "@compute_OC_weights",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,7 @@ const V__COMPUTE_OC_WEIGHTS_METADATA: Metadata = {
 interface VComputeOcWeightsParameters {
     "__STYXTYPE__": "@compute_OC_weights";
     "echo_times"?: string | null | undefined;
+    "echo_times_file"?: InputPathType | null | undefined;
     "echo_dsets": Array<string>;
     "prefix"?: string | null | undefined;
     "def_to_equal"?: string | null | undefined;
@@ -79,6 +80,7 @@ interface VComputeOcWeightsOutputs {
 function v__compute_oc_weights_params(
     echo_dsets: Array<string>,
     echo_times: string | null = null,
+    echo_times_file: InputPathType | null = null,
     prefix: string | null = null,
     def_to_equal: string | null = null,
     oc_method: string | null = null,
@@ -92,6 +94,7 @@ function v__compute_oc_weights_params(
     
      * @param echo_dsets Specify one run of multi-echo EPI data.
      * @param echo_times Specify echo times as list (e.g., "15 30.5 41"). Use either -echo_times or -echo_times_files.
+     * @param echo_times_file Specify file with echo times. Use either -echo_times or -echo_times_files.
      * @param prefix Specify prefix of resulting OC weights dataset (e.g., OC.weights.SUBJ).
      * @param def_to_equal Specify whether to default to equal weights (default = no).
      * @param oc_method Specify which OC method to employ (default = OC_A).
@@ -109,6 +112,9 @@ function v__compute_oc_weights_params(
     };
     if (echo_times !== null) {
         params["echo_times"] = echo_times;
+    }
+    if (echo_times_file !== null) {
+        params["echo_times_file"] = echo_times_file;
     }
     if (prefix !== null) {
         params["prefix"] = prefix;
@@ -150,6 +156,12 @@ function v__compute_oc_weights_cargs(
         cargs.push(
             "-echo_times",
             (params["echo_times"] ?? null)
+        );
+    }
+    if ((params["echo_times_file"] ?? null) !== null) {
+        cargs.push(
+            "-echo_times_file",
+            execution.inputFile((params["echo_times_file"] ?? null))
         );
     }
     cargs.push(
@@ -246,6 +258,7 @@ function v__compute_oc_weights_execute(
 function v__compute_oc_weights(
     echo_dsets: Array<string>,
     echo_times: string | null = null,
+    echo_times_file: InputPathType | null = null,
     prefix: string | null = null,
     def_to_equal: string | null = null,
     oc_method: string | null = null,
@@ -264,6 +277,7 @@ function v__compute_oc_weights(
     
      * @param echo_dsets Specify one run of multi-echo EPI data.
      * @param echo_times Specify echo times as list (e.g., "15 30.5 41"). Use either -echo_times or -echo_times_files.
+     * @param echo_times_file Specify file with echo times. Use either -echo_times or -echo_times_files.
      * @param prefix Specify prefix of resulting OC weights dataset (e.g., OC.weights.SUBJ).
      * @param def_to_equal Specify whether to default to equal weights (default = no).
      * @param oc_method Specify which OC method to employ (default = OC_A).
@@ -277,7 +291,7 @@ function v__compute_oc_weights(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__COMPUTE_OC_WEIGHTS_METADATA);
-    const params = v__compute_oc_weights_params(echo_dsets, echo_times, prefix, def_to_equal, oc_method, sum_weight_tolerance, t2_star_limit, work_dir, verbosity)
+    const params = v__compute_oc_weights_params(echo_dsets, echo_times, echo_times_file, prefix, def_to_equal, oc_method, sum_weight_tolerance, t2_star_limit, work_dir, verbosity)
     return v__compute_oc_weights_execute(params, execution);
 }
 

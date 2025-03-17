@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF_DIST_METADATA: Metadata = {
-    id: "4b7fc8f067afc394968ebdfef5be6b16641eee5b.boutiques",
+    id: "8b5c7176c66dac8d05149bdf650ac16471da45a7.boutiques",
     name: "SurfDist",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,7 +16,11 @@ interface SurfDistParameters {
     "surface": InputPathType;
     "nodepairs": InputPathType;
     "node_path_do"?: string | null | undefined;
+    "euclidean": boolean;
+    "euclidian": boolean;
     "graph": boolean;
+    "from_node"?: string | null | undefined;
+    "to_nodes"?: InputPathType | null | undefined;
 }
 
 
@@ -75,7 +79,11 @@ function surf_dist_params(
     surface: InputPathType,
     nodepairs: InputPathType,
     node_path_do: string | null = null,
+    euclidean: boolean = false,
+    euclidian: boolean = false,
     graph: boolean = false,
+    from_node: string | null = null,
+    to_nodes: InputPathType | null = null,
 ): SurfDistParameters {
     /**
      * Build parameters.
@@ -83,7 +91,11 @@ function surf_dist_params(
      * @param surface Surface on which distances are computed.
      * @param nodepairs Specify node pairs for distance computation.
      * @param node_path_do Output the shortest path between each node pair as a SUMA Displayable object.
+     * @param euclidean Calculate Euclidean distance, rather than graph distance.
+     * @param euclidian Synonym for '-Euclidean'.
      * @param graph Calculate distance along the mesh (default).
+     * @param from_node Specify one starting node for pair calculation.
+     * @param to_nodes Specify nodes used for pair calculation when using -from_node.
     
      * @returns Parameter dictionary
      */
@@ -91,10 +103,18 @@ function surf_dist_params(
         "__STYXTYPE__": "SurfDist" as const,
         "surface": surface,
         "nodepairs": nodepairs,
+        "euclidean": euclidean,
+        "euclidian": euclidian,
         "graph": graph,
     };
     if (node_path_do !== null) {
         params["node_path_do"] = node_path_do;
+    }
+    if (from_node !== null) {
+        params["from_node"] = from_node;
+    }
+    if (to_nodes !== null) {
+        params["to_nodes"] = to_nodes;
     }
     return params;
 }
@@ -122,8 +142,26 @@ function surf_dist_cargs(
             (params["node_path_do"] ?? null)
         );
     }
+    if ((params["euclidean"] ?? null)) {
+        cargs.push("-Euclidean");
+    }
+    if ((params["euclidian"] ?? null)) {
+        cargs.push("-Euclidian");
+    }
     if ((params["graph"] ?? null)) {
         cargs.push("-graph");
+    }
+    if ((params["from_node"] ?? null) !== null) {
+        cargs.push(
+            "-from_node",
+            (params["from_node"] ?? null)
+        );
+    }
+    if ((params["to_nodes"] ?? null) !== null) {
+        cargs.push(
+            "-input",
+            execution.inputFile((params["to_nodes"] ?? null))
+        );
     }
     return cargs;
 }
@@ -177,7 +215,11 @@ function surf_dist(
     surface: InputPathType,
     nodepairs: InputPathType,
     node_path_do: string | null = null,
+    euclidean: boolean = false,
+    euclidian: boolean = false,
     graph: boolean = false,
+    from_node: string | null = null,
+    to_nodes: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfDistOutputs {
     /**
@@ -190,14 +232,18 @@ function surf_dist(
      * @param surface Surface on which distances are computed.
      * @param nodepairs Specify node pairs for distance computation.
      * @param node_path_do Output the shortest path between each node pair as a SUMA Displayable object.
+     * @param euclidean Calculate Euclidean distance, rather than graph distance.
+     * @param euclidian Synonym for '-Euclidean'.
      * @param graph Calculate distance along the mesh (default).
+     * @param from_node Specify one starting node for pair calculation.
+     * @param to_nodes Specify nodes used for pair calculation when using -from_node.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `SurfDistOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_DIST_METADATA);
-    const params = surf_dist_params(surface, nodepairs, node_path_do, graph)
+    const params = surf_dist_params(surface, nodepairs, node_path_do, euclidean, euclidian, graph, from_node, to_nodes)
     return surf_dist_execute(params, execution);
 }
 

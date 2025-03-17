@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PROMPT_USER_METADATA: Metadata = {
-    id: "eeffbea4e522408c1d4978572830a23c9b27d7fb.boutiques",
+    id: "50f7b3456cf7fa2cd699f8ebd295c575df5c9675.boutiques",
     name: "prompt_user",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,7 @@ const PROMPT_USER_METADATA: Metadata = {
 interface PromptUserParameters {
     "__STYXTYPE__": "prompt_user";
     "pause_message": string;
+    "timeout"?: number | null | undefined;
     "timeout_alias"?: number | null | undefined;
 }
 
@@ -66,12 +67,14 @@ interface PromptUserOutputs {
 
 function prompt_user_params(
     pause_message: string,
+    timeout: number | null = null,
     timeout_alias: number | null = null,
 ): PromptUserParameters {
     /**
      * Build parameters.
     
      * @param pause_message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
+     * @param timeout Timeout in seconds for the prompt message. Default answer is returned if TT seconds elapse without user input.
      * @param timeout_alias Alias for -timeout
     
      * @returns Parameter dictionary
@@ -80,6 +83,9 @@ function prompt_user_params(
         "__STYXTYPE__": "prompt_user" as const,
         "pause_message": pause_message,
     };
+    if (timeout !== null) {
+        params["timeout"] = timeout;
+    }
     if (timeout_alias !== null) {
         params["timeout_alias"] = timeout_alias;
     }
@@ -105,6 +111,12 @@ function prompt_user_cargs(
         "<-pause>",
         (params["pause_message"] ?? null)
     );
+    if ((params["timeout"] ?? null) !== null) {
+        cargs.push(
+            "-timeout",
+            String((params["timeout"] ?? null))
+        );
+    }
     if ((params["timeout_alias"] ?? null) !== null) {
         cargs.push(
             "-to",
@@ -160,6 +172,7 @@ function prompt_user_execute(
 
 function prompt_user(
     pause_message: string,
+    timeout: number | null = null,
     timeout_alias: number | null = null,
     runner: Runner | null = null,
 ): PromptUserOutputs {
@@ -171,6 +184,7 @@ function prompt_user(
      * URL: https://afni.nimh.nih.gov/
     
      * @param pause_message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
+     * @param timeout Timeout in seconds for the prompt message. Default answer is returned if TT seconds elapse without user input.
      * @param timeout_alias Alias for -timeout
      * @param runner Command runner
     
@@ -178,7 +192,7 @@ function prompt_user(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PROMPT_USER_METADATA);
-    const params = prompt_user_params(pause_message, timeout_alias)
+    const params = prompt_user_params(pause_message, timeout, timeout_alias)
     return prompt_user_execute(params, execution);
 }
 

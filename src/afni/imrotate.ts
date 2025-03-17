@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMROTATE_METADATA: Metadata = {
-    id: "046eb12264816ed4b6d2246d2d697caf596e0670.boutiques",
+    id: "7c817965f8c449aac8c4bfbde437361551c5546b.boutiques",
     name: "imrotate",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,7 @@ const IMROTATE_METADATA: Metadata = {
 
 interface ImrotateParameters {
     "__STYXTYPE__": "imrotate";
+    "linear_interpolation": boolean;
     "fourier_interpolation": boolean;
     "dx": number;
     "dy": number;
@@ -79,6 +80,7 @@ function imrotate_params(
     phi: number,
     input_image: InputPathType,
     output_image: string,
+    linear_interpolation: boolean = false,
     fourier_interpolation: boolean = false,
 ): ImrotateParameters {
     /**
@@ -89,12 +91,14 @@ function imrotate_params(
      * @param phi Degrees to rotate clockwise
      * @param input_image Input image file
      * @param output_image Output image file
+     * @param linear_interpolation Use bilinear interpolation (default is bicubic)
      * @param fourier_interpolation Use Fourier interpolation
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "imrotate" as const,
+        "linear_interpolation": linear_interpolation,
         "fourier_interpolation": fourier_interpolation,
         "dx": dx,
         "dy": dy,
@@ -120,6 +124,9 @@ function imrotate_cargs(
      */
     const cargs: string[] = [];
     cargs.push("imrotate");
+    if ((params["linear_interpolation"] ?? null)) {
+        cargs.push("-linear");
+    }
     if ((params["fourier_interpolation"] ?? null)) {
         cargs.push("-Fourier");
     }
@@ -182,6 +189,7 @@ function imrotate(
     phi: number,
     input_image: InputPathType,
     output_image: string,
+    linear_interpolation: boolean = false,
     fourier_interpolation: boolean = false,
     runner: Runner | null = null,
 ): ImrotateOutputs {
@@ -197,6 +205,7 @@ function imrotate(
      * @param phi Degrees to rotate clockwise
      * @param input_image Input image file
      * @param output_image Output image file
+     * @param linear_interpolation Use bilinear interpolation (default is bicubic)
      * @param fourier_interpolation Use Fourier interpolation
      * @param runner Command runner
     
@@ -204,7 +213,7 @@ function imrotate(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMROTATE_METADATA);
-    const params = imrotate_params(dx, dy, phi, input_image, output_image, fourier_interpolation)
+    const params = imrotate_params(dx, dy, phi, input_image, output_image, linear_interpolation, fourier_interpolation)
     return imrotate_execute(params, execution);
 }
 

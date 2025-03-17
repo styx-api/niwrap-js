@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_CLUST_SIM_METADATA: Metadata = {
-    id: "493de4c7d1501714af71d386a011e1fe097ca5fb.boutiques",
+    id: "912b449ef9b8c9bbf2596a5e62a4511be33fefad.boutiques",
     name: "3dClustSim",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,28 @@ const V_3D_CLUST_SIM_METADATA: Metadata = {
 
 interface V3dClustSimParameters {
     "__STYXTYPE__": "3dClustSim";
+    "nxyz"?: string | null | undefined;
+    "dxyz"?: string | null | undefined;
+    "ball": boolean;
+    "mask"?: InputPathType | null | undefined;
+    "oksmallmask": boolean;
+    "inset"?: Array<InputPathType> | null | undefined;
+    "fwhm"?: number | null | undefined;
+    "acf"?: string | null | undefined;
+    "nopad": boolean;
+    "pthr"?: string | null | undefined;
+    "athr"?: string | null | undefined;
+    "lots": boolean;
+    "mega": boolean;
+    "iter"?: number | null | undefined;
+    "nodec": boolean;
+    "seed"?: number | null | undefined;
+    "niml": boolean;
+    "both": boolean;
+    "prefix"?: string | null | undefined;
+    "cmd"?: string | null | undefined;
+    "quiet": boolean;
+    "ssave"?: string | null | undefined;
 }
 
 
@@ -63,56 +85,149 @@ interface V3dClustSimOutputs {
     /**
      * Output file for NN1 with 1-sided thresholding
      */
-    output_nn1_1sided: OutputPathType;
+    output_nn1_1sided: OutputPathType | null;
     /**
      * Output file for NN1 with 2-sided thresholding
      */
-    output_nn1_2sided: OutputPathType;
+    output_nn1_2sided: OutputPathType | null;
     /**
      * Output file for NN1 with bi-sided thresholding
      */
-    output_nn1_bisided: OutputPathType;
+    output_nn1_bisided: OutputPathType | null;
     /**
      * Output file for NN2 with 1-sided thresholding
      */
-    output_nn2_1sided: OutputPathType;
+    output_nn2_1sided: OutputPathType | null;
     /**
      * Output file for NN2 with 2-sided thresholding
      */
-    output_nn2_2sided: OutputPathType;
+    output_nn2_2sided: OutputPathType | null;
     /**
      * Output file for NN2 with bi-sided thresholding
      */
-    output_nn2_bisided: OutputPathType;
+    output_nn2_bisided: OutputPathType | null;
     /**
      * Output file for NN3 with 1-sided thresholding
      */
-    output_nn3_1sided: OutputPathType;
+    output_nn3_1sided: OutputPathType | null;
     /**
      * Output file for NN3 with 2-sided thresholding
      */
-    output_nn3_2sided: OutputPathType;
+    output_nn3_2sided: OutputPathType | null;
     /**
      * Output file for NN3 with bi-sided thresholding
      */
-    output_nn3_bisided: OutputPathType;
+    output_nn3_bisided: OutputPathType | null;
     /**
      * Compressed ASCII encoding of the mask volume
      */
-    mask_compressed: OutputPathType;
+    mask_compressed: OutputPathType | null;
 }
 
 
 function v_3d_clust_sim_params(
+    nxyz: string | null = null,
+    dxyz: string | null = null,
+    ball: boolean = false,
+    mask: InputPathType | null = null,
+    oksmallmask: boolean = false,
+    inset: Array<InputPathType> | null = null,
+    fwhm: number | null = null,
+    acf: string | null = null,
+    nopad: boolean = false,
+    pthr: string | null = null,
+    athr: string | null = null,
+    lots: boolean = false,
+    mega: boolean = false,
+    iter: number | null = null,
+    nodec: boolean = false,
+    seed: number | null = null,
+    niml: boolean = false,
+    both: boolean = false,
+    prefix: string | null = null,
+    cmd: string | null = null,
+    quiet: boolean = false,
+    ssave: string | null = null,
 ): V3dClustSimParameters {
     /**
      * Build parameters.
+    
+     * @param nxyz Size of 3D grid to use for simulation
+     * @param dxyz Voxel sizes along each dimension
+     * @param ball Mask off points outside a ball at the center of the grid
+     * @param mask Use the 0 sub-brick of this dataset as a mask
+     * @param oksmallmask Allow small masks with less than 128 nonzero voxels
+     * @param inset Use these dataset(s) as the simulations to threshold and clusterize
+     * @param fwhm Gaussian filter width in mm (use -fwhmxyz for different values per axis)
+     * @param acf Parameters a, b, c for the autocorrelation function
+     * @param nopad Turn off padding slices added for edge effects
+     * @param pthr List of uncorrected per voxel p-values
+     * @param athr List of corrected whole volume alpha-values
+     * @param lots Use a longer list of values for pthr and athr
+     * @param mega Add even more values to the pthr and athr grids
+     * @param iter Number of Monte Carlo simulations
+     * @param nodec Print the cluster size threshold as an integer
+     * @param seed Random number seed
+     * @param niml Output the table in XML/NIML format
+     * @param both Output the table in both XML/NIML format and in .1D format
+     * @param prefix Specify prefix for the output files
+     * @param cmd Write command for putting results into a file's header
+     * @param quiet Don't print out progress reports
+     * @param ssave Save un-thresholded generated random volumes
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dClustSim" as const,
+        "ball": ball,
+        "oksmallmask": oksmallmask,
+        "nopad": nopad,
+        "lots": lots,
+        "mega": mega,
+        "nodec": nodec,
+        "niml": niml,
+        "both": both,
+        "quiet": quiet,
     };
+    if (nxyz !== null) {
+        params["nxyz"] = nxyz;
+    }
+    if (dxyz !== null) {
+        params["dxyz"] = dxyz;
+    }
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (inset !== null) {
+        params["inset"] = inset;
+    }
+    if (fwhm !== null) {
+        params["fwhm"] = fwhm;
+    }
+    if (acf !== null) {
+        params["acf"] = acf;
+    }
+    if (pthr !== null) {
+        params["pthr"] = pthr;
+    }
+    if (athr !== null) {
+        params["athr"] = athr;
+    }
+    if (iter !== null) {
+        params["iter"] = iter;
+    }
+    if (seed !== null) {
+        params["seed"] = seed;
+    }
+    if (prefix !== null) {
+        params["prefix"] = prefix;
+    }
+    if (cmd !== null) {
+        params["cmd"] = cmd;
+    }
+    if (ssave !== null) {
+        params["ssave"] = ssave;
+    }
     return params;
 }
 
@@ -131,7 +246,111 @@ function v_3d_clust_sim_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dClustSim");
-    cargs.push("[OPTIONS]");
+    if ((params["nxyz"] ?? null) !== null) {
+        cargs.push(
+            "-nxyz",
+            (params["nxyz"] ?? null)
+        );
+    }
+    if ((params["dxyz"] ?? null) !== null) {
+        cargs.push(
+            "-dxyz",
+            (params["dxyz"] ?? null)
+        );
+    }
+    if ((params["ball"] ?? null)) {
+        cargs.push("-BALL");
+    }
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["oksmallmask"] ?? null)) {
+        cargs.push("-OKsmallmask");
+    }
+    if ((params["inset"] ?? null) !== null) {
+        cargs.push(
+            "-inset",
+            ...(params["inset"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["fwhm"] ?? null) !== null) {
+        cargs.push(
+            "-fwhm",
+            String((params["fwhm"] ?? null))
+        );
+    }
+    if ((params["acf"] ?? null) !== null) {
+        cargs.push(
+            "-acf",
+            (params["acf"] ?? null)
+        );
+    }
+    if ((params["nopad"] ?? null)) {
+        cargs.push("-nopad");
+    }
+    if ((params["pthr"] ?? null) !== null) {
+        cargs.push(
+            "-pthr",
+            (params["pthr"] ?? null)
+        );
+    }
+    if ((params["athr"] ?? null) !== null) {
+        cargs.push(
+            "-athr",
+            (params["athr"] ?? null)
+        );
+    }
+    if ((params["lots"] ?? null)) {
+        cargs.push("-LOTS");
+    }
+    if ((params["mega"] ?? null)) {
+        cargs.push("-MEGA");
+    }
+    if ((params["iter"] ?? null) !== null) {
+        cargs.push(
+            "-iter",
+            String((params["iter"] ?? null))
+        );
+    }
+    if ((params["nodec"] ?? null)) {
+        cargs.push("-nodec");
+    }
+    if ((params["seed"] ?? null) !== null) {
+        cargs.push(
+            "-seed",
+            String((params["seed"] ?? null))
+        );
+    }
+    if ((params["niml"] ?? null)) {
+        cargs.push("-niml");
+    }
+    if ((params["both"] ?? null)) {
+        cargs.push("-both");
+    }
+    if ((params["prefix"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["prefix"] ?? null)
+        );
+    }
+    if ((params["cmd"] ?? null) !== null) {
+        cargs.push(
+            "-cmd",
+            (params["cmd"] ?? null)
+        );
+    }
+    if ((params["quiet"] ?? null)) {
+        cargs.push("-quiet");
+    }
+    if ((params["ssave"] ?? null) !== null) {
+        cargs.push(
+            "-ssave",
+            (params["ssave"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -150,16 +369,16 @@ function v_3d_clust_sim_outputs(
      */
     const ret: V3dClustSimOutputs = {
         root: execution.outputFile("."),
-        output_nn1_1sided: execution.outputFile(["[PREFIX].NN1_1sided.1D"].join('')),
-        output_nn1_2sided: execution.outputFile(["[PREFIX].NN1_2sided.1D"].join('')),
-        output_nn1_bisided: execution.outputFile(["[PREFIX].NN1_bisided.1D"].join('')),
-        output_nn2_1sided: execution.outputFile(["[PREFIX].NN2_1sided.1D"].join('')),
-        output_nn2_2sided: execution.outputFile(["[PREFIX].NN2_2sided.1D"].join('')),
-        output_nn2_bisided: execution.outputFile(["[PREFIX].NN2_bisided.1D"].join('')),
-        output_nn3_1sided: execution.outputFile(["[PREFIX].NN3_1sided.1D"].join('')),
-        output_nn3_2sided: execution.outputFile(["[PREFIX].NN3_2sided.1D"].join('')),
-        output_nn3_bisided: execution.outputFile(["[PREFIX].NN3_bisided.1D"].join('')),
-        mask_compressed: execution.outputFile(["[PREFIX].mask"].join('')),
+        output_nn1_1sided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN1_1sided.1D"].join('')) : null,
+        output_nn1_2sided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN1_2sided.1D"].join('')) : null,
+        output_nn1_bisided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN1_bisided.1D"].join('')) : null,
+        output_nn2_1sided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN2_1sided.1D"].join('')) : null,
+        output_nn2_2sided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN2_2sided.1D"].join('')) : null,
+        output_nn2_bisided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN2_bisided.1D"].join('')) : null,
+        output_nn3_1sided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN3_1sided.1D"].join('')) : null,
+        output_nn3_2sided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN3_2sided.1D"].join('')) : null,
+        output_nn3_bisided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN3_bisided.1D"].join('')) : null,
+        mask_compressed: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".mask"].join('')) : null,
     };
     return ret;
 }
@@ -190,6 +409,28 @@ function v_3d_clust_sim_execute(
 
 
 function v_3d_clust_sim(
+    nxyz: string | null = null,
+    dxyz: string | null = null,
+    ball: boolean = false,
+    mask: InputPathType | null = null,
+    oksmallmask: boolean = false,
+    inset: Array<InputPathType> | null = null,
+    fwhm: number | null = null,
+    acf: string | null = null,
+    nopad: boolean = false,
+    pthr: string | null = null,
+    athr: string | null = null,
+    lots: boolean = false,
+    mega: boolean = false,
+    iter: number | null = null,
+    nodec: boolean = false,
+    seed: number | null = null,
+    niml: boolean = false,
+    both: boolean = false,
+    prefix: string | null = null,
+    cmd: string | null = null,
+    quiet: boolean = false,
+    ssave: string | null = null,
     runner: Runner | null = null,
 ): V3dClustSimOutputs {
     /**
@@ -199,13 +440,35 @@ function v_3d_clust_sim(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param nxyz Size of 3D grid to use for simulation
+     * @param dxyz Voxel sizes along each dimension
+     * @param ball Mask off points outside a ball at the center of the grid
+     * @param mask Use the 0 sub-brick of this dataset as a mask
+     * @param oksmallmask Allow small masks with less than 128 nonzero voxels
+     * @param inset Use these dataset(s) as the simulations to threshold and clusterize
+     * @param fwhm Gaussian filter width in mm (use -fwhmxyz for different values per axis)
+     * @param acf Parameters a, b, c for the autocorrelation function
+     * @param nopad Turn off padding slices added for edge effects
+     * @param pthr List of uncorrected per voxel p-values
+     * @param athr List of corrected whole volume alpha-values
+     * @param lots Use a longer list of values for pthr and athr
+     * @param mega Add even more values to the pthr and athr grids
+     * @param iter Number of Monte Carlo simulations
+     * @param nodec Print the cluster size threshold as an integer
+     * @param seed Random number seed
+     * @param niml Output the table in XML/NIML format
+     * @param both Output the table in both XML/NIML format and in .1D format
+     * @param prefix Specify prefix for the output files
+     * @param cmd Write command for putting results into a file's header
+     * @param quiet Don't print out progress reports
+     * @param ssave Save un-thresholded generated random volumes
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dClustSimOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CLUST_SIM_METADATA);
-    const params = v_3d_clust_sim_params()
+    const params = v_3d_clust_sim_params(nxyz, dxyz, ball, mask, oksmallmask, inset, fwhm, acf, nopad, pthr, athr, lots, mega, iter, nodec, seed, niml, both, prefix, cmd, quiet, ssave)
     return v_3d_clust_sim_execute(params, execution);
 }
 

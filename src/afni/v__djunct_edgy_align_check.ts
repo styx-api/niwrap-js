@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__DJUNCT_EDGY_ALIGN_CHECK_METADATA: Metadata = {
-    id: "b256b5bb4b47e9c6b85c30cb947f43710826ac49.boutiques",
+    id: "8e479ed45f214bcb93f3842c5934b8e03c6fc47c.boutiques",
     name: "@djunct_edgy_align_check",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -27,6 +27,15 @@ interface VDjunctEdgyAlignCheckParameters {
     "monty"?: number | null | undefined;
     "use_olay_grid"?: string | null | undefined;
     "label_mode"?: string | null | undefined;
+    "help_flag": boolean;
+    "ver_flag": boolean;
+    "echo_flag": boolean;
+    "sharpen_ulay_off_flag": boolean;
+    "mask_olay_edges_flag": boolean;
+    "no_cor_flag": boolean;
+    "no_sag_flag": boolean;
+    "no_axi_flag": boolean;
+    "no_clean_flag": boolean;
     "ulay_range"?: Array<number> | null | undefined;
     "ulay_range_nz"?: Array<number> | null | undefined;
     "ulay_range_am"?: Array<number> | null | undefined;
@@ -94,6 +103,15 @@ function v__djunct_edgy_align_check_params(
     monty: number | null = null,
     use_olay_grid: string | null = null,
     label_mode: string | null = null,
+    help_flag: boolean = false,
+    ver_flag: boolean = false,
+    echo_flag: boolean = false,
+    sharpen_ulay_off_flag: boolean = false,
+    mask_olay_edges_flag: boolean = false,
+    no_cor_flag: boolean = false,
+    no_sag_flag: boolean = false,
+    no_axi_flag: boolean = false,
+    no_clean_flag: boolean = false,
     ulay_range: Array<number> | null = null,
     ulay_range_nz: Array<number> | null = null,
     ulay_range_am: Array<number> | null = null,
@@ -115,6 +133,15 @@ function v__djunct_edgy_align_check_params(
      * @param monty Number of slices in Y-direction for montage
      * @param use_olay_grid Grid interpolation method for overlay
      * @param label_mode Mode for labeling
+     * @param help_flag Display help message
+     * @param ver_flag Show version
+     * @param echo_flag Echo commands
+     * @param sharpen_ulay_off_flag Disable underlay sharpening
+     * @param mask_olay_edges_flag Mask overlay edges
+     * @param no_cor_flag Exclude coronal plane
+     * @param no_sag_flag Exclude sagittal plane
+     * @param no_axi_flag Exclude axial plane
+     * @param no_clean_flag Disable cleaning temporary files
      * @param ulay_range Range for underlay {umin umax}
      * @param ulay_range_nz Range for non-zero underlay {umin umax}
      * @param ulay_range_am Range for auto-mask underlay {umin umax}
@@ -126,6 +153,15 @@ function v__djunct_edgy_align_check_params(
         "ULAY": ulay,
         "OLAY": olay,
         "PREFIX": prefix,
+        "help_flag": help_flag,
+        "ver_flag": ver_flag,
+        "echo_flag": echo_flag,
+        "sharpen_ulay_off_flag": sharpen_ulay_off_flag,
+        "mask_olay_edges_flag": mask_olay_edges_flag,
+        "no_cor_flag": no_cor_flag,
+        "no_sag_flag": no_sag_flag,
+        "no_axi_flag": no_axi_flag,
+        "no_clean_flag": no_clean_flag,
     };
     if (set_dicom_xyz !== null) {
         params["set_dicom_xyz"] = set_dicom_xyz;
@@ -223,15 +259,33 @@ function v__djunct_edgy_align_check_cargs(
     if ((params["label_mode"] ?? null) !== null) {
         cargs.push((params["label_mode"] ?? null));
     }
-    cargs.push("[help_flag]");
-    cargs.push("[ver_flag]");
-    cargs.push("[echo_flag]");
-    cargs.push("[sharpen_ulay_off_flag]");
-    cargs.push("[mask_olay_edges_flag]");
-    cargs.push("[no_cor_flag]");
-    cargs.push("[no_sag_flag]");
-    cargs.push("[no_axi_flag]");
-    cargs.push("[no_clean_flag]");
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-help");
+    }
+    if ((params["ver_flag"] ?? null)) {
+        cargs.push("-ver");
+    }
+    if ((params["echo_flag"] ?? null)) {
+        cargs.push("-echo");
+    }
+    if ((params["sharpen_ulay_off_flag"] ?? null)) {
+        cargs.push("-sharpen_ulay_off");
+    }
+    if ((params["mask_olay_edges_flag"] ?? null)) {
+        cargs.push("-mask_olay_edges");
+    }
+    if ((params["no_cor_flag"] ?? null)) {
+        cargs.push("-no_cor");
+    }
+    if ((params["no_sag_flag"] ?? null)) {
+        cargs.push("-no_sag");
+    }
+    if ((params["no_axi_flag"] ?? null)) {
+        cargs.push("-no_axi");
+    }
+    if ((params["no_clean_flag"] ?? null)) {
+        cargs.push("-no_clean");
+    }
     if ((params["ulay_range"] ?? null) !== null) {
         cargs.push(...(params["ulay_range"] ?? null).map(String));
     }
@@ -303,6 +357,15 @@ function v__djunct_edgy_align_check(
     monty: number | null = null,
     use_olay_grid: string | null = null,
     label_mode: string | null = null,
+    help_flag: boolean = false,
+    ver_flag: boolean = false,
+    echo_flag: boolean = false,
+    sharpen_ulay_off_flag: boolean = false,
+    mask_olay_edges_flag: boolean = false,
+    no_cor_flag: boolean = false,
+    no_sag_flag: boolean = false,
+    no_axi_flag: boolean = false,
+    no_clean_flag: boolean = false,
     ulay_range: Array<number> | null = null,
     ulay_range_nz: Array<number> | null = null,
     ulay_range_am: Array<number> | null = null,
@@ -329,6 +392,15 @@ function v__djunct_edgy_align_check(
      * @param monty Number of slices in Y-direction for montage
      * @param use_olay_grid Grid interpolation method for overlay
      * @param label_mode Mode for labeling
+     * @param help_flag Display help message
+     * @param ver_flag Show version
+     * @param echo_flag Echo commands
+     * @param sharpen_ulay_off_flag Disable underlay sharpening
+     * @param mask_olay_edges_flag Mask overlay edges
+     * @param no_cor_flag Exclude coronal plane
+     * @param no_sag_flag Exclude sagittal plane
+     * @param no_axi_flag Exclude axial plane
+     * @param no_clean_flag Disable cleaning temporary files
      * @param ulay_range Range for underlay {umin umax}
      * @param ulay_range_nz Range for non-zero underlay {umin umax}
      * @param ulay_range_am Range for auto-mask underlay {umin umax}
@@ -338,7 +410,7 @@ function v__djunct_edgy_align_check(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_EDGY_ALIGN_CHECK_METADATA);
-    const params = v__djunct_edgy_align_check_params(ulay, olay, prefix, set_dicom_xyz, box_focus_slices, montgap, montcolor, cbar, save_ftype, umin_fac, montx, monty, use_olay_grid, label_mode, ulay_range, ulay_range_nz, ulay_range_am)
+    const params = v__djunct_edgy_align_check_params(ulay, olay, prefix, set_dicom_xyz, box_focus_slices, montgap, montcolor, cbar, save_ftype, umin_fac, montx, monty, use_olay_grid, label_mode, help_flag, ver_flag, echo_flag, sharpen_ulay_off_flag, mask_olay_edges_flag, no_cor_flag, no_sag_flag, no_axi_flag, no_clean_flag, ulay_range, ulay_range_nz, ulay_range_am)
     return v__djunct_edgy_align_check_execute(params, execution);
 }
 

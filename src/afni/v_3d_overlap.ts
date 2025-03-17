@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_OVERLAP_METADATA: Metadata = {
-    id: "a1bc040d8dc7e5b89536a75a10ba6ad55a1ecc95.boutiques",
+    id: "55cf3c3d26402707160ae90ffa63fe67eaa8da85.boutiques",
     name: "3dOverlap",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,7 @@ interface V3dOverlapParameters {
     "__STYXTYPE__": "3dOverlap";
     "dataset1": InputPathType;
     "dataset2": Array<InputPathType>;
+    "save_prefix"?: string | null | undefined;
 }
 
 
@@ -65,23 +66,25 @@ interface V3dOverlapOutputs {
     /**
      * BRIK file with count of overlaps at each voxel (if -save is used)
      */
-    output_brik: OutputPathType;
+    output_brik: OutputPathType | null;
     /**
      * HEAD file with count of overlaps at each voxel (if -save is used)
      */
-    output_head: OutputPathType;
+    output_head: OutputPathType | null;
 }
 
 
 function v_3d_overlap_params(
     dataset1: InputPathType,
     dataset2: Array<InputPathType>,
+    save_prefix: string | null = null,
 ): V3dOverlapParameters {
     /**
      * Build parameters.
     
      * @param dataset1 First input dataset (e.g. dset1+orig)
      * @param dataset2 Second input dataset (e.g. dset2+orig)
+     * @param save_prefix Save the count of overlaps at each voxel into a dataset with the given prefix
     
      * @returns Parameter dictionary
      */
@@ -90,6 +93,9 @@ function v_3d_overlap_params(
         "dataset1": dataset1,
         "dataset2": dataset2,
     };
+    if (save_prefix !== null) {
+        params["save_prefix"] = save_prefix;
+    }
     return params;
 }
 
@@ -108,9 +114,14 @@ function v_3d_overlap_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dOverlap");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["dataset1"] ?? null)));
     cargs.push(...(params["dataset2"] ?? null).map(f => execution.inputFile(f)));
+    if ((params["save_prefix"] ?? null) !== null) {
+        cargs.push(
+            "-save",
+            (params["save_prefix"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -129,8 +140,8 @@ function v_3d_overlap_outputs(
      */
     const ret: V3dOverlapOutputs = {
         root: execution.outputFile("."),
-        output_brik: execution.outputFile(["[SAVE_PREFIX]+orig.BRIK"].join('')),
-        output_head: execution.outputFile(["[SAVE_PREFIX]+orig.HEAD"].join('')),
+        output_brik: ((params["save_prefix"] ?? null) !== null) ? execution.outputFile([(params["save_prefix"] ?? null), "+orig.BRIK"].join('')) : null,
+        output_head: ((params["save_prefix"] ?? null) !== null) ? execution.outputFile([(params["save_prefix"] ?? null), "+orig.HEAD"].join('')) : null,
     };
     return ret;
 }
@@ -163,6 +174,7 @@ function v_3d_overlap_execute(
 function v_3d_overlap(
     dataset1: InputPathType,
     dataset2: Array<InputPathType>,
+    save_prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dOverlapOutputs {
     /**
@@ -174,13 +186,14 @@ function v_3d_overlap(
     
      * @param dataset1 First input dataset (e.g. dset1+orig)
      * @param dataset2 Second input dataset (e.g. dset2+orig)
+     * @param save_prefix Save the count of overlaps at each voxel into a dataset with the given prefix
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dOverlapOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_OVERLAP_METADATA);
-    const params = v_3d_overlap_params(dataset1, dataset2)
+    const params = v_3d_overlap_params(dataset1, dataset2, save_prefix)
     return v_3d_overlap_execute(params, execution);
 }
 

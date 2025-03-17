@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF_FWHM_METADATA: Metadata = {
-    id: "e55aebb6889c141305f83d758c57177bec4ec628.boutiques",
+    id: "c0c295cfa2772a4d6c7970693902b2233ab45c11.boutiques",
     name: "SurfFWHM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -249,10 +249,6 @@ function surf_fwhm_cargs(
     if ((params["slice"] ?? null)) {
         cargs.push("-slice");
     }
-    cargs.push("[TALK_SUMA_OPTIONS]");
-    cargs.push("[NIML_OPTIONS]");
-    cargs.push("[DEBUG_OPTIONS]");
-    cargs.push("[HELP_OPTIONS]");
     return cargs;
 }
 

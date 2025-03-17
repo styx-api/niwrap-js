@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SUMA_MAKE_SPEC_CARET_METADATA: Metadata = {
-    id: "950a20d0f240b4840873e5b78497c9b7e5e19277.boutiques",
+    id: "ef058c5698e2c248a0e9c472b24e31f1b02dc1ae.boutiques",
     name: "@SUMA_Make_Spec_Caret",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,11 @@ const V__SUMA_MAKE_SPEC_CARET_METADATA: Metadata = {
 interface VSumaMakeSpecCaretParameters {
     "__STYXTYPE__": "@SUMA_Make_Spec_Caret";
     "subject_id": string;
+    "help": boolean;
+    "debug"?: number | null | undefined;
+    "echo": boolean;
+    "surface_path"?: string | null | undefined;
+    "side_labels_style"?: number | null | undefined;
 }
 
 
@@ -74,18 +79,39 @@ interface VSumaMakeSpecCaretOutputs {
 
 function v__suma_make_spec_caret_params(
     subject_id: string,
+    help: boolean = false,
+    debug: number | null = null,
+    echo: boolean = false,
+    surface_path: string | null = null,
+    side_labels_style: number | null = null,
 ): VSumaMakeSpecCaretParameters {
     /**
      * Build parameters.
     
      * @param subject_id Subject ID for file naming
+     * @param help Show help information
+     * @param debug Print debug information along the way
+     * @param echo Turn shell echo on
+     * @param surface_path Path to directory containing 'SURFACES' and AFNI volume used in creating the surfaces
+     * @param side_labels_style Naming style for Left, Right sides. Allowed values: 1 for L R LR style (default), 2 for LEFT RIGHT LR style, 3 for A B AB
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "@SUMA_Make_Spec_Caret" as const,
         "subject_id": subject_id,
+        "help": help,
+        "echo": echo,
     };
+    if (debug !== null) {
+        params["debug"] = debug;
+    }
+    if (surface_path !== null) {
+        params["surface_path"] = surface_path;
+    }
+    if (side_labels_style !== null) {
+        params["side_labels_style"] = side_labels_style;
+    }
     return params;
 }
 
@@ -104,11 +130,34 @@ function v__suma_make_spec_caret_cargs(
      */
     const cargs: string[] = [];
     cargs.push("@SUMA_Make_Spec_Caret");
-    cargs.push("[OPTIONS]");
     cargs.push(
         "-sid",
         (params["subject_id"] ?? null)
     );
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
+    }
+    if ((params["debug"] ?? null) !== null) {
+        cargs.push(
+            "-debug",
+            String((params["debug"] ?? null))
+        );
+    }
+    if ((params["echo"] ?? null)) {
+        cargs.push("-echo");
+    }
+    if ((params["surface_path"] ?? null) !== null) {
+        cargs.push(
+            "-sfpath",
+            (params["surface_path"] ?? null)
+        );
+    }
+    if ((params["side_labels_style"] ?? null) !== null) {
+        cargs.push(
+            "-side_labels_style",
+            String((params["side_labels_style"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -160,6 +209,11 @@ function v__suma_make_spec_caret_execute(
 
 function v__suma_make_spec_caret(
     subject_id: string,
+    help: boolean = false,
+    debug: number | null = null,
+    echo: boolean = false,
+    surface_path: string | null = null,
+    side_labels_style: number | null = null,
     runner: Runner | null = null,
 ): VSumaMakeSpecCaretOutputs {
     /**
@@ -170,13 +224,18 @@ function v__suma_make_spec_caret(
      * URL: https://afni.nimh.nih.gov/
     
      * @param subject_id Subject ID for file naming
+     * @param help Show help information
+     * @param debug Print debug information along the way
+     * @param echo Turn shell echo on
+     * @param surface_path Path to directory containing 'SURFACES' and AFNI volume used in creating the surfaces
+     * @param side_labels_style Naming style for Left, Right sides. Allowed values: 1 for L R LR style (default), 2 for LEFT RIGHT LR style, 3 for A B AB
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `VSumaMakeSpecCaretOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SUMA_MAKE_SPEC_CARET_METADATA);
-    const params = v__suma_make_spec_caret_params(subject_id)
+    const params = v__suma_make_spec_caret_params(subject_id, help, debug, echo, surface_path, side_labels_style)
     return v__suma_make_spec_caret_execute(params, execution);
 }
 

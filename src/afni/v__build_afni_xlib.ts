@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__BUILD_AFNI_XLIB_METADATA: Metadata = {
-    id: "335ac2386eff0dba38cfaae81dacca730457f4a7.boutiques",
+    id: "faed60f92b6fc1a9727b896ad7c88e62cd56fef2.boutiques",
     name: "@build_afni_Xlib",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,8 +13,10 @@ const V__BUILD_AFNI_XLIB_METADATA: Metadata = {
 
 interface VBuildAfniXlibParameters {
     "__STYXTYPE__": "@build_afni_Xlib";
+    "afniX": boolean;
     "localinstall": boolean;
     "debug_symbols": boolean;
+    "lib32": boolean;
     "lib64": boolean;
     "packages": Array<string>;
 }
@@ -68,24 +70,30 @@ interface VBuildAfniXlibOutputs {
 
 function v__build_afni_xlib_params(
     packages: Array<string>,
+    afni_x: boolean = false,
     localinstall: boolean = false,
     debug_symbols: boolean = false,
+    lib32: boolean = false,
     lib64: boolean = false,
 ): VBuildAfniXlibParameters {
     /**
      * Build parameters.
     
      * @param packages Packages to compile and install (e.g., lesstif, openmotif, libXt)
+     * @param afni_x Install under /usr/local/afniX
      * @param localinstall Install under each package directory
      * @param debug_symbols Compile with -g to add symbols
+     * @param lib32 Install libs under lib, and force 32-bit compile (on Linux: add --target=i386)
      * @param lib64 Install libs under lib64 (default is lib)
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "@build_afni_Xlib" as const,
+        "afniX": afni_x,
         "localinstall": localinstall,
         "debug_symbols": debug_symbols,
+        "lib32": lib32,
         "lib64": lib64,
         "packages": packages,
     };
@@ -107,11 +115,17 @@ function v__build_afni_xlib_cargs(
      */
     const cargs: string[] = [];
     cargs.push("@build_afni_Xlib");
+    if ((params["afniX"] ?? null)) {
+        cargs.push("-afniX");
+    }
     if ((params["localinstall"] ?? null)) {
         cargs.push("-localinstall");
     }
     if ((params["debug_symbols"] ?? null)) {
         cargs.push("-g");
+    }
+    if ((params["lib32"] ?? null)) {
+        cargs.push("-lib32");
     }
     if ((params["lib64"] ?? null)) {
         cargs.push("-lib64");
@@ -166,8 +180,10 @@ function v__build_afni_xlib_execute(
 
 function v__build_afni_xlib(
     packages: Array<string>,
+    afni_x: boolean = false,
     localinstall: boolean = false,
     debug_symbols: boolean = false,
+    lib32: boolean = false,
     lib64: boolean = false,
     runner: Runner | null = null,
 ): VBuildAfniXlibOutputs {
@@ -179,8 +195,10 @@ function v__build_afni_xlib(
      * URL: https://afni.nimh.nih.gov/
     
      * @param packages Packages to compile and install (e.g., lesstif, openmotif, libXt)
+     * @param afni_x Install under /usr/local/afniX
      * @param localinstall Install under each package directory
      * @param debug_symbols Compile with -g to add symbols
+     * @param lib32 Install libs under lib, and force 32-bit compile (on Linux: add --target=i386)
      * @param lib64 Install libs under lib64 (default is lib)
      * @param runner Command runner
     
@@ -188,7 +206,7 @@ function v__build_afni_xlib(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__BUILD_AFNI_XLIB_METADATA);
-    const params = v__build_afni_xlib_params(packages, localinstall, debug_symbols, lib64)
+    const params = v__build_afni_xlib_params(packages, afni_x, localinstall, debug_symbols, lib32, lib64)
     return v__build_afni_xlib_execute(params, execution);
 }
 

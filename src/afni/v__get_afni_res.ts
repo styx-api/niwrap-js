@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__GET_AFNI_RES_METADATA: Metadata = {
-    id: "8e9d3bd1817738927cfd2699a3bf4ffe4e305e07.boutiques",
+    id: "e4786e6ad961f0208b6a0d65d657fb95dbacabc8.boutiques",
     name: "@GetAfniRes",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -100,8 +100,9 @@ function v__get_afni_res_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("@GetAfniRes");
     if ((params["output_type"] ?? null) !== null) {
-        cargs.push(["@GetAfniRes", (params["output_type"] ?? null)].join(''));
+        cargs.push((params["output_type"] ?? null));
     }
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
     return cargs;

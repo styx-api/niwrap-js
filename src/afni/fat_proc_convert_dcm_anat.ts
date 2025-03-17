@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_PROC_CONVERT_DCM_ANAT_METADATA: Metadata = {
-    id: "b710eae3e3dfce23951c6f5d44bae1dc65d2b536.boutiques",
+    id: "9a696ac4933b9ed6358cfaf7a01ab13f371ba70a.boutiques",
     name: "fat_proc_convert_dcm_anat",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,6 +13,7 @@ const FAT_PROC_CONVERT_DCM_ANAT_METADATA: Metadata = {
 
 interface FatProcConvertDcmAnatParameters {
     "__STYXTYPE__": "fat_proc_convert_dcm_anat";
+    "dicom_directory"?: string | null | undefined;
     "nifti_input"?: InputPathType | null | undefined;
     "prefix": string;
     "workdir"?: string | null | undefined;
@@ -78,6 +79,7 @@ interface FatProcConvertDcmAnatOutputs {
 
 function fat_proc_convert_dcm_anat_params(
     prefix: string,
+    dicom_directory: string | null = null,
     nifti_input: InputPathType | null = null,
     workdir: string | null = null,
     orient: string | null = null,
@@ -91,6 +93,7 @@ function fat_proc_convert_dcm_anat_params(
      * Build parameters.
     
      * @param prefix Set prefix (and path) for output data.
+     * @param dicom_directory Input as DICOM directory; DIR_IN should contain only DICOM files; all will be selected.
      * @param nifti_input Input as NIFTI file (zipped or unzipped fine). Alternative to '-indir ..'.
      * @param workdir Specify a working directory, which can be removed (default name = '__WORKING_convert_dcm_anat').
      * @param orient Optional chance to reset orientation of the volume files (default is currently 'RAI').
@@ -110,6 +113,9 @@ function fat_proc_convert_dcm_anat_params(
         "no_cmd_out": no_cmd_out,
         "no_qc_view": no_qc_view,
     };
+    if (dicom_directory !== null) {
+        params["dicom_directory"] = dicom_directory;
+    }
     if (nifti_input !== null) {
         params["nifti_input"] = nifti_input;
     }
@@ -140,6 +146,12 @@ function fat_proc_convert_dcm_anat_cargs(
      */
     const cargs: string[] = [];
     cargs.push("fat_proc_convert_dcm_anat");
+    if ((params["dicom_directory"] ?? null) !== null) {
+        cargs.push(
+            "-indir",
+            (params["dicom_directory"] ?? null)
+        );
+    }
     if ((params["nifti_input"] ?? null) !== null) {
         cargs.push(
             "-innii",
@@ -230,6 +242,7 @@ function fat_proc_convert_dcm_anat_execute(
 
 function fat_proc_convert_dcm_anat(
     prefix: string,
+    dicom_directory: string | null = null,
     nifti_input: InputPathType | null = null,
     workdir: string | null = null,
     orient: string | null = null,
@@ -248,6 +261,7 @@ function fat_proc_convert_dcm_anat(
      * URL: https://afni.nimh.nih.gov/
     
      * @param prefix Set prefix (and path) for output data.
+     * @param dicom_directory Input as DICOM directory; DIR_IN should contain only DICOM files; all will be selected.
      * @param nifti_input Input as NIFTI file (zipped or unzipped fine). Alternative to '-indir ..'.
      * @param workdir Specify a working directory, which can be removed (default name = '__WORKING_convert_dcm_anat').
      * @param orient Optional chance to reset orientation of the volume files (default is currently 'RAI').
@@ -262,7 +276,7 @@ function fat_proc_convert_dcm_anat(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_CONVERT_DCM_ANAT_METADATA);
-    const params = fat_proc_convert_dcm_anat_params(prefix, nifti_input, workdir, orient, no_clean, reorig_reorient_off, qc_prefix, no_cmd_out, no_qc_view)
+    const params = fat_proc_convert_dcm_anat_params(prefix, dicom_directory, nifti_input, workdir, orient, no_clean, reorig_reorient_off, qc_prefix, no_cmd_out, no_qc_view)
     return fat_proc_convert_dcm_anat_execute(params, execution);
 }
 

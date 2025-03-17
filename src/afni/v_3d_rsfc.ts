@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_RSFC_METADATA: Metadata = {
-    id: "b5c2a121f1ca24f0166e661caec651b36aec44bd.boutiques",
+    id: "143254090adf81d94650422d3da0d7fcae499cc5.boutiques",
     name: "3dRSFC",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,6 +16,27 @@ interface V3dRsfcParameters {
     "fbot": number;
     "ftop": number;
     "input_dataset": InputPathType;
+    "despike": boolean;
+    "ort_file"?: InputPathType | null | undefined;
+    "dsort_file"?: InputPathType | null | undefined;
+    "nodetrend": boolean;
+    "time_step"?: number | null | undefined;
+    "nfft"?: number | null | undefined;
+    "norm": boolean;
+    "mask"?: InputPathType | null | undefined;
+    "automask": boolean;
+    "blur"?: number | null | undefined;
+    "localpv"?: number | null | undefined;
+    "input_alt"?: InputPathType | null | undefined;
+    "band"?: Array<number> | null | undefined;
+    "prefix"?: string | null | undefined;
+    "quiet": boolean;
+    "no_rs_out": boolean;
+    "un_bandpass_out": boolean;
+    "no_rsfa": boolean;
+    "bp_at_end": boolean;
+    "notrans": boolean;
+    "nosat": boolean;
 }
 
 
@@ -66,11 +87,11 @@ interface V3dRsfcOutputs {
     /**
      * Filtered time series output
      */
-    filtered_time_series: OutputPathType;
+    filtered_time_series: OutputPathType | null;
     /**
      * Un-bandpassed series output
      */
-    un_bandpassed_series: OutputPathType;
+    un_bandpassed_series: OutputPathType | null;
 }
 
 
@@ -78,6 +99,27 @@ function v_3d_rsfc_params(
     fbot: number,
     ftop: number,
     input_dataset: InputPathType,
+    despike: boolean = false,
+    ort_file: InputPathType | null = null,
+    dsort_file: InputPathType | null = null,
+    nodetrend: boolean = false,
+    time_step: number | null = null,
+    nfft: number | null = null,
+    norm: boolean = false,
+    mask: InputPathType | null = null,
+    automask: boolean = false,
+    blur: number | null = null,
+    localpv: number | null = null,
+    input_alt: InputPathType | null = null,
+    band: Array<number> | null = null,
+    prefix: string | null = null,
+    quiet: boolean = false,
+    no_rs_out: boolean = false,
+    un_bandpass_out: boolean = false,
+    no_rsfa: boolean = false,
+    bp_at_end: boolean = false,
+    notrans: boolean = false,
+    nosat: boolean = false,
 ): V3dRsfcParameters {
     /**
      * Build parameters.
@@ -85,6 +127,27 @@ function v_3d_rsfc_params(
      * @param fbot Lowest frequency in the passband, in Hz
      * @param ftop Highest frequency in the passband (must be > fbot)
      * @param input_dataset Input dataset (3D+time sequence of volumes)
+     * @param despike Despike each time series before other processing.
+     * @param ort_file Also orthogonalize input to columns in specified file.
+     * @param dsort_file Orthogonalize each voxel to the corresponding voxel time series in specified dataset.
+     * @param nodetrend Skip the quadratic detrending of input before FFT-based bandpassing.
+     * @param time_step Set time step to specified value in seconds.
+     * @param nfft Set the FFT length to specified value.
+     * @param norm Make all output time series have L2 norm = 1.
+     * @param mask Specify mask dataset.
+     * @param automask Create a mask from the input dataset.
+     * @param blur Blur inside the mask only with specified FWHM in mm.
+     * @param localpv Replace each vector by the local Principal Vector from a neighborhood radius.
+     * @param input_alt Alternative way to specify input dataset.
+     * @param band Alternative way to specify passband frequencies.
+     * @param prefix Set prefix name of the output dataset.
+     * @param quiet Turn off the fun and informative messages.
+     * @param no_rs_out Don't output processed time series, just output parameters.
+     * @param un_bandpass_out Output the un-bandpassed series as well.
+     * @param no_rsfa Exclude RSFA output (default is to include).
+     * @param bp_at_end Bandpassing as the last step in the processing sequence.
+     * @param notrans Don't check for initial positive transients in the data.
+     * @param nosat Equivalent to -notrans, skips checking for initial transients.
     
      * @returns Parameter dictionary
      */
@@ -93,7 +156,48 @@ function v_3d_rsfc_params(
         "fbot": fbot,
         "ftop": ftop,
         "input_dataset": input_dataset,
+        "despike": despike,
+        "nodetrend": nodetrend,
+        "norm": norm,
+        "automask": automask,
+        "quiet": quiet,
+        "no_rs_out": no_rs_out,
+        "un_bandpass_out": un_bandpass_out,
+        "no_rsfa": no_rsfa,
+        "bp_at_end": bp_at_end,
+        "notrans": notrans,
+        "nosat": nosat,
     };
+    if (ort_file !== null) {
+        params["ort_file"] = ort_file;
+    }
+    if (dsort_file !== null) {
+        params["dsort_file"] = dsort_file;
+    }
+    if (time_step !== null) {
+        params["time_step"] = time_step;
+    }
+    if (nfft !== null) {
+        params["nfft"] = nfft;
+    }
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (blur !== null) {
+        params["blur"] = blur;
+    }
+    if (localpv !== null) {
+        params["localpv"] = localpv;
+    }
+    if (input_alt !== null) {
+        params["input_alt"] = input_alt;
+    }
+    if (band !== null) {
+        params["band"] = band;
+    }
+    if (prefix !== null) {
+        params["prefix"] = prefix;
+    }
     return params;
 }
 
@@ -112,10 +216,102 @@ function v_3d_rsfc_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dRSFC");
-    cargs.push("[OPTIONS]");
     cargs.push(String((params["fbot"] ?? null)));
     cargs.push(String((params["ftop"] ?? null)));
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
+    if ((params["despike"] ?? null)) {
+        cargs.push("-despike");
+    }
+    if ((params["ort_file"] ?? null) !== null) {
+        cargs.push(
+            "-ort",
+            execution.inputFile((params["ort_file"] ?? null))
+        );
+    }
+    if ((params["dsort_file"] ?? null) !== null) {
+        cargs.push(
+            "-dsort",
+            execution.inputFile((params["dsort_file"] ?? null))
+        );
+    }
+    if ((params["nodetrend"] ?? null)) {
+        cargs.push("-nodetrend");
+    }
+    if ((params["time_step"] ?? null) !== null) {
+        cargs.push(
+            "-dt",
+            String((params["time_step"] ?? null))
+        );
+    }
+    if ((params["nfft"] ?? null) !== null) {
+        cargs.push(
+            "-nfft",
+            String((params["nfft"] ?? null))
+        );
+    }
+    if ((params["norm"] ?? null)) {
+        cargs.push("-norm");
+    }
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "-mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["automask"] ?? null)) {
+        cargs.push("-automask");
+    }
+    if ((params["blur"] ?? null) !== null) {
+        cargs.push(
+            "-blur",
+            String((params["blur"] ?? null))
+        );
+    }
+    if ((params["localpv"] ?? null) !== null) {
+        cargs.push(
+            "-localPV",
+            String((params["localpv"] ?? null))
+        );
+    }
+    if ((params["input_alt"] ?? null) !== null) {
+        cargs.push(
+            "-input",
+            execution.inputFile((params["input_alt"] ?? null))
+        );
+    }
+    if ((params["band"] ?? null) !== null) {
+        cargs.push(
+            "-band",
+            ...(params["band"] ?? null).map(String)
+        );
+    }
+    if ((params["prefix"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["prefix"] ?? null)
+        );
+    }
+    if ((params["quiet"] ?? null)) {
+        cargs.push("-quiet");
+    }
+    if ((params["no_rs_out"] ?? null)) {
+        cargs.push("-no_rs_out");
+    }
+    if ((params["un_bandpass_out"] ?? null)) {
+        cargs.push("-un_bp_out");
+    }
+    if ((params["no_rsfa"] ?? null)) {
+        cargs.push("-no_rsfa");
+    }
+    if ((params["bp_at_end"] ?? null)) {
+        cargs.push("-bp_at_end");
+    }
+    if ((params["notrans"] ?? null)) {
+        cargs.push("-notrans");
+    }
+    if ((params["nosat"] ?? null)) {
+        cargs.push("-nosat");
+    }
     return cargs;
 }
 
@@ -134,8 +330,8 @@ function v_3d_rsfc_outputs(
      */
     const ret: V3dRsfcOutputs = {
         root: execution.outputFile("."),
-        filtered_time_series: execution.outputFile(["[PREFIX]_LFF+orig.*"].join('')),
-        un_bandpassed_series: execution.outputFile(["[PREFIX]_unBP+orig.*"].join('')),
+        filtered_time_series: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_LFF+orig.*"].join('')) : null,
+        un_bandpassed_series: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_unBP+orig.*"].join('')) : null,
     };
     return ret;
 }
@@ -169,6 +365,27 @@ function v_3d_rsfc(
     fbot: number,
     ftop: number,
     input_dataset: InputPathType,
+    despike: boolean = false,
+    ort_file: InputPathType | null = null,
+    dsort_file: InputPathType | null = null,
+    nodetrend: boolean = false,
+    time_step: number | null = null,
+    nfft: number | null = null,
+    norm: boolean = false,
+    mask: InputPathType | null = null,
+    automask: boolean = false,
+    blur: number | null = null,
+    localpv: number | null = null,
+    input_alt: InputPathType | null = null,
+    band: Array<number> | null = null,
+    prefix: string | null = null,
+    quiet: boolean = false,
+    no_rs_out: boolean = false,
+    un_bandpass_out: boolean = false,
+    no_rsfa: boolean = false,
+    bp_at_end: boolean = false,
+    notrans: boolean = false,
+    nosat: boolean = false,
     runner: Runner | null = null,
 ): V3dRsfcOutputs {
     /**
@@ -181,13 +398,34 @@ function v_3d_rsfc(
      * @param fbot Lowest frequency in the passband, in Hz
      * @param ftop Highest frequency in the passband (must be > fbot)
      * @param input_dataset Input dataset (3D+time sequence of volumes)
+     * @param despike Despike each time series before other processing.
+     * @param ort_file Also orthogonalize input to columns in specified file.
+     * @param dsort_file Orthogonalize each voxel to the corresponding voxel time series in specified dataset.
+     * @param nodetrend Skip the quadratic detrending of input before FFT-based bandpassing.
+     * @param time_step Set time step to specified value in seconds.
+     * @param nfft Set the FFT length to specified value.
+     * @param norm Make all output time series have L2 norm = 1.
+     * @param mask Specify mask dataset.
+     * @param automask Create a mask from the input dataset.
+     * @param blur Blur inside the mask only with specified FWHM in mm.
+     * @param localpv Replace each vector by the local Principal Vector from a neighborhood radius.
+     * @param input_alt Alternative way to specify input dataset.
+     * @param band Alternative way to specify passband frequencies.
+     * @param prefix Set prefix name of the output dataset.
+     * @param quiet Turn off the fun and informative messages.
+     * @param no_rs_out Don't output processed time series, just output parameters.
+     * @param un_bandpass_out Output the un-bandpassed series as well.
+     * @param no_rsfa Exclude RSFA output (default is to include).
+     * @param bp_at_end Bandpassing as the last step in the processing sequence.
+     * @param notrans Don't check for initial positive transients in the data.
+     * @param nosat Equivalent to -notrans, skips checking for initial transients.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dRsfcOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_RSFC_METADATA);
-    const params = v_3d_rsfc_params(fbot, ftop, input_dataset)
+    const params = v_3d_rsfc_params(fbot, ftop, input_dataset, despike, ort_file, dsort_file, nodetrend, time_step, nfft, norm, mask, automask, blur, localpv, input_alt, band, prefix, quiet, no_rs_out, un_bandpass_out, no_rsfa, bp_at_end, notrans, nosat)
     return v_3d_rsfc_execute(params, execution);
 }
 

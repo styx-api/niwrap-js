@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DCOPY_METADATA: Metadata = {
-    id: "4b8187d004c6f4ba95518e709ad1f9b3eb4ed322.boutiques",
+    id: "cf613edf42ba1934d2ac712d37faeb09217cdd61.boutiques",
     name: "3dcopy",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -15,6 +15,9 @@ interface V3dcopyParameters {
     "__STYXTYPE__": "3dcopy";
     "verbose": boolean;
     "denote": boolean;
+    "old_prefix": string;
+    "view"?: string | null | undefined;
+    "new_prefix": string;
 }
 
 
@@ -65,14 +68,20 @@ interface V3dcopyOutputs {
 
 
 function v_3dcopy_params(
+    old_prefix: string,
+    new_prefix: string,
     verbose: boolean = false,
     denote: boolean = false,
+    view: string | null = null,
 ): V3dcopyParameters {
     /**
      * Build parameters.
     
+     * @param old_prefix Old dataset prefix (and view if specific dataset view is to be copied).
+     * @param new_prefix New dataset prefix or directory path.
      * @param verbose Print progress reports.
      * @param denote Remove any Notes from the file.
+     * @param view Specified view (orig, acpc, tlrc).
     
      * @returns Parameter dictionary
      */
@@ -80,7 +89,12 @@ function v_3dcopy_params(
         "__STYXTYPE__": "3dcopy" as const,
         "verbose": verbose,
         "denote": denote,
+        "old_prefix": old_prefix,
+        "new_prefix": new_prefix,
     };
+    if (view !== null) {
+        params["view"] = view;
+    }
     return params;
 }
 
@@ -105,8 +119,13 @@ function v_3dcopy_cargs(
     if ((params["denote"] ?? null)) {
         cargs.push("-denote");
     }
-    cargs.push("{OLD_PREFIX}+{VIEW}");
-    cargs.push("{NEW_PREFIX}");
+    if ((params["view"] ?? null) !== null) {
+        cargs.push(
+            "+",
+            [(params["old_prefix"] ?? null), (params["view"] ?? null)].join('')
+        );
+    }
+    cargs.push((params["new_prefix"] ?? null));
     return cargs;
 }
 
@@ -155,8 +174,11 @@ function v_3dcopy_execute(
 
 
 function v_3dcopy(
+    old_prefix: string,
+    new_prefix: string,
     verbose: boolean = false,
     denote: boolean = false,
+    view: string | null = null,
     runner: Runner | null = null,
 ): V3dcopyOutputs {
     /**
@@ -166,15 +188,18 @@ function v_3dcopy(
      * 
      * URL: https://afni.nimh.nih.gov/
     
+     * @param old_prefix Old dataset prefix (and view if specific dataset view is to be copied).
+     * @param new_prefix New dataset prefix or directory path.
      * @param verbose Print progress reports.
      * @param denote Remove any Notes from the file.
+     * @param view Specified view (orig, acpc, tlrc).
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dcopyOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DCOPY_METADATA);
-    const params = v_3dcopy_params(verbose, denote)
+    const params = v_3dcopy_params(old_prefix, new_prefix, verbose, denote, view)
     return v_3dcopy_execute(params, execution);
 }
 

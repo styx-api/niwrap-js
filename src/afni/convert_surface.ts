@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_SURFACE_METADATA: Metadata = {
-    id: "2b7452b8bf057bc43ac7efc4c5a01abd5236749c.boutiques",
+    id: "1515f74e677d72fcea38965b1c198adce4b27a82.boutiques",
     name: "ConvertSurface",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,8 +17,11 @@ interface ConvertSurfaceParameters {
     "output_surface": string;
     "surface_volume"?: string | null | undefined;
     "transform_tlrc": boolean;
+    "mni_rai": boolean;
     "mni_lpi": boolean;
+    "xmat_1D"?: string | null | undefined;
     "ixmat_1D"?: string | null | undefined;
+    "seed"?: string | null | undefined;
     "native": boolean;
 }
 
@@ -79,8 +82,11 @@ function convert_surface_params(
     output_surface: string,
     surface_volume: string | null = null,
     transform_tlrc: boolean = false,
+    mni_rai: boolean = false,
     mni_lpi: boolean = false,
+    xmat_1_d: string | null = null,
     ixmat_1_d: string | null = null,
+    seed: string | null = null,
     native: boolean = false,
 ): ConvertSurfaceParameters {
     /**
@@ -90,8 +96,11 @@ function convert_surface_params(
      * @param output_surface Specifies the output surface.
      * @param surface_volume Specifies a surface volume.
      * @param transform_tlrc Apply Talairach transform.
+     * @param mni_rai Turn AFNI tlrc coordinates (RAI) into MNI coord space in RAI.
      * @param mni_lpi Turn AFNI tlrc coordinates (RAI) into MNI coord space in LPI.
+     * @param xmat_1_d Apply transformation specified in 1D file.
      * @param ixmat_1_d Apply inverse transformation specified in 1D file.
+     * @param seed Specify SEED to seed the random number generator for random matrix generation.
      * @param native Write the output surface in the coordinate system native to its format.
     
      * @returns Parameter dictionary
@@ -101,14 +110,21 @@ function convert_surface_params(
         "input_surface": input_surface,
         "output_surface": output_surface,
         "transform_tlrc": transform_tlrc,
+        "mni_rai": mni_rai,
         "mni_lpi": mni_lpi,
         "native": native,
     };
     if (surface_volume !== null) {
         params["surface_volume"] = surface_volume;
     }
+    if (xmat_1_d !== null) {
+        params["xmat_1D"] = xmat_1_d;
+    }
     if (ixmat_1_d !== null) {
         params["ixmat_1D"] = ixmat_1_d;
+    }
+    if (seed !== null) {
+        params["seed"] = seed;
     }
     return params;
 }
@@ -145,13 +161,28 @@ function convert_surface_cargs(
     if ((params["transform_tlrc"] ?? null)) {
         cargs.push("-tlrc");
     }
+    if ((params["mni_rai"] ?? null)) {
+        cargs.push("-MNI_rai");
+    }
     if ((params["mni_lpi"] ?? null)) {
         cargs.push("-MNI_lpi");
+    }
+    if ((params["xmat_1D"] ?? null) !== null) {
+        cargs.push(
+            "-xmat_1D",
+            (params["xmat_1D"] ?? null)
+        );
     }
     if ((params["ixmat_1D"] ?? null) !== null) {
         cargs.push(
             "-ixmat_1D",
             (params["ixmat_1D"] ?? null)
+        );
+    }
+    if ((params["seed"] ?? null) !== null) {
+        cargs.push(
+            "-seed",
+            (params["seed"] ?? null)
         );
     }
     if ((params["native"] ?? null)) {
@@ -210,8 +241,11 @@ function convert_surface(
     output_surface: string,
     surface_volume: string | null = null,
     transform_tlrc: boolean = false,
+    mni_rai: boolean = false,
     mni_lpi: boolean = false,
+    xmat_1_d: string | null = null,
     ixmat_1_d: string | null = null,
+    seed: string | null = null,
     native: boolean = false,
     runner: Runner | null = null,
 ): ConvertSurfaceOutputs {
@@ -226,8 +260,11 @@ function convert_surface(
      * @param output_surface Specifies the output surface.
      * @param surface_volume Specifies a surface volume.
      * @param transform_tlrc Apply Talairach transform.
+     * @param mni_rai Turn AFNI tlrc coordinates (RAI) into MNI coord space in RAI.
      * @param mni_lpi Turn AFNI tlrc coordinates (RAI) into MNI coord space in LPI.
+     * @param xmat_1_d Apply transformation specified in 1D file.
      * @param ixmat_1_d Apply inverse transformation specified in 1D file.
+     * @param seed Specify SEED to seed the random number generator for random matrix generation.
      * @param native Write the output surface in the coordinate system native to its format.
      * @param runner Command runner
     
@@ -235,7 +272,7 @@ function convert_surface(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_SURFACE_METADATA);
-    const params = convert_surface_params(input_surface, output_surface, surface_volume, transform_tlrc, mni_lpi, ixmat_1_d, native)
+    const params = convert_surface_params(input_surface, output_surface, surface_volume, transform_tlrc, mni_rai, mni_lpi, xmat_1_d, ixmat_1_d, seed, native)
     return convert_surface_execute(params, execution);
 }
 

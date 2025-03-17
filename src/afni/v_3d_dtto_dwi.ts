@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DTTO_DWI_METADATA: Metadata = {
-    id: "0f0fbb0dc2b7d522416ef673b66be8d6a5895cef.boutiques",
+    id: "3ce4d55f82946de86dac4267e097694ede4e7771.boutiques",
     name: "3dDTtoDWI",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,6 +16,11 @@ interface V3dDttoDwiParameters {
     "gradient_file": InputPathType;
     "i0_dataset": InputPathType;
     "dt_dataset": InputPathType;
+    "prefix"?: string | null | undefined;
+    "automask": boolean;
+    "datum_type"?: string | null | undefined;
+    "scale_out_1000": boolean;
+    "help": boolean;
 }
 
 
@@ -66,7 +71,7 @@ interface V3dDttoDwiOutputs {
     /**
      * Computed DWI images including sub-brick for each gradient vector.
      */
-    output_dwi: OutputPathType;
+    output_dwi: OutputPathType | null;
 }
 
 
@@ -74,6 +79,11 @@ function v_3d_dtto_dwi_params(
     gradient_file: InputPathType,
     i0_dataset: InputPathType,
     dt_dataset: InputPathType,
+    prefix: string | null = null,
+    automask: boolean = false,
+    datum_type: string | null = null,
+    scale_out_1000: boolean = false,
+    help: boolean = false,
 ): V3dDttoDwiParameters {
     /**
      * Build parameters.
@@ -81,6 +91,11 @@ function v_3d_dtto_dwi_params(
      * @param gradient_file 1D file containing the gradient vectors (ASCII floats) for non-zero gradients.
      * @param i0_dataset Volume without any gradient applied.
      * @param dt_dataset 6-sub-brick dataset containing the diffusion tensor data (Dxx, Dxy, Dyy, Dxz, Dyz, Dzz).
+     * @param prefix Prefix for the output dataset name.
+     * @param automask Compute gradient images only for high-intensity (brain) voxels.
+     * @param datum_type Type of the output dataset (float, short, or byte).
+     * @param scale_out_1000 Match with 3dDWItoDT's '-scale_out_1000' functionality.
+     * @param help Show help message.
     
      * @returns Parameter dictionary
      */
@@ -89,7 +104,16 @@ function v_3d_dtto_dwi_params(
         "gradient_file": gradient_file,
         "i0_dataset": i0_dataset,
         "dt_dataset": dt_dataset,
+        "automask": automask,
+        "scale_out_1000": scale_out_1000,
+        "help": help,
     };
+    if (prefix !== null) {
+        params["prefix"] = prefix;
+    }
+    if (datum_type !== null) {
+        params["datum_type"] = datum_type;
+    }
     return params;
 }
 
@@ -108,10 +132,30 @@ function v_3d_dtto_dwi_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dDTtoDWI");
-    cargs.push("[OPTIONS]");
     cargs.push(execution.inputFile((params["gradient_file"] ?? null)));
     cargs.push(execution.inputFile((params["i0_dataset"] ?? null)));
     cargs.push(execution.inputFile((params["dt_dataset"] ?? null)));
+    if ((params["prefix"] ?? null) !== null) {
+        cargs.push(
+            "-prefix",
+            (params["prefix"] ?? null)
+        );
+    }
+    if ((params["automask"] ?? null)) {
+        cargs.push("-automask");
+    }
+    if ((params["datum_type"] ?? null) !== null) {
+        cargs.push(
+            "-datum",
+            (params["datum_type"] ?? null)
+        );
+    }
+    if ((params["scale_out_1000"] ?? null)) {
+        cargs.push("-scale_out_1000");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
+    }
     return cargs;
 }
 
@@ -130,7 +174,7 @@ function v_3d_dtto_dwi_outputs(
      */
     const ret: V3dDttoDwiOutputs = {
         root: execution.outputFile("."),
-        output_dwi: execution.outputFile(["[PREFIX]*.HEAD"].join('')),
+        output_dwi: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "*.HEAD"].join('')) : null,
     };
     return ret;
 }
@@ -164,6 +208,11 @@ function v_3d_dtto_dwi(
     gradient_file: InputPathType,
     i0_dataset: InputPathType,
     dt_dataset: InputPathType,
+    prefix: string | null = null,
+    automask: boolean = false,
+    datum_type: string | null = null,
+    scale_out_1000: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): V3dDttoDwiOutputs {
     /**
@@ -176,13 +225,18 @@ function v_3d_dtto_dwi(
      * @param gradient_file 1D file containing the gradient vectors (ASCII floats) for non-zero gradients.
      * @param i0_dataset Volume without any gradient applied.
      * @param dt_dataset 6-sub-brick dataset containing the diffusion tensor data (Dxx, Dxy, Dyy, Dxz, Dyz, Dzz).
+     * @param prefix Prefix for the output dataset name.
+     * @param automask Compute gradient images only for high-intensity (brain) voxels.
+     * @param datum_type Type of the output dataset (float, short, or byte).
+     * @param scale_out_1000 Match with 3dDWItoDT's '-scale_out_1000' functionality.
+     * @param help Show help message.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dDttoDwiOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DTTO_DWI_METADATA);
-    const params = v_3d_dtto_dwi_params(gradient_file, i0_dataset, dt_dataset)
+    const params = v_3d_dtto_dwi_params(gradient_file, i0_dataset, dt_dataset, prefix, automask, datum_type, scale_out_1000, help)
     return v_3d_dtto_dwi_execute(params, execution);
 }
 

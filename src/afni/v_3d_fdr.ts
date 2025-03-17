@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_FDR_METADATA: Metadata = {
-    id: "052b0ab8a12acc2def2e27ee40fa90c4b23263c0.boutiques",
+    id: "bfccf66ab83c665d5eb67ddf2fb4fae7d2d9767e.boutiques",
     name: "3dFDR",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,7 @@ const V_3D_FDR_METADATA: Metadata = {
 interface V3dFdrParameters {
     "__STYXTYPE__": "3dFDR";
     "input_file": InputPathType;
+    "input1d_file"?: InputPathType | null | undefined;
     "mask_file"?: InputPathType | null | undefined;
     "mask_threshold"?: number | null | undefined;
     "constant_type"?: "cind" | "cdep" | null | undefined;
@@ -91,6 +92,7 @@ interface V3dFdrOutputs {
 function v_3d_fdr_params(
     input_file: InputPathType,
     prefix: string,
+    input1d_file: InputPathType | null = null,
     mask_file: InputPathType | null = null,
     mask_threshold: number | null = null,
     constant_type: "cind" | "cdep" | null = null,
@@ -108,6 +110,7 @@ function v_3d_fdr_params(
     
      * @param input_file Input 3D functional dataset filename
      * @param prefix Use 'pname' for the output dataset prefix name.
+     * @param input1d_file .1D file containing column of p-values
      * @param mask_file Use mask values from file mname. If file mname contains more than 1 sub-brick, the mask sub-brick must be specified. Generally should be used to avoid counting non-brain voxels.
      * @param mask_threshold Only voxels whose corresponding mask value is greater than or equal to the specified value in absolute terms will be considered. Default is 1.
      * @param constant_type Set constant c(N): 1 for independent p-values (default) or sum(1/i, i=1,...,N) for any joint distribution.
@@ -134,6 +137,9 @@ function v_3d_fdr_params(
         "float": float,
         "qval": qval,
     };
+    if (input1d_file !== null) {
+        params["input1d_file"] = input1d_file;
+    }
     if (mask_file !== null) {
         params["mask_file"] = mask_file;
     }
@@ -168,6 +174,12 @@ function v_3d_fdr_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
+    if ((params["input1d_file"] ?? null) !== null) {
+        cargs.push(
+            "-input1D",
+            execution.inputFile((params["input1d_file"] ?? null))
+        );
+    }
     if ((params["mask_file"] ?? null) !== null) {
         cargs.push(
             "-mask_file",
@@ -270,6 +282,7 @@ function v_3d_fdr_execute(
 function v_3d_fdr(
     input_file: InputPathType,
     prefix: string,
+    input1d_file: InputPathType | null = null,
     mask_file: InputPathType | null = null,
     mask_threshold: number | null = null,
     constant_type: "cind" | "cdep" | null = null,
@@ -292,6 +305,7 @@ function v_3d_fdr(
     
      * @param input_file Input 3D functional dataset filename
      * @param prefix Use 'pname' for the output dataset prefix name.
+     * @param input1d_file .1D file containing column of p-values
      * @param mask_file Use mask values from file mname. If file mname contains more than 1 sub-brick, the mask sub-brick must be specified. Generally should be used to avoid counting non-brain voxels.
      * @param mask_threshold Only voxels whose corresponding mask value is greater than or equal to the specified value in absolute terms will be considered. Default is 1.
      * @param constant_type Set constant c(N): 1 for independent p-values (default) or sum(1/i, i=1,...,N) for any joint distribution.
@@ -309,7 +323,7 @@ function v_3d_fdr(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_FDR_METADATA);
-    const params = v_3d_fdr_params(input_file, prefix, mask_file, mask_threshold, constant_type, quiet, list, mode_option, pmask, nopmask, force, float, qval)
+    const params = v_3d_fdr_params(input_file, prefix, input1d_file, mask_file, mask_threshold, constant_type, quiet, list, mode_option, pmask, nopmask, force, float, qval)
     return v_3d_fdr_execute(params, execution);
 }
 

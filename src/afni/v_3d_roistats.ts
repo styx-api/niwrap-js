@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ROISTATS_METADATA: Metadata = {
-    id: "80281254f3598a961619f69119f1d0eb9b58f421.boutiques",
+    id: "b9c0ea474b143a895f00214ac150e218ee4b6ab6.boutiques",
     name: "3dROIstats",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -170,7 +170,6 @@ function v_3d_roistats_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    cargs.push("[OUT_FILE]");
     if ((params["debug"] ?? null)) {
         cargs.push("-debug");
     }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_SEM_METADATA: Metadata = {
-    id: "22951ac5931e28304cde031a44c651e57c4e4a1e.boutiques",
+    id: "a26930914a15136a68f2004d57838df7d226dcb0.boutiques",
     name: "1dSEM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,6 +17,18 @@ interface V1dSemParameters {
     "correlation_matrix": InputPathType;
     "residual_variance": InputPathType;
     "degrees_of_freedom": number;
+    "max_iterations"?: number | null | undefined;
+    "number_random_trials"?: number | null | undefined;
+    "limits"?: Array<number> | null | undefined;
+    "calculate_cost": boolean;
+    "verbose"?: number | null | undefined;
+    "tree_growth": boolean;
+    "model_search": boolean;
+    "max_paths"?: number | null | undefined;
+    "stop_cost"?: number | null | undefined;
+    "forest_growth": boolean;
+    "grow_all": boolean;
+    "leafpicker": boolean;
 }
 
 
@@ -76,6 +88,18 @@ function v_1d_sem_params(
     correlation_matrix: InputPathType,
     residual_variance: InputPathType,
     degrees_of_freedom: number,
+    max_iterations: number | null = null,
+    number_random_trials: number | null = null,
+    limits: Array<number> | null = null,
+    calculate_cost: boolean = false,
+    verbose: number | null = null,
+    tree_growth: boolean = false,
+    model_search: boolean = false,
+    max_paths: number | null = null,
+    stop_cost: number | null = null,
+    forest_growth: boolean = false,
+    grow_all: boolean = false,
+    leafpicker: boolean = false,
 ): V1dSemParameters {
     /**
      * Build parameters.
@@ -84,6 +108,18 @@ function v_1d_sem_params(
      * @param correlation_matrix Correlation matrix 1D file
      * @param residual_variance Residual variance vector 1D file
      * @param degrees_of_freedom Degrees of freedom
+     * @param max_iterations Maximum number of iterations for convergence (Default=10000). Values can range from 1 to any positive integer less than 10000.
+     * @param number_random_trials Number of random trials before optimization (Default = 100).
+     * @param limits Lower and upper limits for connection coefficients (Default = -1.0 to 1.0)
+     * @param calculate_cost No modeling at all, just calculate the cost function for the coefficients as given in the theta file.
+     * @param verbose Print info every nnnnn steps
+     * @param tree_growth Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+     * @param model_search Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+     * @param max_paths Maximum number of paths to include (Default = 1000).
+     * @param stop_cost Stop searching for paths when cost function is below this value (Default = 0.1).
+     * @param forest_growth Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+     * @param grow_all Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+     * @param leafpicker Expands the search optimization to look at multiple paths to avoid local minimum. This method is the default technique for tree growth and standard coefficient searches.
     
      * @returns Parameter dictionary
      */
@@ -93,7 +129,31 @@ function v_1d_sem_params(
         "correlation_matrix": correlation_matrix,
         "residual_variance": residual_variance,
         "degrees_of_freedom": degrees_of_freedom,
+        "calculate_cost": calculate_cost,
+        "tree_growth": tree_growth,
+        "model_search": model_search,
+        "forest_growth": forest_growth,
+        "grow_all": grow_all,
+        "leafpicker": leafpicker,
     };
+    if (max_iterations !== null) {
+        params["max_iterations"] = max_iterations;
+    }
+    if (number_random_trials !== null) {
+        params["number_random_trials"] = number_random_trials;
+    }
+    if (limits !== null) {
+        params["limits"] = limits;
+    }
+    if (verbose !== null) {
+        params["verbose"] = verbose;
+    }
+    if (max_paths !== null) {
+        params["max_paths"] = max_paths;
+    }
+    if (stop_cost !== null) {
+        params["stop_cost"] = stop_cost;
+    }
     return params;
 }
 
@@ -128,7 +188,60 @@ function v_1d_sem_cargs(
         "-DF",
         String((params["degrees_of_freedom"] ?? null))
     );
-    cargs.push("[OPTIONS]");
+    if ((params["max_iterations"] ?? null) !== null) {
+        cargs.push(
+            "-max_iter",
+            String((params["max_iterations"] ?? null))
+        );
+    }
+    if ((params["number_random_trials"] ?? null) !== null) {
+        cargs.push(
+            "-nrand",
+            String((params["number_random_trials"] ?? null))
+        );
+    }
+    if ((params["limits"] ?? null) !== null) {
+        cargs.push(
+            "-limits",
+            ...(params["limits"] ?? null).map(String)
+        );
+    }
+    if ((params["calculate_cost"] ?? null)) {
+        cargs.push("-calccost");
+    }
+    if ((params["verbose"] ?? null) !== null) {
+        cargs.push(
+            "-verbose",
+            String((params["verbose"] ?? null))
+        );
+    }
+    if ((params["tree_growth"] ?? null)) {
+        cargs.push("-tree_growth");
+    }
+    if ((params["model_search"] ?? null)) {
+        cargs.push("-model_search");
+    }
+    if ((params["max_paths"] ?? null) !== null) {
+        cargs.push(
+            "-max_paths",
+            String((params["max_paths"] ?? null))
+        );
+    }
+    if ((params["stop_cost"] ?? null) !== null) {
+        cargs.push(
+            "-stop_cost",
+            String((params["stop_cost"] ?? null))
+        );
+    }
+    if ((params["forest_growth"] ?? null)) {
+        cargs.push("-forest_growth");
+    }
+    if ((params["grow_all"] ?? null)) {
+        cargs.push("-grow_all");
+    }
+    if ((params["leafpicker"] ?? null)) {
+        cargs.push("-leafpicker");
+    }
     return cargs;
 }
 
@@ -182,6 +295,18 @@ function v_1d_sem(
     correlation_matrix: InputPathType,
     residual_variance: InputPathType,
     degrees_of_freedom: number,
+    max_iterations: number | null = null,
+    number_random_trials: number | null = null,
+    limits: Array<number> | null = null,
+    calculate_cost: boolean = false,
+    verbose: number | null = null,
+    tree_growth: boolean = false,
+    model_search: boolean = false,
+    max_paths: number | null = null,
+    stop_cost: number | null = null,
+    forest_growth: boolean = false,
+    grow_all: boolean = false,
+    leafpicker: boolean = false,
     runner: Runner | null = null,
 ): V1dSemOutputs {
     /**
@@ -195,13 +320,25 @@ function v_1d_sem(
      * @param correlation_matrix Correlation matrix 1D file
      * @param residual_variance Residual variance vector 1D file
      * @param degrees_of_freedom Degrees of freedom
+     * @param max_iterations Maximum number of iterations for convergence (Default=10000). Values can range from 1 to any positive integer less than 10000.
+     * @param number_random_trials Number of random trials before optimization (Default = 100).
+     * @param limits Lower and upper limits for connection coefficients (Default = -1.0 to 1.0)
+     * @param calculate_cost No modeling at all, just calculate the cost function for the coefficients as given in the theta file.
+     * @param verbose Print info every nnnnn steps
+     * @param tree_growth Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+     * @param model_search Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+     * @param max_paths Maximum number of paths to include (Default = 1000).
+     * @param stop_cost Stop searching for paths when cost function is below this value (Default = 0.1).
+     * @param forest_growth Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+     * @param grow_all Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+     * @param leafpicker Expands the search optimization to look at multiple paths to avoid local minimum. This method is the default technique for tree growth and standard coefficient searches.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V1dSemOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_SEM_METADATA);
-    const params = v_1d_sem_params(theta, correlation_matrix, residual_variance, degrees_of_freedom)
+    const params = v_1d_sem_params(theta, correlation_matrix, residual_variance, degrees_of_freedom, max_iterations, number_random_trials, limits, calculate_cost, verbose, tree_growth, model_search, max_paths, stop_cost, forest_growth, grow_all, leafpicker)
     return v_1d_sem_execute(params, execution);
 }
 

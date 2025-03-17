@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__GRAYPLOT_METADATA: Metadata = {
-    id: "3d444976676cbb4979c872f1285979b9e0bd687d.boutiques",
+    id: "530147880dced9ec34da9598833b42371288db6a.boutiques",
     name: "@grayplot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -14,6 +14,9 @@ const V__GRAYPLOT_METADATA: Metadata = {
 interface VGrayplotParameters {
     "__STYXTYPE__": "@grayplot";
     "dirname": string;
+    "pvorder": boolean;
+    "peelorder": boolean;
+    "ijkorder": boolean;
     "allorder": boolean;
 }
 
@@ -71,12 +74,18 @@ interface VGrayplotOutputs {
 
 function v__grayplot_params(
     dirname: string,
+    pvorder: boolean = false,
+    peelorder: boolean = false,
+    ijkorder: boolean = false,
     allorder: boolean = false,
 ): VGrayplotParameters {
     /**
      * Build parameters.
     
      * @param dirname Directory containing afni_proc.py results.
+     * @param pvorder Within each partition, voxels are ordered by a simple similarity measure.
+     * @param peelorder Within each partition, voxels are ordered by how many 'peel' operations are needed to reach a given voxel.
+     * @param ijkorder Within each partition, voxels are ordered by the 3D index in which they appear in the dataset.
      * @param allorder Create grayplots for all ordering methods.
     
      * @returns Parameter dictionary
@@ -84,6 +93,9 @@ function v__grayplot_params(
     const params = {
         "__STYXTYPE__": "@grayplot" as const,
         "dirname": dirname,
+        "pvorder": pvorder,
+        "peelorder": peelorder,
+        "ijkorder": ijkorder,
         "allorder": allorder,
     };
     return params;
@@ -105,6 +117,15 @@ function v__grayplot_cargs(
     const cargs: string[] = [];
     cargs.push("@grayplot");
     cargs.push((params["dirname"] ?? null));
+    if ((params["pvorder"] ?? null)) {
+        cargs.push("-pvorder");
+    }
+    if ((params["peelorder"] ?? null)) {
+        cargs.push("-peelorder");
+    }
+    if ((params["ijkorder"] ?? null)) {
+        cargs.push("-ijkorder");
+    }
     if ((params["allorder"] ?? null)) {
         cargs.push("-ALLorder");
     }
@@ -158,6 +179,9 @@ function v__grayplot_execute(
 
 function v__grayplot(
     dirname: string,
+    pvorder: boolean = false,
+    peelorder: boolean = false,
+    ijkorder: boolean = false,
     allorder: boolean = false,
     runner: Runner | null = null,
 ): VGrayplotOutputs {
@@ -169,6 +193,9 @@ function v__grayplot(
      * URL: https://afni.nimh.nih.gov/
     
      * @param dirname Directory containing afni_proc.py results.
+     * @param pvorder Within each partition, voxels are ordered by a simple similarity measure.
+     * @param peelorder Within each partition, voxels are ordered by how many 'peel' operations are needed to reach a given voxel.
+     * @param ijkorder Within each partition, voxels are ordered by the 3D index in which they appear in the dataset.
      * @param allorder Create grayplots for all ordering methods.
      * @param runner Command runner
     
@@ -176,7 +203,7 @@ function v__grayplot(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GRAYPLOT_METADATA);
-    const params = v__grayplot_params(dirname, allorder)
+    const params = v__grayplot_params(dirname, pvorder, peelorder, ijkorder, allorder)
     return v__grayplot_execute(params, execution);
 }
 

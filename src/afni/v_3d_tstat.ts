@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TSTAT_METADATA: Metadata = {
-    id: "2c3351f9c202b2f87198789eb63df2ff52ca3826.boutiques",
+    id: "e1660f36f2b134d3f7b3ce6ea6944f69d67b9501.boutiques",
     name: "3dTstat",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,8 +13,11 @@ const V_3D_TSTAT_METADATA: Metadata = {
 
 interface V3dTstatParameters {
     "__STYXTYPE__": "3dTstat";
+    "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "num_threads"?: number | null | undefined;
+    "options"?: string | null | undefined;
+    "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "sum": boolean;
     "abssum": boolean;
     "sos": boolean;
@@ -71,8 +74,6 @@ interface V3dTstatParameters {
     "mask_mset"?: InputPathType | null | undefined;
     "mrange"?: string | null | undefined;
     "cmask"?: string | null | undefined;
-    "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
-    "in_file": InputPathType;
 }
 
 
@@ -131,6 +132,8 @@ function v_3d_tstat_params(
     in_file: InputPathType,
     mask: InputPathType | null = null,
     num_threads: number | null = null,
+    options: string | null = null,
+    outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     sum: boolean = false,
     abssum: boolean = false,
     sos: boolean = false,
@@ -187,7 +190,6 @@ function v_3d_tstat_params(
     mask_mset: InputPathType | null = null,
     mrange: string | null = null,
     cmask: string | null = null,
-    outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
 ): V3dTstatParameters {
     /**
      * Build parameters.
@@ -195,6 +197,8 @@ function v_3d_tstat_params(
      * @param in_file Input file to 3dtstat.
      * @param mask Mask file.
      * @param num_threads Set number of threads.
+     * @param options Selected statistical output.
+     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
      * @param sum Compute sum of input voxels.
      * @param abssum Compute absolute sum of input voxels.
      * @param sos Compute sum of squares.
@@ -251,12 +255,12 @@ function v_3d_tstat_params(
      * @param mask_mset Use the dataset 'mset' as a mask. Only voxels with nonzero values in 'mset' will be printed from 'dataset'.
      * @param mrange Further restrict the voxels from 'mset' so that only those mask values between 'a' and 'b' (inclusive) will be used.
      * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program, and produce a mask from the resulting 3D brick.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "3dTstat" as const,
+        "in_file": in_file,
         "sum": sum,
         "abssum": abssum,
         "sos": sos,
@@ -307,13 +311,18 @@ function v_3d_tstat_params(
         "firstvalue": firstvalue,
         "tdiff": tdiff,
         "nscale": nscale,
-        "in_file": in_file,
     };
     if (mask !== null) {
         params["mask"] = mask;
     }
     if (num_threads !== null) {
         params["num_threads"] = num_threads;
+    }
+    if (options !== null) {
+        params["options"] = options;
+    }
+    if (outputtype !== null) {
+        params["outputtype"] = outputtype;
     }
     if (prefix !== null) {
         params["prefix"] = prefix;
@@ -333,9 +342,6 @@ function v_3d_tstat_params(
     if (cmask !== null) {
         params["cmask"] = cmask;
     }
-    if (outputtype !== null) {
-        params["outputtype"] = outputtype;
-    }
     return params;
 }
 
@@ -354,6 +360,7 @@ function v_3d_tstat_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dTstat");
+    cargs.push(execution.inputFile((params["in_file"] ?? null)));
     if ((params["mask"] ?? null) !== null) {
         cargs.push(
             "-mask",
@@ -362,6 +369,12 @@ function v_3d_tstat_cargs(
     }
     if ((params["num_threads"] ?? null) !== null) {
         cargs.push(String((params["num_threads"] ?? null)));
+    }
+    if ((params["options"] ?? null) !== null) {
+        cargs.push((params["options"] ?? null));
+    }
+    if ((params["outputtype"] ?? null) !== null) {
+        cargs.push((params["outputtype"] ?? null));
     }
     if ((params["sum"] ?? null)) {
         cargs.push("-sum");
@@ -549,10 +562,6 @@ function v_3d_tstat_cargs(
             (params["cmask"] ?? null)
         );
     }
-    if ((params["outputtype"] ?? null) !== null) {
-        cargs.push((params["outputtype"] ?? null));
-    }
-    cargs.push(execution.inputFile((params["in_file"] ?? null)));
     return cargs;
 }
 
@@ -605,6 +614,8 @@ function v_3d_tstat(
     in_file: InputPathType,
     mask: InputPathType | null = null,
     num_threads: number | null = null,
+    options: string | null = null,
+    outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     sum: boolean = false,
     abssum: boolean = false,
     sos: boolean = false,
@@ -661,7 +672,6 @@ function v_3d_tstat(
     mask_mset: InputPathType | null = null,
     mrange: string | null = null,
     cmask: string | null = null,
-    outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     runner: Runner | null = null,
 ): V3dTstatOutputs {
     /**
@@ -674,6 +684,8 @@ function v_3d_tstat(
      * @param in_file Input file to 3dtstat.
      * @param mask Mask file.
      * @param num_threads Set number of threads.
+     * @param options Selected statistical output.
+     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
      * @param sum Compute sum of input voxels.
      * @param abssum Compute absolute sum of input voxels.
      * @param sos Compute sum of squares.
@@ -730,14 +742,13 @@ function v_3d_tstat(
      * @param mask_mset Use the dataset 'mset' as a mask. Only voxels with nonzero values in 'mset' will be printed from 'dataset'.
      * @param mrange Further restrict the voxels from 'mset' so that only those mask values between 'a' and 'b' (inclusive) will be used.
      * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program, and produce a mask from the resulting 3D brick.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dTstatOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSTAT_METADATA);
-    const params = v_3d_tstat_params(in_file, mask, num_threads, sum, abssum, sos, l2norm, mean, slope, stdev, stdev_nod, cvar, cvar_nod, cvarinv, cvarinv_nod, tsnr, mad, dw, median, nzmedian, nzstdev, bmv, mssd, mssdsqrt, masdx, min, max, absmax, signed_absmax, percentile, argmin, argmin1, argmax, argmax1, argabsmax, argabsmax1, duration, onset, offset, centroid, centduration, nzmean, zcount, nzcount, autocorr, autoreg, accumulate, centromean, skewness, kurtosis, firstvalue, tdiff, prefix, datum, nscale, basepercent, mask_mset, mrange, cmask, outputtype)
+    const params = v_3d_tstat_params(in_file, mask, num_threads, options, outputtype, sum, abssum, sos, l2norm, mean, slope, stdev, stdev_nod, cvar, cvar_nod, cvarinv, cvarinv_nod, tsnr, mad, dw, median, nzmedian, nzstdev, bmv, mssd, mssdsqrt, masdx, min, max, absmax, signed_absmax, percentile, argmin, argmin1, argmax, argmax1, argabsmax, argabsmax1, duration, onset, offset, centroid, centduration, nzmean, zcount, nzcount, autocorr, autoreg, accumulate, centromean, skewness, kurtosis, firstvalue, tdiff, prefix, datum, nscale, basepercent, mask_mset, mrange, cmask)
     return v_3d_tstat_execute(params, execution);
 }
 

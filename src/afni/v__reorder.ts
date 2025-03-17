@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__REORDER_METADATA: Metadata = {
-    id: "93af53020ee1088a33b0e58234dc8960b688e23e.boutiques",
+    id: "a1aaf6dbb807ea79af1609bee99a7c13181932fa.boutiques",
     name: "@Reorder",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -19,6 +19,7 @@ interface VReorderParameters {
     "offset"?: number | null | undefined;
     "save_work": boolean;
     "test": boolean;
+    "help": boolean;
 }
 
 
@@ -80,6 +81,7 @@ function v__reorder_params(
     offset: number | null = null,
     save_work: boolean = false,
     test: boolean = false,
+    help: boolean = false,
 ): VReorderParameters {
     /**
      * Build parameters.
@@ -90,6 +92,7 @@ function v__reorder_params(
      * @param offset Offset mapfile TR indices by OFFSET (in TRs)
      * @param save_work Do not delete work directory (reorder.work.dir) at the end
      * @param test Just report sub-bricks, do not create datasets
+     * @param help Show help message
     
      * @returns Parameter dictionary
      */
@@ -100,6 +103,7 @@ function v__reorder_params(
         "prefix": prefix,
         "save_work": save_work,
         "test": test,
+        "help": help,
     };
     if (offset !== null) {
         params["offset"] = offset;
@@ -136,6 +140,9 @@ function v__reorder_cargs(
     }
     if ((params["test"] ?? null)) {
         cargs.push("-test");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-help");
     }
     return cargs;
 }
@@ -192,6 +199,7 @@ function v__reorder(
     offset: number | null = null,
     save_work: boolean = false,
     test: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): VReorderOutputs {
     /**
@@ -207,13 +215,14 @@ function v__reorder(
      * @param offset Offset mapfile TR indices by OFFSET (in TRs)
      * @param save_work Do not delete work directory (reorder.work.dir) at the end
      * @param test Just report sub-bricks, do not create datasets
+     * @param help Show help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `VReorderOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__REORDER_METADATA);
-    const params = v__reorder_params(input_dataset, mapfile, prefix, offset, save_work, test)
+    const params = v__reorder_params(input_dataset, mapfile, prefix, offset, save_work, test, help)
     return v__reorder_execute(params, execution);
 }
 

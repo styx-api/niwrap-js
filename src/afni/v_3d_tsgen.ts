@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TSGEN_METADATA: Metadata = {
-    id: "99758b64781663ffd508cccdf61b5f963c784b4a.boutiques",
+    id: "23ea0ec274045284df882fa88ec58e47ba43443f.boutiques",
     name: "3dTSgen",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -25,6 +25,7 @@ interface V3dTsgenParameters {
     "signal_coef"?: string | null | undefined;
     "noise_coef"?: string | null | undefined;
     "bucket_config"?: string | null | undefined;
+    "brick_config"?: string | null | undefined;
 }
 
 
@@ -87,6 +88,7 @@ function v_3d_tsgen_params(
     signal_coef: string | null = null,
     noise_coef: string | null = null,
     bucket_config: string | null = null,
+    brick_config: string | null = null,
 ): V3dTsgenParameters {
     /**
      * Build parameters.
@@ -103,6 +105,7 @@ function v_3d_tsgen_params(
      * @param signal_coef Write kth signal parameter gs[k]. Output 'fim' is written to prefix filename
      * @param noise_coef Write kth noise parameter gn[k]. Output 'fim' is written to prefix filename
      * @param bucket_config Create one AFNI 'bucket' dataset containing n sub-bricks. n=0 creates the default output. Output 'bucket' is written to prefixname
+     * @param brick_config Specify content for sub-brick in the form 'm t k label' where m is the sub-brick number, t is 'scoef' or 'ncoef', k is parameter index, and label is a descriptive label.
     
      * @returns Parameter dictionary
      */
@@ -132,6 +135,9 @@ function v_3d_tsgen_params(
     }
     if (bucket_config !== null) {
         params["bucket_config"] = bucket_config;
+    }
+    if (brick_config !== null) {
+        params["brick_config"] = brick_config;
     }
     return params;
 }
@@ -207,6 +213,12 @@ function v_3d_tsgen_cargs(
             (params["bucket_config"] ?? null)
         );
     }
+    if ((params["brick_config"] ?? null) !== null) {
+        cargs.push(
+            "-brick",
+            (params["brick_config"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -267,6 +279,7 @@ function v_3d_tsgen(
     signal_coef: string | null = null,
     noise_coef: string | null = null,
     bucket_config: string | null = null,
+    brick_config: string | null = null,
     runner: Runner | null = null,
 ): V3dTsgenOutputs {
     /**
@@ -288,13 +301,14 @@ function v_3d_tsgen(
      * @param signal_coef Write kth signal parameter gs[k]. Output 'fim' is written to prefix filename
      * @param noise_coef Write kth noise parameter gn[k]. Output 'fim' is written to prefix filename
      * @param bucket_config Create one AFNI 'bucket' dataset containing n sub-bricks. n=0 creates the default output. Output 'bucket' is written to prefixname
+     * @param brick_config Specify content for sub-brick in the form 'm t k label' where m is the sub-brick number, t is 'scoef' or 'ncoef', k is parameter index, and label is a descriptive label.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V3dTsgenOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSGEN_METADATA);
-    const params = v_3d_tsgen_params(input_file, signal_label, noise_label, sigma_value, output_file, in_tr_flag, signal_constr, noise_constr, voxel_number, signal_coef, noise_coef, bucket_config)
+    const params = v_3d_tsgen_params(input_file, signal_label, noise_label, sigma_value, output_file, in_tr_flag, signal_constr, noise_constr, voxel_number, signal_coef, noise_coef, bucket_config, brick_config)
     return v_3d_tsgen_execute(params, execution);
 }
 

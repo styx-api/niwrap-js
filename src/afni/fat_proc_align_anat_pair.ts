@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_PROC_ALIGN_ANAT_PAIR_METADATA: Metadata = {
-    id: "b81d41214e66c7f77b2bbc885c2f23369ad68254.boutiques",
+    id: "bcbf8258d04aa65236dca0e8a04659e810e17311.boutiques",
     name: "fat_proc_align_anat_pair",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -17,6 +17,7 @@ interface FatProcAlignAnatPairParameters {
     "input_t2w": InputPathType;
     "output_prefix": string;
     "output_grid"?: number | null | undefined;
+    "out_t2w_grid": boolean;
     "input_t2w_mask"?: InputPathType | null | undefined;
     "do_ss_tmp_t1w": boolean;
     "warp"?: string | null | undefined;
@@ -91,6 +92,7 @@ function fat_proc_align_anat_pair_params(
     input_t2w: InputPathType,
     output_prefix: string,
     output_grid: number | null = null,
+    out_t2w_grid: boolean = false,
     input_t2w_mask: InputPathType | null = null,
     do_ss_tmp_t1w: boolean = false,
     warp: string | null = null,
@@ -106,6 +108,7 @@ function fat_proc_align_anat_pair_params(
      * @param input_t2w T2-weighted volume
      * @param output_prefix Output prefix for files and snapshots
      * @param output_grid Specify output T1w volume's final resolution (isotropic)
+     * @param out_t2w_grid Final T1w volume is on the T2W volume's grid
      * @param input_t2w_mask Input a mask to apply to the T2w volume for alignment
      * @param do_ss_tmp_t1w Apply skullstripping to the T1w volume during an intermediate step
      * @param warp Specify the degrees of freedom for warping using options from 3dAllineate
@@ -121,6 +124,7 @@ function fat_proc_align_anat_pair_params(
         "input_t1w": input_t1w,
         "input_t2w": input_t2w,
         "output_prefix": output_prefix,
+        "out_t2w_grid": out_t2w_grid,
         "do_ss_tmp_t1w": do_ss_tmp_t1w,
         "no_cmd_out": no_cmd_out,
         "no_clean": no_clean,
@@ -175,6 +179,9 @@ function fat_proc_align_anat_pair_cargs(
             "-newgrid",
             String((params["output_grid"] ?? null))
         );
+    }
+    if ((params["out_t2w_grid"] ?? null)) {
+        cargs.push("-out_t2w_grid");
     }
     if ((params["input_t2w_mask"] ?? null) !== null) {
         cargs.push(
@@ -264,6 +271,7 @@ function fat_proc_align_anat_pair(
     input_t2w: InputPathType,
     output_prefix: string,
     output_grid: number | null = null,
+    out_t2w_grid: boolean = false,
     input_t2w_mask: InputPathType | null = null,
     do_ss_tmp_t1w: boolean = false,
     warp: string | null = null,
@@ -284,6 +292,7 @@ function fat_proc_align_anat_pair(
      * @param input_t2w T2-weighted volume
      * @param output_prefix Output prefix for files and snapshots
      * @param output_grid Specify output T1w volume's final resolution (isotropic)
+     * @param out_t2w_grid Final T1w volume is on the T2W volume's grid
      * @param input_t2w_mask Input a mask to apply to the T2w volume for alignment
      * @param do_ss_tmp_t1w Apply skullstripping to the T1w volume during an intermediate step
      * @param warp Specify the degrees of freedom for warping using options from 3dAllineate
@@ -297,7 +306,7 @@ function fat_proc_align_anat_pair(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_ALIGN_ANAT_PAIR_METADATA);
-    const params = fat_proc_align_anat_pair_params(input_t1w, input_t2w, output_prefix, output_grid, input_t2w_mask, do_ss_tmp_t1w, warp, matrix, workdir, no_cmd_out, no_clean)
+    const params = fat_proc_align_anat_pair_params(input_t1w, input_t2w, output_prefix, output_grid, out_t2w_grid, input_t2w_mask, do_ss_tmp_t1w, warp, matrix, workdir, no_cmd_out, no_clean)
     return fat_proc_align_anat_pair_execute(params, execution);
 }
 

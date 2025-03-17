@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_CORRELATE_METADATA: Metadata = {
-    id: "be0ac3e4b1a192ead53f328b4b3ecf125d8d36fe.boutiques",
+    id: "f3dbbb641ceed6bf13990065b1b59dc542a7a7fa.boutiques",
     name: "1dCorrelate",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -16,7 +16,11 @@ interface V1dCorrelateParameters {
     "ktaub": boolean;
     "nboot"?: number | null | undefined;
     "alpha"?: number | null | undefined;
+    "block": boolean;
     "blk": boolean;
+    "pearson": boolean;
+    "spearman": boolean;
+    "quadrant": boolean;
     "input_files": Array<InputPathType>;
 }
 
@@ -72,7 +76,11 @@ function v_1d_correlate_params(
     ktaub: boolean = false,
     nboot: number | null = null,
     alpha: number | null = null,
+    block: boolean = false,
     blk: boolean = false,
+    pearson: boolean = false,
+    spearman: boolean = false,
+    quadrant: boolean = false,
 ): V1dCorrelateParameters {
     /**
      * Build parameters.
@@ -81,14 +89,22 @@ function v_1d_correlate_params(
      * @param ktaub Kendall's tau_b correlation (popular somewhere, maybe)
      * @param nboot Set the number of bootstrap replicates
      * @param alpha Set the 2-sided confidence interval width to '100-A' percent.
+     * @param block Use variable-length block resampling to account for serial correlation
      * @param blk Alternate flag for variable-length block resampling
+     * @param pearson Pearson correlation (the default method)
+     * @param spearman Spearman (rank) correlation (more robust versus outliers)
+     * @param quadrant Quadrant (binarized) correlation (most robust, but weaker)
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "1dCorrelate" as const,
         "ktaub": ktaub,
+        "block": block,
         "blk": blk,
+        "pearson": pearson,
+        "spearman": spearman,
+        "quadrant": quadrant,
         "input_files": input_files,
     };
     if (nboot !== null) {
@@ -130,8 +146,20 @@ function v_1d_correlate_cargs(
             String((params["alpha"] ?? null))
         );
     }
+    if ((params["block"] ?? null)) {
+        cargs.push("-block");
+    }
     if ((params["blk"] ?? null)) {
         cargs.push("-blk");
+    }
+    if ((params["pearson"] ?? null)) {
+        cargs.push("-Pearson");
+    }
+    if ((params["spearman"] ?? null)) {
+        cargs.push("-Spearman");
+    }
+    if ((params["quadrant"] ?? null)) {
+        cargs.push("-Quadrant");
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
     return cargs;
@@ -186,7 +214,11 @@ function v_1d_correlate(
     ktaub: boolean = false,
     nboot: number | null = null,
     alpha: number | null = null,
+    block: boolean = false,
     blk: boolean = false,
+    pearson: boolean = false,
+    spearman: boolean = false,
+    quadrant: boolean = false,
     runner: Runner | null = null,
 ): V1dCorrelateOutputs {
     /**
@@ -200,14 +232,18 @@ function v_1d_correlate(
      * @param ktaub Kendall's tau_b correlation (popular somewhere, maybe)
      * @param nboot Set the number of bootstrap replicates
      * @param alpha Set the 2-sided confidence interval width to '100-A' percent.
+     * @param block Use variable-length block resampling to account for serial correlation
      * @param blk Alternate flag for variable-length block resampling
+     * @param pearson Pearson correlation (the default method)
+     * @param spearman Spearman (rank) correlation (more robust versus outliers)
+     * @param quadrant Quadrant (binarized) correlation (most robust, but weaker)
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `V1dCorrelateOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_CORRELATE_METADATA);
-    const params = v_1d_correlate_params(input_files, ktaub, nboot, alpha, blk)
+    const params = v_1d_correlate_params(input_files, ktaub, nboot, alpha, block, blk, pearson, spearman, quadrant)
     return v_1d_correlate_execute(params, execution);
 }
 
