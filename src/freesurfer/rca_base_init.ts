@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCA_BASE_INIT_METADATA: Metadata = {
-    id: "40035e4c6889519a8062b007d6e932c3e18ff078.boutiques",
+    id: "3c8d3ad6bcb4fc42684b1829ed14e08e22b13cd8.boutiques",
     name: "rca-base-init",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -108,10 +108,11 @@ function rca_base_init_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("rca-base-init");
     if ((params["log_file"] ?? null) !== null) {
         cargs.push(
             "-init",
-            ["rca-base", (params["log_file"] ?? null)].join('')
+            (params["log_file"] ?? null)
         );
     }
     if ((params["status_file"] ?? null) !== null) {

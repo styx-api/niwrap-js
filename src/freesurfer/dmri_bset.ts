@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_BSET_METADATA: Metadata = {
-    id: "a5ba928b721f328bbae969650915bdc4c218018a.boutiques",
+    id: "9a9d1299f82ba59a9a11b741685458eb6f480882.boutiques",
     name: "dmri_bset",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -15,6 +15,7 @@ interface DmriBsetParameters {
     "__STYXTYPE__": "dmri_bset";
     "input_dwi": InputPathType;
     "output_dwi": string;
+    "b_values"?: Array<number> | null | undefined;
     "btol"?: number | null | undefined;
     "bsort": boolean;
     "bmax"?: number | null | undefined;
@@ -87,6 +88,7 @@ interface DmriBsetOutputs {
 function dmri_bset_params(
     input_dwi: InputPathType,
     output_dwi: string,
+    b_values: Array<number> | null = null,
     btol: number | null = 0.05,
     bsort: boolean = false,
     bmax: number | null = null,
@@ -100,6 +102,7 @@ function dmri_bset_params(
     
      * @param input_dwi Input DWI series
      * @param output_dwi Output DWI series
+     * @param b_values Extract one or more b-values
      * @param btol Tolerance around each single b-value (default: 0.05)
      * @param bsort Reorder output data by b-shell (default: maintain original order)
      * @param bmax Extract all b-values less than or equal to a maximum
@@ -116,6 +119,9 @@ function dmri_bset_params(
         "output_dwi": output_dwi,
         "bsort": bsort,
     };
+    if (b_values !== null) {
+        params["b_values"] = b_values;
+    }
     if (btol !== null) {
         params["btol"] = btol;
     }
@@ -154,7 +160,12 @@ function dmri_bset_cargs(
     cargs.push("dmri_bset");
     cargs.push(execution.inputFile((params["input_dwi"] ?? null)));
     cargs.push((params["output_dwi"] ?? null));
-    cargs.push("[B_VALUES...]");
+    if ((params["b_values"] ?? null) !== null) {
+        cargs.push(
+            "--b",
+            ...(params["b_values"] ?? null).map(String)
+        );
+    }
     if ((params["btol"] ?? null) !== null) {
         cargs.push(
             "--btol",
@@ -247,6 +258,7 @@ function dmri_bset_execute(
 function dmri_bset(
     input_dwi: InputPathType,
     output_dwi: string,
+    b_values: Array<number> | null = null,
     btol: number | null = 0.05,
     bsort: boolean = false,
     bmax: number | null = null,
@@ -265,6 +277,7 @@ function dmri_bset(
     
      * @param input_dwi Input DWI series
      * @param output_dwi Output DWI series
+     * @param b_values Extract one or more b-values
      * @param btol Tolerance around each single b-value (default: 0.05)
      * @param bsort Reorder output data by b-shell (default: maintain original order)
      * @param bmax Extract all b-values less than or equal to a maximum
@@ -278,7 +291,7 @@ function dmri_bset(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_BSET_METADATA);
-    const params = dmri_bset_params(input_dwi, output_dwi, btol, bsort, bmax, input_b_table, input_g_table, output_b_table, output_g_table)
+    const params = dmri_bset_params(input_dwi, output_dwi, b_values, btol, bsort, bmax, input_b_table, input_g_table, output_b_table, output_g_table)
     return dmri_bset_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TALAIRACH_METADATA: Metadata = {
-    id: "1512333dd2617cccb8f9ea33a7bc7b56b8c724e3.boutiques",
+    id: "fdcf0b0c4d49174cda1f651aa6a291f3c7d090a9.boutiques",
     name: "talairach",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -111,14 +111,14 @@ function talairach_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("mri_nu_correct.mni");
+    cargs.push("talairach");
     cargs.push(
         "-i",
-        ["-", execution.inputFile((params["input_volume"] ?? null))].join('')
+        execution.inputFile((params["input_volume"] ?? null))
     );
     cargs.push(
         "-xfm",
-        ["-", (params["output_transform"] ?? null)].join('')
+        (params["output_transform"] ?? null)
     );
     if ((params["log_flag"] ?? null)) {
         cargs.push("--log");

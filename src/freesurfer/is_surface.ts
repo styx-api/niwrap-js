@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IS_SURFACE_METADATA: Metadata = {
-    id: "6cb9d1446618fbf43c51093ee6543e6c01436b21.boutiques",
+    id: "86c411bc39041a8b3eae45962259ad09e76de3b1.boutiques",
     name: "is-surface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -94,9 +94,10 @@ function is_surface_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("is-surface");
     cargs.push(
         "-surface",
-        ["is", execution.inputFile((params["infile"] ?? null))].join('')
+        execution.inputFile((params["infile"] ?? null))
     );
     return cargs;
 }

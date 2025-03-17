@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCMDJPEG_FS_METADATA: Metadata = {
-    id: "72def5b0b090531bebd9d33b2cf8001287532af2.boutiques",
+    id: "23277311b6d3ec67d22170dc491d01934643849c.boutiques",
     name: "dcmdjpeg.fs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -265,7 +265,7 @@ function dcmdjpeg_fs_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("dcmdjpeg");
+    cargs.push("dcmdjpeg.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
     if ((params["help"] ?? null)) {

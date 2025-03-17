@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GROUPSTATS_METADATA: Metadata = {
-    id: "b3ed2b7c0070683b40d589d0c64dbdd96b53715f.boutiques",
+    id: "355e1a7428f21999fd48f18935d2d56917a02e73.boutiques",
     name: "groupstats",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,11 +14,21 @@ const GROUPSTATS_METADATA: Metadata = {
 interface GroupstatsParameters {
     "__STYXTYPE__": "groupstats";
     "outdir": string;
+    "group_fsgd"?: InputPathType | null | undefined;
     "subjectfile"?: InputPathType | null | undefined;
     "fwhm"?: Array<number> | null | undefined;
     "subject_dir"?: string | null | undefined;
     "mapname"?: string | null | undefined;
     "srcsurfreg"?: string | null | undefined;
+    "no_maps": boolean;
+    "lh_only": boolean;
+    "rh_only": boolean;
+    "no_aparcstats": boolean;
+    "no_asegstats": boolean;
+    "no_wparcstats": boolean;
+    "no_stats": boolean;
+    "new": boolean;
+    "base": boolean;
     "keep53": boolean;
 }
 
@@ -76,22 +86,42 @@ interface GroupstatsOutputs {
 
 function groupstats_params(
     outdir: string,
+    group_fsgd: InputPathType | null = null,
     subjectfile: InputPathType | null = null,
     fwhm: Array<number> | null = null,
     subject_dir: string | null = null,
     mapname: string | null = null,
     srcsurfreg: string | null = null,
+    no_maps: boolean = false,
+    lh_only: boolean = false,
+    rh_only: boolean = false,
+    no_aparcstats: boolean = false,
+    no_asegstats: boolean = false,
+    no_wparcstats: boolean = false,
+    no_stats: boolean = false,
+    new_: boolean = false,
+    base: boolean = false,
     keep53: boolean = false,
 ): GroupstatsParameters {
     /**
      * Build parameters.
     
      * @param outdir Output folder
+     * @param group_fsgd Specify the FSGD file for the group
      * @param subjectfile Subject list file
      * @param fwhm Specify smoothing level(s)
      * @param subject_dir Subject directory
      * @param mapname Use the given map name
      * @param srcsurfreg Source surface registration (default is sphere.reg)
+     * @param no_maps Only analyze ROI data
+     * @param lh_only Only analyze left hemisphere
+     * @param rh_only Only analyze right hemisphere
+     * @param no_aparcstats Do not compute aparcstats
+     * @param no_asegstats Do not compute asegstats
+     * @param no_wparcstats Do not compute wmparcstats
+     * @param no_stats Do not perform any ROI stats
+     * @param new_ Append .new.mris_make_surfaces to map names
+     * @param base Sets measure thickness area volume curvature sulcus (excludes white-gray percentage)
      * @param keep53 Keep 5.3 aseg names (e.g., Thalamus-Proper)
     
      * @returns Parameter dictionary
@@ -99,8 +129,20 @@ function groupstats_params(
     const params = {
         "__STYXTYPE__": "groupstats" as const,
         "outdir": outdir,
+        "no_maps": no_maps,
+        "lh_only": lh_only,
+        "rh_only": rh_only,
+        "no_aparcstats": no_aparcstats,
+        "no_asegstats": no_asegstats,
+        "no_wparcstats": no_wparcstats,
+        "no_stats": no_stats,
+        "new": new_,
+        "base": base,
         "keep53": keep53,
     };
+    if (group_fsgd !== null) {
+        params["group_fsgd"] = group_fsgd;
+    }
     if (subjectfile !== null) {
         params["subjectfile"] = subjectfile;
     }
@@ -138,6 +180,12 @@ function groupstats_cargs(
         "--o",
         (params["outdir"] ?? null)
     );
+    if ((params["group_fsgd"] ?? null) !== null) {
+        cargs.push(
+            "--fsgd",
+            execution.inputFile((params["group_fsgd"] ?? null))
+        );
+    }
     if ((params["subjectfile"] ?? null) !== null) {
         cargs.push(
             "--f",
@@ -167,6 +215,33 @@ function groupstats_cargs(
             "--srcsurfreg",
             (params["srcsurfreg"] ?? null)
         );
+    }
+    if ((params["no_maps"] ?? null)) {
+        cargs.push("--no-maps");
+    }
+    if ((params["lh_only"] ?? null)) {
+        cargs.push("--lh");
+    }
+    if ((params["rh_only"] ?? null)) {
+        cargs.push("--rh");
+    }
+    if ((params["no_aparcstats"] ?? null)) {
+        cargs.push("--no-aparcstats");
+    }
+    if ((params["no_asegstats"] ?? null)) {
+        cargs.push("--no-asegstats");
+    }
+    if ((params["no_wparcstats"] ?? null)) {
+        cargs.push("--no-wparcstats");
+    }
+    if ((params["no_stats"] ?? null)) {
+        cargs.push("--no-stats");
+    }
+    if ((params["new"] ?? null)) {
+        cargs.push("--new");
+    }
+    if ((params["base"] ?? null)) {
+        cargs.push("--base");
     }
     if ((params["keep53"] ?? null)) {
         cargs.push("--keep53");
@@ -221,11 +296,21 @@ function groupstats_execute(
 
 function groupstats(
     outdir: string,
+    group_fsgd: InputPathType | null = null,
     subjectfile: InputPathType | null = null,
     fwhm: Array<number> | null = null,
     subject_dir: string | null = null,
     mapname: string | null = null,
     srcsurfreg: string | null = null,
+    no_maps: boolean = false,
+    lh_only: boolean = false,
+    rh_only: boolean = false,
+    no_aparcstats: boolean = false,
+    no_asegstats: boolean = false,
+    no_wparcstats: boolean = false,
+    no_stats: boolean = false,
+    new_: boolean = false,
+    base: boolean = false,
     keep53: boolean = false,
     runner: Runner | null = null,
 ): GroupstatsOutputs {
@@ -237,11 +322,21 @@ function groupstats(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param outdir Output folder
+     * @param group_fsgd Specify the FSGD file for the group
      * @param subjectfile Subject list file
      * @param fwhm Specify smoothing level(s)
      * @param subject_dir Subject directory
      * @param mapname Use the given map name
      * @param srcsurfreg Source surface registration (default is sphere.reg)
+     * @param no_maps Only analyze ROI data
+     * @param lh_only Only analyze left hemisphere
+     * @param rh_only Only analyze right hemisphere
+     * @param no_aparcstats Do not compute aparcstats
+     * @param no_asegstats Do not compute asegstats
+     * @param no_wparcstats Do not compute wmparcstats
+     * @param no_stats Do not perform any ROI stats
+     * @param new_ Append .new.mris_make_surfaces to map names
+     * @param base Sets measure thickness area volume curvature sulcus (excludes white-gray percentage)
      * @param keep53 Keep 5.3 aseg names (e.g., Thalamus-Proper)
      * @param runner Command runner
     
@@ -249,7 +344,7 @@ function groupstats(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GROUPSTATS_METADATA);
-    const params = groupstats_params(outdir, subjectfile, fwhm, subject_dir, mapname, srcsurfreg, keep53)
+    const params = groupstats_params(outdir, group_fsgd, subjectfile, fwhm, subject_dir, mapname, srcsurfreg, no_maps, lh_only, rh_only, no_aparcstats, no_asegstats, no_wparcstats, no_stats, new_, base, keep53)
     return groupstats_execute(params, execution);
 }
 

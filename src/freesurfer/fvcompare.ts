@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FVCOMPARE_METADATA: Metadata = {
-    id: "84e27ef54cc73075db70cca3ebbdd40631c9472d.boutiques",
+    id: "34ef4943d85118cb4252e43061bab2f274dff0b4.boutiques",
     name: "fvcompare",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -24,6 +24,7 @@ interface FvcompareParameters {
     "segmentation"?: string | null | undefined;
     "aseg": boolean;
     "no_seg": boolean;
+    "left_hemi": boolean;
     "right_hemi": boolean;
     "no_surf": boolean;
     "gray_levels"?: Array<number> | null | undefined;
@@ -98,6 +99,7 @@ function fvcompare_params(
     segmentation: string | null = null,
     aseg: boolean = false,
     no_seg: boolean = false,
+    left_hemi: boolean = false,
     right_hemi: boolean = false,
     no_surf: boolean = false,
     gray_levels: Array<number> | null = null,
@@ -126,6 +128,7 @@ function fvcompare_params(
      * @param segmentation Segmentation name found in subject/mri (default: aparc+aseg.mgz, can have multiple)
      * @param aseg Add aseg.mgz to segmentation list
      * @param no_seg Do not display segmentations
+     * @param left_hemi Only display left hemisphere
      * @param right_hemi Only display right hemisphere
      * @param no_surf Do not display surfaces
      * @param gray_levels Set gray scale levels
@@ -148,6 +151,7 @@ function fvcompare_params(
         "subject2": subject2,
         "aseg": aseg,
         "no_seg": no_seg,
+        "left_hemi": left_hemi,
         "right_hemi": right_hemi,
         "no_surf": no_surf,
         "aparc": aparc,
@@ -269,6 +273,9 @@ function fvcompare_cargs(
     if ((params["no_seg"] ?? null)) {
         cargs.push("--no-seg");
     }
+    if ((params["left_hemi"] ?? null)) {
+        cargs.push("--lh");
+    }
     if ((params["right_hemi"] ?? null)) {
         cargs.push("--rh");
     }
@@ -385,6 +392,7 @@ function fvcompare(
     segmentation: string | null = null,
     aseg: boolean = false,
     no_seg: boolean = false,
+    left_hemi: boolean = false,
     right_hemi: boolean = false,
     no_surf: boolean = false,
     gray_levels: Array<number> | null = null,
@@ -418,6 +426,7 @@ function fvcompare(
      * @param segmentation Segmentation name found in subject/mri (default: aparc+aseg.mgz, can have multiple)
      * @param aseg Add aseg.mgz to segmentation list
      * @param no_seg Do not display segmentations
+     * @param left_hemi Only display left hemisphere
      * @param right_hemi Only display right hemisphere
      * @param no_surf Do not display surfaces
      * @param gray_levels Set gray scale levels
@@ -437,7 +446,7 @@ function fvcompare(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FVCOMPARE_METADATA);
-    const params = fvcompare_params(subject1, subject2, subject_dir1, subject_dir2, name1, name2, color1, volume, segmentation, aseg, no_seg, right_hemi, no_surf, gray_levels, cursor_position, zoom_level, annotation, aparc, inflated, white, orig, surf_name, pointset, wot2)
+    const params = fvcompare_params(subject1, subject2, subject_dir1, subject_dir2, name1, name2, color1, volume, segmentation, aseg, no_seg, left_hemi, right_hemi, no_surf, gray_levels, cursor_position, zoom_level, annotation, aparc, inflated, white, orig, surf_name, pointset, wot2)
     return fvcompare_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEG2FILLED_METADATA: Metadata = {
-    id: "894fcea3b0a2a4a1b34ad187f3a8016973d50857.boutiques",
+    id: "08a923890854a31a1c2fa48662a53980de38b6b2.boutiques",
     name: "seg2filled",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -132,15 +132,15 @@ function seg2filled_cargs(
     cargs.push("seg2filled");
     cargs.push(
         "-seg",
-        ["-", execution.inputFile((params["seg_file"] ?? null))].join('')
+        execution.inputFile((params["seg_file"] ?? null))
     );
     cargs.push(
         "-norm",
-        ["-", execution.inputFile((params["norm_file"] ?? null))].join('')
+        execution.inputFile((params["norm_file"] ?? null))
     );
     cargs.push(
         "-o",
-        ["-", (params["output_file"] ?? null)].join('')
+        (params["output_file"] ?? null)
     );
     if ((params["ndil"] ?? null) !== null) {
         cargs.push(

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_STATS_TPS_METADATA: Metadata = {
-    id: "bc2f340c25927fb0b4a967b198182aa268f9cf9f.boutiques",
+    id: "1bcd114b81501e8287ad3b93601056a429f0aaa9.boutiques",
     name: "long_stats_tps",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -132,27 +132,27 @@ function long_stats_tps_cargs(
     cargs.push("long_stats_tps");
     cargs.push(
         "--qdec",
-        ["--qdec=", execution.inputFile((params["qdec_table"] ?? null))].join('')
+        execution.inputFile((params["qdec_table"] ?? null))
     );
     cargs.push(
         "--stats",
-        ["--stats=", (params["stats_file"] ?? null)].join('')
+        (params["stats_file"] ?? null)
     );
     cargs.push(
         "--meas",
-        ["--meas=", (params["measure"] ?? null)].join('')
+        (params["measure"] ?? null)
     );
     cargs.push(
         "--sd",
-        ["--sd=", (params["subjects_dir"] ?? null)].join('')
+        (params["subjects_dir"] ?? null)
     );
     cargs.push(
         "--tp",
-        ["--tp=", String((params["time_point"] ?? null))].join('')
+        String((params["time_point"] ?? null))
     );
     cargs.push(
         "--out",
-        ["--out=", (params["output_file"] ?? null)].join('')
+        (params["output_file"] ?? null)
     );
     if ((params["qcolumn"] ?? null) !== null) {
         cargs.push(

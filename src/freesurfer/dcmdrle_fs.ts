@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCMDRLE_FS_METADATA: Metadata = {
-    id: "1c6fdec3b4ee16a344e1e0d5d4e1bcbc79b17f47.boutiques",
+    id: "b9eeb8b72ae777bc906cf77f646047be70b17380.boutiques",
     name: "dcmdrle.fs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -229,7 +229,7 @@ function dcmdrle_fs_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("dcmdrle");
+    cargs.push("dcmdrle.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
     if ((params["help"] ?? null)) {

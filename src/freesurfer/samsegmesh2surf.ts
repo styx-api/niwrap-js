@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SAMSEGMESH2SURF_METADATA: Metadata = {
-    id: "d985be1373714eb0aff1a308730598604fe9d68c.boutiques",
+    id: "d0ca6a468bc9a3a09b97395c0b760ba787b54209.boutiques",
     name: "samsegmesh2surf",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -139,27 +139,25 @@ function samsegmesh2surf_cargs(
     if ((params["template"] ?? null) !== null) {
         cargs.push(
             "--template",
-            ["(", execution.inputFile((params["template"] ?? null))].join('')
+            execution.inputFile((params["template"] ?? null))
         );
     }
-    cargs.push("|");
     if ((params["lta_transform"] ?? null) !== null) {
         cargs.push(
             "--lta",
-            [execution.inputFile((params["lta_transform"] ?? null)), ")"].join('')
+            execution.inputFile((params["lta_transform"] ?? null))
         );
     }
     if ((params["output_surface"] ?? null) !== null) {
         cargs.push(
             "--osurf",
-            ["(", (params["output_surface"] ?? null)].join('')
+            (params["output_surface"] ?? null)
         );
     }
-    cargs.push("|");
     if ((params["output_priors"] ?? null) !== null) {
         cargs.push(
             "--opriors",
-            [(params["output_priors"] ?? null), ")"].join('')
+            (params["output_priors"] ?? null)
         );
     }
     if ((params["invert_flag"] ?? null)) {

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APARC2FEAT_METADATA: Metadata = {
-    id: "40a686bfd13826d8c5472e46b643ff5ee20464a4.boutiques",
+    id: "0ac9c7d7d17f6bd66cfbc4ec10b36ae576f35039.boutiques",
     name: "aparc2feat",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -20,6 +20,8 @@ interface Aparc2featParameters {
     "annot_a2005s_flag": boolean;
     "annot_a2009s_flag": boolean;
     "debug_flag": boolean;
+    "help_flag": boolean;
+    "version_flag": boolean;
 }
 
 
@@ -86,6 +88,8 @@ function aparc2feat_params(
     annot_a2005s_flag: boolean = false,
     annot_a2009s_flag: boolean = false,
     debug_flag: boolean = false,
+    help_flag: boolean = false,
+    version_flag: boolean = false,
 ): Aparc2featParameters {
     /**
      * Build parameters.
@@ -97,6 +101,8 @@ function aparc2feat_params(
      * @param annot_a2005s_flag Specify annotation = aparc.a2005s.
      * @param annot_a2009s_flag Specify annotation = aparc.a2009s.
      * @param debug_flag Turn on debugging.
+     * @param help_flag Print help and exit.
+     * @param version_flag Print version and exit.
     
      * @returns Parameter dictionary
      */
@@ -106,6 +112,8 @@ function aparc2feat_params(
         "annot_a2005s_flag": annot_a2005s_flag,
         "annot_a2009s_flag": annot_a2009s_flag,
         "debug_flag": debug_flag,
+        "help_flag": help_flag,
+        "version_flag": version_flag,
     };
     if (featdirfile !== null) {
         params["featdirfile"] = featdirfile;
@@ -165,6 +173,12 @@ function aparc2feat_cargs(
     if ((params["debug_flag"] ?? null)) {
         cargs.push("--debug");
     }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("--help");
+    }
+    if ((params["version_flag"] ?? null)) {
+        cargs.push("--version");
+    }
     return cargs;
 }
 
@@ -222,6 +236,8 @@ function aparc2feat(
     annot_a2005s_flag: boolean = false,
     annot_a2009s_flag: boolean = false,
     debug_flag: boolean = false,
+    help_flag: boolean = false,
+    version_flag: boolean = false,
     runner: Runner | null = null,
 ): Aparc2featOutputs {
     /**
@@ -238,13 +254,15 @@ function aparc2feat(
      * @param annot_a2005s_flag Specify annotation = aparc.a2005s.
      * @param annot_a2009s_flag Specify annotation = aparc.a2009s.
      * @param debug_flag Turn on debugging.
+     * @param help_flag Print help and exit.
+     * @param version_flag Print version and exit.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `Aparc2featOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APARC2FEAT_METADATA);
-    const params = aparc2feat_params(feat_directories, featdirfile, hemi, annot, annot_a2005s_flag, annot_a2009s_flag, debug_flag)
+    const params = aparc2feat_params(feat_directories, featdirfile, hemi, annot, annot_a2005s_flag, annot_a2009s_flag, debug_flag, help_flag, version_flag)
     return aparc2feat_execute(params, execution);
 }
 

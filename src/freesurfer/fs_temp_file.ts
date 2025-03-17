@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FS_TEMP_FILE_METADATA: Metadata = {
-    id: "517fdbcd5c110803a94e295435754191461fd4ee.boutiques",
+    id: "66a8be9a7267979a485ac7d37ceb69ea952d8f36.boutiques",
     name: "fs_temp_file",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,9 +13,12 @@ const FS_TEMP_FILE_METADATA: Metadata = {
 
 interface FsTempFileParameters {
     "__STYXTYPE__": "fs_temp_file";
+    "base_dir"?: string | null | undefined;
     "base_dir_alt"?: string | null | undefined;
+    "suffix"?: string | null | undefined;
     "suffix_alt"?: string | null | undefined;
     "scratch": boolean;
+    "help": boolean;
     "help_alt": boolean;
 }
 
@@ -67,17 +70,23 @@ interface FsTempFileOutputs {
 
 
 function fs_temp_file_params(
+    base_dir: string | null = null,
     base_dir_alt: string | null = null,
+    suffix: string | null = null,
     suffix_alt: string | null = null,
     scratch: boolean = false,
+    help: boolean = false,
     help_alt: boolean = false,
 ): FsTempFileParameters {
     /**
      * Build parameters.
     
+     * @param base_dir Manually specify base temporary directory.
      * @param base_dir_alt Manually specify base temporary directory.
+     * @param suffix Optional file suffix.
      * @param suffix_alt Optional file suffix.
      * @param scratch Use /scratch directory if available, but FS_TMPDIR takes priority.
+     * @param help Print help text and exit.
      * @param help_alt Print help text and exit.
     
      * @returns Parameter dictionary
@@ -85,10 +94,17 @@ function fs_temp_file_params(
     const params = {
         "__STYXTYPE__": "fs_temp_file" as const,
         "scratch": scratch,
+        "help": help,
         "help_alt": help_alt,
     };
+    if (base_dir !== null) {
+        params["base_dir"] = base_dir;
+    }
     if (base_dir_alt !== null) {
         params["base_dir_alt"] = base_dir_alt;
+    }
+    if (suffix !== null) {
+        params["suffix"] = suffix;
     }
     if (suffix_alt !== null) {
         params["suffix_alt"] = suffix_alt;
@@ -111,10 +127,22 @@ function fs_temp_file_cargs(
      */
     const cargs: string[] = [];
     cargs.push("fs_temp_file");
+    if ((params["base_dir"] ?? null) !== null) {
+        cargs.push(
+            "-b",
+            (params["base_dir"] ?? null)
+        );
+    }
     if ((params["base_dir_alt"] ?? null) !== null) {
         cargs.push(
             "--base",
             (params["base_dir_alt"] ?? null)
+        );
+    }
+    if ((params["suffix"] ?? null) !== null) {
+        cargs.push(
+            "-s",
+            (params["suffix"] ?? null)
         );
     }
     if ((params["suffix_alt"] ?? null) !== null) {
@@ -125,6 +153,9 @@ function fs_temp_file_cargs(
     }
     if ((params["scratch"] ?? null)) {
         cargs.push("--scratch");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-h");
     }
     if ((params["help_alt"] ?? null)) {
         cargs.push("--help");
@@ -177,9 +208,12 @@ function fs_temp_file_execute(
 
 
 function fs_temp_file(
+    base_dir: string | null = null,
     base_dir_alt: string | null = null,
+    suffix: string | null = null,
     suffix_alt: string | null = null,
     scratch: boolean = false,
+    help: boolean = false,
     help_alt: boolean = false,
     runner: Runner | null = null,
 ): FsTempFileOutputs {
@@ -190,9 +224,12 @@ function fs_temp_file(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param base_dir Manually specify base temporary directory.
      * @param base_dir_alt Manually specify base temporary directory.
+     * @param suffix Optional file suffix.
      * @param suffix_alt Optional file suffix.
      * @param scratch Use /scratch directory if available, but FS_TMPDIR takes priority.
+     * @param help Print help text and exit.
      * @param help_alt Print help text and exit.
      * @param runner Command runner
     
@@ -200,7 +237,7 @@ function fs_temp_file(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_TEMP_FILE_METADATA);
-    const params = fs_temp_file_params(base_dir_alt, suffix_alt, scratch, help_alt)
+    const params = fs_temp_file_params(base_dir, base_dir_alt, suffix, suffix_alt, scratch, help, help_alt)
     return fs_temp_file_execute(params, execution);
 }
 

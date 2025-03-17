@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IREPIFITVOL_GLNX64_METADATA: Metadata = {
-    id: "e1b3c71003d88eeb91c6bc522cbeb9c8dec5641d.boutiques",
+    id: "a245c53e9539ea6eed51026dad3ae5a54dd3dcd3.boutiques",
     name: "irepifitvol.glnx64",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -103,7 +103,7 @@ function irepifitvol_glnx64_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("irepifitvol");
+    cargs.push("irepifitvol.glnx64");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
     return cargs;

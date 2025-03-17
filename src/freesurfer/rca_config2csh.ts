@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCA_CONFIG2CSH_METADATA: Metadata = {
-    id: "a6974f7a84f9b447ffa3652155f3daff457ba308.boutiques",
+    id: "7da3f443ce243dae4e35d8db7f6e15691dc59ca6.boutiques",
     name: "rca-config2csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -94,9 +94,10 @@ function rca_config2csh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("rca-config2csh");
     cargs.push(
         "-config2csh",
-        ["rca", execution.inputFile((params["configfile"] ?? null))].join('')
+        execution.inputFile((params["configfile"] ?? null))
     );
     return cargs;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_APPLY_REG_METADATA: Metadata = {
-    id: "cba2fa7ec9ece7dd7da7631135e083c0bc5bc503.boutiques",
+    id: "9fde49bd7ee0afa537381c5ca9d9fe244176aed6.boutiques",
     name: "mris_apply_reg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -224,7 +224,6 @@ function mris_apply_reg_cargs(
         "--streg",
         (params["streg_pair"] ?? null)
     );
-    cargs.push("[STREG_ADDITIONAL...]");
     if ((params["src_label"] ?? null) !== null) {
         cargs.push(
             "--src-label",

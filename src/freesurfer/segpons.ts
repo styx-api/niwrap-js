@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGPONS_METADATA: Metadata = {
-    id: "4b38e194fdd9fe1d16fc15d6ac746b2dffa56e0f.boutiques",
+    id: "8eb6baa748bcc4187afc21f69060f662b9b141d7.boutiques",
     name: "segpons",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -126,7 +126,7 @@ function segpons_cargs(
     cargs.push("segpons");
     cargs.push(
         "-s",
-        ["-", (params["subject"] ?? null)].join('')
+        (params["subject"] ?? null)
     );
     if ((params["aseg"] ?? null)) {
         cargs.push("--aseg");

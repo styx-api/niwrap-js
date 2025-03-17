@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCMDIR_INFO_MGH_METADATA: Metadata = {
-    id: "7ccff8790fdd0d584c57e3c31a9bf9ffd1e90e36.boutiques",
+    id: "162f400a399c275cd7fef293d1d5ad1cd84402e4.boutiques",
     name: "dcmdir-info-mgh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -117,9 +117,10 @@ function dcmdir_info_mgh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("dcmdir-info-mgh");
     cargs.push(
         "-mgh",
-        ["dcmdir-info", (params["dicomdir"] ?? null)].join('')
+        (params["dicomdir"] ?? null)
     );
     if ((params["unpackdir"] ?? null) !== null) {
         cargs.push((params["unpackdir"] ?? null));

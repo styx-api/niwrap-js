@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_REORIENT_LR_CSH_METADATA: Metadata = {
-    id: "44b9d6ba4983462289bb74a35e46ca2bc4fb3a6c.boutiques",
+    id: "0a6ce73f29c18581e75c6c6cc19eafd6b33ca832.boutiques",
     name: "mri_reorient_LR.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -123,7 +123,7 @@ function mri_reorient_lr_csh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("mri_reorient_LR");
+    cargs.push("mri_reorient_LR.csh");
     cargs.push(
         "--i",
         execution.inputFile((params["input_vol"] ?? null))

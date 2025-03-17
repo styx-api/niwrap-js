@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MNI152REG_METADATA: Metadata = {
-    id: "ce57b863d24379ba72442d213f0a02c5cba44366.boutiques",
+    id: "8fa95f49688c26996caeccdd18ef44b1edc62d55.boutiques",
     name: "mni152reg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -124,7 +124,7 @@ function mni152reg_cargs(
     cargs.push("mni152reg");
     cargs.push(
         "-s",
-        ["-", (params["subject"] ?? null)].join('')
+        (params["subject"] ?? null)
     );
     if ((params["register_1mm"] ?? null)) {
         cargs.push("--1");

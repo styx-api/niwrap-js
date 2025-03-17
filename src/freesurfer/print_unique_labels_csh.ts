@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PRINT_UNIQUE_LABELS_CSH_METADATA: Metadata = {
-    id: "e9fb80f03f3d4d6c2fbe65561d9c32f6e16bc580.boutiques",
+    id: "61620e17b7f1d9248e212d87048973a57d06b37e.boutiques",
     name: "print_unique_labels.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,7 +14,10 @@ const PRINT_UNIQUE_LABELS_CSH_METADATA: Metadata = {
 interface PrintUniqueLabelsCshParameters {
     "__STYXTYPE__": "print_unique_labels.csh";
     "label_volume": InputPathType;
+    "output_file"?: string | null | undefined;
     "list_only": boolean;
+    "version": boolean;
+    "help": boolean;
 }
 
 
@@ -65,19 +68,25 @@ interface PrintUniqueLabelsCshOutputs {
     /**
      * Output file with the list of unique labels
      */
-    results_file: OutputPathType;
+    results_file: OutputPathType | null;
 }
 
 
 function print_unique_labels_csh_params(
     label_volume: InputPathType,
+    output_file: string | null = null,
     list_only: boolean = false,
+    version: boolean = false,
+    help: boolean = false,
 ): PrintUniqueLabelsCshParameters {
     /**
      * Build parameters.
     
      * @param label_volume Label volume to be analyzed
+     * @param output_file Text file where the results are written
      * @param list_only Only list the labels
+     * @param version Print version and exit
+     * @param help Print help and exit
     
      * @returns Parameter dictionary
      */
@@ -85,7 +94,12 @@ function print_unique_labels_csh_params(
         "__STYXTYPE__": "print_unique_labels.csh" as const,
         "label_volume": label_volume,
         "list_only": list_only,
+        "version": version,
+        "help": help,
     };
+    if (output_file !== null) {
+        params["output_file"] = output_file;
+    }
     return params;
 }
 
@@ -108,8 +122,20 @@ function print_unique_labels_csh_cargs(
         "--vol",
         execution.inputFile((params["label_volume"] ?? null))
     );
+    if ((params["output_file"] ?? null) !== null) {
+        cargs.push(
+            "--out",
+            (params["output_file"] ?? null)
+        );
+    }
     if ((params["list_only"] ?? null)) {
         cargs.push("--list");
+    }
+    if ((params["version"] ?? null)) {
+        cargs.push("--version");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("--help");
     }
     return cargs;
 }
@@ -129,7 +155,7 @@ function print_unique_labels_csh_outputs(
      */
     const ret: PrintUniqueLabelsCshOutputs = {
         root: execution.outputFile("."),
-        results_file: execution.outputFile(["[OUTPUT_FILE]"].join('')),
+        results_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
     };
     return ret;
 }
@@ -161,7 +187,10 @@ function print_unique_labels_csh_execute(
 
 function print_unique_labels_csh(
     label_volume: InputPathType,
+    output_file: string | null = null,
     list_only: boolean = false,
+    version: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): PrintUniqueLabelsCshOutputs {
     /**
@@ -172,14 +201,17 @@ function print_unique_labels_csh(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param label_volume Label volume to be analyzed
+     * @param output_file Text file where the results are written
      * @param list_only Only list the labels
+     * @param version Print version and exit
+     * @param help Print help and exit
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `PrintUniqueLabelsCshOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PRINT_UNIQUE_LABELS_CSH_METADATA);
-    const params = print_unique_labels_csh_params(label_volume, list_only)
+    const params = print_unique_labels_csh_params(label_volume, output_file, list_only, version, help)
     return print_unique_labels_csh_execute(params, execution);
 }
 

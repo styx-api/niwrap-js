@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MORPH_TABLES_RH_METADATA: Metadata = {
-    id: "2f3add04b35d7726ca806ca38014821260043ebc.boutiques",
+    id: "9194a1ddf4531bb86d7ff7792d74bb6bd3e661a5.boutiques",
     name: "morph_tables-rh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -96,10 +96,11 @@ function morph_tables_rh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("morph_tables-rh");
     if ((params["options"] ?? null) !== null) {
         cargs.push(
             "-rh",
-            ["morph_tables", (params["options"] ?? null)].join('')
+            (params["options"] ?? null)
         );
     }
     return cargs;

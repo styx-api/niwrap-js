@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RUN_QDEC_GLM_METADATA: Metadata = {
-    id: "b83d7c50b5137b0f5530f2c1776edefd9de98fa2.boutiques",
+    id: "7d86461bf7f65d864302de80bed43c2de8adbb76.boutiques",
     name: "run-qdec-glm",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -94,9 +94,10 @@ function run_qdec_glm_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("run-qdec-glm");
     cargs.push(
         "-glm",
-        ["run-qdec", (params["qdec_directory"] ?? null)].join('')
+        (params["qdec_directory"] ?? null)
     );
     return cargs;
 }

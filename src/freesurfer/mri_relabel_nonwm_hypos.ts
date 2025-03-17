@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_RELABEL_NONWM_HYPOS_METADATA: Metadata = {
-    id: "93faec099d80076ace8a12bddc7f7a4affe02681.boutiques",
+    id: "c2dc64755d5cb891179f87b8ccf2689c8f1b9dde.boutiques",
     name: "mri_relabel_nonwm_hypos",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -124,11 +124,11 @@ function mri_relabel_nonwm_hypos_cargs(
     cargs.push("mri_relabel_nonwm_hypos");
     cargs.push(
         "-i",
-        ["-", execution.inputFile((params["inputseg"] ?? null))].join('')
+        execution.inputFile((params["inputseg"] ?? null))
     );
     cargs.push(
         "-o",
-        ["-", (params["outputseg"] ?? null)].join('')
+        (params["outputseg"] ?? null)
     );
     if ((params["segments"] ?? null) !== null) {
         cargs.push(

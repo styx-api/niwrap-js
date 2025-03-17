@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_SUBJECT_METADATA: Metadata = {
-    id: "5ab5fa41476c4d8921b2a5ed52d0505305a8ad2b.boutiques",
+    id: "a65e75f6b6b5d6e1393a6f72d663a2e7389bbdf7.boutiques",
     name: "segment_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -121,7 +121,7 @@ function segment_subject_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("mri_nu_correct.mni");
+    cargs.push("segment_subject");
     cargs.push(
         "--i",
         execution.inputFile((params["input_volume"] ?? null))

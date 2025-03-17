@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GDCMCONV_FS_METADATA: Metadata = {
-    id: "c4cb69979a329deef98f15b2e797b9c57375a6ef.boutiques",
+    id: "98f7b1994832a771c3433368967176f42a435bc4.boutiques",
     name: "gdcmconv.fs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -272,7 +272,7 @@ function gdcmconv_fs_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("gdcmconv");
+    cargs.push("gdcmconv.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
     if ((params["explicit_flag"] ?? null)) {

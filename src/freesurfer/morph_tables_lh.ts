@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MORPH_TABLES_LH_METADATA: Metadata = {
-    id: "e50487cf18790588cbef4e2983a79d88589f3cc3.boutiques",
+    id: "34324860233ca7709fb6c2b4418a71bd3f0cbdf6.boutiques",
     name: "morph_tables-lh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -103,9 +103,10 @@ function morph_tables_lh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("morph_tables-lh");
     cargs.push(
         "-lh",
-        ["morph_tables", execution.inputFile((params["input_file"] ?? null))].join('')
+        execution.inputFile((params["input_file"] ?? null))
     );
     if ((params["some_flag"] ?? null)) {
         cargs.push("--some-flag");

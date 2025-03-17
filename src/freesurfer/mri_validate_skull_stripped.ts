@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_VALIDATE_SKULL_STRIPPED_METADATA: Metadata = {
-    id: "2bdfa9e2cc73998aa283c518ac64ca8fd5b27024.boutiques",
+    id: "0de0265b82e5cc83b346cf1e1de5cade0f9128b2.boutiques",
     name: "mri_validate_skull_stripped",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -102,7 +102,7 @@ function mri_validate_skull_stripped_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("tntester");
+    cargs.push("mri_validate_skull_stripped");
     cargs.push(execution.inputFile((params["mri_reference"] ?? null)));
     cargs.push(execution.inputFile((params["mri_test"] ?? null)));
     cargs.push(String((params["weight"] ?? null)));

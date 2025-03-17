@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_GTMPVC_METADATA: Metadata = {
-    id: "fd930d51e0a8f5012076ae523ec1cb2238ba47c5.boutiques",
+    id: "3c3042699fe4320ac7c6849c5d7c614e5a318805.boutiques",
     name: "mri_gtmpvc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -18,6 +18,8 @@ interface MriGtmpvcParameters {
     "psf": number;
     "segmentation": InputPathType;
     "registration"?: InputPathType | null | undefined;
+    "regheader": boolean;
+    "reg_identity": boolean;
     "output_directory": string;
     "mask"?: InputPathType | null | undefined;
     "auto_mask"?: number | null | undefined;
@@ -178,6 +180,8 @@ function mri_gtmpvc_params(
     output_directory: string,
     frame: number | null = null,
     registration: InputPathType | null = null,
+    regheader: boolean = false,
+    reg_identity: boolean = false,
     mask: InputPathType | null = null,
     auto_mask: number | null = null,
     no_reduce_fov: boolean = false,
@@ -242,6 +246,8 @@ function mri_gtmpvc_params(
      * @param output_directory Output directory
      * @param frame Only process 0-based frame F from input volume
      * @param registration LTA registration file that maps PET to anatomical
+     * @param regheader Assume input and seg share scanner space
+     * @param reg_identity Assume that input is in anatomical space
      * @param mask Ignore areas outside of the mask (in input vol space)
      * @param auto_mask Automatically compute mask with FWHM and threshold
      * @param no_reduce_fov Do not reduce FoV to encompass mask
@@ -304,6 +310,8 @@ function mri_gtmpvc_params(
         "input_volume": input_volume,
         "psf": psf,
         "segmentation": segmentation,
+        "regheader": regheader,
+        "reg_identity": reg_identity,
         "output_directory": output_directory,
         "no_reduce_fov": no_reduce_fov,
         "reduce_fov_eqodd": reduce_fov_eqodd,
@@ -449,6 +457,12 @@ function mri_gtmpvc_cargs(
             "--reg",
             execution.inputFile((params["registration"] ?? null))
         );
+    }
+    if ((params["regheader"] ?? null)) {
+        cargs.push("--regheader");
+    }
+    if ((params["reg_identity"] ?? null)) {
+        cargs.push("--reg-identity");
     }
     cargs.push(
         "--o",
@@ -745,6 +759,8 @@ function mri_gtmpvc(
     output_directory: string,
     frame: number | null = null,
     registration: InputPathType | null = null,
+    regheader: boolean = false,
+    reg_identity: boolean = false,
     mask: InputPathType | null = null,
     auto_mask: number | null = null,
     no_reduce_fov: boolean = false,
@@ -814,6 +830,8 @@ function mri_gtmpvc(
      * @param output_directory Output directory
      * @param frame Only process 0-based frame F from input volume
      * @param registration LTA registration file that maps PET to anatomical
+     * @param regheader Assume input and seg share scanner space
+     * @param reg_identity Assume that input is in anatomical space
      * @param mask Ignore areas outside of the mask (in input vol space)
      * @param auto_mask Automatically compute mask with FWHM and threshold
      * @param no_reduce_fov Do not reduce FoV to encompass mask
@@ -874,7 +892,7 @@ function mri_gtmpvc(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GTMPVC_METADATA);
-    const params = mri_gtmpvc_params(input_volume, psf, segmentation, output_directory, frame, registration, mask, auto_mask, no_reduce_fov, reduce_fov_eqodd, contrast_matrix, default_seg_merge, merge_hypos, merge_cblum_wm_gyri, tt_reduce, replace_seg, replace_file, rescale, no_rescale, scale_refval, ctab, ctab_default, tt_update, lateralization, no_tfe, no_pvc, segpvfres, rbv, rbv_res, mueller_pvc, mg_ref_cerebral_wm, mg_ref_lobes_wm, glm_mg_pvc, km_ref, km_hb, steady_state, save_x, save_y, save_beta, save_x0, save_input, save_eres, save_yhat, save_yhat_noise, save_yhat_full_fov, save_yhat0, synth, synth_only, synth_save, save_text, threads, max_threads, max_threads_minus_one, subjects_dir, vg_thresh, gdiag, debug, checkopts, help, version)
+    const params = mri_gtmpvc_params(input_volume, psf, segmentation, output_directory, frame, registration, regheader, reg_identity, mask, auto_mask, no_reduce_fov, reduce_fov_eqodd, contrast_matrix, default_seg_merge, merge_hypos, merge_cblum_wm_gyri, tt_reduce, replace_seg, replace_file, rescale, no_rescale, scale_refval, ctab, ctab_default, tt_update, lateralization, no_tfe, no_pvc, segpvfres, rbv, rbv_res, mueller_pvc, mg_ref_cerebral_wm, mg_ref_lobes_wm, glm_mg_pvc, km_ref, km_hb, steady_state, save_x, save_y, save_beta, save_x0, save_input, save_eres, save_yhat, save_yhat_noise, save_yhat_full_fov, save_yhat0, synth, synth_only, synth_save, save_text, threads, max_threads, max_threads_minus_one, subjects_dir, vg_thresh, gdiag, debug, checkopts, help, version)
     return mri_gtmpvc_execute(params, execution);
 }
 

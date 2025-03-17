@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA: Metadata = {
-    id: "d1c64f0c85672d74bb2cb15852e56662e6d58c32.boutiques",
+    id: "f922d68383395cff18ea3f5fe5e68eae32a7b22e.boutiques",
     name: "renormalize_subject_keep_editting",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,7 @@ const RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA: Metadata = {
 
 interface RenormalizeSubjectKeepEdittingParameters {
     "__STYXTYPE__": "renormalize_subject_keep_editting";
+    "placeholder_input"?: string | null | undefined;
 }
 
 
@@ -68,15 +69,21 @@ interface RenormalizeSubjectKeepEdittingOutputs {
 
 
 function renormalize_subject_keep_editting_params(
+    placeholder_input: string | null = null,
 ): RenormalizeSubjectKeepEdittingParameters {
     /**
      * Build parameters.
+    
+     * @param placeholder_input Placeholder input since tool details are not available.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "renormalize_subject_keep_editting" as const,
     };
+    if (placeholder_input !== null) {
+        params["placeholder_input"] = placeholder_input;
+    }
     return params;
 }
 
@@ -95,6 +102,9 @@ function renormalize_subject_keep_editting_cargs(
      */
     const cargs: string[] = [];
     cargs.push("renormalize_subject_keep_editting");
+    if ((params["placeholder_input"] ?? null) !== null) {
+        cargs.push((params["placeholder_input"] ?? null));
+    }
     return cargs;
 }
 
@@ -144,6 +154,7 @@ function renormalize_subject_keep_editting_execute(
 
 
 function renormalize_subject_keep_editting(
+    placeholder_input: string | null = null,
     runner: Runner | null = null,
 ): RenormalizeSubjectKeepEdittingOutputs {
     /**
@@ -153,13 +164,14 @@ function renormalize_subject_keep_editting(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param placeholder_input Placeholder input since tool details are not available.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `RenormalizeSubjectKeepEdittingOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA);
-    const params = renormalize_subject_keep_editting_params()
+    const params = renormalize_subject_keep_editting_params(placeholder_input)
     return renormalize_subject_keep_editting_execute(params, execution);
 }
 

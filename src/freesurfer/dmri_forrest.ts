@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_FORREST_METADATA: Metadata = {
-    id: "dd4542253804128ad899a822733de446938568c4.boutiques",
+    id: "2c71c0f52e15a044282718015b50d98a2a58e574.boutiques",
     name: "dmri_forrest",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -21,6 +21,7 @@ interface DmriForrestParameters {
     "diff_file"?: InputPathType | null | undefined;
     "debug": boolean;
     "checkopts": boolean;
+    "help": boolean;
 }
 
 
@@ -79,6 +80,7 @@ function dmri_forrest_params(
     diff_file: InputPathType | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
+    help: boolean = false,
 ): DmriForrestParameters {
     /**
      * Build parameters.
@@ -91,6 +93,7 @@ function dmri_forrest_params(
      * @param diff_file Input diffusion orientation volume name, relative to subject directory
      * @param debug Turn on debugging mode
      * @param checkopts Only check options and exit
+     * @param help Display help information
     
      * @returns Parameter dictionary
      */
@@ -102,6 +105,7 @@ function dmri_forrest_params(
         "tract_files": tract_files,
         "debug": debug,
         "checkopts": checkopts,
+        "help": help,
     };
     if (seg_file !== null) {
         params["seg_file"] = seg_file;
@@ -161,6 +165,9 @@ function dmri_forrest_cargs(
     if ((params["checkopts"] ?? null)) {
         cargs.push("--checkopts");
     }
+    if ((params["help"] ?? null)) {
+        cargs.push("--help");
+    }
     return cargs;
 }
 
@@ -217,6 +224,7 @@ function dmri_forrest(
     diff_file: InputPathType | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): DmriForrestOutputs {
     /**
@@ -234,13 +242,14 @@ function dmri_forrest(
      * @param diff_file Input diffusion orientation volume name, relative to subject directory
      * @param debug Turn on debugging mode
      * @param checkopts Only check options and exit
+     * @param help Display help information
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `DmriForrestOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_FORREST_METADATA);
-    const params = dmri_forrest_params(test_dir, train_file, mask_file, tract_files, seg_file, diff_file, debug, checkopts)
+    const params = dmri_forrest_params(test_dir, train_file, mask_file, tract_files, seg_file, diff_file, debug, checkopts, help)
     return dmri_forrest_execute(params, execution);
 }
 

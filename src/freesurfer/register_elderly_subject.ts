@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const REGISTER_ELDERLY_SUBJECT_METADATA: Metadata = {
-    id: "537220baa60ce5febcf14be16d4b791c3cbbebb9.boutiques",
+    id: "6846052f6f1ffde9ddad0703126f73b72a6cd671.boutiques",
     name: "register_elderly_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -125,7 +125,7 @@ function register_elderly_subject_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("mri_em_register");
+    cargs.push("register_elderly_subject");
     if ((params["sampling_percentage"] ?? null) !== null) {
         cargs.push(
             "-p",

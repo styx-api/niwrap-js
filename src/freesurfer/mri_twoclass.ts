@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_TWOCLASS_METADATA: Metadata = {
-    id: "717cefa4d525f9af2426548e3f53f0a54c018c15.boutiques",
+    id: "d2a42c55540746e081c5b41bbf3d232cedb5984b.boutiques",
     name: "mri_twoclass",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -130,7 +130,6 @@ function mri_twoclass_cargs(
     cargs.push((params["output_subject"] ?? null));
     cargs.push((params["output_volume"] ?? null));
     cargs.push(...(params["c1_subjects"] ?? null));
-    cargs.push(":");
     cargs.push(...(params["c2_subjects"] ?? null));
     if ((params["f_threshold"] ?? null) !== null) {
         cargs.push(

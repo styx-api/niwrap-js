@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_NL_ALIGN_METADATA: Metadata = {
-    id: "cd2a19b23e2fec00175500358afe679cc9ee7fc7.boutiques",
+    id: "fd12751796479c6b953e5a2ce259ca4890ee3c30.boutiques",
     name: "mri_nl_align",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -31,11 +31,13 @@ interface MriNlAlignParameters {
     "erode"?: number | null | undefined;
     "match_mean"?: number | null | undefined;
     "intensity"?: number | null | undefined;
+    "ll"?: number | null | undefined;
     "noregrid_flag": boolean;
     "regrid_flag": boolean;
     "view"?: Array<number> | null | undefined;
     "levels"?: number | null | undefined;
     "area_smoothness"?: number | null | undefined;
+    "asmooth"?: number | null | undefined;
     "area"?: number | null | undefined;
     "tolerance"?: number | null | undefined;
     "sigma"?: number | null | undefined;
@@ -132,11 +134,13 @@ function mri_nl_align_params(
     erode: number | null = null,
     match_mean: number | null = null,
     intensity: number | null = null,
+    ll: number | null = null,
     noregrid_flag: boolean = false,
     regrid_flag: boolean = false,
     view: Array<number> | null = null,
     levels: number | null = null,
     area_smoothness: number | null = null,
+    asmooth: number | null = null,
     area: number | null = null,
     tolerance: number | null = null,
     sigma: number | null = null,
@@ -182,11 +186,13 @@ function mri_nl_align_params(
      * @param erode Erode source and target image specified times before morphing
      * @param match_mean Control for matching peak of intensity ratio histogram
      * @param intensity Set l_log_likelihood to specified value
+     * @param ll Set l_log_likelihood to specified value
      * @param noregrid_flag Disable regridding
      * @param regrid_flag Enable regridding
      * @param view View voxel coordinates (Gx, Gy, Gz)
      * @param levels Set levels to specified value
      * @param area_smoothness Set l_area_smoothness to specified value
+     * @param asmooth Set l_area_smoothness to specified value
      * @param area Set l_area to specified value
      * @param tolerance Set tolerance to specified value
      * @param sigma Set sigma to specified value
@@ -256,6 +262,9 @@ function mri_nl_align_params(
     if (intensity !== null) {
         params["intensity"] = intensity;
     }
+    if (ll !== null) {
+        params["ll"] = ll;
+    }
     if (view !== null) {
         params["view"] = view;
     }
@@ -264,6 +273,9 @@ function mri_nl_align_params(
     }
     if (area_smoothness !== null) {
         params["area_smoothness"] = area_smoothness;
+    }
+    if (asmooth !== null) {
+        params["asmooth"] = asmooth;
     }
     if (area !== null) {
         params["area"] = area;
@@ -430,6 +442,12 @@ function mri_nl_align_cargs(
             String((params["intensity"] ?? null))
         );
     }
+    if ((params["ll"] ?? null) !== null) {
+        cargs.push(
+            "-ll",
+            String((params["ll"] ?? null))
+        );
+    }
     if ((params["noregrid_flag"] ?? null)) {
         cargs.push("-noregrid");
     }
@@ -452,6 +470,12 @@ function mri_nl_align_cargs(
         cargs.push(
             "-areasmoothness",
             String((params["area_smoothness"] ?? null))
+        );
+    }
+    if ((params["asmooth"] ?? null) !== null) {
+        cargs.push(
+            "-asmooth",
+            String((params["asmooth"] ?? null))
         );
     }
     if ((params["area"] ?? null) !== null) {
@@ -659,11 +683,13 @@ function mri_nl_align(
     erode: number | null = null,
     match_mean: number | null = null,
     intensity: number | null = null,
+    ll: number | null = null,
     noregrid_flag: boolean = false,
     regrid_flag: boolean = false,
     view: Array<number> | null = null,
     levels: number | null = null,
     area_smoothness: number | null = null,
+    asmooth: number | null = null,
     area: number | null = null,
     tolerance: number | null = null,
     sigma: number | null = null,
@@ -714,11 +740,13 @@ function mri_nl_align(
      * @param erode Erode source and target image specified times before morphing
      * @param match_mean Control for matching peak of intensity ratio histogram
      * @param intensity Set l_log_likelihood to specified value
+     * @param ll Set l_log_likelihood to specified value
      * @param noregrid_flag Disable regridding
      * @param regrid_flag Enable regridding
      * @param view View voxel coordinates (Gx, Gy, Gz)
      * @param levels Set levels to specified value
      * @param area_smoothness Set l_area_smoothness to specified value
+     * @param asmooth Set l_area_smoothness to specified value
      * @param area Set l_area to specified value
      * @param tolerance Set tolerance to specified value
      * @param sigma Set sigma to specified value
@@ -748,7 +776,7 @@ function mri_nl_align(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_NL_ALIGN_METADATA);
-    const params = mri_nl_align_params(source, target, warp, debug_voxel, debug_node, no_neg, renormalize, aseg_flag, diag_volume, optimal_flag, momentum_flag, fixed_flag, distance, dtrans, match_peak_flag, erode, match_mean, intensity, noregrid_flag, regrid_flag, view, levels, area_smoothness, area, tolerance, sigma, min_sigma, ribbon, rthresh, scale, dt, passes, skip, apply, distance_log, momentum, iterations, smoothness, transform, inverse_transform, binary, jacobian, disable_zero_locations, smooth_averages, exp_k, diagnostics)
+    const params = mri_nl_align_params(source, target, warp, debug_voxel, debug_node, no_neg, renormalize, aseg_flag, diag_volume, optimal_flag, momentum_flag, fixed_flag, distance, dtrans, match_peak_flag, erode, match_mean, intensity, ll, noregrid_flag, regrid_flag, view, levels, area_smoothness, asmooth, area, tolerance, sigma, min_sigma, ribbon, rthresh, scale, dt, passes, skip, apply, distance_log, momentum, iterations, smoothness, transform, inverse_transform, binary, jacobian, disable_zero_locations, smooth_averages, exp_k, diagnostics)
     return mri_nl_align_execute(params, execution);
 }
 

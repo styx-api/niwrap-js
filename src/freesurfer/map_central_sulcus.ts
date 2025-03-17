@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAP_CENTRAL_SULCUS_METADATA: Metadata = {
-    id: "13b958f09713b9767ab00695cb856a93c2ef9725.boutiques",
+    id: "516b76e8b1ac8749a680661e63215cc41d8c82f4.boutiques",
     name: "map_central_sulcus",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -275,7 +275,7 @@ function map_central_sulcus_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("recon-all");
+    cargs.push("map_central_sulcus");
     cargs.push(
         "-subjid",
         (params["subjid"] ?? null)

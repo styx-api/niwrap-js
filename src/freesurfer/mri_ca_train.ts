@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_CA_TRAIN_METADATA: Metadata = {
-    id: "432e0861913c8c1346f736846e22c0107ee5337f.boutiques",
+    id: "b0a0862d8bce51400e3699e4c44a4499c82a6c8a.boutiques",
     name: "mri_ca_train",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -21,6 +21,7 @@ interface MriCaTrainParameters {
     "node_spacing"?: string | null | undefined;
     "prior_spacing"?: string | null | undefined;
     "input_training"?: Array<string> | null | undefined;
+    "symmetrize": boolean;
     "makesym"?: Array<string> | null | undefined;
     "check_symmetry"?: Array<string> | null | undefined;
     "sanity_check": boolean;
@@ -84,6 +85,7 @@ function mri_ca_train_params(
     node_spacing: string | null = null,
     prior_spacing: string | null = null,
     input_training: Array<string> | null = null,
+    symmetrize: boolean = false,
     makesym: Array<string> | null = null,
     check_symmetry: Array<string> | null = null,
     sanity_check: boolean = false,
@@ -101,6 +103,7 @@ function mri_ca_train_params(
      * @param node_spacing Spacing of classifiers in canonical space
      * @param prior_spacing Spacing of class priors in canonical space
      * @param input_training Specifying training data, path relative to each subject's MRI directory. Can specify multiple inputs.
+     * @param symmetrize Symmetrize the atlas after creation
      * @param makesym Symmetrize an already existing atlas. Specify input GCA and symmetrized GCA.
      * @param check_symmetry Check the symmetry of an already existing atlas. Specify input GCA and symmetrized GCA.
      * @param sanity_check Conduct sanity-check of labels for obvious edit errors
@@ -114,6 +117,7 @@ function mri_ca_train_params(
         "subjects": subjects,
         "output_gca": output_gca,
         "segmentation": segmentation,
+        "symmetrize": symmetrize,
         "sanity_check": sanity_check,
     };
     if (transform !== null) {
@@ -196,6 +200,9 @@ function mri_ca_train_cargs(
             "-input",
             ...(params["input_training"] ?? null)
         );
+    }
+    if ((params["symmetrize"] ?? null)) {
+        cargs.push("-sym");
     }
     if ((params["makesym"] ?? null) !== null) {
         cargs.push(
@@ -280,6 +287,7 @@ function mri_ca_train(
     node_spacing: string | null = null,
     prior_spacing: string | null = null,
     input_training: Array<string> | null = null,
+    symmetrize: boolean = false,
     makesym: Array<string> | null = null,
     check_symmetry: Array<string> | null = null,
     sanity_check: boolean = false,
@@ -302,6 +310,7 @@ function mri_ca_train(
      * @param node_spacing Spacing of classifiers in canonical space
      * @param prior_spacing Spacing of class priors in canonical space
      * @param input_training Specifying training data, path relative to each subject's MRI directory. Can specify multiple inputs.
+     * @param symmetrize Symmetrize the atlas after creation
      * @param makesym Symmetrize an already existing atlas. Specify input GCA and symmetrized GCA.
      * @param check_symmetry Check the symmetry of an already existing atlas. Specify input GCA and symmetrized GCA.
      * @param sanity_check Conduct sanity-check of labels for obvious edit errors
@@ -313,7 +322,7 @@ function mri_ca_train(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CA_TRAIN_METADATA);
-    const params = mri_ca_train_params(subjects, output_gca, segmentation, transform, mask_volume, node_spacing, prior_spacing, input_training, makesym, check_symmetry, sanity_check, threads, done_file)
+    const params = mri_ca_train_params(subjects, output_gca, segmentation, transform, mask_volume, node_spacing, prior_spacing, input_training, symmetrize, makesym, check_symmetry, sanity_check, threads, done_file)
     return mri_ca_train_execute(params, execution);
 }
 

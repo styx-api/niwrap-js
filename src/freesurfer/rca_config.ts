@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCA_CONFIG_METADATA: Metadata = {
-    id: "51c0aae9a34d0b770555399cc01f066ce00769c7.boutiques",
+    id: "46eae30104e8ee7e67f818e2a5df2c8456668ef9.boutiques",
     name: "rca-config",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -108,9 +108,10 @@ function rca_config_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("rca-config");
     cargs.push(
         "-config",
-        ["recon", execution.inputFile((params["source_config"] ?? null))].join('')
+        execution.inputFile((params["source_config"] ?? null))
     );
     cargs.push(execution.inputFile((params["updated_config"] ?? null)));
     cargs.push(execution.inputFile((params["unknown_args_file"] ?? null)));

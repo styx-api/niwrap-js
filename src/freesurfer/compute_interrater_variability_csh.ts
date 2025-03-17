@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA: Metadata = {
-    id: "d85f89519ecdd6db050cf20b230dd279bab615ca.boutiques",
+    id: "7363f7a4d7e7af9a9827c3ca57854bc1610a9623.boutiques",
     name: "compute_interrater_variability.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,6 +16,8 @@ interface ComputeInterraterVariabilityCshParameters {
     "label_vol1": InputPathType;
     "label_vol2": InputPathType;
     "output_prefix": string;
+    "version": boolean;
+    "help": boolean;
 }
 
 
@@ -82,6 +84,8 @@ function compute_interrater_variability_csh_params(
     label_vol1: InputPathType,
     label_vol2: InputPathType,
     output_prefix: string,
+    version: boolean = false,
+    help: boolean = false,
 ): ComputeInterraterVariabilityCshParameters {
     /**
      * Build parameters.
@@ -89,6 +93,8 @@ function compute_interrater_variability_csh_params(
      * @param label_vol1 Label volume from rater 1.
      * @param label_vol2 Label volume from rater 2.
      * @param output_prefix Prefix for the output text files containing results. A total of three files will be produced.
+     * @param version Print version information and exit.
+     * @param help Print help information and exit.
     
      * @returns Parameter dictionary
      */
@@ -97,6 +103,8 @@ function compute_interrater_variability_csh_params(
         "label_vol1": label_vol1,
         "label_vol2": label_vol2,
         "output_prefix": output_prefix,
+        "version": version,
+        "help": help,
     };
     return params;
 }
@@ -115,7 +123,7 @@ function compute_interrater_variability_csh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("compute_interrater_variability");
+    cargs.push("compute_interrater_variability.csh");
     cargs.push(
         "--vol1",
         execution.inputFile((params["label_vol1"] ?? null))
@@ -128,6 +136,12 @@ function compute_interrater_variability_csh_cargs(
         "--out",
         (params["output_prefix"] ?? null)
     );
+    if ((params["version"] ?? null)) {
+        cargs.push("--version");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("--help");
+    }
     return cargs;
 }
 
@@ -182,6 +196,8 @@ function compute_interrater_variability_csh(
     label_vol1: InputPathType,
     label_vol2: InputPathType,
     output_prefix: string,
+    version: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): ComputeInterraterVariabilityCshOutputs {
     /**
@@ -194,13 +210,15 @@ function compute_interrater_variability_csh(
      * @param label_vol1 Label volume from rater 1.
      * @param label_vol2 Label volume from rater 2.
      * @param output_prefix Prefix for the output text files containing results. A total of three files will be produced.
+     * @param version Print version information and exit.
+     * @param help Print help information and exit.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `ComputeInterraterVariabilityCshOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA);
-    const params = compute_interrater_variability_csh_params(label_vol1, label_vol2, output_prefix)
+    const params = compute_interrater_variability_csh_params(label_vol1, label_vol2, output_prefix, version, help)
     return compute_interrater_variability_csh_execute(params, execution);
 }
 

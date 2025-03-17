@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PCTSURFCON_METADATA: Metadata = {
-    id: "0e082a082c6b181a71427db52d685c35d4270743.boutiques",
+    id: "ad5f62ba3adae77bc989e8136a6e5d45a335abd9.boutiques",
     name: "pctsurfcon",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -157,7 +157,7 @@ function pctsurfcon_cargs(
     cargs.push("pctsurfcon");
     cargs.push(
         "-s",
-        ["-", (params["subject"] ?? null)].join('')
+        (params["subject"] ?? null)
     );
     if ((params["fsvol"] ?? null) !== null) {
         cargs.push(

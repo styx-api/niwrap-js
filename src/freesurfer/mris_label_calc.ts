@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_LABEL_CALC_METADATA: Metadata = {
-    id: "4566c0b5206cd4d9fc63822cdb713e50b1ee033e.boutiques",
+    id: "0dc4043ecf2e55b53be6b5910c84a71bf8a1c707.boutiques",
     name: "mris_label_calc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -17,6 +17,7 @@ interface MrisLabelCalcParameters {
     "input1": InputPathType;
     "input2": InputPathType;
     "output": string;
+    "iterations"?: number | null | undefined;
 }
 
 
@@ -76,6 +77,7 @@ function mris_label_calc_params(
     input1: InputPathType,
     input2: InputPathType,
     output: string,
+    iterations: number | null = null,
 ): MrisLabelCalcParameters {
     /**
      * Build parameters.
@@ -84,6 +86,7 @@ function mris_label_calc_params(
      * @param input1 First input label file
      * @param input2 Second input label file (used for 'invert', 'erode', 'dilate' operations)
      * @param output Output label file
+     * @param iterations Number of times to erode or dilate label
     
      * @returns Parameter dictionary
      */
@@ -94,6 +97,9 @@ function mris_label_calc_params(
         "input2": input2,
         "output": output,
     };
+    if (iterations !== null) {
+        params["iterations"] = iterations;
+    }
     return params;
 }
 
@@ -116,6 +122,12 @@ function mris_label_calc_cargs(
     cargs.push(execution.inputFile((params["input1"] ?? null)));
     cargs.push(execution.inputFile((params["input2"] ?? null)));
     cargs.push((params["output"] ?? null));
+    if ((params["iterations"] ?? null) !== null) {
+        cargs.push(
+            "<n>",
+            String((params["iterations"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -169,6 +181,7 @@ function mris_label_calc(
     input1: InputPathType,
     input2: InputPathType,
     output: string,
+    iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisLabelCalcOutputs {
     /**
@@ -182,13 +195,14 @@ function mris_label_calc(
      * @param input1 First input label file
      * @param input2 Second input label file (used for 'invert', 'erode', 'dilate' operations)
      * @param output Output label file
+     * @param iterations Number of times to erode or dilate label
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MrisLabelCalcOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_LABEL_CALC_METADATA);
-    const params = mris_label_calc_params(command, input1, input2, output)
+    const params = mris_label_calc_params(command, input1, input2, output, iterations)
     return mris_label_calc_execute(params, execution);
 }
 

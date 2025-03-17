@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GCA_APPLY_METADATA: Metadata = {
-    id: "004863971f906d9a0b7892c9101381a0f012a5c2.boutiques",
+    id: "37d628d973685edc2921052f548a797e0b449eb8.boutiques",
     name: "gca-apply",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -207,9 +207,10 @@ function gca_apply_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("gca-apply");
     cargs.push(
         "-apply",
-        ["gca", execution.inputFile((params["gcafile"] ?? null))].join('')
+        execution.inputFile((params["gcafile"] ?? null))
     );
     cargs.push((params["subject"] ?? null));
     if ((params["nthreads"] ?? null) !== null) {

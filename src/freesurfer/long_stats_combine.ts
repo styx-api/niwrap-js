@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_STATS_COMBINE_METADATA: Metadata = {
-    id: "44c43a96c18b3f3b72a80aed68ec585e7b861c9d.boutiques",
+    id: "75845120ecb7a42bb2814094cd14fceadf929854.boutiques",
     name: "long_stats_combine",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -152,7 +152,6 @@ function long_stats_combine_cargs(
         "--sd",
         (params["subject_dir"] ?? null)
     );
-    cargs.push("--out");
     cargs.push(
         "--outqdec",
         (params["output_qdec"] ?? null)

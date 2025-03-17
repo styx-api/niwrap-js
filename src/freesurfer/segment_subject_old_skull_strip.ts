@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA: Metadata = {
-    id: "abc48359fac304f034867897b978186bcd82c5e7.boutiques",
+    id: "76e6c0d1bcca0bcd9cea638d24de4bcebaf7875a.boutiques",
     name: "segment_subject_old_skull_strip",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -125,14 +125,14 @@ function segment_subject_old_skull_strip_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("mri_nu_correct.mni");
+    cargs.push("segment_subject_old_skull_strip");
     cargs.push(
         "-i",
-        ["-", execution.inputFile((params["input_volume"] ?? null))].join('')
+        execution.inputFile((params["input_volume"] ?? null))
     );
     cargs.push(
         "-xfm",
-        ["-", (params["output_xfm"] ?? null)].join('')
+        (params["output_xfm"] ?? null)
     );
     if ((params["log_file"] ?? null) !== null) {
         cargs.push(

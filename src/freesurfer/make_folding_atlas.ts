@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_FOLDING_ATLAS_METADATA: Metadata = {
-    id: "cd742cf69eb865650042165331953a619d588ea9.boutiques",
+    id: "2ea9d8d1b60df2ade6f961abd423e6b44d34ffda.boutiques",
     name: "make_folding_atlas",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -22,6 +22,7 @@ interface MakeFoldingAtlasParameters {
     "init_surf_reg"?: string | null | undefined;
     "init_subject"?: string | null | undefined;
     "no_annot_template": boolean;
+    "left_hemisphere": boolean;
     "right_hemisphere": boolean;
     "lhrh": boolean;
     "ico_order"?: number | null | undefined;
@@ -96,6 +97,7 @@ function make_folding_atlas_params(
     init_surf_reg: string | null = null,
     init_subject: string | null = null,
     no_annot_template: boolean = false,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     lhrh: boolean = false,
     ico_order: number | null = null,
@@ -119,6 +121,7 @@ function make_folding_atlas_params(
      * @param init_surf_reg Registration used to make template on first iteration (default sphere.reg).
      * @param init_subject Create first atlas from subject instead of all subjects.
      * @param no_annot_template Disable annotation template (good for monkeys).
+     * @param left_hemisphere Process left hemisphere.
      * @param right_hemisphere Process right hemisphere.
      * @param lhrh Process both left and right hemispheres (default).
      * @param ico_order Icosahedron order; default is 7.
@@ -136,6 +139,7 @@ function make_folding_atlas_params(
         "__STYXTYPE__": "make_folding_atlas" as const,
         "xhemi": xhemi,
         "no_annot_template": no_annot_template,
+        "left_hemisphere": left_hemisphere,
         "right_hemisphere": right_hemisphere,
         "lhrh": lhrh,
         "no_vol_on_last": no_vol_on_last,
@@ -240,6 +244,9 @@ function make_folding_atlas_cargs(
     if ((params["no_annot_template"] ?? null)) {
         cargs.push("--no-annot-template");
     }
+    if ((params["left_hemisphere"] ?? null)) {
+        cargs.push("--lh");
+    }
     if ((params["right_hemisphere"] ?? null)) {
         cargs.push("--rh");
     }
@@ -337,6 +344,7 @@ function make_folding_atlas(
     init_surf_reg: string | null = null,
     init_subject: string | null = null,
     no_annot_template: boolean = false,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     lhrh: boolean = false,
     ico_order: number | null = null,
@@ -365,6 +373,7 @@ function make_folding_atlas(
      * @param init_surf_reg Registration used to make template on first iteration (default sphere.reg).
      * @param init_subject Create first atlas from subject instead of all subjects.
      * @param no_annot_template Disable annotation template (good for monkeys).
+     * @param left_hemisphere Process left hemisphere.
      * @param right_hemisphere Process right hemisphere.
      * @param lhrh Process both left and right hemispheres (default).
      * @param ico_order Icosahedron order; default is 7.
@@ -381,7 +390,7 @@ function make_folding_atlas(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_FOLDING_ATLAS_METADATA);
-    const params = make_folding_atlas_params(subjlistfile, fsgdfile, subjects, output_base, max_iterations, xhemi, init_surf_reg, init_subject, no_annot_template, right_hemisphere, lhrh, ico_order, no_vol_on_last, vol, init, short_sleep, no_template_only, threads, slurm_account)
+    const params = make_folding_atlas_params(subjlistfile, fsgdfile, subjects, output_base, max_iterations, xhemi, init_surf_reg, init_subject, no_annot_template, left_hemisphere, right_hemisphere, lhrh, ico_order, no_vol_on_last, vol, init, short_sleep, no_template_only, threads, slurm_account)
     return make_folding_atlas_execute(params, execution);
 }
 

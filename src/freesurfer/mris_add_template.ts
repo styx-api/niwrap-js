@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_ADD_TEMPLATE_METADATA: Metadata = {
-    id: "cad5f1397d4979ef787014fa2412a1f0a10cfe8b.boutiques",
+    id: "27b09d413ee029bc56c1679ca8d443e525504262.boutiques",
     name: "mris_add_template",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,7 @@ const MRIS_ADD_TEMPLATE_METADATA: Metadata = {
 
 interface MrisAddTemplateParameters {
     "__STYXTYPE__": "mris_add_template";
+    "placeholder_input"?: string | null | undefined;
 }
 
 
@@ -68,15 +69,21 @@ interface MrisAddTemplateOutputs {
 
 
 function mris_add_template_params(
+    placeholder_input: string | null = null,
 ): MrisAddTemplateParameters {
     /**
      * Build parameters.
+    
+     * @param placeholder_input No inputs available as the tool has been removed.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "mris_add_template" as const,
     };
+    if (placeholder_input !== null) {
+        params["placeholder_input"] = placeholder_input;
+    }
     return params;
 }
 
@@ -95,6 +102,9 @@ function mris_add_template_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mris_add_template");
+    if ((params["placeholder_input"] ?? null) !== null) {
+        cargs.push((params["placeholder_input"] ?? null));
+    }
     return cargs;
 }
 
@@ -144,6 +154,7 @@ function mris_add_template_execute(
 
 
 function mris_add_template(
+    placeholder_input: string | null = null,
     runner: Runner | null = null,
 ): MrisAddTemplateOutputs {
     /**
@@ -153,13 +164,14 @@ function mris_add_template(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param placeholder_input No inputs available as the tool has been removed.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MrisAddTemplateOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ADD_TEMPLATE_METADATA);
-    const params = mris_add_template_params()
+    const params = mris_add_template_params(placeholder_input)
     return mris_add_template_execute(params, execution);
 }
 

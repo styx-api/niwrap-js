@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ISOLATE_LABELS_CSH_METADATA: Metadata = {
-    id: "38dc57e5ac2ab0f7a3569ce5a6d3b6708f167dad.boutiques",
+    id: "b99f5a36e27edd815c27d9c5646229750b881f96.boutiques",
     name: "isolate_labels.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -15,6 +15,7 @@ interface IsolateLabelsCshParameters {
     "__STYXTYPE__": "isolate_labels.csh";
     "label_volume": InputPathType;
     "output_prefix": string;
+    "label_option"?: string | null | undefined;
     "lowercase_label_option"?: string | null | undefined;
     "version": boolean;
     "keepval": boolean;
@@ -71,6 +72,7 @@ interface IsolateLabelsCshOutputs {
 function isolate_labels_csh_params(
     label_volume: InputPathType,
     output_prefix: string,
+    label_option: string | null = null,
     lowercase_label_option: string | null = null,
     version: boolean = false,
     keepval: boolean = false,
@@ -81,6 +83,7 @@ function isolate_labels_csh_params(
     
      * @param label_volume Label volume to be analyzed
      * @param output_prefix Prefix of binary label file(s)
+     * @param label_option The particular label to be analyzed; default is all labels.
      * @param lowercase_label_option The particular label to be analyzed; default is all labels.
      * @param version Print version and exit
      * @param keepval Keeps original label values
@@ -96,6 +99,9 @@ function isolate_labels_csh_params(
         "keepval": keepval,
         "help": help,
     };
+    if (label_option !== null) {
+        params["label_option"] = label_option;
+    }
     if (lowercase_label_option !== null) {
         params["lowercase_label_option"] = lowercase_label_option;
     }
@@ -116,7 +122,7 @@ function isolate_labels_csh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("isolate_labels");
+    cargs.push("isolate_labels.csh");
     cargs.push(
         "--vol",
         execution.inputFile((params["label_volume"] ?? null))
@@ -125,6 +131,12 @@ function isolate_labels_csh_cargs(
         "--outprefix",
         (params["output_prefix"] ?? null)
     );
+    if ((params["label_option"] ?? null) !== null) {
+        cargs.push(
+            "--L",
+            (params["label_option"] ?? null)
+        );
+    }
     if ((params["lowercase_label_option"] ?? null) !== null) {
         cargs.push(
             "--l",
@@ -190,6 +202,7 @@ function isolate_labels_csh_execute(
 function isolate_labels_csh(
     label_volume: InputPathType,
     output_prefix: string,
+    label_option: string | null = null,
     lowercase_label_option: string | null = null,
     version: boolean = false,
     keepval: boolean = false,
@@ -205,6 +218,7 @@ function isolate_labels_csh(
     
      * @param label_volume Label volume to be analyzed
      * @param output_prefix Prefix of binary label file(s)
+     * @param label_option The particular label to be analyzed; default is all labels.
      * @param lowercase_label_option The particular label to be analyzed; default is all labels.
      * @param version Print version and exit
      * @param keepval Keeps original label values
@@ -215,7 +229,7 @@ function isolate_labels_csh(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ISOLATE_LABELS_CSH_METADATA);
-    const params = isolate_labels_csh_params(label_volume, output_prefix, lowercase_label_option, version, keepval, help)
+    const params = isolate_labels_csh_params(label_volume, output_prefix, label_option, lowercase_label_option, version, keepval, help)
     return isolate_labels_csh_execute(params, execution);
 }
 

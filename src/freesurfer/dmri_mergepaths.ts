@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_MERGEPATHS_METADATA: Metadata = {
-    id: "18bc644100dca612df1989666e60cf3a4214164c.boutiques",
+    id: "73d51f5dfd2648daefced42e8f22083b6b9e5b42.boutiques",
     name: "dmri_mergepaths",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -120,7 +120,7 @@ function dmri_mergepaths_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("./dmri_mergepaths");
+    cargs.push("dmri_mergepaths");
     cargs.push(...(params["input_volumes"] ?? null).map(f => execution.inputFile(f)));
     if ((params["input_directory"] ?? null) !== null) {
         cargs.push(

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_SPHERICAL_AVERAGE_METADATA: Metadata = {
-    id: "1428559d3a56abaf727b5871834a354591593a62.boutiques",
+    id: "183c7a343e730b5d37f38ae332c84cb1365ae30e.boutiques",
     name: "mris_spherical_average",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,13 +13,20 @@ const MRIS_SPHERICAL_AVERAGE_METADATA: Metadata = {
 
 interface MrisSphericalAverageParameters {
     "__STYXTYPE__": "mris_spherical_average";
-    "summary_statistics"?: string | null | undefined;
     "which": "coords" | "label" | "vals" | "curv" | "area";
     "fname": string;
     "hemi": "lh" | "rh";
     "spherical_surf": string;
     "subjects": Array<string>;
     "output": string;
+    "segment": boolean;
+    "normalize": boolean;
+    "orig"?: string | null | undefined;
+    "output_subject_name"?: string | null | undefined;
+    "output_subject_dir"?: string | null | undefined;
+    "subjects_dir"?: string | null | undefined;
+    "average_area": boolean;
+    "summary_statistics"?: string | null | undefined;
 }
 
 
@@ -76,6 +83,13 @@ function mris_spherical_average_params(
     spherical_surf: string,
     subjects: Array<string>,
     output: string,
+    segment: boolean = false,
+    normalize: boolean = false,
+    orig: string | null = null,
+    output_subject_name: string | null = null,
+    output_subject_dir: string | null = null,
+    subjects_dir: string | null = null,
+    average_area: boolean = false,
     summary_statistics: string | null = null,
 ): MrisSphericalAverageParameters {
     /**
@@ -87,6 +101,13 @@ function mris_spherical_average_params(
      * @param spherical_surf The spherical surface file.
      * @param subjects List of subjects.
      * @param output Output file or directory.
+     * @param segment Only use largest connected component of label.
+     * @param normalize Normalize output so it can be interpreted as a probability.
+     * @param orig Use <name> as original surface position; default=orig.
+     * @param output_subject_name Use <output subject name> as the space to write the results in instead of the last subject given.
+     * @param output_subject_dir Use <output subject dir> as the subjects dir for the output subject.
+     * @param subjects_dir Set the subjects directory.
+     * @param average_area Compute threshold for label that will give the average label approximately the average surface area.
      * @param summary_statistics Generate summary statistics and write them into sigavg<cond #>-<hemi>.w and sigvar<cond #>-<hemi>.w.
     
      * @returns Parameter dictionary
@@ -99,7 +120,22 @@ function mris_spherical_average_params(
         "spherical_surf": spherical_surf,
         "subjects": subjects,
         "output": output,
+        "segment": segment,
+        "normalize": normalize,
+        "average_area": average_area,
     };
+    if (orig !== null) {
+        params["orig"] = orig;
+    }
+    if (output_subject_name !== null) {
+        params["output_subject_name"] = output_subject_name;
+    }
+    if (output_subject_dir !== null) {
+        params["output_subject_dir"] = output_subject_dir;
+    }
+    if (subjects_dir !== null) {
+        params["subjects_dir"] = subjects_dir;
+    }
     if (summary_statistics !== null) {
         params["summary_statistics"] = summary_statistics;
     }
@@ -121,18 +157,51 @@ function mris_spherical_average_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mris_spherical_average");
-    if ((params["summary_statistics"] ?? null) !== null) {
-        cargs.push(
-            "-s",
-            (params["summary_statistics"] ?? null)
-        );
-    }
     cargs.push((params["which"] ?? null));
     cargs.push((params["fname"] ?? null));
     cargs.push((params["hemi"] ?? null));
     cargs.push((params["spherical_surf"] ?? null));
     cargs.push(...(params["subjects"] ?? null));
     cargs.push((params["output"] ?? null));
+    if ((params["segment"] ?? null)) {
+        cargs.push("-segment");
+    }
+    if ((params["normalize"] ?? null)) {
+        cargs.push("-n");
+    }
+    if ((params["orig"] ?? null) !== null) {
+        cargs.push(
+            "-orig",
+            (params["orig"] ?? null)
+        );
+    }
+    if ((params["output_subject_name"] ?? null) !== null) {
+        cargs.push(
+            "-o",
+            (params["output_subject_name"] ?? null)
+        );
+    }
+    if ((params["output_subject_dir"] ?? null) !== null) {
+        cargs.push(
+            "-osdir",
+            (params["output_subject_dir"] ?? null)
+        );
+    }
+    if ((params["subjects_dir"] ?? null) !== null) {
+        cargs.push(
+            "-sdir",
+            (params["subjects_dir"] ?? null)
+        );
+    }
+    if ((params["average_area"] ?? null)) {
+        cargs.push("-average_area");
+    }
+    if ((params["summary_statistics"] ?? null) !== null) {
+        cargs.push(
+            "-s",
+            (params["summary_statistics"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -187,6 +256,13 @@ function mris_spherical_average(
     spherical_surf: string,
     subjects: Array<string>,
     output: string,
+    segment: boolean = false,
+    normalize: boolean = false,
+    orig: string | null = null,
+    output_subject_name: string | null = null,
+    output_subject_dir: string | null = null,
+    subjects_dir: string | null = null,
+    average_area: boolean = false,
     summary_statistics: string | null = null,
     runner: Runner | null = null,
 ): MrisSphericalAverageOutputs {
@@ -203,6 +279,13 @@ function mris_spherical_average(
      * @param spherical_surf The spherical surface file.
      * @param subjects List of subjects.
      * @param output Output file or directory.
+     * @param segment Only use largest connected component of label.
+     * @param normalize Normalize output so it can be interpreted as a probability.
+     * @param orig Use <name> as original surface position; default=orig.
+     * @param output_subject_name Use <output subject name> as the space to write the results in instead of the last subject given.
+     * @param output_subject_dir Use <output subject dir> as the subjects dir for the output subject.
+     * @param subjects_dir Set the subjects directory.
+     * @param average_area Compute threshold for label that will give the average label approximately the average surface area.
      * @param summary_statistics Generate summary statistics and write them into sigavg<cond #>-<hemi>.w and sigvar<cond #>-<hemi>.w.
      * @param runner Command runner
     
@@ -210,7 +293,7 @@ function mris_spherical_average(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SPHERICAL_AVERAGE_METADATA);
-    const params = mris_spherical_average_params(which, fname, hemi, spherical_surf, subjects, output, summary_statistics)
+    const params = mris_spherical_average_params(which, fname, hemi, spherical_surf, subjects, output, segment, normalize, orig, output_subject_name, output_subject_dir, subjects_dir, average_area, summary_statistics)
     return mris_spherical_average_execute(params, execution);
 }
 

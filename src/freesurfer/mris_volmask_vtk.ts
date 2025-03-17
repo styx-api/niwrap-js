@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_VOLMASK_VTK_METADATA: Metadata = {
-    id: "800007184636ff21baf1531ccc9b9b9b778933b9.boutiques",
+    id: "26e246fc04ff45f83eec1e536a78198e40089ef9.boutiques",
     name: "mris_volmask_vtk",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -209,7 +209,7 @@ function mris_volmask_vtk_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("mris_volmask");
+    cargs.push("mris_volmask_vtk");
     if ((params["cap_distance"] ?? null) !== null) {
         cargs.push(
             "--cap_distance",

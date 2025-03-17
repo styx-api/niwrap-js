@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIDUCIALS_CALIBRATION_METADATA: Metadata = {
-    id: "445a4b2fe29e36b5286fe1c80268453941ab7144.boutiques",
+    id: "b87cb0a61e77503c416b5bd15c7cec1c1ef97456.boutiques",
     name: "fiducials_calibration",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,7 @@ const FIDUCIALS_CALIBRATION_METADATA: Metadata = {
 
 interface FiducialsCalibrationParameters {
     "__STYXTYPE__": "fiducials_calibration";
+    "qt_plugin_installation"?: string | null | undefined;
 }
 
 
@@ -63,15 +64,21 @@ interface FiducialsCalibrationOutputs {
 
 
 function fiducials_calibration_params(
+    qt_plugin_installation: string | null = "Check Qt installation and platform plugin availability",
 ): FiducialsCalibrationParameters {
     /**
      * Build parameters.
+    
+     * @param qt_plugin_installation This application requires a functional Qt installation. If it fails to start, reinstalling the application might fix the problem.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "fiducials_calibration" as const,
     };
+    if (qt_plugin_installation !== null) {
+        params["qt_plugin_installation"] = qt_plugin_installation;
+    }
     return params;
 }
 
@@ -90,6 +97,9 @@ function fiducials_calibration_cargs(
      */
     const cargs: string[] = [];
     cargs.push("fiducials_calibration");
+    if ((params["qt_plugin_installation"] ?? null) !== null) {
+        cargs.push((params["qt_plugin_installation"] ?? null));
+    }
     return cargs;
 }
 
@@ -138,6 +148,7 @@ function fiducials_calibration_execute(
 
 
 function fiducials_calibration(
+    qt_plugin_installation: string | null = "Check Qt installation and platform plugin availability",
     runner: Runner | null = null,
 ): FiducialsCalibrationOutputs {
     /**
@@ -147,13 +158,14 @@ function fiducials_calibration(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param qt_plugin_installation This application requires a functional Qt installation. If it fails to start, reinstalling the application might fix the problem.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIDUCIALS_CALIBRATION_METADATA);
-    const params = fiducials_calibration_params()
+    const params = fiducials_calibration_params(qt_plugin_installation)
     return fiducials_calibration_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONF2HIRES_METADATA: Metadata = {
-    id: "0daec93cecaaf674dbbc3d770b70999cf8bff082.boutiques",
+    id: "2455d1a9818a72df60f5c386c53541cd8cd28eab.boutiques",
     name: "conf2hires",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,14 +14,20 @@ const CONF2HIRES_METADATA: Metadata = {
 interface Conf2hiresParameters {
     "__STYXTYPE__": "conf2hires";
     "subject": string;
+    "t2": boolean;
     "no_t2": boolean;
     "mm_norm_sigma"?: number | null | undefined;
+    "flair": boolean;
     "no_flair": boolean;
     "threads"?: number | null | undefined;
     "copy_bias_from_conf": boolean;
     "norm_opts_rca": boolean;
+    "cubic": boolean;
     "trilin": boolean;
+    "dev": boolean;
     "no_dev": boolean;
+    "bbr_con"?: string | null | undefined;
+    "bbr_t1": boolean;
     "bbr_t2": boolean;
     "first_peak_d1": boolean;
     "first_peak_d2": boolean;
@@ -79,14 +85,20 @@ interface Conf2hiresOutputs {
 
 function conf2hires_params(
     subject: string,
+    t2: boolean = false,
     no_t2: boolean = false,
     mm_norm_sigma: number | null = 8,
+    flair: boolean = false,
     no_flair: boolean = false,
     threads: number | null = null,
     copy_bias_from_conf: boolean = false,
     norm_opts_rca: boolean = false,
+    cubic: boolean = false,
     trilin: boolean = false,
+    dev: boolean = false,
     no_dev: boolean = false,
+    bbr_con: string | null = null,
+    bbr_t1: boolean = false,
     bbr_t2: boolean = false,
     first_peak_d1: boolean = false,
     first_peak_d2: boolean = false,
@@ -98,14 +110,20 @@ function conf2hires_params(
      * Build parameters.
     
      * @param subject Subject identifier
+     * @param t2 Enable T2 processing
      * @param no_t2 Disable T2 processing (default)
      * @param mm_norm_sigma Smoothing level for T2 mri_normalize (default is 8)
+     * @param flair Enable FLAIR processing
      * @param no_flair Disable FLAIR processing (default)
      * @param threads Number of threads to use
      * @param copy_bias_from_conf Copy bias field from conformed instead of computing directly
      * @param norm_opts_rca Compute bias directly using recon-all opts to mri_normalize
+     * @param cubic Use cubic normalization (applies with --copy-bias-from-conf)
      * @param trilin Use trilinear normalization (default, applies with --copy-bias-from-conf)
+     * @param dev Use mris_make_surfaces.dev
      * @param no_dev Do not use mris_make_surfaces.dev (default)
+     * @param bbr_con Set BBR contrast type (default t2)
+     * @param bbr_t1 Set BBR contrast type to t1
      * @param bbr_t2 Set BBR contrast type to t2
      * @param first_peak_d1 Refine surface targets in MRIScomputeBorderValues() using first peak method D1
      * @param first_peak_d2 Refine surface targets in MRIScomputeBorderValues() using first peak method D2
@@ -118,12 +136,17 @@ function conf2hires_params(
     const params = {
         "__STYXTYPE__": "conf2hires" as const,
         "subject": subject,
+        "t2": t2,
         "no_t2": no_t2,
+        "flair": flair,
         "no_flair": no_flair,
         "copy_bias_from_conf": copy_bias_from_conf,
         "norm_opts_rca": norm_opts_rca,
+        "cubic": cubic,
         "trilin": trilin,
+        "dev": dev,
         "no_dev": no_dev,
+        "bbr_t1": bbr_t1,
         "bbr_t2": bbr_t2,
         "first_peak_d1": first_peak_d1,
         "first_peak_d2": first_peak_d2,
@@ -134,6 +157,9 @@ function conf2hires_params(
     }
     if (threads !== null) {
         params["threads"] = threads;
+    }
+    if (bbr_con !== null) {
+        params["bbr_con"] = bbr_con;
     }
     if (stopmask !== null) {
         params["stopmask"] = stopmask;
@@ -163,6 +189,9 @@ function conf2hires_cargs(
         "--s",
         (params["subject"] ?? null)
     );
+    if ((params["t2"] ?? null)) {
+        cargs.push("--t2");
+    }
     if ((params["no_t2"] ?? null)) {
         cargs.push("--no-t2");
     }
@@ -171,6 +200,9 @@ function conf2hires_cargs(
             "--mm-norm-sigma",
             String((params["mm_norm_sigma"] ?? null))
         );
+    }
+    if ((params["flair"] ?? null)) {
+        cargs.push("--flair");
     }
     if ((params["no_flair"] ?? null)) {
         cargs.push("--no-flair");
@@ -187,11 +219,26 @@ function conf2hires_cargs(
     if ((params["norm_opts_rca"] ?? null)) {
         cargs.push("--norm-opts-rca");
     }
+    if ((params["cubic"] ?? null)) {
+        cargs.push("--cubic");
+    }
     if ((params["trilin"] ?? null)) {
         cargs.push("--trilin");
     }
+    if ((params["dev"] ?? null)) {
+        cargs.push("--dev");
+    }
     if ((params["no_dev"] ?? null)) {
         cargs.push("--no-dev");
+    }
+    if ((params["bbr_con"] ?? null) !== null) {
+        cargs.push(
+            "--bbr-con",
+            (params["bbr_con"] ?? null)
+        );
+    }
+    if ((params["bbr_t1"] ?? null)) {
+        cargs.push("--bbr-t1");
     }
     if ((params["bbr_t2"] ?? null)) {
         cargs.push("--bbr-t2");
@@ -266,14 +313,20 @@ function conf2hires_execute(
 
 function conf2hires(
     subject: string,
+    t2: boolean = false,
     no_t2: boolean = false,
     mm_norm_sigma: number | null = 8,
+    flair: boolean = false,
     no_flair: boolean = false,
     threads: number | null = null,
     copy_bias_from_conf: boolean = false,
     norm_opts_rca: boolean = false,
+    cubic: boolean = false,
     trilin: boolean = false,
+    dev: boolean = false,
     no_dev: boolean = false,
+    bbr_con: string | null = null,
+    bbr_t1: boolean = false,
     bbr_t2: boolean = false,
     first_peak_d1: boolean = false,
     first_peak_d2: boolean = false,
@@ -290,14 +343,20 @@ function conf2hires(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param subject Subject identifier
+     * @param t2 Enable T2 processing
      * @param no_t2 Disable T2 processing (default)
      * @param mm_norm_sigma Smoothing level for T2 mri_normalize (default is 8)
+     * @param flair Enable FLAIR processing
      * @param no_flair Disable FLAIR processing (default)
      * @param threads Number of threads to use
      * @param copy_bias_from_conf Copy bias field from conformed instead of computing directly
      * @param norm_opts_rca Compute bias directly using recon-all opts to mri_normalize
+     * @param cubic Use cubic normalization (applies with --copy-bias-from-conf)
      * @param trilin Use trilinear normalization (default, applies with --copy-bias-from-conf)
+     * @param dev Use mris_make_surfaces.dev
      * @param no_dev Do not use mris_make_surfaces.dev (default)
+     * @param bbr_con Set BBR contrast type (default t2)
+     * @param bbr_t1 Set BBR contrast type to t1
      * @param bbr_t2 Set BBR contrast type to t2
      * @param first_peak_d1 Refine surface targets in MRIScomputeBorderValues() using first peak method D1
      * @param first_peak_d2 Refine surface targets in MRIScomputeBorderValues() using first peak method D2
@@ -310,7 +369,7 @@ function conf2hires(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONF2HIRES_METADATA);
-    const params = conf2hires_params(subject, no_t2, mm_norm_sigma, no_flair, threads, copy_bias_from_conf, norm_opts_rca, trilin, no_dev, bbr_t2, first_peak_d1, first_peak_d2, stopmask, expert, force_update)
+    const params = conf2hires_params(subject, t2, no_t2, mm_norm_sigma, flair, no_flair, threads, copy_bias_from_conf, norm_opts_rca, cubic, trilin, dev, no_dev, bbr_con, bbr_t1, bbr_t2, first_peak_d1, first_peak_d2, stopmask, expert, force_update)
     return conf2hires_execute(params, execution);
 }
 

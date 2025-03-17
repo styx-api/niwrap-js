@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MORPH_RGB_LH_METADATA: Metadata = {
-    id: "8a27176b135c7e00506bbb223dc33d4f8b5c331f.boutiques",
+    id: "044963f7616c001fb9f232b33ff6dda1d55eaf4f.boutiques",
     name: "morph_rgb-lh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -94,9 +94,10 @@ function morph_rgb_lh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("morph_rgb-lh");
     cargs.push(
         "-lh",
-        ["morph_rgb", (params["subject_id"] ?? null)].join('')
+        (params["subject_id"] ?? null)
     );
     return cargs;
 }

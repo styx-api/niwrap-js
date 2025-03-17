@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPHERE_SUBJECT_LH_METADATA: Metadata = {
-    id: "6cb29acf4c0a72caae7b4c3b000c37495ed423e6.boutiques",
+    id: "951f794e9569d4f1b767c4b13b886e42c3d32956.boutiques",
     name: "sphere_subject-lh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -94,9 +94,10 @@ function sphere_subject_lh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("sphere_subject-lh");
     cargs.push(
         "-lh",
-        ["sphere_subject", execution.inputFile((params["license_file"] ?? null))].join('')
+        execution.inputFile((params["license_file"] ?? null))
     );
     return cargs;
 }

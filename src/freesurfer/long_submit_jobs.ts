@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_SUBMIT_JOBS_METADATA: Metadata = {
-    id: "d9fdcdcc044b4b6a583cb8d7681940ebbb389e10.boutiques",
+    id: "73a46d90ad07cf1b262590059e8ca43cc4fde840.boutiques",
     name: "long_submit_jobs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -286,13 +286,9 @@ function long_submit_jobs_cargs(
     if ((params["simfiles"] ?? null)) {
         cargs.push("--simfiles");
     }
-    cargs.push("[--skip]");
-    cargs.push("[--skiperror]");
     if ((params["check"] ?? null)) {
         cargs.push("--check");
     }
-    cargs.push("[--update-recon-all]");
-    cargs.push("[--use-recon-all]");
     if ((params["pause"] ?? null) !== null) {
         cargs.push(
             "--pause",

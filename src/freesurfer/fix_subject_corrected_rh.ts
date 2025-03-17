@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIX_SUBJECT_CORRECTED_RH_METADATA: Metadata = {
-    id: "52da465b947b94728415b771545cea34c0073071.boutiques",
+    id: "7b7e39c32815a5cef6cf9aad3f4046ba8b47ddb9.boutiques",
     name: "fix_subject_corrected-rh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -99,9 +99,10 @@ function fix_subject_corrected_rh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("fix_subject_corrected-rh");
     cargs.push(
         "-rh",
-        ["fix_subject_corrected", (params["subject_dir"] ?? null)].join('')
+        (params["subject_dir"] ?? null)
     );
     return cargs;
 }

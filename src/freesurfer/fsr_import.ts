@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSR_IMPORT_METADATA: Metadata = {
-    id: "0f4f0456c8df72ab9210f36b4e8bfb88e6ceba62.boutiques",
+    id: "8c46b9370bd04e469266a234c1fd26413c67b9bf.boutiques",
     name: "fsr-import",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,6 +14,10 @@ const FSR_IMPORT_METADATA: Metadata = {
 interface FsrImportParameters {
     "__STYXTYPE__": "fsr-import";
     "outdir": string;
+    "t1w_input"?: Array<InputPathType> | null | undefined;
+    "t2w_input"?: Array<InputPathType> | null | undefined;
+    "flair_input"?: Array<InputPathType> | null | undefined;
+    "custom_mode_input"?: Array<string> | null | undefined;
     "force_update": boolean;
     "no_conform": boolean;
     "hires": boolean;
@@ -85,6 +89,10 @@ interface FsrImportOutputs {
 
 function fsr_import_params(
     outdir: string,
+    t1w_input: Array<InputPathType> | null = null,
+    t2w_input: Array<InputPathType> | null = null,
+    flair_input: Array<InputPathType> | null = null,
+    custom_mode_input: Array<string> | null = null,
     force_update: boolean = false,
     no_conform: boolean = false,
     hires: boolean = false,
@@ -93,6 +101,10 @@ function fsr_import_params(
      * Build parameters.
     
      * @param outdir Root directory for output data
+     * @param t1w_input Input T1-weighted image files
+     * @param t2w_input Input T2-weighted image files
+     * @param flair_input Input FLAIR image files
+     * @param custom_mode_input Custom modality image file with specified mode name (not t1w, t2w, or flair)
      * @param force_update Update files regardless of timestamp
      * @param no_conform Do not conform inputs to 1mm, 256 dimensions
      * @param hires Same as --no-conform
@@ -106,6 +118,18 @@ function fsr_import_params(
         "no_conform": no_conform,
         "hires": hires,
     };
+    if (t1w_input !== null) {
+        params["t1w_input"] = t1w_input;
+    }
+    if (t2w_input !== null) {
+        params["t2w_input"] = t2w_input;
+    }
+    if (flair_input !== null) {
+        params["flair_input"] = flair_input;
+    }
+    if (custom_mode_input !== null) {
+        params["custom_mode_input"] = custom_mode_input;
+    }
     return params;
 }
 
@@ -128,10 +152,30 @@ function fsr_import_cargs(
         "--o",
         (params["outdir"] ?? null)
     );
-    cargs.push("[T1W...]");
-    cargs.push("[T2W...]");
-    cargs.push("[FLAIR...]");
-    cargs.push("[CUSTOM_MODES...]");
+    if ((params["t1w_input"] ?? null) !== null) {
+        cargs.push(
+            "--t1w",
+            ...(params["t1w_input"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["t2w_input"] ?? null) !== null) {
+        cargs.push(
+            "--t2w",
+            ...(params["t2w_input"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["flair_input"] ?? null) !== null) {
+        cargs.push(
+            "--flair",
+            ...(params["flair_input"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    if ((params["custom_mode_input"] ?? null) !== null) {
+        cargs.push(
+            "--mode",
+            ...(params["custom_mode_input"] ?? null)
+        );
+    }
     if ((params["force_update"] ?? null)) {
         cargs.push("--force-update");
     }
@@ -194,6 +238,10 @@ function fsr_import_execute(
 
 function fsr_import(
     outdir: string,
+    t1w_input: Array<InputPathType> | null = null,
+    t2w_input: Array<InputPathType> | null = null,
+    flair_input: Array<InputPathType> | null = null,
+    custom_mode_input: Array<string> | null = null,
     force_update: boolean = false,
     no_conform: boolean = false,
     hires: boolean = false,
@@ -207,6 +255,10 @@ function fsr_import(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param outdir Root directory for output data
+     * @param t1w_input Input T1-weighted image files
+     * @param t2w_input Input T2-weighted image files
+     * @param flair_input Input FLAIR image files
+     * @param custom_mode_input Custom modality image file with specified mode name (not t1w, t2w, or flair)
      * @param force_update Update files regardless of timestamp
      * @param no_conform Do not conform inputs to 1mm, 256 dimensions
      * @param hires Same as --no-conform
@@ -216,7 +268,7 @@ function fsr_import(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSR_IMPORT_METADATA);
-    const params = fsr_import_params(outdir, force_update, no_conform, hires)
+    const params = fsr_import_params(outdir, t1w_input, t2w_input, flair_input, custom_mode_input, force_update, no_conform, hires)
     return fsr_import_execute(params, execution);
 }
 

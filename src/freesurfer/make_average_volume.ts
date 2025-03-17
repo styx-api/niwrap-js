@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_AVERAGE_VOLUME_METADATA: Metadata = {
-    id: "52d00009c5f5db471f13423dea8699f07efa357d.boutiques",
+    id: "72e02e18d338618b963b745c51ee6a0b8c78e972.boutiques",
     name: "make_average_volume",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -19,12 +19,14 @@ interface MakeAverageVolumeParameters {
     "topdir"?: string | null | undefined;
     "xform"?: string | null | undefined;
     "sdir"?: string | null | undefined;
+    "sd_flag": boolean;
     "force_flag": boolean;
     "keep_all_orig_flag": boolean;
     "no_aseg_flag": boolean;
     "ctab"?: string | null | undefined;
     "ctab_default_flag": boolean;
     "echo_flag": boolean;
+    "debug_flag": boolean;
     "nocleanup_flag": boolean;
 }
 
@@ -82,12 +84,14 @@ function make_average_volume_params(
     topdir: string | null = null,
     xform: string | null = null,
     sdir: string | null = null,
+    sd_flag: boolean = false,
     force_flag: boolean = false,
     keep_all_orig_flag: boolean = false,
     no_aseg_flag: boolean = false,
     ctab: string | null = null,
     ctab_default_flag: boolean = false,
     echo_flag: boolean = false,
+    debug_flag: boolean = false,
     nocleanup_flag: boolean = false,
 ): MakeAverageVolumeParameters {
     /**
@@ -99,12 +103,14 @@ function make_average_volume_params(
      * @param topdir Directory to put data and link to SUBJECTS_DIR.
      * @param xform Transformation name to use, default is talairach.xfm.
      * @param sdir Use specified SUBJECTS_DIR instead of the environment's one.
+     * @param sd_flag Same as --sdir.
      * @param force_flag Overwrite existing average subject data.
      * @param keep_all_orig_flag Concatenate all original volumes into mri/orig.all.mgz.
      * @param no_aseg_flag Do not create 'average' aseg.
      * @param ctab Embed colortable into segmentations.
      * @param ctab_default_flag Embed FreeSurferColorLUT.txt into segmentations.
      * @param echo_flag Enable command echo for debugging.
+     * @param debug_flag Same as --echo for debugging.
      * @param nocleanup_flag Do not delete temporary files.
     
      * @returns Parameter dictionary
@@ -112,11 +118,13 @@ function make_average_volume_params(
     const params = {
         "__STYXTYPE__": "make_average_volume" as const,
         "subjects": subjects,
+        "sd_flag": sd_flag,
         "force_flag": force_flag,
         "keep_all_orig_flag": keep_all_orig_flag,
         "no_aseg_flag": no_aseg_flag,
         "ctab_default_flag": ctab_default_flag,
         "echo_flag": echo_flag,
+        "debug_flag": debug_flag,
         "nocleanup_flag": nocleanup_flag,
     };
     if (fsgd !== null) {
@@ -189,6 +197,9 @@ function make_average_volume_cargs(
             (params["sdir"] ?? null)
         );
     }
+    if ((params["sd_flag"] ?? null)) {
+        cargs.push("--sd");
+    }
     if ((params["force_flag"] ?? null)) {
         cargs.push("--force");
     }
@@ -209,6 +220,9 @@ function make_average_volume_cargs(
     }
     if ((params["echo_flag"] ?? null)) {
         cargs.push("--echo");
+    }
+    if ((params["debug_flag"] ?? null)) {
+        cargs.push("--debug");
     }
     if ((params["nocleanup_flag"] ?? null)) {
         cargs.push("--nocleanup");
@@ -267,12 +281,14 @@ function make_average_volume(
     topdir: string | null = null,
     xform: string | null = null,
     sdir: string | null = null,
+    sd_flag: boolean = false,
     force_flag: boolean = false,
     keep_all_orig_flag: boolean = false,
     no_aseg_flag: boolean = false,
     ctab: string | null = null,
     ctab_default_flag: boolean = false,
     echo_flag: boolean = false,
+    debug_flag: boolean = false,
     nocleanup_flag: boolean = false,
     runner: Runner | null = null,
 ): MakeAverageVolumeOutputs {
@@ -289,12 +305,14 @@ function make_average_volume(
      * @param topdir Directory to put data and link to SUBJECTS_DIR.
      * @param xform Transformation name to use, default is talairach.xfm.
      * @param sdir Use specified SUBJECTS_DIR instead of the environment's one.
+     * @param sd_flag Same as --sdir.
      * @param force_flag Overwrite existing average subject data.
      * @param keep_all_orig_flag Concatenate all original volumes into mri/orig.all.mgz.
      * @param no_aseg_flag Do not create 'average' aseg.
      * @param ctab Embed colortable into segmentations.
      * @param ctab_default_flag Embed FreeSurferColorLUT.txt into segmentations.
      * @param echo_flag Enable command echo for debugging.
+     * @param debug_flag Same as --echo for debugging.
      * @param nocleanup_flag Do not delete temporary files.
      * @param runner Command runner
     
@@ -302,7 +320,7 @@ function make_average_volume(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_AVERAGE_VOLUME_METADATA);
-    const params = make_average_volume_params(subjects, fsgd, out, topdir, xform, sdir, force_flag, keep_all_orig_flag, no_aseg_flag, ctab, ctab_default_flag, echo_flag, nocleanup_flag)
+    const params = make_average_volume_params(subjects, fsgd, out, topdir, xform, sdir, sd_flag, force_flag, keep_all_orig_flag, no_aseg_flag, ctab, ctab_default_flag, echo_flag, debug_flag, nocleanup_flag)
     return make_average_volume_execute(params, execution);
 }
 

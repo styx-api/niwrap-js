@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const COMPUTE_LABEL_VOLUMES_CSH_METADATA: Metadata = {
-    id: "82638ae4faa0eb9506df9c2f3a56c833cb5de288.boutiques",
+    id: "f6bb92d910cd7a9b624eadf0f487558e645d0c90.boutiques",
     name: "compute_label_volumes.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,6 +16,7 @@ interface ComputeLabelVolumesCshParameters {
     "label_vol": InputPathType;
     "output_file": string;
     "label_l"?: string | null | undefined;
+    "label_l_1"?: string | null | undefined;
     "version": boolean;
     "help": boolean;
 }
@@ -76,6 +77,7 @@ function compute_label_volumes_csh_params(
     label_vol: InputPathType,
     output_file: string,
     label_l: string | null = null,
+    label_l_1: string | null = null,
     version: boolean = false,
     help: boolean = false,
 ): ComputeLabelVolumesCshParameters {
@@ -85,6 +87,7 @@ function compute_label_volumes_csh_params(
      * @param label_vol Label volume to be analyzed
      * @param output_file Text file where the results are written
      * @param label_l The particular label to be analyzed (case-insensitive option)
+     * @param label_l_1 The particular label to be analyzed (case-insensitive option)
      * @param version Print version and exit
      * @param help Print help and exit
     
@@ -99,6 +102,9 @@ function compute_label_volumes_csh_params(
     };
     if (label_l !== null) {
         params["label_l"] = label_l;
+    }
+    if (label_l_1 !== null) {
+        params["label_l_1"] = label_l_1;
     }
     return params;
 }
@@ -117,7 +123,7 @@ function compute_label_volumes_csh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("compute_label_volumes");
+    cargs.push("compute_label_volumes.csh");
     cargs.push(
         "--vol",
         execution.inputFile((params["label_vol"] ?? null))
@@ -130,6 +136,12 @@ function compute_label_volumes_csh_cargs(
         cargs.push(
             "--l",
             (params["label_l"] ?? null)
+        );
+    }
+    if ((params["label_l_1"] ?? null) !== null) {
+        cargs.push(
+            "--l",
+            (params["label_l_1"] ?? null)
         );
     }
     if ((params["version"] ?? null)) {
@@ -190,6 +202,7 @@ function compute_label_volumes_csh(
     label_vol: InputPathType,
     output_file: string,
     label_l: string | null = null,
+    label_l_1: string | null = null,
     version: boolean = false,
     help: boolean = false,
     runner: Runner | null = null,
@@ -204,6 +217,7 @@ function compute_label_volumes_csh(
      * @param label_vol Label volume to be analyzed
      * @param output_file Text file where the results are written
      * @param label_l The particular label to be analyzed (case-insensitive option)
+     * @param label_l_1 The particular label to be analyzed (case-insensitive option)
      * @param version Print version and exit
      * @param help Print help and exit
      * @param runner Command runner
@@ -212,7 +226,7 @@ function compute_label_volumes_csh(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COMPUTE_LABEL_VOLUMES_CSH_METADATA);
-    const params = compute_label_volumes_csh_params(label_vol, output_file, label_l, version, help)
+    const params = compute_label_volumes_csh_params(label_vol, output_file, label_l, label_l_1, version, help)
     return compute_label_volumes_csh_execute(params, execution);
 }
 

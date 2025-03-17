@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAP_ALL_LABELS_LH_METADATA: Metadata = {
-    id: "569f8a45a5f0082dff949fe6bc883e667d21393b.boutiques",
+    id: "97a60688b269fc75bd6ea545f965efcd4df1c156.boutiques",
     name: "map_all_labels-lh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -17,6 +17,7 @@ interface MapAllLabelsLhParameters {
     "fname": string;
     "hemi": string;
     "spherical_surf": InputPathType;
+    "subjects": Array<string>;
     "output": string;
 }
 
@@ -77,6 +78,7 @@ function map_all_labels_lh_params(
     fname: string,
     hemi: string,
     spherical_surf: InputPathType,
+    subjects: Array<string>,
     output: string,
 ): MapAllLabelsLhParameters {
     /**
@@ -86,6 +88,7 @@ function map_all_labels_lh_params(
      * @param fname The file name to process.
      * @param hemi The hemisphere to process (usually 'lh' for left hemisphere).
      * @param spherical_surf The spherical surface file.
+     * @param subjects List of subjects to process.
      * @param output Output file.
     
      * @returns Parameter dictionary
@@ -96,6 +99,7 @@ function map_all_labels_lh_params(
         "fname": fname,
         "hemi": hemi,
         "spherical_surf": spherical_surf,
+        "subjects": subjects,
         "output": output,
     };
     return params;
@@ -115,14 +119,15 @@ function map_all_labels_lh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("map_all_labels-lh");
     cargs.push(
         "-lh",
-        ["map_all_labels", (params["which"] ?? null)].join('')
+        (params["which"] ?? null)
     );
     cargs.push((params["fname"] ?? null));
     cargs.push((params["hemi"] ?? null));
     cargs.push(execution.inputFile((params["spherical_surf"] ?? null)));
-    cargs.push("[SUBJECTS...]");
+    cargs.push(...(params["subjects"] ?? null));
     cargs.push((params["output"] ?? null));
     return cargs;
 }
@@ -177,6 +182,7 @@ function map_all_labels_lh(
     fname: string,
     hemi: string,
     spherical_surf: InputPathType,
+    subjects: Array<string>,
     output: string,
     runner: Runner | null = null,
 ): MapAllLabelsLhOutputs {
@@ -191,6 +197,7 @@ function map_all_labels_lh(
      * @param fname The file name to process.
      * @param hemi The hemisphere to process (usually 'lh' for left hemisphere).
      * @param spherical_surf The spherical surface file.
+     * @param subjects List of subjects to process.
      * @param output Output file.
      * @param runner Command runner
     
@@ -198,7 +205,7 @@ function map_all_labels_lh(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAP_ALL_LABELS_LH_METADATA);
-    const params = map_all_labels_lh_params(which, fname, hemi, spherical_surf, output)
+    const params = map_all_labels_lh_params(which, fname, hemi, spherical_surf, subjects, output)
     return map_all_labels_lh_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_WARP_CONVERT_METADATA: Metadata = {
-    id: "36b7f6d3b0edf16e088ad567445e656a71a7dd89.boutiques",
+    id: "32b2750e85eac274b020aca2c35655e2c3b86427.boutiques",
     name: "mri_warp_convert",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,7 +13,17 @@ const MRI_WARP_CONVERT_METADATA: Metadata = {
 
 interface MriWarpConvertParameters {
     "__STYXTYPE__": "mri_warp_convert";
+    "inm3z"?: InputPathType | null | undefined;
+    "infsl"?: InputPathType | null | undefined;
+    "inlps"?: InputPathType | null | undefined;
+    "initk"?: InputPathType | null | undefined;
+    "inras"?: InputPathType | null | undefined;
     "invox"?: InputPathType | null | undefined;
+    "outm3z"?: string | null | undefined;
+    "outfsl"?: string | null | undefined;
+    "outlps"?: string | null | undefined;
+    "outitk"?: string | null | undefined;
+    "outras"?: string | null | undefined;
     "outvox"?: string | null | undefined;
     "insrcgeom"?: InputPathType | null | undefined;
     "downsample": boolean;
@@ -72,7 +82,17 @@ interface MriWarpConvertOutputs {
 
 
 function mri_warp_convert_params(
+    inm3z: InputPathType | null = null,
+    infsl: InputPathType | null = null,
+    inlps: InputPathType | null = null,
+    initk: InputPathType | null = null,
+    inras: InputPathType | null = null,
     invox: InputPathType | null = null,
+    outm3z: string | null = null,
+    outfsl: string | null = null,
+    outlps: string | null = null,
+    outitk: string | null = null,
+    outras: string | null = null,
     outvox: string | null = null,
     insrcgeom: InputPathType | null = null,
     downsample: boolean = false,
@@ -80,7 +100,17 @@ function mri_warp_convert_params(
     /**
      * Build parameters.
     
+     * @param inm3z Input M3Z warp
+     * @param infsl Input FSL warp
+     * @param inlps Input LPS-to-LPS displacement field (e.g. ITK, ANTs)
+     * @param initk Input ITK LPS-to-LPS displacement field
+     * @param inras Input RAS-to-RAS displacement field (e.g. NiftyReg)
      * @param invox Input file with displacements in source-voxel space
+     * @param outm3z Output warp (M3Z Freesurfer format)
+     * @param outfsl Output warp (FSL format)
+     * @param outlps Output LPS-to-LPS displacement field (e.g. ITK, ANTs)
+     * @param outitk Output ITK LPS-to-LPS displacement field
+     * @param outras Output RAS-to-RAS displacement field (e.g. NiftyReg)
      * @param outvox Output file with displacements in source-voxel space
      * @param insrcgeom Specify source image geometry (moving volume)
      * @param downsample Downsample output M3Z to spacing of 2.
@@ -91,8 +121,38 @@ function mri_warp_convert_params(
         "__STYXTYPE__": "mri_warp_convert" as const,
         "downsample": downsample,
     };
+    if (inm3z !== null) {
+        params["inm3z"] = inm3z;
+    }
+    if (infsl !== null) {
+        params["infsl"] = infsl;
+    }
+    if (inlps !== null) {
+        params["inlps"] = inlps;
+    }
+    if (initk !== null) {
+        params["initk"] = initk;
+    }
+    if (inras !== null) {
+        params["inras"] = inras;
+    }
     if (invox !== null) {
         params["invox"] = invox;
+    }
+    if (outm3z !== null) {
+        params["outm3z"] = outm3z;
+    }
+    if (outfsl !== null) {
+        params["outfsl"] = outfsl;
+    }
+    if (outlps !== null) {
+        params["outlps"] = outlps;
+    }
+    if (outitk !== null) {
+        params["outitk"] = outitk;
+    }
+    if (outras !== null) {
+        params["outras"] = outras;
     }
     if (outvox !== null) {
         params["outvox"] = outvox;
@@ -118,10 +178,70 @@ function mri_warp_convert_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mri_warp_convert");
+    if ((params["inm3z"] ?? null) !== null) {
+        cargs.push(
+            "--inm3z",
+            execution.inputFile((params["inm3z"] ?? null))
+        );
+    }
+    if ((params["infsl"] ?? null) !== null) {
+        cargs.push(
+            "--infsl",
+            execution.inputFile((params["infsl"] ?? null))
+        );
+    }
+    if ((params["inlps"] ?? null) !== null) {
+        cargs.push(
+            "--inlps",
+            execution.inputFile((params["inlps"] ?? null))
+        );
+    }
+    if ((params["initk"] ?? null) !== null) {
+        cargs.push(
+            "--initk",
+            execution.inputFile((params["initk"] ?? null))
+        );
+    }
+    if ((params["inras"] ?? null) !== null) {
+        cargs.push(
+            "--inras",
+            execution.inputFile((params["inras"] ?? null))
+        );
+    }
     if ((params["invox"] ?? null) !== null) {
         cargs.push(
             "--invox",
             execution.inputFile((params["invox"] ?? null))
+        );
+    }
+    if ((params["outm3z"] ?? null) !== null) {
+        cargs.push(
+            "--outm3z",
+            (params["outm3z"] ?? null)
+        );
+    }
+    if ((params["outfsl"] ?? null) !== null) {
+        cargs.push(
+            "--outfsl",
+            (params["outfsl"] ?? null)
+        );
+    }
+    if ((params["outlps"] ?? null) !== null) {
+        cargs.push(
+            "--outlps",
+            (params["outlps"] ?? null)
+        );
+    }
+    if ((params["outitk"] ?? null) !== null) {
+        cargs.push(
+            "--outitk",
+            (params["outitk"] ?? null)
+        );
+    }
+    if ((params["outras"] ?? null) !== null) {
+        cargs.push(
+            "--outras",
+            (params["outras"] ?? null)
         );
     }
     if ((params["outvox"] ?? null) !== null) {
@@ -188,7 +308,17 @@ function mri_warp_convert_execute(
 
 
 function mri_warp_convert(
+    inm3z: InputPathType | null = null,
+    infsl: InputPathType | null = null,
+    inlps: InputPathType | null = null,
+    initk: InputPathType | null = null,
+    inras: InputPathType | null = null,
     invox: InputPathType | null = null,
+    outm3z: string | null = null,
+    outfsl: string | null = null,
+    outlps: string | null = null,
+    outitk: string | null = null,
+    outras: string | null = null,
     outvox: string | null = null,
     insrcgeom: InputPathType | null = null,
     downsample: boolean = false,
@@ -201,7 +331,17 @@ function mri_warp_convert(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param inm3z Input M3Z warp
+     * @param infsl Input FSL warp
+     * @param inlps Input LPS-to-LPS displacement field (e.g. ITK, ANTs)
+     * @param initk Input ITK LPS-to-LPS displacement field
+     * @param inras Input RAS-to-RAS displacement field (e.g. NiftyReg)
      * @param invox Input file with displacements in source-voxel space
+     * @param outm3z Output warp (M3Z Freesurfer format)
+     * @param outfsl Output warp (FSL format)
+     * @param outlps Output LPS-to-LPS displacement field (e.g. ITK, ANTs)
+     * @param outitk Output ITK LPS-to-LPS displacement field
+     * @param outras Output RAS-to-RAS displacement field (e.g. NiftyReg)
      * @param outvox Output file with displacements in source-voxel space
      * @param insrcgeom Specify source image geometry (moving volume)
      * @param downsample Downsample output M3Z to spacing of 2.
@@ -211,7 +351,7 @@ function mri_warp_convert(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_WARP_CONVERT_METADATA);
-    const params = mri_warp_convert_params(invox, outvox, insrcgeom, downsample)
+    const params = mri_warp_convert_params(inm3z, infsl, inlps, initk, inras, invox, outm3z, outfsl, outlps, outitk, outras, outvox, insrcgeom, downsample)
     return mri_warp_convert_execute(params, execution);
 }
 

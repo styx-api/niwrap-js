@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_AVERAGE_METADATA: Metadata = {
-    id: "9f634edc8e7e1a23500b288fecc20c4dd605a410.boutiques",
+    id: "69d82dea302095f344b973c4241c98b9f485dab8.boutiques",
     name: "mri_average",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -29,6 +29,7 @@ interface MriAverageParameters {
     "translation"?: Array<number> | null | undefined;
     "rotation"?: Array<number> | null | undefined;
     "momentum"?: number | null | undefined;
+    "rms": boolean;
     "rms_alt": boolean;
     "percent": boolean;
     "binarize"?: number | null | undefined;
@@ -104,6 +105,7 @@ function mri_average_params(
     translation: Array<number> | null = null,
     rotation: Array<number> | null = null,
     momentum: number | null = null,
+    rms: boolean = false,
     rms_alt: boolean = false,
     percent: boolean = false,
     binarize: number | null = null,
@@ -128,6 +130,7 @@ function mri_average_params(
      * @param translation Translation of second volume.
      * @param rotation Rotation of second volume around each axis in degrees.
      * @param momentum Use momentum n (default=0).
+     * @param rms Compute sqrt of average of sum of squares (RMS, same as -rms).
      * @param rms_alt Compute sqrt of average of sum of squares (RMS, same as -sqr).
      * @param percent Compute percentage.
      * @param binarize Binarize the input volumes using threshold th.
@@ -145,6 +148,7 @@ function mri_average_params(
         "noconform": noconform,
         "trilinear": trilinear,
         "window": window,
+        "rms": rms,
         "rms_alt": rms_alt,
         "percent": percent,
         "absolute": absolute,
@@ -262,6 +266,9 @@ function mri_average_cargs(
             String((params["momentum"] ?? null))
         );
     }
+    if ((params["rms"] ?? null)) {
+        cargs.push("-sqr");
+    }
     if ((params["rms_alt"] ?? null)) {
         cargs.push("-rms");
     }
@@ -342,6 +349,7 @@ function mri_average(
     translation: Array<number> | null = null,
     rotation: Array<number> | null = null,
     momentum: number | null = null,
+    rms: boolean = false,
     rms_alt: boolean = false,
     percent: boolean = false,
     binarize: number | null = null,
@@ -371,6 +379,7 @@ function mri_average(
      * @param translation Translation of second volume.
      * @param rotation Rotation of second volume around each axis in degrees.
      * @param momentum Use momentum n (default=0).
+     * @param rms Compute sqrt of average of sum of squares (RMS, same as -rms).
      * @param rms_alt Compute sqrt of average of sum of squares (RMS, same as -sqr).
      * @param percent Compute percentage.
      * @param binarize Binarize the input volumes using threshold th.
@@ -381,7 +390,7 @@ function mri_average(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_AVERAGE_METADATA);
-    const params = mri_average_params(input_volumes, output_volume, rigid_alignment, read_from_file, dt, tol, conform, noconform, reduce, sinc_interpolation, trilinear, window, snapshots, translation, rotation, momentum, rms_alt, percent, binarize, absolute)
+    const params = mri_average_params(input_volumes, output_volume, rigid_alignment, read_from_file, dt, tol, conform, noconform, reduce, sinc_interpolation, trilinear, window, snapshots, translation, rotation, momentum, rms, rms_alt, percent, binarize, absolute)
     return mri_average_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_GDFGLM_METADATA: Metadata = {
-    id: "6bfd0a6b2b32f6fa09eb9767dc1f8e35ce2df1d6.boutiques",
+    id: "799723e383e86e6f477fa13e70a258bc7ff7f5f8.boutiques",
     name: "mri_gdfglm",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,7 @@ const MRI_GDFGLM_METADATA: Metadata = {
 
 interface MriGdfglmParameters {
     "__STYXTYPE__": "mri_gdfglm";
+    "inputs"?: string | null | undefined;
 }
 
 
@@ -68,15 +69,21 @@ interface MriGdfglmOutputs {
 
 
 function mri_gdfglm_params(
+    inputs: string | null = null,
 ): MriGdfglmParameters {
     /**
      * Build parameters.
+    
+     * @param inputs Input parameters are not available because the command has been removed.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "mri_gdfglm" as const,
     };
+    if (inputs !== null) {
+        params["inputs"] = inputs;
+    }
     return params;
 }
 
@@ -95,6 +102,9 @@ function mri_gdfglm_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mri_gdfglm");
+    if ((params["inputs"] ?? null) !== null) {
+        cargs.push((params["inputs"] ?? null));
+    }
     return cargs;
 }
 
@@ -144,6 +154,7 @@ function mri_gdfglm_execute(
 
 
 function mri_gdfglm(
+    inputs: string | null = null,
     runner: Runner | null = null,
 ): MriGdfglmOutputs {
     /**
@@ -153,13 +164,14 @@ function mri_gdfglm(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param inputs Input parameters are not available because the command has been removed.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MriGdfglmOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GDFGLM_METADATA);
-    const params = mri_gdfglm_params()
+    const params = mri_gdfglm_params(inputs)
     return mri_gdfglm_execute(params, execution);
 }
 

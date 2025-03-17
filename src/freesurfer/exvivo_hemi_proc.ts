@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EXVIVO_HEMI_PROC_METADATA: Metadata = {
-    id: "9ef40c3f2cab9928f235df79043cbc38b92918d6.boutiques",
+    id: "e3813e1b2b5ac9842148171363015c6a44f9e300.boutiques",
     name: "exvivo-hemi-proc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,6 +16,7 @@ interface ExvivoHemiProcParameters {
     "flashdir": string;
     "outdir": string;
     "subject": string;
+    "left_hemi": boolean;
     "right_hemi": boolean;
     "suptent": boolean;
     "no_rotate": boolean;
@@ -80,6 +81,7 @@ function exvivo_hemi_proc_params(
     flashdir: string,
     outdir: string,
     subject: string,
+    left_hemi: boolean = false,
     right_hemi: boolean = false,
     suptent: boolean = false,
     no_rotate: boolean = false,
@@ -98,6 +100,7 @@ function exvivo_hemi_proc_params(
      * @param flashdir Path to the FLASH data directory.
      * @param outdir Output directory where results will be saved.
      * @param subject Full path to the subject.
+     * @param left_hemi Process left hemisphere.
      * @param right_hemi Process right hemisphere.
      * @param suptent Indicate no tentorium (cblum and bstem) in the sample.
      * @param no_rotate Indicate rotation is not needed.
@@ -117,6 +120,7 @@ function exvivo_hemi_proc_params(
         "flashdir": flashdir,
         "outdir": outdir,
         "subject": subject,
+        "left_hemi": left_hemi,
         "right_hemi": right_hemi,
         "suptent": suptent,
         "no_rotate": no_rotate,
@@ -165,6 +169,9 @@ function exvivo_hemi_proc_cargs(
         "--s",
         (params["subject"] ?? null)
     );
+    if ((params["left_hemi"] ?? null)) {
+        cargs.push("--lh");
+    }
     if ((params["right_hemi"] ?? null)) {
         cargs.push("--rh");
     }
@@ -258,6 +265,7 @@ function exvivo_hemi_proc(
     flashdir: string,
     outdir: string,
     subject: string,
+    left_hemi: boolean = false,
     right_hemi: boolean = false,
     suptent: boolean = false,
     no_rotate: boolean = false,
@@ -281,6 +289,7 @@ function exvivo_hemi_proc(
      * @param flashdir Path to the FLASH data directory.
      * @param outdir Output directory where results will be saved.
      * @param subject Full path to the subject.
+     * @param left_hemi Process left hemisphere.
      * @param right_hemi Process right hemisphere.
      * @param suptent Indicate no tentorium (cblum and bstem) in the sample.
      * @param no_rotate Indicate rotation is not needed.
@@ -298,7 +307,7 @@ function exvivo_hemi_proc(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXVIVO_HEMI_PROC_METADATA);
-    const params = exvivo_hemi_proc_params(flashdir, outdir, subject, right_hemi, suptent, no_rotate, t1thresh, threads, check_only, prep_only, mask_only, samseg_only, stop_mmppsp_after, force)
+    const params = exvivo_hemi_proc_params(flashdir, outdir, subject, left_hemi, right_hemi, suptent, no_rotate, t1thresh, threads, check_only, prep_only, mask_only, samseg_only, stop_mmppsp_after, force)
     return exvivo_hemi_proc_execute(params, execution);
 }
 

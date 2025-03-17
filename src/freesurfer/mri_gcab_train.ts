@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_GCAB_TRAIN_METADATA: Metadata = {
-    id: "5b3336956c10bad5fe64ad5c8c726b6429d9bf74.boutiques",
+    id: "25854951f0e7de8635b58728b8a09edd107a327e.boutiques",
     name: "mri_gcab_train",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,7 @@ const MRI_GCAB_TRAIN_METADATA: Metadata = {
 
 interface MriGcabTrainParameters {
     "__STYXTYPE__": "mri_gcab_train";
+    "removed_info"?: string | null | undefined;
 }
 
 
@@ -63,15 +64,21 @@ interface MriGcabTrainOutputs {
 
 
 function mri_gcab_train_params(
+    removed_info: string | null = "mri_gcab_train has been removed from this version of freesurfer.",
 ): MriGcabTrainParameters {
     /**
      * Build parameters.
+    
+     * @param removed_info Command has been removed from the current version of FreeSurfer. For further information, please contact the support mailing list.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "mri_gcab_train" as const,
     };
+    if (removed_info !== null) {
+        params["removed_info"] = removed_info;
+    }
     return params;
 }
 
@@ -90,6 +97,9 @@ function mri_gcab_train_cargs(
      */
     const cargs: string[] = [];
     cargs.push("mri_gcab_train");
+    if ((params["removed_info"] ?? null) !== null) {
+        cargs.push((params["removed_info"] ?? null));
+    }
     return cargs;
 }
 
@@ -138,6 +148,7 @@ function mri_gcab_train_execute(
 
 
 function mri_gcab_train(
+    removed_info: string | null = "mri_gcab_train has been removed from this version of freesurfer.",
     runner: Runner | null = null,
 ): MriGcabTrainOutputs {
     /**
@@ -147,13 +158,14 @@ function mri_gcab_train(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param removed_info Command has been removed from the current version of FreeSurfer. For further information, please contact the support mailing list.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GCAB_TRAIN_METADATA);
-    const params = mri_gcab_train_params()
+    const params = mri_gcab_train_params(removed_info)
     return mri_gcab_train_execute(params, execution);
 }
 

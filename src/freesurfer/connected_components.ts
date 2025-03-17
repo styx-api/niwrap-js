@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONNECTED_COMPONENTS_METADATA: Metadata = {
-    id: "415ac7eebb3cd7123aaeb6ad6eb398b6cc1343ba.boutiques",
+    id: "f1633b5575d9dbbe6d93199947f8505bc14a7d96.boutiques",
     name: "connected_components",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,9 @@ const CONNECTED_COMPONENTS_METADATA: Metadata = {
 
 interface ConnectedComponentsParameters {
     "__STYXTYPE__": "connected_components";
+    "input_image": InputPathType;
+    "output_image": string;
+    "threshold"?: number | null | undefined;
 }
 
 
@@ -68,15 +71,27 @@ interface ConnectedComponentsOutputs {
 
 
 function connected_components_params(
+    input_image: InputPathType,
+    output_image: string = "output_labelled_image",
+    threshold: number | null = null,
 ): ConnectedComponentsParameters {
     /**
      * Build parameters.
+    
+     * @param input_image Input image file.
+     * @param output_image Output labeled connected components image.
+     * @param threshold Threshold for binarizing the input image.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "connected_components" as const,
+        "input_image": input_image,
+        "output_image": output_image,
     };
+    if (threshold !== null) {
+        params["threshold"] = threshold;
+    }
     return params;
 }
 
@@ -95,6 +110,17 @@ function connected_components_cargs(
      */
     const cargs: string[] = [];
     cargs.push("connected_components");
+    cargs.push(execution.inputFile((params["input_image"] ?? null)));
+    cargs.push(
+        "-o",
+        (params["output_image"] ?? null)
+    );
+    if ((params["threshold"] ?? null) !== null) {
+        cargs.push(
+            "-t",
+            String((params["threshold"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -113,7 +139,7 @@ function connected_components_outputs(
      */
     const ret: ConnectedComponentsOutputs = {
         root: execution.outputFile("."),
-        output_labelled_image_file: execution.outputFile(["[OUTPUT_IMAGE].nii.gz"].join('')),
+        output_labelled_image_file: execution.outputFile([(params["output_image"] ?? null), ".nii.gz"].join('')),
     };
     return ret;
 }
@@ -144,6 +170,9 @@ function connected_components_execute(
 
 
 function connected_components(
+    input_image: InputPathType,
+    output_image: string = "output_labelled_image",
+    threshold: number | null = null,
     runner: Runner | null = null,
 ): ConnectedComponentsOutputs {
     /**
@@ -153,13 +182,16 @@ function connected_components(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param input_image Input image file.
+     * @param output_image Output labeled connected components image.
+     * @param threshold Threshold for binarizing the input image.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `ConnectedComponentsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONNECTED_COMPONENTS_METADATA);
-    const params = connected_components_params()
+    const params = connected_components_params(input_image, output_image, threshold)
     return connected_components_execute(params, execution);
 }
 

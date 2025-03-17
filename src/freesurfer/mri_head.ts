@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_HEAD_METADATA: Metadata = {
-    id: "fb167e02a7257ba8b9a2343709e24ec6a1664305.boutiques",
+    id: "f71c8c4f81d133948a66cd2d08a048fd40c58c30.boutiques",
     name: "mri_head",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,6 +16,8 @@ interface MriHeadParameters {
     "identify": boolean;
     "read": boolean;
     "filename"?: string | null | undefined;
+    "help": boolean;
+    "usage": boolean;
     "question_mark_help": boolean;
 }
 
@@ -70,6 +72,8 @@ function mri_head_params(
     identify: boolean = false,
     read: boolean = false,
     filename: string | null = null,
+    help: boolean = false,
+    usage: boolean = false,
     question_mark_help: boolean = false,
 ): MriHeadParameters {
     /**
@@ -78,6 +82,8 @@ function mri_head_params(
      * @param identify Identify the MRI file
      * @param read Read the MRI file
      * @param filename Filename for identification or reading
+     * @param help Display help information
+     * @param usage Display usage information
      * @param question_mark_help Display help or usage information
     
      * @returns Parameter dictionary
@@ -86,6 +92,8 @@ function mri_head_params(
         "__STYXTYPE__": "mri_head" as const,
         "identify": identify,
         "read": read,
+        "help": help,
+        "usage": usage,
         "question_mark_help": question_mark_help,
     };
     if (filename !== null) {
@@ -117,6 +125,12 @@ function mri_head_cargs(
     }
     if ((params["filename"] ?? null) !== null) {
         cargs.push((params["filename"] ?? null));
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-h");
+    }
+    if ((params["usage"] ?? null)) {
+        cargs.push("-u");
     }
     if ((params["question_mark_help"] ?? null)) {
         cargs.push("-?");
@@ -172,6 +186,8 @@ function mri_head(
     identify: boolean = false,
     read: boolean = false,
     filename: string | null = null,
+    help: boolean = false,
+    usage: boolean = false,
     question_mark_help: boolean = false,
     runner: Runner | null = null,
 ): MriHeadOutputs {
@@ -185,6 +201,8 @@ function mri_head(
      * @param identify Identify the MRI file
      * @param read Read the MRI file
      * @param filename Filename for identification or reading
+     * @param help Display help information
+     * @param usage Display usage information
      * @param question_mark_help Display help or usage information
      * @param runner Command runner
     
@@ -192,7 +210,7 @@ function mri_head(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_HEAD_METADATA);
-    const params = mri_head_params(identify, read, filename, question_mark_help)
+    const params = mri_head_params(identify, read, filename, help, usage, question_mark_help)
     return mri_head_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GROUPSTATSDIFF_METADATA: Metadata = {
-    id: "474a0a73a03ccd5e8c25186fbb8a8f0ccde75dd7.boutiques",
+    id: "fd778211449d90ec41caacb3a7dc64cdb74d5085.boutiques",
     name: "groupstatsdiff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -181,15 +181,15 @@ function groupstatsdiff_cargs(
     cargs.push("groupstatsdiff");
     cargs.push(
         "-g1",
-        ["-", (params["group1_dir"] ?? null)].join('')
+        (params["group1_dir"] ?? null)
     );
     cargs.push(
         "-g2",
-        ["-", (params["group2_dir"] ?? null)].join('')
+        (params["group2_dir"] ?? null)
     );
     cargs.push(
         "-o",
-        ["-", (params["output_dir"] ?? null)].join('')
+        (params["output_dir"] ?? null)
     );
     if ((params["no_maps"] ?? null)) {
         cargs.push("--no-maps");

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MORPH_ONLY_SUBJECT_RH_METADATA: Metadata = {
-    id: "cf178313d144b58ca109c79e9c3499855a731ab6.boutiques",
+    id: "dfd0ca80bee1df9c17a052f04b511b4001fa744d.boutiques",
     name: "morph_only_subject-rh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -99,9 +99,10 @@ function morph_only_subject_rh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("morph_only_subject-rh");
     cargs.push(
         "-rh",
-        ["morph_only_subject", execution.inputFile((params["subject_dir"] ?? null))].join('')
+        execution.inputFile((params["subject_dir"] ?? null))
     );
     return cargs;
 }

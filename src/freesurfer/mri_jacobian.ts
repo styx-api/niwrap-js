@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_JACOBIAN_METADATA: Metadata = {
-    id: "261fa5191d385d242b16ec1808b1a5ac51b44bc2.boutiques",
+    id: "92cd12066432758c04574ab139770c5aabee1470.boutiques",
     name: "mri_jacobian",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -22,6 +22,7 @@ interface MriJacobianParameters {
     "smooth_sigma"?: number | null | undefined;
     "zero_mean_log": boolean;
     "tm3d": boolean;
+    "help1": boolean;
     "help2": boolean;
     "dt": boolean;
     "debug_voxel"?: Array<number> | null | undefined;
@@ -90,6 +91,7 @@ function mri_jacobian_params(
     smooth_sigma: number | null = null,
     zero_mean_log: boolean = false,
     tm3d: boolean = false,
+    help1: boolean = false,
     help2: boolean = false,
     dt: boolean = false,
     debug_voxel: Array<number> | null = null,
@@ -107,6 +109,7 @@ function mri_jacobian_params(
      * @param smooth_sigma Smoothing Jacobian volume with sigma
      * @param zero_mean_log Make log Jacobian zero mean
      * @param tm3d The input morph (m3z) originated from tm3d (mri_cvs_register)
+     * @param help1 Writing out help
      * @param help2 Writing out help
      * @param dt DT option (description not provided in help text)
      * @param debug_voxel Debug voxel with specified Gx, Gy, Gz coordinates
@@ -124,6 +127,7 @@ function mri_jacobian_params(
         "log_jacobian": log_jacobian,
         "zero_mean_log": zero_mean_log,
         "tm3d": tm3d,
+        "help1": help1,
         "help2": help2,
         "dt": dt,
         "remove": remove,
@@ -175,6 +179,9 @@ function mri_jacobian_cargs(
     }
     if ((params["tm3d"] ?? null)) {
         cargs.push("-tm3d");
+    }
+    if ((params["help1"] ?? null)) {
+        cargs.push("-?");
     }
     if ((params["help2"] ?? null)) {
         cargs.push("-u");
@@ -249,6 +256,7 @@ function mri_jacobian(
     smooth_sigma: number | null = null,
     zero_mean_log: boolean = false,
     tm3d: boolean = false,
+    help1: boolean = false,
     help2: boolean = false,
     dt: boolean = false,
     debug_voxel: Array<number> | null = null,
@@ -271,6 +279,7 @@ function mri_jacobian(
      * @param smooth_sigma Smoothing Jacobian volume with sigma
      * @param zero_mean_log Make log Jacobian zero mean
      * @param tm3d The input morph (m3z) originated from tm3d (mri_cvs_register)
+     * @param help1 Writing out help
      * @param help2 Writing out help
      * @param dt DT option (description not provided in help text)
      * @param debug_voxel Debug voxel with specified Gx, Gy, Gz coordinates
@@ -281,7 +290,7 @@ function mri_jacobian(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_JACOBIAN_METADATA);
-    const params = mri_jacobian_params(morph_file, template_vol, output_vol, atlas_coord, write_area_vols, log_jacobian, smooth_sigma, zero_mean_log, tm3d, help2, dt, debug_voxel, remove)
+    const params = mri_jacobian_params(morph_file, template_vol, output_vol, atlas_coord, write_area_vols, log_jacobian, smooth_sigma, zero_mean_log, tm3d, help1, help2, dt, debug_voxel, remove)
     return mri_jacobian_execute(params, execution);
 }
 

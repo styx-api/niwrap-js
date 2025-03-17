@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIX_SUBJECT_RH_METADATA: Metadata = {
-    id: "3bb32adfbfd21f826f4e479a088d3bcfcdad5042.boutiques",
+    id: "d288abc3ea82bec21208e7703917dbd10a9bc4b7.boutiques",
     name: "fix_subject-rh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -98,9 +98,10 @@ function fix_subject_rh_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("fix_subject-rh");
     cargs.push(
         "-rh",
-        ["fix_subject", (params["input_directory"] ?? null)].join('')
+        (params["input_directory"] ?? null)
     );
     if ((params["help_flag"] ?? null)) {
         cargs.push("--help");

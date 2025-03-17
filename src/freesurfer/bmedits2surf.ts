@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BMEDITS2SURF_METADATA: Metadata = {
-    id: "be18624e39ce9efc3a4eb4744be1016b11c9fa5f.boutiques",
+    id: "f869eae38aafdf868c159585778d592e90997dbd.boutiques",
     name: "bmedits2surf",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -159,7 +159,7 @@ function bmedits2surf_cargs(
     cargs.push("bmedits2surf");
     cargs.push(
         "-s",
-        ["-", (params["subject"] ?? null)].join('')
+        (params["subject"] ?? null)
     );
     if ((params["self"] ?? null)) {
         cargs.push("--self");

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONGMC_METADATA: Metadata = {
-    id: "51a04d5ffd0bb81591249e8acfb084306bc3edcb.boutiques",
+    id: "a60463859b66f4dac910ccf5dd67f14573c1ca1f.boutiques",
     name: "longmc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,6 +16,7 @@ interface LongmcParameters {
     "cross_tp_name": string;
     "base_name": string;
     "conform_to_hires": boolean;
+    "no_conform_to_hires": boolean;
     "subjects_dir": string;
     "subject_name"?: string | null | undefined;
     "no_force_update": boolean;
@@ -73,6 +74,7 @@ function longmc_params(
     base_name: string,
     subjects_dir: string,
     conform_to_hires: boolean = false,
+    no_conform_to_hires: boolean = false,
     subject_name: string | null = null,
     no_force_update: boolean = false,
 ): LongmcParameters {
@@ -83,6 +85,7 @@ function longmc_params(
      * @param base_name Base name for the longitudinal analysis
      * @param subjects_dir Set the SUBJECTS_DIR directory
      * @param conform_to_hires Option to conform input to high-resolution
+     * @param no_conform_to_hires Option to not conform input to high-resolution
      * @param subject_name Subject name override, must be declared after -long
      * @param no_force_update Do not force update
     
@@ -93,6 +96,7 @@ function longmc_params(
         "cross_tp_name": cross_tp_name,
         "base_name": base_name,
         "conform_to_hires": conform_to_hires,
+        "no_conform_to_hires": no_conform_to_hires,
         "subjects_dir": subjects_dir,
         "no_force_update": no_force_update,
     };
@@ -124,6 +128,9 @@ function longmc_cargs(
     cargs.push((params["base_name"] ?? null));
     if ((params["conform_to_hires"] ?? null)) {
         cargs.push("-conf2hires");
+    }
+    if ((params["no_conform_to_hires"] ?? null)) {
+        cargs.push("-no-conf2hires");
     }
     cargs.push(
         "-sd",
@@ -190,6 +197,7 @@ function longmc(
     base_name: string,
     subjects_dir: string,
     conform_to_hires: boolean = false,
+    no_conform_to_hires: boolean = false,
     subject_name: string | null = null,
     no_force_update: boolean = false,
     runner: Runner | null = null,
@@ -205,6 +213,7 @@ function longmc(
      * @param base_name Base name for the longitudinal analysis
      * @param subjects_dir Set the SUBJECTS_DIR directory
      * @param conform_to_hires Option to conform input to high-resolution
+     * @param no_conform_to_hires Option to not conform input to high-resolution
      * @param subject_name Subject name override, must be declared after -long
      * @param no_force_update Do not force update
      * @param runner Command runner
@@ -213,7 +222,7 @@ function longmc(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONGMC_METADATA);
-    const params = longmc_params(cross_tp_name, base_name, subjects_dir, conform_to_hires, subject_name, no_force_update)
+    const params = longmc_params(cross_tp_name, base_name, subjects_dir, conform_to_hires, no_conform_to_hires, subject_name, no_force_update)
     return longmc_execute(params, execution);
 }
 

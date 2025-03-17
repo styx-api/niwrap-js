@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_SUBJECT_FLASH_METADATA: Metadata = {
-    id: "6437bdd8443156c21638b016c6209131b9efc309.boutiques",
+    id: "1d6e63edc1016916b719770e029fc275fe393603.boutiques",
     name: "label_subject_flash",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -115,7 +115,7 @@ function label_subject_flash_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("mri_ca_label");
+    cargs.push("label_subject_flash");
     cargs.push(
         "-flash",
         execution.inputFile((params["tissue_params"] ?? null))
