@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TRAC_ALL_METADATA: Metadata = {
-    id: "73a5f89795c73c559ddd404cdcdd1e92ea957a5a.boutiques",
+    id: "b42a3b054e835eeb20b6882531177ef5ca819af7.boutiques",
     name: "trac-all",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,8 +16,36 @@ interface TracAllParameters {
     "config_file"?: InputPathType | null | undefined;
     "subject_name"?: string | null | undefined;
     "dicom_file"?: InputPathType | null | undefined;
+    "pre_processing": boolean;
+    "bedpost": boolean;
+    "pathway_reconstruction": boolean;
     "assemble_measures": boolean;
+    "image_corrections": boolean;
+    "no_image_corrections": boolean;
+    "image_quality_assessment": boolean;
+    "no_image_quality_assessment": boolean;
+    "intra_registration": boolean;
+    "no_intra_registration": boolean;
+    "tensor_fit": boolean;
+    "no_tensor_fit": boolean;
+    "inter_registration": boolean;
+    "no_inter_registration": boolean;
+    "pathway_priors": boolean;
     "no_pathway_priors": boolean;
+    "infant_options": boolean;
+    "job_file"?: InputPathType | null | undefined;
+    "log_file"?: string | null | undefined;
+    "no_append_log": boolean;
+    "cmd_file"?: string | null | undefined;
+    "no_is_running": boolean;
+    "subjects_directory"?: string | null | undefined;
+    "umask"?: string | null | undefined;
+    "group_id"?: string | null | undefined;
+    "allow_core_dump": boolean;
+    "debug_mode": boolean;
+    "dont_run": boolean;
+    "only_versions": boolean;
+    "version_info": boolean;
     "help": boolean;
 }
 
@@ -81,8 +109,36 @@ function trac_all_params(
     config_file: InputPathType | null = null,
     subject_name: string | null = null,
     dicom_file: InputPathType | null = null,
+    pre_processing: boolean = false,
+    bedpost: boolean = false,
+    pathway_reconstruction: boolean = false,
     assemble_measures: boolean = false,
+    image_corrections: boolean = false,
+    no_image_corrections: boolean = false,
+    image_quality_assessment: boolean = false,
+    no_image_quality_assessment: boolean = false,
+    intra_registration: boolean = false,
+    no_intra_registration: boolean = false,
+    tensor_fit: boolean = false,
+    no_tensor_fit: boolean = false,
+    inter_registration: boolean = false,
+    no_inter_registration: boolean = false,
+    pathway_priors: boolean = false,
     no_pathway_priors: boolean = false,
+    infant_options: boolean = false,
+    job_file: InputPathType | null = null,
+    log_file: string | null = null,
+    no_append_log: boolean = false,
+    cmd_file: string | null = null,
+    no_is_running: boolean = false,
+    subjects_directory: string | null = null,
+    umask: string | null = null,
+    group_id: string | null = null,
+    allow_core_dump: boolean = false,
+    debug_mode: boolean = false,
+    dont_run: boolean = false,
+    only_versions: boolean = false,
+    version_info: boolean = false,
     help: boolean = false,
 ): TracAllParameters {
     /**
@@ -91,16 +147,66 @@ function trac_all_params(
      * @param config_file Configuration file to set analysis options (dmrirc file)
      * @param subject_name Subject name (if not defined in dmrirc)
      * @param dicom_file Input DWI DICOM (if not defined in dmrirc)
+     * @param pre_processing Perform pre-processing (step 1, all substeps)
+     * @param bedpost Perform bedpost (step 2)
+     * @param pathway_reconstruction Perform pathway reconstruction (step 3)
      * @param assemble_measures Assemble pathway measures from multiple subjects (step 4)
+     * @param image_corrections Perform image corrections (step 1.1)
+     * @param no_image_corrections Skip image corrections (step 1.1)
+     * @param image_quality_assessment Perform image quality assessment (step 1.2)
+     * @param no_image_quality_assessment Skip image quality assessment (step 1.2)
+     * @param intra_registration Perform intra-subject registration (step 1.3)
+     * @param no_intra_registration Skip intra-subject registration (step 1.3)
+     * @param tensor_fit Perform tensor fit (step 1.4)
+     * @param no_tensor_fit Skip tensor fit (step 1.4)
+     * @param inter_registration Perform inter-subject registration (step 1.5)
+     * @param no_inter_registration Skip inter-subject registration (step 1.5)
+     * @param pathway_priors Perform pathway priors (step 1.6)
      * @param no_pathway_priors Skip pathway priors (step 1.6)
+     * @param infant_options Use infant brain processing options
+     * @param job_file Write a text file with command lines that can be run in parallel and do not run them
+     * @param log_file Unique log file instead of the default scripts/trac-all.log
+     * @param no_append_log Overwrite old log files instead of appending
+     * @param cmd_file Unique cmd file instead of the default scripts/trac-all.cmd
+     * @param no_is_running Do not check whether subjects are currently being processed
+     * @param subjects_directory Specify subjects directory (default environment SUBJECTS_DIR)
+     * @param umask Set Unix file permission mask (default 002)
+     * @param group_id Check that current group is alpha groupid
+     * @param allow_core_dump Set coredump limit to unlimited
+     * @param debug_mode Generate much more output
+     * @param dont_run Do everything but execute each command
+     * @param only_versions Print version of each binary and exit
+     * @param version_info Print version of this script and exit
      * @param help Print full contents of help
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "trac-all" as const,
+        "pre_processing": pre_processing,
+        "bedpost": bedpost,
+        "pathway_reconstruction": pathway_reconstruction,
         "assemble_measures": assemble_measures,
+        "image_corrections": image_corrections,
+        "no_image_corrections": no_image_corrections,
+        "image_quality_assessment": image_quality_assessment,
+        "no_image_quality_assessment": no_image_quality_assessment,
+        "intra_registration": intra_registration,
+        "no_intra_registration": no_intra_registration,
+        "tensor_fit": tensor_fit,
+        "no_tensor_fit": no_tensor_fit,
+        "inter_registration": inter_registration,
+        "no_inter_registration": no_inter_registration,
+        "pathway_priors": pathway_priors,
         "no_pathway_priors": no_pathway_priors,
+        "infant_options": infant_options,
+        "no_append_log": no_append_log,
+        "no_is_running": no_is_running,
+        "allow_core_dump": allow_core_dump,
+        "debug_mode": debug_mode,
+        "dont_run": dont_run,
+        "only_versions": only_versions,
+        "version_info": version_info,
         "help": help,
     };
     if (config_file !== null) {
@@ -111,6 +217,24 @@ function trac_all_params(
     }
     if (dicom_file !== null) {
         params["dicom_file"] = dicom_file;
+    }
+    if (job_file !== null) {
+        params["job_file"] = job_file;
+    }
+    if (log_file !== null) {
+        params["log_file"] = log_file;
+    }
+    if (cmd_file !== null) {
+        params["cmd_file"] = cmd_file;
+    }
+    if (subjects_directory !== null) {
+        params["subjects_directory"] = subjects_directory;
+    }
+    if (umask !== null) {
+        params["umask"] = umask;
+    }
+    if (group_id !== null) {
+        params["group_id"] = group_id;
     }
     return params;
 }
@@ -148,11 +272,113 @@ function trac_all_cargs(
             execution.inputFile((params["dicom_file"] ?? null))
         );
     }
+    if ((params["pre_processing"] ?? null)) {
+        cargs.push("-prep");
+    }
+    if ((params["bedpost"] ?? null)) {
+        cargs.push("-bedp");
+    }
+    if ((params["pathway_reconstruction"] ?? null)) {
+        cargs.push("-path");
+    }
     if ((params["assemble_measures"] ?? null)) {
         cargs.push("-stat");
     }
+    if ((params["image_corrections"] ?? null)) {
+        cargs.push("-corr");
+    }
+    if ((params["no_image_corrections"] ?? null)) {
+        cargs.push("-nocorr");
+    }
+    if ((params["image_quality_assessment"] ?? null)) {
+        cargs.push("-qa");
+    }
+    if ((params["no_image_quality_assessment"] ?? null)) {
+        cargs.push("-noqa");
+    }
+    if ((params["intra_registration"] ?? null)) {
+        cargs.push("-intra");
+    }
+    if ((params["no_intra_registration"] ?? null)) {
+        cargs.push("-nointra");
+    }
+    if ((params["tensor_fit"] ?? null)) {
+        cargs.push("-tensor");
+    }
+    if ((params["no_tensor_fit"] ?? null)) {
+        cargs.push("-notensor");
+    }
+    if ((params["inter_registration"] ?? null)) {
+        cargs.push("-inter");
+    }
+    if ((params["no_inter_registration"] ?? null)) {
+        cargs.push("-nointer");
+    }
+    if ((params["pathway_priors"] ?? null)) {
+        cargs.push("-prior");
+    }
     if ((params["no_pathway_priors"] ?? null)) {
         cargs.push("-noprior");
+    }
+    if ((params["infant_options"] ?? null)) {
+        cargs.push("-infant");
+    }
+    if ((params["job_file"] ?? null) !== null) {
+        cargs.push(
+            "-jobs",
+            execution.inputFile((params["job_file"] ?? null))
+        );
+    }
+    if ((params["log_file"] ?? null) !== null) {
+        cargs.push(
+            "-log",
+            (params["log_file"] ?? null)
+        );
+    }
+    if ((params["no_append_log"] ?? null)) {
+        cargs.push("-noappendlog");
+    }
+    if ((params["cmd_file"] ?? null) !== null) {
+        cargs.push(
+            "-cmd",
+            (params["cmd_file"] ?? null)
+        );
+    }
+    if ((params["no_is_running"] ?? null)) {
+        cargs.push("-no-isrunning");
+    }
+    if ((params["subjects_directory"] ?? null) !== null) {
+        cargs.push(
+            "-sd",
+            (params["subjects_directory"] ?? null)
+        );
+    }
+    if ((params["umask"] ?? null) !== null) {
+        cargs.push(
+            "-umask",
+            (params["umask"] ?? null)
+        );
+    }
+    if ((params["group_id"] ?? null) !== null) {
+        cargs.push(
+            "-grp",
+            (params["group_id"] ?? null)
+        );
+    }
+    if ((params["allow_core_dump"] ?? null)) {
+        cargs.push("-allowcoredump");
+    }
+    if ((params["debug_mode"] ?? null)) {
+        cargs.push("-debug");
+    }
+    if ((params["dont_run"] ?? null)) {
+        cargs.push("-dontrun");
+    }
+    if ((params["only_versions"] ?? null)) {
+        cargs.push("-onlyversions");
+    }
+    if ((params["version_info"] ?? null)) {
+        cargs.push("-version");
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -210,8 +436,36 @@ function trac_all(
     config_file: InputPathType | null = null,
     subject_name: string | null = null,
     dicom_file: InputPathType | null = null,
+    pre_processing: boolean = false,
+    bedpost: boolean = false,
+    pathway_reconstruction: boolean = false,
     assemble_measures: boolean = false,
+    image_corrections: boolean = false,
+    no_image_corrections: boolean = false,
+    image_quality_assessment: boolean = false,
+    no_image_quality_assessment: boolean = false,
+    intra_registration: boolean = false,
+    no_intra_registration: boolean = false,
+    tensor_fit: boolean = false,
+    no_tensor_fit: boolean = false,
+    inter_registration: boolean = false,
+    no_inter_registration: boolean = false,
+    pathway_priors: boolean = false,
     no_pathway_priors: boolean = false,
+    infant_options: boolean = false,
+    job_file: InputPathType | null = null,
+    log_file: string | null = null,
+    no_append_log: boolean = false,
+    cmd_file: string | null = null,
+    no_is_running: boolean = false,
+    subjects_directory: string | null = null,
+    umask: string | null = null,
+    group_id: string | null = null,
+    allow_core_dump: boolean = false,
+    debug_mode: boolean = false,
+    dont_run: boolean = false,
+    only_versions: boolean = false,
+    version_info: boolean = false,
     help: boolean = false,
     runner: Runner | null = null,
 ): TracAllOutputs {
@@ -225,8 +479,36 @@ function trac_all(
      * @param config_file Configuration file to set analysis options (dmrirc file)
      * @param subject_name Subject name (if not defined in dmrirc)
      * @param dicom_file Input DWI DICOM (if not defined in dmrirc)
+     * @param pre_processing Perform pre-processing (step 1, all substeps)
+     * @param bedpost Perform bedpost (step 2)
+     * @param pathway_reconstruction Perform pathway reconstruction (step 3)
      * @param assemble_measures Assemble pathway measures from multiple subjects (step 4)
+     * @param image_corrections Perform image corrections (step 1.1)
+     * @param no_image_corrections Skip image corrections (step 1.1)
+     * @param image_quality_assessment Perform image quality assessment (step 1.2)
+     * @param no_image_quality_assessment Skip image quality assessment (step 1.2)
+     * @param intra_registration Perform intra-subject registration (step 1.3)
+     * @param no_intra_registration Skip intra-subject registration (step 1.3)
+     * @param tensor_fit Perform tensor fit (step 1.4)
+     * @param no_tensor_fit Skip tensor fit (step 1.4)
+     * @param inter_registration Perform inter-subject registration (step 1.5)
+     * @param no_inter_registration Skip inter-subject registration (step 1.5)
+     * @param pathway_priors Perform pathway priors (step 1.6)
      * @param no_pathway_priors Skip pathway priors (step 1.6)
+     * @param infant_options Use infant brain processing options
+     * @param job_file Write a text file with command lines that can be run in parallel and do not run them
+     * @param log_file Unique log file instead of the default scripts/trac-all.log
+     * @param no_append_log Overwrite old log files instead of appending
+     * @param cmd_file Unique cmd file instead of the default scripts/trac-all.cmd
+     * @param no_is_running Do not check whether subjects are currently being processed
+     * @param subjects_directory Specify subjects directory (default environment SUBJECTS_DIR)
+     * @param umask Set Unix file permission mask (default 002)
+     * @param group_id Check that current group is alpha groupid
+     * @param allow_core_dump Set coredump limit to unlimited
+     * @param debug_mode Generate much more output
+     * @param dont_run Do everything but execute each command
+     * @param only_versions Print version of each binary and exit
+     * @param version_info Print version of this script and exit
      * @param help Print full contents of help
      * @param runner Command runner
     
@@ -234,7 +516,7 @@ function trac_all(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRAC_ALL_METADATA);
-    const params = trac_all_params(config_file, subject_name, dicom_file, assemble_measures, no_pathway_priors, help)
+    const params = trac_all_params(config_file, subject_name, dicom_file, pre_processing, bedpost, pathway_reconstruction, assemble_measures, image_corrections, no_image_corrections, image_quality_assessment, no_image_quality_assessment, intra_registration, no_intra_registration, tensor_fit, no_tensor_fit, inter_registration, no_inter_registration, pathway_priors, no_pathway_priors, infant_options, job_file, log_file, no_append_log, cmd_file, no_is_running, subjects_directory, umask, group_id, allow_core_dump, debug_mode, dont_run, only_versions, version_info, help)
     return trac_all_execute(params, execution);
 }
 

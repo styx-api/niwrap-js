@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VERTEXVOL_METADATA: Metadata = {
-    id: "43f2f0ece18dc9707df38e81102c8d727e4682e9.boutiques",
+    id: "72720dd9559564a7517285d29ffdf9116e4d731a.boutiques",
     name: "vertexvol",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,8 +14,10 @@ const VERTEXVOL_METADATA: Metadata = {
 interface VertexvolParameters {
     "__STYXTYPE__": "vertexvol";
     "subject": string;
+    "left_hemisphere": boolean;
     "right_hemisphere": boolean;
     "output_file"?: string | null | undefined;
+    "use_th3": boolean;
     "no_th3": boolean;
 }
 
@@ -73,16 +75,20 @@ interface VertexvolOutputs {
 
 function vertexvol_params(
     subject: string,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     output_file: string | null = "?h.volume",
+    use_th3: boolean = false,
     no_th3: boolean = false,
 ): VertexvolParameters {
     /**
      * Build parameters.
     
      * @param subject Subject identifier
+     * @param left_hemisphere Select left hemisphere
      * @param right_hemisphere Select right hemisphere
      * @param output_file Output file name, default is ?h.volume
+     * @param use_th3 Use TH3 method for computation
      * @param no_th3 Don't use TH3 method for computation
     
      * @returns Parameter dictionary
@@ -90,7 +96,9 @@ function vertexvol_params(
     const params = {
         "__STYXTYPE__": "vertexvol" as const,
         "subject": subject,
+        "left_hemisphere": left_hemisphere,
         "right_hemisphere": right_hemisphere,
+        "use_th3": use_th3,
         "no_th3": no_th3,
     };
     if (output_file !== null) {
@@ -118,6 +126,9 @@ function vertexvol_cargs(
         "--s",
         (params["subject"] ?? null)
     );
+    if ((params["left_hemisphere"] ?? null)) {
+        cargs.push("--lh");
+    }
     if ((params["right_hemisphere"] ?? null)) {
         cargs.push("--rh");
     }
@@ -126,6 +137,9 @@ function vertexvol_cargs(
             "--o",
             (params["output_file"] ?? null)
         );
+    }
+    if ((params["use_th3"] ?? null)) {
+        cargs.push("--th3");
     }
     if ((params["no_th3"] ?? null)) {
         cargs.push("--no-th3");
@@ -180,8 +194,10 @@ function vertexvol_execute(
 
 function vertexvol(
     subject: string,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     output_file: string | null = "?h.volume",
+    use_th3: boolean = false,
     no_th3: boolean = false,
     runner: Runner | null = null,
 ): VertexvolOutputs {
@@ -193,8 +209,10 @@ function vertexvol(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param subject Subject identifier
+     * @param left_hemisphere Select left hemisphere
      * @param right_hemisphere Select right hemisphere
      * @param output_file Output file name, default is ?h.volume
+     * @param use_th3 Use TH3 method for computation
      * @param no_th3 Don't use TH3 method for computation
      * @param runner Command runner
     
@@ -202,7 +220,7 @@ function vertexvol(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VERTEXVOL_METADATA);
-    const params = vertexvol_params(subject, right_hemisphere, output_file, no_th3)
+    const params = vertexvol_params(subject, left_hemisphere, right_hemisphere, output_file, use_th3, no_th3)
     return vertexvol_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RTVIEW_METADATA: Metadata = {
-    id: "bbfc6a7778d4c734c212389406f89e8b0c6cbe09.boutiques",
+    id: "d1062fc3fcb7c8d781138ed45f8feb4a04671369.boutiques",
     name: "rtview",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,7 +14,10 @@ const RTVIEW_METADATA: Metadata = {
 interface RtviewParameters {
     "__STYXTYPE__": "rtview";
     "subject"?: string | null | undefined;
+    "hemi"?: string | null | undefined;
+    "left_hemi": boolean;
     "right_hemi": boolean;
+    "eccen": boolean;
     "polar": boolean;
     "real_file"?: InputPathType | null | undefined;
     "imag_file"?: InputPathType | null | undefined;
@@ -75,7 +78,10 @@ interface RtviewOutputs {
 
 function rtview_params(
     subject: string | null = null,
+    hemi: string | null = null,
+    left_hemi: boolean = false,
     right_hemi: boolean = false,
+    eccen: boolean = false,
     polar: boolean = false,
     real_file: InputPathType | null = null,
     imag_file: InputPathType | null = null,
@@ -90,7 +96,10 @@ function rtview_params(
      * Build parameters.
     
      * @param subject Subject to use as display
+     * @param hemi Hemisphere to display: 'lh' for left hemisphere or 'rh' for right hemisphere
+     * @param left_hemi Display left hemisphere
      * @param right_hemi Display right hemisphere
+     * @param eccen Display eccentricity data
      * @param polar Display polar data
      * @param real_file File containing real (cosine) values
      * @param imag_file File containing imaginary (sine) values
@@ -105,13 +114,18 @@ function rtview_params(
      */
     const params = {
         "__STYXTYPE__": "rtview" as const,
+        "left_hemi": left_hemi,
         "right_hemi": right_hemi,
+        "eccen": eccen,
         "polar": polar,
         "flat_display": flat_display,
         "no_cleanup": no_cleanup,
     };
     if (subject !== null) {
         params["subject"] = subject;
+    }
+    if (hemi !== null) {
+        params["hemi"] = hemi;
     }
     if (real_file !== null) {
         params["real_file"] = real_file;
@@ -155,8 +169,20 @@ function rtview_cargs(
             (params["subject"] ?? null)
         );
     }
+    if ((params["hemi"] ?? null) !== null) {
+        cargs.push(
+            "--hemi",
+            (params["hemi"] ?? null)
+        );
+    }
+    if ((params["left_hemi"] ?? null)) {
+        cargs.push("--lh");
+    }
     if ((params["right_hemi"] ?? null)) {
         cargs.push("--rh");
+    }
+    if ((params["eccen"] ?? null)) {
+        cargs.push("--eccen");
     }
     if ((params["polar"] ?? null)) {
         cargs.push("--polar");
@@ -252,7 +278,10 @@ function rtview_execute(
 
 function rtview(
     subject: string | null = null,
+    hemi: string | null = null,
+    left_hemi: boolean = false,
     right_hemi: boolean = false,
+    eccen: boolean = false,
     polar: boolean = false,
     real_file: InputPathType | null = null,
     imag_file: InputPathType | null = null,
@@ -272,7 +301,10 @@ function rtview(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param subject Subject to use as display
+     * @param hemi Hemisphere to display: 'lh' for left hemisphere or 'rh' for right hemisphere
+     * @param left_hemi Display left hemisphere
      * @param right_hemi Display right hemisphere
+     * @param eccen Display eccentricity data
      * @param polar Display polar data
      * @param real_file File containing real (cosine) values
      * @param imag_file File containing imaginary (sine) values
@@ -288,7 +320,7 @@ function rtview(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RTVIEW_METADATA);
-    const params = rtview_params(subject, right_hemi, polar, real_file, imag_file, fsig_file, reg_file, flat_display, patch, tcl_file, no_cleanup)
+    const params = rtview_params(subject, hemi, left_hemi, right_hemi, eccen, polar, real_file, imag_file, fsig_file, reg_file, flat_display, patch, tcl_file, no_cleanup)
     return rtview_execute(params, execution);
 }
 

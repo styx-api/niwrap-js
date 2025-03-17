@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SAMSEG_LONG_METADATA: Metadata = {
-    id: "686e2f45cf8bcf8f37552255f101cc1d16f93f40.boutiques",
+    id: "514c1dbb1911d4434a75fb9f1d1ec8a2a10ee435.boutiques",
     name: "samseg-long",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,9 +14,10 @@ const SAMSEG_LONG_METADATA: Metadata = {
 interface SamsegLongParameters {
     "__STYXTYPE__": "samseg-long";
     "output_dir": string;
+    "input_files": Array<InputPathType>;
+    "align_mc": boolean;
     "align_no_mc": boolean;
     "threads"?: number | null | undefined;
-    "input_files": Array<InputPathType>;
     "save_posteriors": boolean;
     "force_update": boolean;
 }
@@ -84,6 +85,7 @@ interface SamsegLongOutputs {
 function samseg_long_params(
     output_dir: string,
     input_files: Array<InputPathType>,
+    align_mc: boolean = false,
     align_no_mc: boolean = false,
     threads: number | null = null,
     save_posteriors: boolean = false,
@@ -94,6 +96,7 @@ function samseg_long_params(
     
      * @param output_dir Output directory.
      * @param input_files Input image files. All inputs must be a single modality.
+     * @param align_mc Align all inputs using robust register.
      * @param align_no_mc Do not align inputs using robust register.
      * @param threads Number of threads to use.
      * @param save_posteriors Save posterior probabilities.
@@ -104,8 +107,9 @@ function samseg_long_params(
     const params = {
         "__STYXTYPE__": "samseg-long" as const,
         "output_dir": output_dir,
-        "align_no_mc": align_no_mc,
         "input_files": input_files,
+        "align_mc": align_mc,
+        "align_no_mc": align_no_mc,
         "save_posteriors": save_posteriors,
         "force_update": force_update,
     };
@@ -134,6 +138,13 @@ function samseg_long_cargs(
         "--o",
         (params["output_dir"] ?? null)
     );
+    cargs.push(
+        "--i",
+        ...(params["input_files"] ?? null).map(f => execution.inputFile(f))
+    );
+    if ((params["align_mc"] ?? null)) {
+        cargs.push("--mc");
+    }
     if ((params["align_no_mc"] ?? null)) {
         cargs.push("--no-mc");
     }
@@ -143,10 +154,6 @@ function samseg_long_cargs(
             String((params["threads"] ?? null))
         );
     }
-    cargs.push(
-        "--i",
-        ...(params["input_files"] ?? null).map(f => execution.inputFile(f))
-    );
     if ((params["save_posteriors"] ?? null)) {
         cargs.push("--save-posteriors");
     }
@@ -206,6 +213,7 @@ function samseg_long_execute(
 function samseg_long(
     output_dir: string,
     input_files: Array<InputPathType>,
+    align_mc: boolean = false,
     align_no_mc: boolean = false,
     threads: number | null = null,
     save_posteriors: boolean = false,
@@ -221,6 +229,7 @@ function samseg_long(
     
      * @param output_dir Output directory.
      * @param input_files Input image files. All inputs must be a single modality.
+     * @param align_mc Align all inputs using robust register.
      * @param align_no_mc Do not align inputs using robust register.
      * @param threads Number of threads to use.
      * @param save_posteriors Save posterior probabilities.
@@ -231,7 +240,7 @@ function samseg_long(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMSEG_LONG_METADATA);
-    const params = samseg_long_params(output_dir, input_files, align_no_mc, threads, save_posteriors, force_update)
+    const params = samseg_long_params(output_dir, input_files, align_mc, align_no_mc, threads, save_posteriors, force_update)
     return samseg_long_execute(params, execution);
 }
 

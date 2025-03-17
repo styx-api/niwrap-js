@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PREDICT_V1_SH_METADATA: Metadata = {
-    id: "9dad70e954292a5df8dae706ae1d13ad401174c0.boutiques",
+    id: "fa5102ea5c78705d9124599a58b8008cca2f5a92.boutiques",
     name: "predict_v1.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -18,6 +18,7 @@ interface PredictV1ShParameters {
     "hemisphere"?: string | null | undefined;
     "print_mode_flag": boolean;
     "subjects": Array<string>;
+    "usage_flag": boolean;
 }
 
 
@@ -73,6 +74,7 @@ function predict_v1_sh_params(
     inflated_surface_flag: boolean = false,
     hemisphere: string | null = null,
     print_mode_flag: boolean = false,
+    usage_flag: boolean = false,
 ): PredictV1ShParameters {
     /**
      * Build parameters.
@@ -82,6 +84,7 @@ function predict_v1_sh_params(
      * @param inflated_surface_flag Don't use inflated surface as initial registration (backward compatibility)
      * @param hemisphere Hemisphere (rh or lh) default is both hemispheres
      * @param print_mode_flag Print mode (do not run commands, just print them)
+     * @param usage_flag Print usage
     
      * @returns Parameter dictionary
      */
@@ -90,6 +93,7 @@ function predict_v1_sh_params(
         "inflated_surface_flag": inflated_surface_flag,
         "print_mode_flag": print_mode_flag,
         "subjects": subjects,
+        "usage_flag": usage_flag,
     };
     if (template !== null) {
         params["template"] = template;
@@ -133,7 +137,10 @@ function predict_v1_sh_cargs(
     if ((params["print_mode_flag"] ?? null)) {
         cargs.push("-p");
     }
-    cargs.push([(params["subjects"] ?? null).join(""), "..."].join(''));
+    cargs.push(...(params["subjects"] ?? null));
+    if ((params["usage_flag"] ?? null)) {
+        cargs.push("-u");
+    }
     return cargs;
 }
 
@@ -187,6 +194,7 @@ function predict_v1_sh(
     inflated_surface_flag: boolean = false,
     hemisphere: string | null = null,
     print_mode_flag: boolean = false,
+    usage_flag: boolean = false,
     runner: Runner | null = null,
 ): PredictV1ShOutputs {
     /**
@@ -201,13 +209,14 @@ function predict_v1_sh(
      * @param inflated_surface_flag Don't use inflated surface as initial registration (backward compatibility)
      * @param hemisphere Hemisphere (rh or lh) default is both hemispheres
      * @param print_mode_flag Print mode (do not run commands, just print them)
+     * @param usage_flag Print usage
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `PredictV1ShOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PREDICT_V1_SH_METADATA);
-    const params = predict_v1_sh_params(subjects, template, inflated_surface_flag, hemisphere, print_mode_flag)
+    const params = predict_v1_sh_params(subjects, template, inflated_surface_flag, hemisphere, print_mode_flag, usage_flag)
     return predict_v1_sh_execute(params, execution);
 }
 

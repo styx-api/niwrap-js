@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FS_UPDATE_METADATA: Metadata = {
-    id: "4603b7fb31c1aa61646a36fb25725ca6a61d057f.boutiques",
+    id: "f55ece15d6ea47dd3edb6a480f7b814dfb337904.boutiques",
     name: "fs_update",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,6 +14,8 @@ const FS_UPDATE_METADATA: Metadata = {
 interface FsUpdateParameters {
     "__STYXTYPE__": "fs_update";
     "update_path"?: string | null | undefined;
+    "help_short": boolean;
+    "help_medium": boolean;
     "help_long": boolean;
 }
 
@@ -66,17 +68,22 @@ interface FsUpdateOutputs {
 
 function fs_update_params(
     update_path: string | null = null,
+    help_short: boolean = false,
+    help_medium: boolean = false,
     help_long: boolean = false,
 ): FsUpdateParameters {
     /**
      * Build parameters.
     
      * @param update_path Path to specific files or directories to update, copied recursively
+     * @param help_short Show help
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "fs_update" as const,
+        "help_short": help_short,
+        "help_medium": help_medium,
         "help_long": help_long,
     };
     if (update_path !== null) {
@@ -102,6 +109,12 @@ function fs_update_cargs(
     cargs.push("fs_update");
     if ((params["update_path"] ?? null) !== null) {
         cargs.push((params["update_path"] ?? null));
+    }
+    if ((params["help_short"] ?? null)) {
+        cargs.push("-h");
+    }
+    if ((params["help_medium"] ?? null)) {
+        cargs.push("-help");
     }
     if ((params["help_long"] ?? null)) {
         cargs.push("--help");
@@ -155,6 +168,8 @@ function fs_update_execute(
 
 function fs_update(
     update_path: string | null = null,
+    help_short: boolean = false,
+    help_medium: boolean = false,
     help_long: boolean = false,
     runner: Runner | null = null,
 ): FsUpdateOutputs {
@@ -166,13 +181,14 @@ function fs_update(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param update_path Path to specific files or directories to update, copied recursively
+     * @param help_short Show help
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FsUpdateOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_UPDATE_METADATA);
-    const params = fs_update_params(update_path, help_long)
+    const params = fs_update_params(update_path, help_short, help_medium, help_long)
     return fs_update_execute(params, execution);
 }
 

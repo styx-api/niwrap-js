@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_SEG_DIFF_METADATA: Metadata = {
-    id: "71504722501dfa1ec92d8dd0c51d3ee7e1c9740c.boutiques",
+    id: "1ffa8167a31865e0a4ffb1e2d6b11eef8bdddfc0.boutiques",
     name: "mri_seg_diff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -17,6 +17,7 @@ interface MriSegDiffParameters {
     "seg2"?: InputPathType | null | undefined;
     "seg"?: InputPathType | null | undefined;
     "diff": string;
+    "diff_in"?: InputPathType | null | undefined;
     "merged"?: string | null | undefined;
     "diff_force": boolean;
     "debug": boolean;
@@ -85,6 +86,7 @@ function mri_seg_diff_params(
     seg1: InputPathType | null = null,
     seg2: InputPathType | null = null,
     seg: InputPathType | null = null,
+    diff_in: InputPathType | null = null,
     merged: string | null = null,
     diff_force: boolean = false,
     debug: boolean = false,
@@ -98,6 +100,7 @@ function mri_seg_diff_params(
      * @param seg1 First segmentation file (e.g., unedited).
      * @param seg2 Second segmentation file (e.g., edited).
      * @param seg Source segmentation file (e.g., unedited).
+     * @param diff_in Input diff segmentation volume.
      * @param merged Merged output, combining unedited with diff.
      * @param diff_force Force creation of a diff even if no diff is detected.
      * @param debug Turn on debugging.
@@ -122,6 +125,9 @@ function mri_seg_diff_params(
     }
     if (seg !== null) {
         params["seg"] = seg;
+    }
+    if (diff_in !== null) {
+        params["diff_in"] = diff_in;
     }
     if (merged !== null) {
         params["merged"] = merged;
@@ -166,6 +172,12 @@ function mri_seg_diff_cargs(
         "--diff",
         (params["diff"] ?? null)
     );
+    if ((params["diff_in"] ?? null) !== null) {
+        cargs.push(
+            "--diff-in",
+            execution.inputFile((params["diff_in"] ?? null))
+        );
+    }
     if ((params["merged"] ?? null) !== null) {
         cargs.push(
             "--merged",
@@ -238,6 +250,7 @@ function mri_seg_diff(
     seg1: InputPathType | null = null,
     seg2: InputPathType | null = null,
     seg: InputPathType | null = null,
+    diff_in: InputPathType | null = null,
     merged: string | null = null,
     diff_force: boolean = false,
     debug: boolean = false,
@@ -256,6 +269,7 @@ function mri_seg_diff(
      * @param seg1 First segmentation file (e.g., unedited).
      * @param seg2 Second segmentation file (e.g., edited).
      * @param seg Source segmentation file (e.g., unedited).
+     * @param diff_in Input diff segmentation volume.
      * @param merged Merged output, combining unedited with diff.
      * @param diff_force Force creation of a diff even if no diff is detected.
      * @param debug Turn on debugging.
@@ -267,7 +281,7 @@ function mri_seg_diff(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEG_DIFF_METADATA);
-    const params = mri_seg_diff_params(diff, seg1, seg2, seg, merged, diff_force, debug, checkopts, version)
+    const params = mri_seg_diff_params(diff, seg1, seg2, seg, diff_in, merged, diff_force, debug, checkopts, version)
     return mri_seg_diff_execute(params, execution);
 }
 

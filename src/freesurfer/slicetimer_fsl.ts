@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SLICETIMER_FSL_METADATA: Metadata = {
-    id: "27673c86089b795cd88a005218734e798ec23211.boutiques",
+    id: "9f6e993d60103d5d70a85a9d3580dffe485d5763.boutiques",
     name: "slicetimer.fsl",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -147,8 +147,7 @@ function slicetimer_fsl_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("slicetimer");
-    cargs.push("--in");
+    cargs.push("slicetimer.fsl");
     cargs.push(
         "-i",
         execution.inputFile((params["infile"] ?? null))

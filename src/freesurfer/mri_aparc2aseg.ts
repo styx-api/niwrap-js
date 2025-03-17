@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_APARC2ASEG_METADATA: Metadata = {
-    id: "70399c00183edd73f6d174d9a1c242615869d650.boutiques",
+    id: "d81366f82e290a78f07433462eedcb07c712e3e6.boutiques",
     name: "mri_aparc2aseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -29,6 +29,7 @@ interface MriAparc2asegParameters {
     "no_fix_parahip": boolean;
     "smooth_normals"?: number | null | undefined;
     "crs_test"?: string | null | undefined;
+    "left_hemisphere": boolean;
     "right_hemisphere": boolean;
     "threads"?: number | null | undefined;
     "help": boolean;
@@ -104,6 +105,7 @@ function mri_aparc2aseg_params(
     no_fix_parahip: boolean = false,
     smooth_normals: number | null = null,
     crs_test: string | null = null,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     threads: number | null = null,
     help: boolean = false,
@@ -128,6 +130,7 @@ function mri_aparc2aseg_params(
      * @param no_fix_parahip Do not remove unconnected regions from WM parahip
      * @param smooth_normals Change number of surface normal smoothing steps (default is 10).
      * @param crs_test Test mapping of column, row, slice
+     * @param left_hemisphere Only process the left hemisphere
      * @param right_hemisphere Only process the right hemisphere
      * @param threads Run in parallel with the specified number of threads
      * @param help Print out information on how to use this program
@@ -145,6 +148,7 @@ function mri_aparc2aseg_params(
         "rip_unknown": rip_unknown,
         "hypo_as_wm": hypo_as_wm,
         "no_fix_parahip": no_fix_parahip,
+        "left_hemisphere": left_hemisphere,
         "right_hemisphere": right_hemisphere,
         "help": help,
         "version": version,
@@ -266,6 +270,9 @@ function mri_aparc2aseg_cargs(
             (params["crs_test"] ?? null)
         );
     }
+    if ((params["left_hemisphere"] ?? null)) {
+        cargs.push("--lh");
+    }
     if ((params["right_hemisphere"] ?? null)) {
         cargs.push("--rh");
     }
@@ -346,6 +353,7 @@ function mri_aparc2aseg(
     no_fix_parahip: boolean = false,
     smooth_normals: number | null = null,
     crs_test: string | null = null,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     threads: number | null = null,
     help: boolean = false,
@@ -375,6 +383,7 @@ function mri_aparc2aseg(
      * @param no_fix_parahip Do not remove unconnected regions from WM parahip
      * @param smooth_normals Change number of surface normal smoothing steps (default is 10).
      * @param crs_test Test mapping of column, row, slice
+     * @param left_hemisphere Only process the left hemisphere
      * @param right_hemisphere Only process the right hemisphere
      * @param threads Run in parallel with the specified number of threads
      * @param help Print out information on how to use this program
@@ -385,7 +394,7 @@ function mri_aparc2aseg(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_APARC2ASEG_METADATA);
-    const params = mri_aparc2aseg_params(subject, output_volfile, old_ribbon, new_ribbon, a2005s, a2009s, annot_name, annot_table, base_offset, label_wm, wmparc_dmax, rip_unknown, hypo_as_wm, no_fix_parahip, smooth_normals, crs_test, right_hemisphere, threads, help, version)
+    const params = mri_aparc2aseg_params(subject, output_volfile, old_ribbon, new_ribbon, a2005s, a2009s, annot_name, annot_table, base_offset, label_wm, wmparc_dmax, rip_unknown, hypo_as_wm, no_fix_parahip, smooth_normals, crs_test, left_hemisphere, right_hemisphere, threads, help, version)
     return mri_aparc2aseg_execute(params, execution);
 }
 

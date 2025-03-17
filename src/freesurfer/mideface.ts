@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MIDEFACE_METADATA: Metadata = {
-    id: "78ed8c9b1bc484046f26f89a611375e8c4e503a1.boutiques",
+    id: "e4a7d1cf3f8f93ccdd73f64b12dba5ce0fe4110b.boutiques",
     name: "mideface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -20,18 +20,29 @@ interface MidefaceParameters {
     "exclusion_mask"?: InputPathType | null | undefined;
     "samseg_ndilations"?: number | null | undefined;
     "samseg_json"?: string | null | undefined;
+    "samseg_fast": boolean;
+    "no_samseg_fast": boolean;
     "init_reg"?: InputPathType | null | undefined;
     "synthseg_ndilations"?: number | null | undefined;
     "fill_const"?: Array<number> | null | undefined;
+    "fill_zero": boolean;
     "fhi"?: number | null | undefined;
+    "no_ears": boolean;
+    "back_of_head": boolean;
+    "forehead": boolean;
+    "pics": boolean;
     "code"?: string | null | undefined;
     "image_convert"?: string | null | undefined;
+    "no_post": boolean;
     "threads"?: number | null | undefined;
+    "force": boolean;
+    "output_format"?: string | null | undefined;
+    "atlas"?: string | null | undefined;
+    "expert"?: string | null | undefined;
     "display_no"?: number | null | undefined;
     "apply_volume"?: string | null | undefined;
     "check_volume"?: InputPathType | null | undefined;
     "check_output_file"?: InputPathType | null | undefined;
-    "output_format"?: string | null | undefined;
 }
 
 
@@ -98,18 +109,29 @@ function mideface_params(
     exclusion_mask: InputPathType | null = null,
     samseg_ndilations: number | null = null,
     samseg_json: string | null = null,
+    samseg_fast: boolean = false,
+    no_samseg_fast: boolean = false,
     init_reg: InputPathType | null = null,
     synthseg_ndilations: number | null = null,
     fill_const: Array<number> | null = null,
+    fill_zero: boolean = false,
     fhi: number | null = null,
+    no_ears: boolean = false,
+    back_of_head: boolean = false,
+    forehead: boolean = false,
+    pics: boolean = false,
     code: string | null = null,
     image_convert: string | null = null,
+    no_post: boolean = false,
     threads: number | null = null,
+    force: boolean = false,
+    output_format: string | null = null,
+    atlas: string | null = null,
+    expert: string | null = null,
     display_no: number | null = null,
     apply_volume: string | null = null,
     check_volume: InputPathType | null = null,
     check_output_file: InputPathType | null = null,
-    output_format: string | null = null,
 ): MidefaceParameters {
     /**
      * Build parameters.
@@ -121,18 +143,29 @@ function mideface_params(
      * @param exclusion_mask Mask to exclude certain regions from defacing
      * @param samseg_ndilations Number of dilations for Samseg segmentation
      * @param samseg_json JSON configuration for Samseg
+     * @param samseg_fast Configure Samseg to run quickly
+     * @param no_samseg_fast Do not configure Samseg to run quickly
      * @param init_reg Initial registration file for Samseg
      * @param synthseg_ndilations Number of dilations for Synthseg segmentation
      * @param fill_const Constants for filling regions
+     * @param fill_zero Fill regions with zero
      * @param fhi FHI value for MRIchangeType()
+     * @param no_ears Do not include ears in the defacing
+     * @param back_of_head Include back of head in defacing
+     * @param forehead Include forehead in defacing (risks removing brain)
+     * @param pics Take pictures of the defaced result
      * @param code Embed code name in pictures
      * @param image_convert Path to ImageMagick convert binary for pictures
+     * @param no_post Do not make a head surface after defacing
      * @param threads Number of threads to use
+     * @param force Force reprocessing (only applicable if output directory is used)
+     * @param output_format Output file format
+     * @param atlas Directory containing atlas files
+     * @param expert Additional expert options
      * @param display_no Xvfb display number for taking pictures
      * @param apply_volume Apply midface output to a second volume
      * @param check_volume Volume to check if defaced
      * @param check_output_file Optional output file for check result
-     * @param output_format Output file format
     
      * @returns Parameter dictionary
      */
@@ -140,6 +173,15 @@ function mideface_params(
         "__STYXTYPE__": "mideface" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
+        "samseg_fast": samseg_fast,
+        "no_samseg_fast": no_samseg_fast,
+        "fill_zero": fill_zero,
+        "no_ears": no_ears,
+        "back_of_head": back_of_head,
+        "forehead": forehead,
+        "pics": pics,
+        "no_post": no_post,
+        "force": force,
     };
     if (facemask !== null) {
         params["facemask"] = facemask;
@@ -177,6 +219,15 @@ function mideface_params(
     if (threads !== null) {
         params["threads"] = threads;
     }
+    if (output_format !== null) {
+        params["output_format"] = output_format;
+    }
+    if (atlas !== null) {
+        params["atlas"] = atlas;
+    }
+    if (expert !== null) {
+        params["expert"] = expert;
+    }
     if (display_no !== null) {
         params["display_no"] = display_no;
     }
@@ -188,9 +239,6 @@ function mideface_params(
     }
     if (check_output_file !== null) {
         params["check_output_file"] = check_output_file;
-    }
-    if (output_format !== null) {
-        params["output_format"] = output_format;
     }
     return params;
 }
@@ -248,6 +296,12 @@ function mideface_cargs(
             (params["samseg_json"] ?? null)
         );
     }
+    if ((params["samseg_fast"] ?? null)) {
+        cargs.push("--samseg-fast");
+    }
+    if ((params["no_samseg_fast"] ?? null)) {
+        cargs.push("--no-samseg-fast");
+    }
     if ((params["init_reg"] ?? null) !== null) {
         cargs.push(
             "--init-reg",
@@ -266,11 +320,26 @@ function mideface_cargs(
             ...(params["fill_const"] ?? null).map(String)
         );
     }
+    if ((params["fill_zero"] ?? null)) {
+        cargs.push("--fill-zero");
+    }
     if ((params["fhi"] ?? null) !== null) {
         cargs.push(
             "--fhi",
             String((params["fhi"] ?? null))
         );
+    }
+    if ((params["no_ears"] ?? null)) {
+        cargs.push("--no-ears");
+    }
+    if ((params["back_of_head"] ?? null)) {
+        cargs.push("--back-of-head");
+    }
+    if ((params["forehead"] ?? null)) {
+        cargs.push("--forehead");
+    }
+    if ((params["pics"] ?? null)) {
+        cargs.push("--pics");
     }
     if ((params["code"] ?? null) !== null) {
         cargs.push(
@@ -284,10 +353,34 @@ function mideface_cargs(
             (params["image_convert"] ?? null)
         );
     }
+    if ((params["no_post"] ?? null)) {
+        cargs.push("--no-post");
+    }
     if ((params["threads"] ?? null) !== null) {
         cargs.push(
             "--threads",
             String((params["threads"] ?? null))
+        );
+    }
+    if ((params["force"] ?? null)) {
+        cargs.push("--force");
+    }
+    if ((params["output_format"] ?? null) !== null) {
+        cargs.push(
+            "--nii --nii.gz --mgz",
+            (params["output_format"] ?? null)
+        );
+    }
+    if ((params["atlas"] ?? null) !== null) {
+        cargs.push(
+            "--atlas",
+            (params["atlas"] ?? null)
+        );
+    }
+    if ((params["expert"] ?? null) !== null) {
+        cargs.push(
+            "--expert",
+            (params["expert"] ?? null)
         );
     }
     if ((params["display_no"] ?? null) !== null) {
@@ -312,12 +405,6 @@ function mideface_cargs(
         cargs.push(
             "--check",
             execution.inputFile((params["check_output_file"] ?? null))
-        );
-    }
-    if ((params["output_format"] ?? null) !== null) {
-        cargs.push(
-            "--nii --nii.gz --mgz",
-            (params["output_format"] ?? null)
         );
     }
     return cargs;
@@ -377,18 +464,29 @@ function mideface(
     exclusion_mask: InputPathType | null = null,
     samseg_ndilations: number | null = null,
     samseg_json: string | null = null,
+    samseg_fast: boolean = false,
+    no_samseg_fast: boolean = false,
     init_reg: InputPathType | null = null,
     synthseg_ndilations: number | null = null,
     fill_const: Array<number> | null = null,
+    fill_zero: boolean = false,
     fhi: number | null = null,
+    no_ears: boolean = false,
+    back_of_head: boolean = false,
+    forehead: boolean = false,
+    pics: boolean = false,
     code: string | null = null,
     image_convert: string | null = null,
+    no_post: boolean = false,
     threads: number | null = null,
+    force: boolean = false,
+    output_format: string | null = null,
+    atlas: string | null = null,
+    expert: string | null = null,
     display_no: number | null = null,
     apply_volume: string | null = null,
     check_volume: InputPathType | null = null,
     check_output_file: InputPathType | null = null,
-    output_format: string | null = null,
     runner: Runner | null = null,
 ): MidefaceOutputs {
     /**
@@ -405,25 +503,36 @@ function mideface(
      * @param exclusion_mask Mask to exclude certain regions from defacing
      * @param samseg_ndilations Number of dilations for Samseg segmentation
      * @param samseg_json JSON configuration for Samseg
+     * @param samseg_fast Configure Samseg to run quickly
+     * @param no_samseg_fast Do not configure Samseg to run quickly
      * @param init_reg Initial registration file for Samseg
      * @param synthseg_ndilations Number of dilations for Synthseg segmentation
      * @param fill_const Constants for filling regions
+     * @param fill_zero Fill regions with zero
      * @param fhi FHI value for MRIchangeType()
+     * @param no_ears Do not include ears in the defacing
+     * @param back_of_head Include back of head in defacing
+     * @param forehead Include forehead in defacing (risks removing brain)
+     * @param pics Take pictures of the defaced result
      * @param code Embed code name in pictures
      * @param image_convert Path to ImageMagick convert binary for pictures
+     * @param no_post Do not make a head surface after defacing
      * @param threads Number of threads to use
+     * @param force Force reprocessing (only applicable if output directory is used)
+     * @param output_format Output file format
+     * @param atlas Directory containing atlas files
+     * @param expert Additional expert options
      * @param display_no Xvfb display number for taking pictures
      * @param apply_volume Apply midface output to a second volume
      * @param check_volume Volume to check if defaced
      * @param check_output_file Optional output file for check result
-     * @param output_format Output file format
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MidefaceOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MIDEFACE_METADATA);
-    const params = mideface_params(input_volume, output_volume, facemask, output_dir, exclusion_mask, samseg_ndilations, samseg_json, init_reg, synthseg_ndilations, fill_const, fhi, code, image_convert, threads, display_no, apply_volume, check_volume, check_output_file, output_format)
+    const params = mideface_params(input_volume, output_volume, facemask, output_dir, exclusion_mask, samseg_ndilations, samseg_json, samseg_fast, no_samseg_fast, init_reg, synthseg_ndilations, fill_const, fill_zero, fhi, no_ears, back_of_head, forehead, pics, code, image_convert, no_post, threads, force, output_format, atlas, expert, display_no, apply_volume, check_volume, check_output_file)
     return mideface_execute(params, execution);
 }
 

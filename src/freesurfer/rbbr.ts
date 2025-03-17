@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RBBR_METADATA: Metadata = {
-    id: "6f8461b7fae6d16cb41c5377c9a0a117f94c76da.boutiques",
+    id: "5e244d64ac10cdbe8cb73d1d3628ed3768d60a04.boutiques",
     name: "rbbr",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -15,7 +15,11 @@ interface RbbrParameters {
     "__STYXTYPE__": "rbbr";
     "subject"?: string | null | undefined;
     "moving_image": string;
+    "t1_contrast": boolean;
     "t2_contrast": boolean;
+    "init_reg": boolean;
+    "init_spm": boolean;
+    "init_fsl": boolean;
     "init_header": boolean;
     "cost_threshold"?: number | null | undefined;
     "gtm_synthesize"?: string | null | undefined;
@@ -96,7 +100,11 @@ interface RbbrOutputs {
 function rbbr_params(
     moving_image: string,
     subject: string | null = null,
+    t1_contrast: boolean = false,
     t2_contrast: boolean = false,
+    init_reg: boolean = false,
+    init_spm: boolean = false,
+    init_fsl: boolean = false,
     init_header: boolean = false,
     cost_threshold: number | null = null,
     gtm_synthesize: string | null = null,
@@ -118,7 +126,11 @@ function rbbr_params(
     
      * @param moving_image Input moving image
      * @param subject FreeSurfer subject (not needed with --init-reg)
+     * @param t1_contrast Use T1 tissue contrast
      * @param t2_contrast Use T2 tissue contrast
+     * @param init_reg Initialize registration
+     * @param init_spm Initialize with SPM
+     * @param init_fsl Initialize with FSL
      * @param init_header Initialize using header
      * @param cost_threshold Cost threshold to define outlier
      * @param gtm_synthesize Use GTM to synthesize
@@ -140,7 +152,11 @@ function rbbr_params(
     const params = {
         "__STYXTYPE__": "rbbr" as const,
         "moving_image": moving_image,
+        "t1_contrast": t1_contrast,
         "t2_contrast": t2_contrast,
+        "init_reg": init_reg,
+        "init_spm": init_spm,
+        "init_fsl": init_fsl,
         "init_header": init_header,
         "tt_reduce": tt_reduce,
         "left_hemi": left_hemi,
@@ -208,8 +224,20 @@ function rbbr_cargs(
         "--mov",
         (params["moving_image"] ?? null)
     );
+    if ((params["t1_contrast"] ?? null)) {
+        cargs.push("--t1");
+    }
     if ((params["t2_contrast"] ?? null)) {
         cargs.push("--t2");
+    }
+    if ((params["init_reg"] ?? null)) {
+        cargs.push("--init-reg");
+    }
+    if ((params["init_spm"] ?? null)) {
+        cargs.push("--init-spm");
+    }
+    if ((params["init_fsl"] ?? null)) {
+        cargs.push("--init-fsl");
     }
     if ((params["init_header"] ?? null)) {
         cargs.push("--init-header");
@@ -339,7 +367,11 @@ function rbbr_execute(
 function rbbr(
     moving_image: string,
     subject: string | null = null,
+    t1_contrast: boolean = false,
     t2_contrast: boolean = false,
+    init_reg: boolean = false,
+    init_spm: boolean = false,
+    init_fsl: boolean = false,
     init_header: boolean = false,
     cost_threshold: number | null = null,
     gtm_synthesize: string | null = null,
@@ -366,7 +398,11 @@ function rbbr(
     
      * @param moving_image Input moving image
      * @param subject FreeSurfer subject (not needed with --init-reg)
+     * @param t1_contrast Use T1 tissue contrast
      * @param t2_contrast Use T2 tissue contrast
+     * @param init_reg Initialize registration
+     * @param init_spm Initialize with SPM
+     * @param init_fsl Initialize with FSL
      * @param init_header Initialize using header
      * @param cost_threshold Cost threshold to define outlier
      * @param gtm_synthesize Use GTM to synthesize
@@ -388,7 +424,7 @@ function rbbr(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RBBR_METADATA);
-    const params = rbbr_params(moving_image, subject, t2_contrast, init_header, cost_threshold, gtm_synthesize, tt_reduce, iterations, output_reg, output_lta, left_hemi, right_hemi, gm_proj_frac, gm_proj_abs, wm_proj_abs, frame_no, output_template, no_merge)
+    const params = rbbr_params(moving_image, subject, t1_contrast, t2_contrast, init_reg, init_spm, init_fsl, init_header, cost_threshold, gtm_synthesize, tt_reduce, iterations, output_reg, output_lta, left_hemi, right_hemi, gm_proj_frac, gm_proj_abs, wm_proj_abs, frame_no, output_template, no_merge)
     return rbbr_execute(params, execution);
 }
 

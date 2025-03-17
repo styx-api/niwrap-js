@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
-    id: "8a6a12eb1eae4567d49625f69155e84f68466b3c.boutiques",
+    id: "e6b692a7de46610579fa5e10ad01fb96c5b2f745.boutiques",
     name: "segmentSubjectT2_autoEstimateAlveusML",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,6 +13,7 @@ const SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
 
 interface SegmentSubjectT2AutoEstimateAlveusMlParameters {
     "__STYXTYPE__": "segmentSubjectT2_autoEstimateAlveusML";
+    "missing_library": string;
 }
 
 
@@ -63,14 +64,18 @@ interface SegmentSubjectT2AutoEstimateAlveusMlOutputs {
 
 
 function segment_subject_t2_auto_estimate_alveus_ml_params(
+    missing_library: string = "libmwlaunchermain.so: cannot open shared object file",
 ): SegmentSubjectT2AutoEstimateAlveusMlParameters {
     /**
      * Build parameters.
+    
+     * @param missing_library The tool could not be executed due to a missing shared library: libmwlaunchermain.so
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "segmentSubjectT2_autoEstimateAlveusML" as const,
+        "missing_library": missing_library,
     };
     return params;
 }
@@ -90,6 +95,7 @@ function segment_subject_t2_auto_estimate_alveus_ml_cargs(
      */
     const cargs: string[] = [];
     cargs.push("segmentSubjectT2_autoEstimateAlveusML");
+    cargs.push((params["missing_library"] ?? null));
     return cargs;
 }
 
@@ -138,6 +144,7 @@ function segment_subject_t2_auto_estimate_alveus_ml_execute(
 
 
 function segment_subject_t2_auto_estimate_alveus_ml(
+    missing_library: string = "libmwlaunchermain.so: cannot open shared object file",
     runner: Runner | null = null,
 ): SegmentSubjectT2AutoEstimateAlveusMlOutputs {
     /**
@@ -147,13 +154,14 @@ function segment_subject_t2_auto_estimate_alveus_ml(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param missing_library The tool could not be executed due to a missing shared library: libmwlaunchermain.so
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `SegmentSubjectT2AutoEstimateAlveusMlOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
-    const params = segment_subject_t2_auto_estimate_alveus_ml_params()
+    const params = segment_subject_t2_auto_estimate_alveus_ml_params(missing_library)
     return segment_subject_t2_auto_estimate_alveus_ml_execute(params, execution);
 }
 

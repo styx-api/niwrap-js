@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SAMSEG_METADATA: Metadata = {
-    id: "1947f646fba1c79e354f5efabbda10d0a11595ce.boutiques",
+    id: "86da9ab5c96ce79b11eaa8ba3fee321e3bcca1b7.boutiques",
     name: "samseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -50,6 +50,7 @@ interface SamsegParameters {
     "regmat_file"?: InputPathType | null | undefined;
     "init_lta"?: InputPathType | null | undefined;
     "reg_only": boolean;
+    "ssdd_directory"?: string | null | undefined;
     "save_mesh": boolean;
     "max_iters"?: number | null | undefined;
     "dice_file"?: InputPathType | null | undefined;
@@ -160,6 +161,7 @@ function samseg_params(
     regmat_file: InputPathType | null = null,
     init_lta: InputPathType | null = null,
     reg_only: boolean = false,
+    ssdd_directory: string | null = null,
     save_mesh: boolean = false,
     max_iters: number | null = null,
     dice_file: InputPathType | null = null,
@@ -207,6 +209,7 @@ function samseg_params(
      * @param regmat_file Same as --reg.
      * @param init_lta Initial registration LTA file.
      * @param reg_only Only perform registration.
+     * @param ssdd_directory Path to SAMSEG_Data_DIR where the atlas is located.
      * @param save_mesh Save the mesh, useful for longitudinal analysis.
      * @param max_iters Maximum number of iterations.
      * @param dice_file DICE coefficient file for segmentation.
@@ -291,6 +294,9 @@ function samseg_params(
     }
     if (init_lta !== null) {
         params["init_lta"] = init_lta;
+    }
+    if (ssdd_directory !== null) {
+        params["ssdd_directory"] = ssdd_directory;
     }
     if (max_iters !== null) {
         params["max_iters"] = max_iters;
@@ -486,6 +492,12 @@ function samseg_cargs(
     if ((params["reg_only"] ?? null)) {
         cargs.push("--reg-only");
     }
+    if ((params["ssdd_directory"] ?? null) !== null) {
+        cargs.push(
+            "--ssdd",
+            (params["ssdd_directory"] ?? null)
+        );
+    }
     if ((params["save_mesh"] ?? null)) {
         cargs.push("--save-mesh");
     }
@@ -605,6 +617,7 @@ function samseg(
     regmat_file: InputPathType | null = null,
     init_lta: InputPathType | null = null,
     reg_only: boolean = false,
+    ssdd_directory: string | null = null,
     save_mesh: boolean = false,
     max_iters: number | null = null,
     dice_file: InputPathType | null = null,
@@ -657,6 +670,7 @@ function samseg(
      * @param regmat_file Same as --reg.
      * @param init_lta Initial registration LTA file.
      * @param reg_only Only perform registration.
+     * @param ssdd_directory Path to SAMSEG_Data_DIR where the atlas is located.
      * @param save_mesh Save the mesh, useful for longitudinal analysis.
      * @param max_iters Maximum number of iterations.
      * @param dice_file DICE coefficient file for segmentation.
@@ -669,7 +683,7 @@ function samseg(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMSEG_METADATA);
-    const params = samseg_params(input_files, output_directory, t1w_files, t2w_files, flair_files, other_modality_files, options_file, dissection_photo_mode, save_history, subject, save_posteriors, save_probabilities, no_save_warp, mrf, no_mrf, threads, atlas_directory, gmm_file, no_block_coordinate_descent, logdomain_costandgradient_calculator, no_logdomain_costandgradient_calculator, recon, fill, normalization2, use_t2w, use_flair, hires, subjects_directory, pallidum_separate, stiffness, lesion, lesion_mask_pattern, bias_field_smoothing_kernel, registration_file, regmat_file, init_lta, reg_only, save_mesh, max_iters, dice_file, ignore_unknown, smooth_wm_cortex, profile_file)
+    const params = samseg_params(input_files, output_directory, t1w_files, t2w_files, flair_files, other_modality_files, options_file, dissection_photo_mode, save_history, subject, save_posteriors, save_probabilities, no_save_warp, mrf, no_mrf, threads, atlas_directory, gmm_file, no_block_coordinate_descent, logdomain_costandgradient_calculator, no_logdomain_costandgradient_calculator, recon, fill, normalization2, use_t2w, use_flair, hires, subjects_directory, pallidum_separate, stiffness, lesion, lesion_mask_pattern, bias_field_smoothing_kernel, registration_file, regmat_file, init_lta, reg_only, ssdd_directory, save_mesh, max_iters, dice_file, ignore_unknown, smooth_wm_cortex, profile_file)
     return samseg_execute(params, execution);
 }
 

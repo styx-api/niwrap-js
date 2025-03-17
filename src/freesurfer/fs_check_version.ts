@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FS_CHECK_VERSION_METADATA: Metadata = {
-    id: "1bb29df8432be8183122dba0b74d19ba214f7751.boutiques",
+    id: "660409ce98a2983c236b82f391b2216637f1c37f.boutiques",
     name: "fs-check-version",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -16,7 +16,9 @@ interface FsCheckVersionParameters {
     "subjects_dir": string;
     "outfile": string;
     "subject"?: string | null | undefined;
+    "require_match": boolean;
     "no_require_match": boolean;
+    "test": boolean;
     "test_debug": boolean;
 }
 
@@ -76,7 +78,9 @@ function fs_check_version_params(
     subjects_dir: string,
     outfile: string,
     subject: string | null = null,
+    require_match: boolean = false,
     no_require_match: boolean = false,
+    test: boolean = false,
     test_debug: boolean = false,
 ): FsCheckVersionParameters {
     /**
@@ -85,7 +89,9 @@ function fs_check_version_params(
      * @param subjects_dir Subjects directory path
      * @param outfile Output file path where result of version check will be written
      * @param subject Subject name (optional)
+     * @param require_match Set REQUIRE_FS_MATCH for testing
      * @param no_require_match Unset REQUIRE_FS_MATCH for testing
+     * @param test Go through permutations for testing
      * @param test_debug Go through permutations for debugging
     
      * @returns Parameter dictionary
@@ -94,7 +100,9 @@ function fs_check_version_params(
         "__STYXTYPE__": "fs-check-version" as const,
         "subjects_dir": subjects_dir,
         "outfile": outfile,
+        "require_match": require_match,
         "no_require_match": no_require_match,
+        "test": test,
         "test_debug": test_debug,
     };
     if (subject !== null) {
@@ -132,8 +140,14 @@ function fs_check_version_cargs(
             (params["subject"] ?? null)
         );
     }
+    if ((params["require_match"] ?? null)) {
+        cargs.push("--require-match");
+    }
     if ((params["no_require_match"] ?? null)) {
         cargs.push("--no-require-match");
+    }
+    if ((params["test"] ?? null)) {
+        cargs.push("--test");
     }
     if ((params["test_debug"] ?? null)) {
         cargs.push("--test-debug");
@@ -190,7 +204,9 @@ function fs_check_version(
     subjects_dir: string,
     outfile: string,
     subject: string | null = null,
+    require_match: boolean = false,
     no_require_match: boolean = false,
+    test: boolean = false,
     test_debug: boolean = false,
     runner: Runner | null = null,
 ): FsCheckVersionOutputs {
@@ -204,7 +220,9 @@ function fs_check_version(
      * @param subjects_dir Subjects directory path
      * @param outfile Output file path where result of version check will be written
      * @param subject Subject name (optional)
+     * @param require_match Set REQUIRE_FS_MATCH for testing
      * @param no_require_match Unset REQUIRE_FS_MATCH for testing
+     * @param test Go through permutations for testing
      * @param test_debug Go through permutations for debugging
      * @param runner Command runner
     
@@ -212,7 +230,7 @@ function fs_check_version(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_CHECK_VERSION_METADATA);
-    const params = fs_check_version_params(subjects_dir, outfile, subject, no_require_match, test_debug)
+    const params = fs_check_version_params(subjects_dir, outfile, subject, require_match, no_require_match, test, test_debug)
     return fs_check_version_execute(params, execution);
 }
 

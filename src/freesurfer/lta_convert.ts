@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LTA_CONVERT_METADATA: Metadata = {
-    id: "daaa6767af53c23e0e3f62c31924d12dbc6e0eaa.boutiques",
+    id: "089d903b1865bcb03759aa837457f18ed456f5ed.boutiques",
     name: "lta_convert",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,7 +13,19 @@ const LTA_CONVERT_METADATA: Metadata = {
 
 interface LtaConvertParameters {
     "__STYXTYPE__": "lta_convert";
+    "in_lta"?: InputPathType | null | undefined;
+    "in_fsl"?: InputPathType | null | undefined;
+    "in_mni"?: InputPathType | null | undefined;
+    "in_reg"?: InputPathType | null | undefined;
+    "in_niftyreg"?: InputPathType | null | undefined;
+    "in_itk"?: InputPathType | null | undefined;
     "in_vox"?: InputPathType | null | undefined;
+    "out_lta"?: string | null | undefined;
+    "out_fsl"?: string | null | undefined;
+    "out_mni"?: string | null | undefined;
+    "out_reg"?: string | null | undefined;
+    "out_niftyreg"?: string | null | undefined;
+    "out_itk"?: string | null | undefined;
     "out_vox"?: string | null | undefined;
     "invert": boolean;
     "ltavox2vox": boolean;
@@ -77,7 +89,19 @@ interface LtaConvertOutputs {
 
 
 function lta_convert_params(
+    in_lta: InputPathType | null = null,
+    in_fsl: InputPathType | null = null,
+    in_mni: InputPathType | null = null,
+    in_reg: InputPathType | null = null,
+    in_niftyreg: InputPathType | null = null,
+    in_itk: InputPathType | null = null,
     in_vox: InputPathType | null = null,
+    out_lta: string | null = null,
+    out_fsl: string | null = null,
+    out_mni: string | null = null,
+    out_reg: string | null = null,
+    out_niftyreg: string | null = null,
+    out_itk: string | null = null,
     out_vox: string | null = null,
     invert: boolean = false,
     ltavox2vox: boolean = false,
@@ -90,7 +114,19 @@ function lta_convert_params(
     /**
      * Build parameters.
     
+     * @param in_lta Input transform of LTA type
+     * @param in_fsl Input transform of FSL type
+     * @param in_mni Input transform of MNI / XFM type
+     * @param in_reg Input transform of TK REG type (deprecated format)
+     * @param in_niftyreg Input transform of NiftyReg type (inverse RAS2RAS)
+     * @param in_itk Input ITK transform (inverse LPS2LPS).
      * @param in_vox Input transform in source image space (inverse VOX2VOX)
+     * @param out_lta Output linear transform (LTA FreeSurfer format)
+     * @param out_fsl Output transform in FSL format
+     * @param out_mni Output transform in MNI/XFM format
+     * @param out_reg Output transform in REG DAT format
+     * @param out_niftyreg Output transform in NiftyReg format (inverse RAS2RAS)
+     * @param out_itk Output transform in ITK TXT format (inverse LPS2LPS)
      * @param out_vox Output transform in source image space (inverse VOX2VOX)
      * @param invert Inverts transform
      * @param ltavox2vox Output type VOX2VOX (default RAS2RAS) with --ltaout
@@ -109,8 +145,44 @@ function lta_convert_params(
         "ltatkreg": ltatkreg,
         "trg_conform": trg_conform,
     };
+    if (in_lta !== null) {
+        params["in_lta"] = in_lta;
+    }
+    if (in_fsl !== null) {
+        params["in_fsl"] = in_fsl;
+    }
+    if (in_mni !== null) {
+        params["in_mni"] = in_mni;
+    }
+    if (in_reg !== null) {
+        params["in_reg"] = in_reg;
+    }
+    if (in_niftyreg !== null) {
+        params["in_niftyreg"] = in_niftyreg;
+    }
+    if (in_itk !== null) {
+        params["in_itk"] = in_itk;
+    }
     if (in_vox !== null) {
         params["in_vox"] = in_vox;
+    }
+    if (out_lta !== null) {
+        params["out_lta"] = out_lta;
+    }
+    if (out_fsl !== null) {
+        params["out_fsl"] = out_fsl;
+    }
+    if (out_mni !== null) {
+        params["out_mni"] = out_mni;
+    }
+    if (out_reg !== null) {
+        params["out_reg"] = out_reg;
+    }
+    if (out_niftyreg !== null) {
+        params["out_niftyreg"] = out_niftyreg;
+    }
+    if (out_itk !== null) {
+        params["out_itk"] = out_itk;
     }
     if (out_vox !== null) {
         params["out_vox"] = out_vox;
@@ -142,10 +214,82 @@ function lta_convert_cargs(
      */
     const cargs: string[] = [];
     cargs.push("lta_convert");
+    if ((params["in_lta"] ?? null) !== null) {
+        cargs.push(
+            "--inlta",
+            execution.inputFile((params["in_lta"] ?? null))
+        );
+    }
+    if ((params["in_fsl"] ?? null) !== null) {
+        cargs.push(
+            "--infsl",
+            execution.inputFile((params["in_fsl"] ?? null))
+        );
+    }
+    if ((params["in_mni"] ?? null) !== null) {
+        cargs.push(
+            "--inmni",
+            execution.inputFile((params["in_mni"] ?? null))
+        );
+    }
+    if ((params["in_reg"] ?? null) !== null) {
+        cargs.push(
+            "--inreg",
+            execution.inputFile((params["in_reg"] ?? null))
+        );
+    }
+    if ((params["in_niftyreg"] ?? null) !== null) {
+        cargs.push(
+            "--inniftyreg",
+            execution.inputFile((params["in_niftyreg"] ?? null))
+        );
+    }
+    if ((params["in_itk"] ?? null) !== null) {
+        cargs.push(
+            "--initk",
+            execution.inputFile((params["in_itk"] ?? null))
+        );
+    }
     if ((params["in_vox"] ?? null) !== null) {
         cargs.push(
             "--invox",
             execution.inputFile((params["in_vox"] ?? null))
+        );
+    }
+    if ((params["out_lta"] ?? null) !== null) {
+        cargs.push(
+            "--outlta",
+            (params["out_lta"] ?? null)
+        );
+    }
+    if ((params["out_fsl"] ?? null) !== null) {
+        cargs.push(
+            "--outfsl",
+            (params["out_fsl"] ?? null)
+        );
+    }
+    if ((params["out_mni"] ?? null) !== null) {
+        cargs.push(
+            "--outmni",
+            (params["out_mni"] ?? null)
+        );
+    }
+    if ((params["out_reg"] ?? null) !== null) {
+        cargs.push(
+            "--outreg",
+            (params["out_reg"] ?? null)
+        );
+    }
+    if ((params["out_niftyreg"] ?? null) !== null) {
+        cargs.push(
+            "--outniftyreg",
+            (params["out_niftyreg"] ?? null)
+        );
+    }
+    if ((params["out_itk"] ?? null) !== null) {
+        cargs.push(
+            "--outitk",
+            (params["out_itk"] ?? null)
         );
     }
     if ((params["out_vox"] ?? null) !== null) {
@@ -233,7 +377,19 @@ function lta_convert_execute(
 
 
 function lta_convert(
+    in_lta: InputPathType | null = null,
+    in_fsl: InputPathType | null = null,
+    in_mni: InputPathType | null = null,
+    in_reg: InputPathType | null = null,
+    in_niftyreg: InputPathType | null = null,
+    in_itk: InputPathType | null = null,
     in_vox: InputPathType | null = null,
+    out_lta: string | null = null,
+    out_fsl: string | null = null,
+    out_mni: string | null = null,
+    out_reg: string | null = null,
+    out_niftyreg: string | null = null,
+    out_itk: string | null = null,
     out_vox: string | null = null,
     invert: boolean = false,
     ltavox2vox: boolean = false,
@@ -251,7 +407,19 @@ function lta_convert(
      * 
      * URL: https://github.com/freesurfer/freesurfer
     
+     * @param in_lta Input transform of LTA type
+     * @param in_fsl Input transform of FSL type
+     * @param in_mni Input transform of MNI / XFM type
+     * @param in_reg Input transform of TK REG type (deprecated format)
+     * @param in_niftyreg Input transform of NiftyReg type (inverse RAS2RAS)
+     * @param in_itk Input ITK transform (inverse LPS2LPS).
      * @param in_vox Input transform in source image space (inverse VOX2VOX)
+     * @param out_lta Output linear transform (LTA FreeSurfer format)
+     * @param out_fsl Output transform in FSL format
+     * @param out_mni Output transform in MNI/XFM format
+     * @param out_reg Output transform in REG DAT format
+     * @param out_niftyreg Output transform in NiftyReg format (inverse RAS2RAS)
+     * @param out_itk Output transform in ITK TXT format (inverse LPS2LPS)
      * @param out_vox Output transform in source image space (inverse VOX2VOX)
      * @param invert Inverts transform
      * @param ltavox2vox Output type VOX2VOX (default RAS2RAS) with --ltaout
@@ -266,7 +434,7 @@ function lta_convert(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LTA_CONVERT_METADATA);
-    const params = lta_convert_params(in_vox, out_vox, invert, ltavox2vox, ltatkreg, src_geometry, trg_geometry, trg_conform, subject_name)
+    const params = lta_convert_params(in_lta, in_fsl, in_mni, in_reg, in_niftyreg, in_itk, in_vox, out_lta, out_fsl, out_mni, out_reg, out_niftyreg, out_itk, out_vox, invert, ltavox2vox, ltatkreg, src_geometry, trg_geometry, trg_conform, subject_name)
     return lta_convert_execute(params, execution);
 }
 

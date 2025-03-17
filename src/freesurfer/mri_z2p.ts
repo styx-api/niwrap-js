@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_Z2P_METADATA: Metadata = {
-    id: "993304b1f6f275d376d70048d9e4d541fe6daff2.boutiques",
+    id: "78dfd44d5447e6090f81e24d6551a8f322082fcf.boutiques",
     name: "mri_z2p",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -22,6 +22,10 @@ interface MriZ2pParameters {
     "signed": boolean;
     "feat"?: string | null | undefined;
     "feat_format"?: string | null | undefined;
+    "nii_format": boolean;
+    "niigz_format": boolean;
+    "mgh_format": boolean;
+    "mgz_format": boolean;
     "img_format": boolean;
     "debug": boolean;
     "check_opts": boolean;
@@ -93,6 +97,10 @@ function mri_z2p_params(
     signed: boolean = false,
     feat: string | null = null,
     feat_format: string | null = null,
+    nii_format: boolean = false,
+    niigz_format: boolean = false,
+    mgh_format: boolean = false,
+    mgz_format: boolean = false,
     img_format: boolean = false,
     debug: boolean = false,
     check_opts: boolean = false,
@@ -109,6 +117,10 @@ function mri_z2p_params(
      * @param signed Two-sided/signed p-value (p = 2*(1-p)).
      * @param feat Convert all z-stats and zf-stats to sigs in the specified directory.
      * @param feat_format Use specified format for output (e.g., nii, nii.gz, mgh).
+     * @param nii_format Use NIfTI output format.
+     * @param niigz_format Use compressed NIfTI output format.
+     * @param mgh_format Use MGH output format.
+     * @param mgz_format Use MGZ output format.
      * @param img_format Use Analyze output format.
      * @param debug Turn on debugging.
      * @param check_opts Don't run anything, just check options and exit.
@@ -123,6 +135,10 @@ function mri_z2p_params(
         "two_sided": two_sided,
         "one_sided": one_sided,
         "signed": signed,
+        "nii_format": nii_format,
+        "niigz_format": niigz_format,
+        "mgh_format": mgh_format,
+        "mgz_format": mgz_format,
         "img_format": img_format,
         "debug": debug,
         "check_opts": check_opts,
@@ -193,6 +209,18 @@ function mri_z2p_cargs(
             (params["feat_format"] ?? null)
         );
     }
+    if ((params["nii_format"] ?? null)) {
+        cargs.push("--nii");
+    }
+    if ((params["niigz_format"] ?? null)) {
+        cargs.push("--nii.gz");
+    }
+    if ((params["mgh_format"] ?? null)) {
+        cargs.push("--mgh");
+    }
+    if ((params["mgz_format"] ?? null)) {
+        cargs.push("--mgz");
+    }
     if ((params["img_format"] ?? null)) {
         cargs.push("--img");
     }
@@ -261,6 +289,10 @@ function mri_z2p(
     signed: boolean = false,
     feat: string | null = null,
     feat_format: string | null = null,
+    nii_format: boolean = false,
+    niigz_format: boolean = false,
+    mgh_format: boolean = false,
+    mgz_format: boolean = false,
     img_format: boolean = false,
     debug: boolean = false,
     check_opts: boolean = false,
@@ -282,6 +314,10 @@ function mri_z2p(
      * @param signed Two-sided/signed p-value (p = 2*(1-p)).
      * @param feat Convert all z-stats and zf-stats to sigs in the specified directory.
      * @param feat_format Use specified format for output (e.g., nii, nii.gz, mgh).
+     * @param nii_format Use NIfTI output format.
+     * @param niigz_format Use compressed NIfTI output format.
+     * @param mgh_format Use MGH output format.
+     * @param mgz_format Use MGZ output format.
      * @param img_format Use Analyze output format.
      * @param debug Turn on debugging.
      * @param check_opts Don't run anything, just check options and exit.
@@ -291,7 +327,7 @@ function mri_z2p(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_Z2P_METADATA);
-    const params = mri_z2p_params(z_volume, p_volume, sig_volume, mask_volume, two_sided, one_sided, signed, feat, feat_format, img_format, debug, check_opts)
+    const params = mri_z2p_params(z_volume, p_volume, sig_volume, mask_volume, two_sided, one_sided, signed, feat, feat_format, nii_format, niigz_format, mgh_format, mgz_format, img_format, debug, check_opts)
     return mri_z2p_execute(params, execution);
 }
 

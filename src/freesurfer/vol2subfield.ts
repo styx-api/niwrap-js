@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOL2SUBFIELD_METADATA: Metadata = {
-    id: "ec503af3368509aa5b191ee5f77a6d7c5a57bc38.boutiques",
+    id: "5eac73d445c940e914c3170cc398217dabfe1801.boutiques",
     name: "vol2subfield",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -22,8 +22,15 @@ interface Vol2subfieldParameters {
     "avgwf_output"?: string | null | undefined;
     "avgwfvol_output"?: string | null | undefined;
     "color_table"?: InputPathType | null | undefined;
+    "interpolation_nearest": boolean;
+    "interpolation_trilin": boolean;
     "interpolation_cubic": boolean;
     "tmp_directory"?: string | null | undefined;
+    "preset_subfield_lh_hippoamyg": boolean;
+    "preset_subfield_rh_hippoamyg": boolean;
+    "preset_subfield_lh_hbt": boolean;
+    "preset_subfield_rh_hbt": boolean;
+    "preset_subfield_thalamus": boolean;
     "preset_subfield_brainstem": boolean;
 }
 
@@ -105,8 +112,15 @@ function vol2subfield_params(
     avgwf_output: string | null = null,
     avgwfvol_output: string | null = null,
     color_table: InputPathType | null = null,
+    interpolation_nearest: boolean = false,
+    interpolation_trilin: boolean = false,
     interpolation_cubic: boolean = false,
     tmp_directory: string | null = null,
+    preset_subfield_lh_hippoamyg: boolean = false,
+    preset_subfield_rh_hippoamyg: boolean = false,
+    preset_subfield_lh_hbt: boolean = false,
+    preset_subfield_rh_hbt: boolean = false,
+    preset_subfield_thalamus: boolean = false,
     preset_subfield_brainstem: boolean = false,
 ): Vol2subfieldParameters {
     /**
@@ -121,8 +135,15 @@ function vol2subfield_params(
      * @param avgwf_output Run mri_segstats with --avgwf output to this file
      * @param avgwfvol_output Run mri_segstats with --avgwfvol output to this file
      * @param color_table Color table to use with mri_segstats
+     * @param interpolation_nearest Use nearest neighbor interpolation
+     * @param interpolation_trilin Use triliear interpolation
      * @param interpolation_cubic Use cubic interpolation
      * @param tmp_directory Temporary directory for debugging
+     * @param preset_subfield_lh_hippoamyg Set subfield to lh.hippoAmygLabels-T1.v21.mgz
+     * @param preset_subfield_rh_hippoamyg Set subfield to rh.hippoAmygLabels-T1.v21.mgz
+     * @param preset_subfield_lh_hbt Set subfield to lh.hippoAmygLabels-T1.v21.HBT.mgz
+     * @param preset_subfield_rh_hbt Set subfield to rh.hippoAmygLabels-T1.v21.HBT.mgz
+     * @param preset_subfield_thalamus Set subfield to ThalamicNuclei.v10.T1.mgz
      * @param preset_subfield_brainstem Set subfield to brainstemSsLabels.v12.mgz
     
      * @returns Parameter dictionary
@@ -132,7 +153,14 @@ function vol2subfield_params(
         "input_volume": input_volume,
         "subfield_volume": subfield_volume,
         "registration_file": registration_file,
+        "interpolation_nearest": interpolation_nearest,
+        "interpolation_trilin": interpolation_trilin,
         "interpolation_cubic": interpolation_cubic,
+        "preset_subfield_lh_hippoamyg": preset_subfield_lh_hippoamyg,
+        "preset_subfield_rh_hippoamyg": preset_subfield_rh_hippoamyg,
+        "preset_subfield_lh_hbt": preset_subfield_lh_hbt,
+        "preset_subfield_rh_hbt": preset_subfield_rh_hbt,
+        "preset_subfield_thalamus": preset_subfield_thalamus,
         "preset_subfield_brainstem": preset_subfield_brainstem,
     };
     if (output_volume !== null) {
@@ -222,6 +250,12 @@ function vol2subfield_cargs(
             execution.inputFile((params["color_table"] ?? null))
         );
     }
+    if ((params["interpolation_nearest"] ?? null)) {
+        cargs.push("--nearest");
+    }
+    if ((params["interpolation_trilin"] ?? null)) {
+        cargs.push("--trilin");
+    }
     if ((params["interpolation_cubic"] ?? null)) {
         cargs.push("--cubic");
     }
@@ -230,6 +264,21 @@ function vol2subfield_cargs(
             "--tmp",
             (params["tmp_directory"] ?? null)
         );
+    }
+    if ((params["preset_subfield_lh_hippoamyg"] ?? null)) {
+        cargs.push("--lh.hippoamyg");
+    }
+    if ((params["preset_subfield_rh_hippoamyg"] ?? null)) {
+        cargs.push("--rh.hippoamyg");
+    }
+    if ((params["preset_subfield_lh_hbt"] ?? null)) {
+        cargs.push("--lh.hbt");
+    }
+    if ((params["preset_subfield_rh_hbt"] ?? null)) {
+        cargs.push("--rh.hbt");
+    }
+    if ((params["preset_subfield_thalamus"] ?? null)) {
+        cargs.push("--thalamus");
     }
     if ((params["preset_subfield_brainstem"] ?? null)) {
         cargs.push("--brainstem");
@@ -296,8 +345,15 @@ function vol2subfield(
     avgwf_output: string | null = null,
     avgwfvol_output: string | null = null,
     color_table: InputPathType | null = null,
+    interpolation_nearest: boolean = false,
+    interpolation_trilin: boolean = false,
     interpolation_cubic: boolean = false,
     tmp_directory: string | null = null,
+    preset_subfield_lh_hippoamyg: boolean = false,
+    preset_subfield_rh_hippoamyg: boolean = false,
+    preset_subfield_lh_hbt: boolean = false,
+    preset_subfield_rh_hbt: boolean = false,
+    preset_subfield_thalamus: boolean = false,
     preset_subfield_brainstem: boolean = false,
     runner: Runner | null = null,
 ): Vol2subfieldOutputs {
@@ -317,8 +373,15 @@ function vol2subfield(
      * @param avgwf_output Run mri_segstats with --avgwf output to this file
      * @param avgwfvol_output Run mri_segstats with --avgwfvol output to this file
      * @param color_table Color table to use with mri_segstats
+     * @param interpolation_nearest Use nearest neighbor interpolation
+     * @param interpolation_trilin Use triliear interpolation
      * @param interpolation_cubic Use cubic interpolation
      * @param tmp_directory Temporary directory for debugging
+     * @param preset_subfield_lh_hippoamyg Set subfield to lh.hippoAmygLabels-T1.v21.mgz
+     * @param preset_subfield_rh_hippoamyg Set subfield to rh.hippoAmygLabels-T1.v21.mgz
+     * @param preset_subfield_lh_hbt Set subfield to lh.hippoAmygLabels-T1.v21.HBT.mgz
+     * @param preset_subfield_rh_hbt Set subfield to rh.hippoAmygLabels-T1.v21.HBT.mgz
+     * @param preset_subfield_thalamus Set subfield to ThalamicNuclei.v10.T1.mgz
      * @param preset_subfield_brainstem Set subfield to brainstemSsLabels.v12.mgz
      * @param runner Command runner
     
@@ -326,7 +389,7 @@ function vol2subfield(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOL2SUBFIELD_METADATA);
-    const params = vol2subfield_params(input_volume, subfield_volume, registration_file, output_volume, output_registration, stats_output, avgwf_output, avgwfvol_output, color_table, interpolation_cubic, tmp_directory, preset_subfield_brainstem)
+    const params = vol2subfield_params(input_volume, subfield_volume, registration_file, output_volume, output_registration, stats_output, avgwf_output, avgwfvol_output, color_table, interpolation_nearest, interpolation_trilin, interpolation_cubic, tmp_directory, preset_subfield_lh_hippoamyg, preset_subfield_rh_hippoamyg, preset_subfield_lh_hbt, preset_subfield_rh_hbt, preset_subfield_thalamus, preset_subfield_brainstem)
     return vol2subfield_execute(params, execution);
 }
 

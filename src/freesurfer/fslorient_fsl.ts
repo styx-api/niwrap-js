@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLORIENT_FSL_METADATA: Metadata = {
-    id: "91c87d301655f1a487272843a72c1efbca6dd79a.boutiques",
+    id: "15cd7a99b2de893a5d0fcdffc84df6b7b7cfaf46.boutiques",
     name: "fslorient.fsl",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,10 +13,22 @@ const FSLORIENT_FSL_METADATA: Metadata = {
 
 interface FslorientFslParameters {
     "__STYXTYPE__": "fslorient.fsl";
-    "swap_orient": boolean;
     "filename": InputPathType;
+    "get_orient": boolean;
+    "get_sform": boolean;
+    "get_qform": boolean;
+    "set_sform"?: Array<number> | null | undefined;
     "set_qform"?: Array<number> | null | undefined;
+    "get_sform_code": boolean;
+    "get_qform_code": boolean;
+    "set_sform_code"?: string | null | undefined;
     "set_qform_code"?: string | null | undefined;
+    "copy_sform_to_qform": boolean;
+    "copy_qform_to_sform": boolean;
+    "delete_orient": boolean;
+    "force_radiological": boolean;
+    "force_neurological": boolean;
+    "swap_orient": boolean;
 }
 
 
@@ -68,27 +80,67 @@ interface FslorientFslOutputs {
 
 function fslorient_fsl_params(
     filename: InputPathType,
-    swap_orient: boolean = false,
+    get_orient: boolean = false,
+    get_sform: boolean = false,
+    get_qform: boolean = false,
+    set_sform: Array<number> | null = null,
     set_qform: Array<number> | null = null,
+    get_sform_code: boolean = false,
+    get_qform_code: boolean = false,
+    set_sform_code: string | null = null,
     set_qform_code: string | null = null,
+    copy_sform_to_qform: boolean = false,
+    copy_qform_to_sform: boolean = false,
+    delete_orient: boolean = false,
+    force_radiological: boolean = false,
+    force_neurological: boolean = false,
+    swap_orient: boolean = false,
 ): FslorientFslParameters {
     /**
      * Build parameters.
     
      * @param filename Input image filename
-     * @param swap_orient Swaps FSL radiological and FSL neurological
+     * @param get_orient Prints FSL left-right orientation
+     * @param get_sform Prints the 16 elements of the sform matrix
+     * @param get_qform Prints the 16 elements of the qform matrix
+     * @param set_sform Sets the 16 elements of the sform matrix
      * @param set_qform Sets the 16 elements of the qform matrix
+     * @param get_sform_code Prints the sform integer code
+     * @param get_qform_code Prints the qform integer code
+     * @param set_sform_code Sets sform integer code
      * @param set_qform_code Sets qform integer code
+     * @param copy_sform_to_qform Sets the qform equal to the sform (code and matrix)
+     * @param copy_qform_to_sform Sets the sform equal to the qform (code and matrix)
+     * @param delete_orient Removes orient info from header
+     * @param force_radiological Makes FSL radiological header
+     * @param force_neurological Makes FSL neurological header (not Analyze)
+     * @param swap_orient Swaps FSL radiological and FSL neurological
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "fslorient.fsl" as const,
-        "swap_orient": swap_orient,
         "filename": filename,
+        "get_orient": get_orient,
+        "get_sform": get_sform,
+        "get_qform": get_qform,
+        "get_sform_code": get_sform_code,
+        "get_qform_code": get_qform_code,
+        "copy_sform_to_qform": copy_sform_to_qform,
+        "copy_qform_to_sform": copy_qform_to_sform,
+        "delete_orient": delete_orient,
+        "force_radiological": force_radiological,
+        "force_neurological": force_neurological,
+        "swap_orient": swap_orient,
     };
+    if (set_sform !== null) {
+        params["set_sform"] = set_sform;
+    }
     if (set_qform !== null) {
         params["set_qform"] = set_qform;
+    }
+    if (set_sform_code !== null) {
+        params["set_sform_code"] = set_sform_code;
     }
     if (set_qform_code !== null) {
         params["set_qform_code"] = set_qform_code;
@@ -110,15 +162,39 @@ function fslorient_fsl_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("fslorient");
-    if ((params["swap_orient"] ?? null)) {
-        cargs.push("-swaporient");
-    }
+    cargs.push("fslorient.fsl");
     cargs.push(execution.inputFile((params["filename"] ?? null)));
+    if ((params["get_orient"] ?? null)) {
+        cargs.push("-getorient");
+    }
+    if ((params["get_sform"] ?? null)) {
+        cargs.push("-getsform");
+    }
+    if ((params["get_qform"] ?? null)) {
+        cargs.push("-getqform");
+    }
+    if ((params["set_sform"] ?? null) !== null) {
+        cargs.push(
+            "-setsform",
+            ...(params["set_sform"] ?? null).map(String)
+        );
+    }
     if ((params["set_qform"] ?? null) !== null) {
         cargs.push(
             "-setqform",
             ...(params["set_qform"] ?? null).map(String)
+        );
+    }
+    if ((params["get_sform_code"] ?? null)) {
+        cargs.push("-getsformcode");
+    }
+    if ((params["get_qform_code"] ?? null)) {
+        cargs.push("-getqformcode");
+    }
+    if ((params["set_sform_code"] ?? null) !== null) {
+        cargs.push(
+            "-setsformcode",
+            (params["set_sform_code"] ?? null)
         );
     }
     if ((params["set_qform_code"] ?? null) !== null) {
@@ -126,6 +202,24 @@ function fslorient_fsl_cargs(
             "-setqformcode",
             (params["set_qform_code"] ?? null)
         );
+    }
+    if ((params["copy_sform_to_qform"] ?? null)) {
+        cargs.push("-copysform2qform");
+    }
+    if ((params["copy_qform_to_sform"] ?? null)) {
+        cargs.push("-copyqform2sform");
+    }
+    if ((params["delete_orient"] ?? null)) {
+        cargs.push("-deleteorient");
+    }
+    if ((params["force_radiological"] ?? null)) {
+        cargs.push("-forceradiological");
+    }
+    if ((params["force_neurological"] ?? null)) {
+        cargs.push("-forceneurological");
+    }
+    if ((params["swap_orient"] ?? null)) {
+        cargs.push("-swaporient");
     }
     return cargs;
 }
@@ -176,9 +270,21 @@ function fslorient_fsl_execute(
 
 function fslorient_fsl(
     filename: InputPathType,
-    swap_orient: boolean = false,
+    get_orient: boolean = false,
+    get_sform: boolean = false,
+    get_qform: boolean = false,
+    set_sform: Array<number> | null = null,
     set_qform: Array<number> | null = null,
+    get_sform_code: boolean = false,
+    get_qform_code: boolean = false,
+    set_sform_code: string | null = null,
     set_qform_code: string | null = null,
+    copy_sform_to_qform: boolean = false,
+    copy_qform_to_sform: boolean = false,
+    delete_orient: boolean = false,
+    force_radiological: boolean = false,
+    force_neurological: boolean = false,
+    swap_orient: boolean = false,
     runner: Runner | null = null,
 ): FslorientFslOutputs {
     /**
@@ -189,16 +295,28 @@ function fslorient_fsl(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param filename Input image filename
-     * @param swap_orient Swaps FSL radiological and FSL neurological
+     * @param get_orient Prints FSL left-right orientation
+     * @param get_sform Prints the 16 elements of the sform matrix
+     * @param get_qform Prints the 16 elements of the qform matrix
+     * @param set_sform Sets the 16 elements of the sform matrix
      * @param set_qform Sets the 16 elements of the qform matrix
+     * @param get_sform_code Prints the sform integer code
+     * @param get_qform_code Prints the qform integer code
+     * @param set_sform_code Sets sform integer code
      * @param set_qform_code Sets qform integer code
+     * @param copy_sform_to_qform Sets the qform equal to the sform (code and matrix)
+     * @param copy_qform_to_sform Sets the sform equal to the qform (code and matrix)
+     * @param delete_orient Removes orient info from header
+     * @param force_radiological Makes FSL radiological header
+     * @param force_neurological Makes FSL neurological header (not Analyze)
+     * @param swap_orient Swaps FSL radiological and FSL neurological
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FslorientFslOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLORIENT_FSL_METADATA);
-    const params = fslorient_fsl_params(filename, swap_orient, set_qform, set_qform_code)
+    const params = fslorient_fsl_params(filename, get_orient, get_sform, get_qform, set_sform, set_qform, get_sform_code, get_qform_code, set_sform_code, set_qform_code, copy_sform_to_qform, copy_qform_to_sform, delete_orient, force_radiological, force_neurological, swap_orient)
     return fslorient_fsl_execute(params, execution);
 }
 

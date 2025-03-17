@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const POST_RECON_ALL_METADATA: Metadata = {
-    id: "043904c04e1a7c309fb6aa5cb7234831a996fdf4.boutiques",
+    id: "4506cae7a1f970c99574dc4fac8b9e2fc2792099.boutiques",
     name: "post-recon-all",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,9 +14,13 @@ const POST_RECON_ALL_METADATA: Metadata = {
 interface PostReconAllParameters {
     "__STYXTYPE__": "post-recon-all";
     "subject": string;
+    "subfields": boolean;
     "no_subfields": boolean;
+    "subregions": boolean;
     "no_subregions": boolean;
+    "cvs": boolean;
     "no_cvs": boolean;
+    "qcache": boolean;
     "no_qcache": boolean;
     "no_sclimbic": boolean;
     "no_hthsu": boolean;
@@ -80,9 +84,13 @@ interface PostReconAllOutputs {
 
 function post_recon_all_params(
     subject: string,
+    subfields: boolean = false,
     no_subfields: boolean = false,
+    subregions: boolean = false,
     no_subregions: boolean = false,
+    cvs: boolean = false,
     no_cvs: boolean = false,
+    qcache: boolean = false,
     no_qcache: boolean = false,
     no_sclimbic: boolean = false,
     no_hthsu: boolean = false,
@@ -100,9 +108,13 @@ function post_recon_all_params(
      * Build parameters.
     
      * @param subject Subject identifier to be processed
+     * @param subfields Run subfields extraction (default behavior)
      * @param no_subfields Do not run subfields extraction
+     * @param subregions Run subregions extraction (default behavior)
      * @param no_subregions Do not run subregions extraction
+     * @param cvs Run CVS processing
      * @param no_cvs Do not run CVS processing (default behavior)
+     * @param qcache Run qcache processing (default behavior)
      * @param no_qcache Do not run qcache processing
      * @param no_sclimbic Do not run sclimbic processing
      * @param no_hthsu Do not run hypothalamic subunits processing
@@ -121,9 +133,13 @@ function post_recon_all_params(
     const params = {
         "__STYXTYPE__": "post-recon-all" as const,
         "subject": subject,
+        "subfields": subfields,
         "no_subfields": no_subfields,
+        "subregions": subregions,
         "no_subregions": no_subregions,
+        "cvs": cvs,
         "no_cvs": no_cvs,
+        "qcache": qcache,
         "no_qcache": no_qcache,
         "no_sclimbic": no_sclimbic,
         "no_hthsu": no_hthsu,
@@ -156,18 +172,31 @@ function post_recon_all_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
+    cargs.push("post-recon-all");
     cargs.push(
         "-all",
-        ["post-recon", (params["subject"] ?? null)].join('')
+        (params["subject"] ?? null)
     );
+    if ((params["subfields"] ?? null)) {
+        cargs.push("--subfields");
+    }
     if ((params["no_subfields"] ?? null)) {
         cargs.push("--no-subfields");
+    }
+    if ((params["subregions"] ?? null)) {
+        cargs.push("--subregions");
     }
     if ((params["no_subregions"] ?? null)) {
         cargs.push("--no-subregions");
     }
+    if ((params["cvs"] ?? null)) {
+        cargs.push("--cvs");
+    }
     if ((params["no_cvs"] ?? null)) {
         cargs.push("--no-cvs");
+    }
+    if ((params["qcache"] ?? null)) {
+        cargs.push("--qcache");
     }
     if ((params["no_qcache"] ?? null)) {
         cargs.push("--no-qcache");
@@ -257,9 +286,13 @@ function post_recon_all_execute(
 
 function post_recon_all(
     subject: string,
+    subfields: boolean = false,
     no_subfields: boolean = false,
+    subregions: boolean = false,
     no_subregions: boolean = false,
+    cvs: boolean = false,
     no_cvs: boolean = false,
+    qcache: boolean = false,
     no_qcache: boolean = false,
     no_sclimbic: boolean = false,
     no_hthsu: boolean = false,
@@ -282,9 +315,13 @@ function post_recon_all(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param subject Subject identifier to be processed
+     * @param subfields Run subfields extraction (default behavior)
      * @param no_subfields Do not run subfields extraction
+     * @param subregions Run subregions extraction (default behavior)
      * @param no_subregions Do not run subregions extraction
+     * @param cvs Run CVS processing
      * @param no_cvs Do not run CVS processing (default behavior)
+     * @param qcache Run qcache processing (default behavior)
      * @param no_qcache Do not run qcache processing
      * @param no_sclimbic Do not run sclimbic processing
      * @param no_hthsu Do not run hypothalamic subunits processing
@@ -303,7 +340,7 @@ function post_recon_all(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POST_RECON_ALL_METADATA);
-    const params = post_recon_all_params(subject, no_subfields, no_subregions, no_cvs, no_qcache, no_sclimbic, no_hthsu, no_synthstrip, no_synthseg, no_qastats, no_samseg, no_xhemi, no_cos7, threads, force, exit_on_error)
+    const params = post_recon_all_params(subject, subfields, no_subfields, subregions, no_subregions, cvs, no_cvs, qcache, no_qcache, no_sclimbic, no_hthsu, no_synthstrip, no_synthseg, no_qastats, no_samseg, no_xhemi, no_cos7, threads, force, exit_on_error)
     return post_recon_all_execute(params, execution);
 }
 

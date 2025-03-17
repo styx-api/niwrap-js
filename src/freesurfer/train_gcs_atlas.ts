@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TRAIN_GCS_ATLAS_METADATA: Metadata = {
-    id: "915555870bf5ee316610cc5c539e20a5e0db415f.boutiques",
+    id: "94c89e1dfe3d6f19edd5cc1f4b3eeb93c181a16d.boutiques",
     name: "train-gcs-atlas",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -15,6 +15,8 @@ interface TrainGcsAtlasParameters {
     "__STYXTYPE__": "train-gcs-atlas";
     "manual_parcellation"?: string | null | undefined;
     "subjlist_file"?: InputPathType | null | undefined;
+    "left_hemi": boolean;
+    "right_hemi": boolean;
     "hemi_spec"?: string | null | undefined;
     "output_gcs": string;
     "surf_reg"?: InputPathType | null | undefined;
@@ -81,6 +83,8 @@ function train_gcs_atlas_params(
     output_gcs: string,
     manual_parcellation: string | null = null,
     subjlist_file: InputPathType | null = null,
+    left_hemi: boolean = false,
+    right_hemi: boolean = false,
     hemi_spec: string | null = null,
     surf_reg: InputPathType | null = null,
     color_table: InputPathType | null = null,
@@ -95,6 +99,8 @@ function train_gcs_atlas_params(
      * @param output_gcs Output GCS file
      * @param manual_parcellation Manual parcellation; default is aparc_edited
      * @param subjlist_file File containing the list of subjects
+     * @param left_hemi Left hemisphere processing
+     * @param right_hemi Right hemisphere processing
      * @param hemi_spec Specify hemisphere for processing
      * @param surf_reg Surface registration file; default is sphere.reg
      * @param color_table Color table file
@@ -107,6 +113,8 @@ function train_gcs_atlas_params(
      */
     const params = {
         "__STYXTYPE__": "train-gcs-atlas" as const,
+        "left_hemi": left_hemi,
+        "right_hemi": right_hemi,
         "output_gcs": output_gcs,
         "jackknife_flag": jackknife_flag,
     };
@@ -163,6 +171,12 @@ function train_gcs_atlas_cargs(
             "--f",
             execution.inputFile((params["subjlist_file"] ?? null))
         );
+    }
+    if ((params["left_hemi"] ?? null)) {
+        cargs.push("--lh");
+    }
+    if ((params["right_hemi"] ?? null)) {
+        cargs.push("--rh");
     }
     if ((params["hemi_spec"] ?? null) !== null) {
         cargs.push(
@@ -259,6 +273,8 @@ function train_gcs_atlas(
     output_gcs: string,
     manual_parcellation: string | null = null,
     subjlist_file: InputPathType | null = null,
+    left_hemi: boolean = false,
+    right_hemi: boolean = false,
     hemi_spec: string | null = null,
     surf_reg: InputPathType | null = null,
     color_table: InputPathType | null = null,
@@ -278,6 +294,8 @@ function train_gcs_atlas(
      * @param output_gcs Output GCS file
      * @param manual_parcellation Manual parcellation; default is aparc_edited
      * @param subjlist_file File containing the list of subjects
+     * @param left_hemi Left hemisphere processing
+     * @param right_hemi Right hemisphere processing
      * @param hemi_spec Specify hemisphere for processing
      * @param surf_reg Surface registration file; default is sphere.reg
      * @param color_table Color table file
@@ -291,7 +309,7 @@ function train_gcs_atlas(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRAIN_GCS_ATLAS_METADATA);
-    const params = train_gcs_atlas_params(output_gcs, manual_parcellation, subjlist_file, hemi_spec, surf_reg, color_table, exclude_subject, jackknife_flag, aseg_filename, threads)
+    const params = train_gcs_atlas_params(output_gcs, manual_parcellation, subjlist_file, left_hemi, right_hemi, hemi_spec, surf_reg, color_table, exclude_subject, jackknife_flag, aseg_filename, threads)
     return train_gcs_atlas_execute(params, execution);
 }
 

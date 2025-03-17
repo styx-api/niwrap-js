@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const UPDATE_NEEDED_METADATA: Metadata = {
-    id: "81ad1ec598b447ced529bab2b15819d597e08ec9.boutiques",
+    id: "bbeff96a804ee5f7f839128e9a8f2889e0e27e42.boutiques",
     name: "UpdateNeeded",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -15,6 +15,7 @@ interface UpdateNeededParameters {
     "__STYXTYPE__": "UpdateNeeded";
     "target_file": InputPathType;
     "source_file": InputPathType;
+    "additional_source_files"?: Array<InputPathType> | null | undefined;
 }
 
 
@@ -67,12 +68,14 @@ interface UpdateNeededOutputs {
 function update_needed_params(
     target_file: InputPathType,
     source_file: InputPathType,
+    additional_source_files: Array<InputPathType> | null = null,
 ): UpdateNeededParameters {
     /**
      * Build parameters.
     
      * @param target_file The target file that needs to be updated.
      * @param source_file The primary source file for updating the target file.
+     * @param additional_source_files Additional source files for updating the target file.
     
      * @returns Parameter dictionary
      */
@@ -81,6 +84,9 @@ function update_needed_params(
         "target_file": target_file,
         "source_file": source_file,
     };
+    if (additional_source_files !== null) {
+        params["additional_source_files"] = additional_source_files;
+    }
     return params;
 }
 
@@ -101,7 +107,9 @@ function update_needed_cargs(
     cargs.push("UpdateNeeded");
     cargs.push(execution.inputFile((params["target_file"] ?? null)));
     cargs.push(execution.inputFile((params["source_file"] ?? null)));
-    cargs.push("[ADDITIONAL_SOURCE_FILES...]");
+    if ((params["additional_source_files"] ?? null) !== null) {
+        cargs.push(...(params["additional_source_files"] ?? null).map(f => execution.inputFile(f)));
+    }
     return cargs;
 }
 
@@ -152,6 +160,7 @@ function update_needed_execute(
 function update_needed(
     target_file: InputPathType,
     source_file: InputPathType,
+    additional_source_files: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): UpdateNeededOutputs {
     /**
@@ -163,13 +172,14 @@ function update_needed(
     
      * @param target_file The target file that needs to be updated.
      * @param source_file The primary source file for updating the target file.
+     * @param additional_source_files Additional source files for updating the target file.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `UpdateNeededOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UPDATE_NEEDED_METADATA);
-    const params = update_needed_params(target_file, source_file)
+    const params = update_needed_params(target_file, source_file, additional_source_files)
     return update_needed_execute(params, execution);
 }
 

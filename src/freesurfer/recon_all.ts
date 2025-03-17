@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RECON_ALL_METADATA: Metadata = {
-    id: "de72948bacd270ce7d872b3cb30e555b07de540c.boutiques",
+    id: "1798c3fdbe8f172aa9c2b07b5d9c964e492cfd06.boutiques",
     name: "recon-all",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -14,6 +14,14 @@ const RECON_ALL_METADATA: Metadata = {
 interface ReconAllParameters {
     "__STYXTYPE__": "recon-all";
     "subjid": string;
+    "all_flag": boolean;
+    "autorecon_all_flag": boolean;
+    "autorecon1_flag": boolean;
+    "autorecon2_flag": boolean;
+    "autorecon2_cp_flag": boolean;
+    "autorecon2_wm_flag": boolean;
+    "autorecon2_inflate1_flag": boolean;
+    "autorecon2_perhemi_flag": boolean;
     "autorecon3_flag": boolean;
     "hemi"?: string | null | undefined;
     "pons_crs"?: Array<number> | null | undefined;
@@ -134,6 +142,14 @@ interface ReconAllOutputs {
 
 function recon_all_params(
     subjid: string,
+    all_flag: boolean = false,
+    autorecon_all_flag: boolean = false,
+    autorecon1_flag: boolean = false,
+    autorecon2_flag: boolean = false,
+    autorecon2_cp_flag: boolean = false,
+    autorecon2_wm_flag: boolean = false,
+    autorecon2_inflate1_flag: boolean = false,
+    autorecon2_perhemi_flag: boolean = false,
     autorecon3_flag: boolean = false,
     hemi: string | null = null,
     pons_crs: Array<number> | null = null,
@@ -199,6 +215,14 @@ function recon_all_params(
      * Build parameters.
     
      * @param subjid Subject ID for the FreeSurfer analysis
+     * @param all_flag Performs all stages of cortical reconstruction
+     * @param autorecon_all_flag Same as -all
+     * @param autorecon1_flag Process stages 1-5
+     * @param autorecon2_flag Process stages 6-23
+     * @param autorecon2_cp_flag Process stages 12-23
+     * @param autorecon2_wm_flag Process stages 15-23
+     * @param autorecon2_inflate1_flag Process stages 6-18
+     * @param autorecon2_perhemi_flag Tessellation, Smooth1, Inflate1, Qsphere, Fix, Smooth2, Inflate2, Finalsurf, Ribbon
      * @param autorecon3_flag Process stages 24-34
      * @param hemi Specify hemisphere ('lh' or 'rh')
      * @param pons_crs Specify CRS for pons during fill operation
@@ -265,6 +289,14 @@ function recon_all_params(
     const params = {
         "__STYXTYPE__": "recon-all" as const,
         "subjid": subjid,
+        "all_flag": all_flag,
+        "autorecon_all_flag": autorecon_all_flag,
+        "autorecon1_flag": autorecon1_flag,
+        "autorecon2_flag": autorecon2_flag,
+        "autorecon2_cp_flag": autorecon2_cp_flag,
+        "autorecon2_wm_flag": autorecon2_wm_flag,
+        "autorecon2_inflate1_flag": autorecon2_inflate1_flag,
+        "autorecon2_perhemi_flag": autorecon2_perhemi_flag,
         "autorecon3_flag": autorecon3_flag,
         "nofill": nofill,
         "wsless": wsless,
@@ -408,6 +440,30 @@ function recon_all_cargs(
         "-subjid",
         (params["subjid"] ?? null)
     );
+    if ((params["all_flag"] ?? null)) {
+        cargs.push("-all");
+    }
+    if ((params["autorecon_all_flag"] ?? null)) {
+        cargs.push("-autorecon-all");
+    }
+    if ((params["autorecon1_flag"] ?? null)) {
+        cargs.push("-autorecon1");
+    }
+    if ((params["autorecon2_flag"] ?? null)) {
+        cargs.push("-autorecon2");
+    }
+    if ((params["autorecon2_cp_flag"] ?? null)) {
+        cargs.push("-autorecon2-cp");
+    }
+    if ((params["autorecon2_wm_flag"] ?? null)) {
+        cargs.push("-autorecon2-wm");
+    }
+    if ((params["autorecon2_inflate1_flag"] ?? null)) {
+        cargs.push("-autorecon2-inflate1");
+    }
+    if ((params["autorecon2_perhemi_flag"] ?? null)) {
+        cargs.push("-autorecon2-perhemi");
+    }
     if ((params["autorecon3_flag"] ?? null)) {
         cargs.push("-autorecon3");
     }
@@ -729,6 +785,14 @@ function recon_all_execute(
 
 function recon_all(
     subjid: string,
+    all_flag: boolean = false,
+    autorecon_all_flag: boolean = false,
+    autorecon1_flag: boolean = false,
+    autorecon2_flag: boolean = false,
+    autorecon2_cp_flag: boolean = false,
+    autorecon2_wm_flag: boolean = false,
+    autorecon2_inflate1_flag: boolean = false,
+    autorecon2_perhemi_flag: boolean = false,
     autorecon3_flag: boolean = false,
     hemi: string | null = null,
     pons_crs: Array<number> | null = null,
@@ -799,6 +863,14 @@ function recon_all(
      * URL: https://github.com/freesurfer/freesurfer
     
      * @param subjid Subject ID for the FreeSurfer analysis
+     * @param all_flag Performs all stages of cortical reconstruction
+     * @param autorecon_all_flag Same as -all
+     * @param autorecon1_flag Process stages 1-5
+     * @param autorecon2_flag Process stages 6-23
+     * @param autorecon2_cp_flag Process stages 12-23
+     * @param autorecon2_wm_flag Process stages 15-23
+     * @param autorecon2_inflate1_flag Process stages 6-18
+     * @param autorecon2_perhemi_flag Tessellation, Smooth1, Inflate1, Qsphere, Fix, Smooth2, Inflate2, Finalsurf, Ribbon
      * @param autorecon3_flag Process stages 24-34
      * @param hemi Specify hemisphere ('lh' or 'rh')
      * @param pons_crs Specify CRS for pons during fill operation
@@ -865,7 +937,7 @@ function recon_all(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RECON_ALL_METADATA);
-    const params = recon_all_params(subjid, autorecon3_flag, hemi, pons_crs, cc_crs, lh_crs, rh_crs, nofill, watershed, external_brain_mask, wsless, wsmore, wsatlas, no_wsatlas, no_wsgcaatlas, wsthresh, wsseed, norm_3d_iters, norm_max_grad, norm1_b, norm2_b, norm1_n, norm2_n, cm, no_fix_with_ga, fix_diag_only, seg_wlo, seg_ghi, nothicken, no_ca_align_after, no_ca_align, deface, expert_file, xopts_use, xopts_clean, xopts_overwrite, termscript_file, mprage, washu_mprage, schwartzya3t_atlas, threads, waitfor_file, notify_file, log_file, status_file, noappend, no_isrunning, hippocampal_subfields_t1, hippocampal_subfields_t2, hippocampal_subfields_t1t2, brainstem_structures, subjects_dir, mail_user, umask, group_id, only_versions, debug, allow_coredump, dontrun, version, help)
+    const params = recon_all_params(subjid, all_flag, autorecon_all_flag, autorecon1_flag, autorecon2_flag, autorecon2_cp_flag, autorecon2_wm_flag, autorecon2_inflate1_flag, autorecon2_perhemi_flag, autorecon3_flag, hemi, pons_crs, cc_crs, lh_crs, rh_crs, nofill, watershed, external_brain_mask, wsless, wsmore, wsatlas, no_wsatlas, no_wsgcaatlas, wsthresh, wsseed, norm_3d_iters, norm_max_grad, norm1_b, norm2_b, norm1_n, norm2_n, cm, no_fix_with_ga, fix_diag_only, seg_wlo, seg_ghi, nothicken, no_ca_align_after, no_ca_align, deface, expert_file, xopts_use, xopts_clean, xopts_overwrite, termscript_file, mprage, washu_mprage, schwartzya3t_atlas, threads, waitfor_file, notify_file, log_file, status_file, noappend, no_isrunning, hippocampal_subfields_t1, hippocampal_subfields_t2, hippocampal_subfields_t1t2, brainstem_structures, subjects_dir, mail_user, umask, group_id, only_versions, debug, allow_coredump, dontrun, version, help)
     return recon_all_execute(params, execution);
 }
 

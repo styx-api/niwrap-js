@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANNOT2STD_METADATA: Metadata = {
-    id: "fcdd66f979c54df988b9364c89c1d5056e322ab6.boutiques",
+    id: "2c9123403463828b0f1e87c964b86cb68c130b07.boutiques",
     name: "annot2std",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -18,11 +18,14 @@ interface Annot2stdParameters {
     "fsgd_file"?: InputPathType | null | undefined;
     "subject_list_file"?: InputPathType | null | undefined;
     "target"?: string | null | undefined;
+    "left_hemisphere": boolean;
     "right_hemisphere": boolean;
     "xhemi": boolean;
     "surfreg"?: string | null | undefined;
     "srcsurfreg"?: string | null | undefined;
     "trgsurfreg"?: string | null | undefined;
+    "annotname"?: string | null | undefined;
+    "aparc": boolean;
     "a2009s": boolean;
     "segmentation"?: string | null | undefined;
     "stack"?: string | null | undefined;
@@ -96,11 +99,14 @@ function annot2std_params(
     fsgd_file: InputPathType | null = null,
     subject_list_file: InputPathType | null = null,
     target: string | null = null,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     xhemi: boolean = false,
     surfreg: string | null = null,
     srcsurfreg: string | null = null,
     trgsurfreg: string | null = null,
+    annotname: string | null = null,
+    aparc: boolean = false,
     a2009s: boolean = false,
     segmentation: string | null = null,
     stack: string | null = null,
@@ -115,11 +121,14 @@ function annot2std_params(
      * @param fsgd_file FSGD file for group descriptor
      * @param subject_list_file Subject list file
      * @param target Target subject (e.g., fsaverage)
+     * @param left_hemisphere Use left hemisphere
      * @param right_hemisphere Use right hemisphere
      * @param xhemi For interhemispheric analysis
      * @param surfreg Surface registration type (default is sphere.reg)
      * @param srcsurfreg Source surface registration type (default is sphere.reg)
      * @param trgsurfreg Target surface registration type (default is sphere.reg)
+     * @param annotname Input annotation name (?h.annotname.annot)
+     * @param aparc Annotation name set to aparc
      * @param a2009s Annotation name set to aparc.a2009s
      * @param segmentation Save output as a surface segmentation (2 frames, second = p)
      * @param stack Stack of individual annotations as segmentation
@@ -132,8 +141,10 @@ function annot2std_params(
         "__STYXTYPE__": "annot2std" as const,
         "output_annot_path": output_annot_path,
         "subjects": subjects,
+        "left_hemisphere": left_hemisphere,
         "right_hemisphere": right_hemisphere,
         "xhemi": xhemi,
+        "aparc": aparc,
         "a2009s": a2009s,
         "help": help,
         "version": version,
@@ -155,6 +166,9 @@ function annot2std_params(
     }
     if (trgsurfreg !== null) {
         params["trgsurfreg"] = trgsurfreg;
+    }
+    if (annotname !== null) {
+        params["annotname"] = annotname;
     }
     if (segmentation !== null) {
         params["segmentation"] = segmentation;
@@ -206,6 +220,9 @@ function annot2std_cargs(
             (params["target"] ?? null)
         );
     }
+    if ((params["left_hemisphere"] ?? null)) {
+        cargs.push("--lh");
+    }
     if ((params["right_hemisphere"] ?? null)) {
         cargs.push("--rh");
     }
@@ -229,6 +246,15 @@ function annot2std_cargs(
             "--trgsurfreg",
             (params["trgsurfreg"] ?? null)
         );
+    }
+    if ((params["annotname"] ?? null) !== null) {
+        cargs.push(
+            "--a",
+            (params["annotname"] ?? null)
+        );
+    }
+    if ((params["aparc"] ?? null)) {
+        cargs.push("--aparc");
     }
     if ((params["a2009s"] ?? null)) {
         cargs.push("--a2009s");
@@ -307,11 +333,14 @@ function annot2std(
     fsgd_file: InputPathType | null = null,
     subject_list_file: InputPathType | null = null,
     target: string | null = null,
+    left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     xhemi: boolean = false,
     surfreg: string | null = null,
     srcsurfreg: string | null = null,
     trgsurfreg: string | null = null,
+    annotname: string | null = null,
+    aparc: boolean = false,
     a2009s: boolean = false,
     segmentation: string | null = null,
     stack: string | null = null,
@@ -331,11 +360,14 @@ function annot2std(
      * @param fsgd_file FSGD file for group descriptor
      * @param subject_list_file Subject list file
      * @param target Target subject (e.g., fsaverage)
+     * @param left_hemisphere Use left hemisphere
      * @param right_hemisphere Use right hemisphere
      * @param xhemi For interhemispheric analysis
      * @param surfreg Surface registration type (default is sphere.reg)
      * @param srcsurfreg Source surface registration type (default is sphere.reg)
      * @param trgsurfreg Target surface registration type (default is sphere.reg)
+     * @param annotname Input annotation name (?h.annotname.annot)
+     * @param aparc Annotation name set to aparc
      * @param a2009s Annotation name set to aparc.a2009s
      * @param segmentation Save output as a surface segmentation (2 frames, second = p)
      * @param stack Stack of individual annotations as segmentation
@@ -347,7 +379,7 @@ function annot2std(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANNOT2STD_METADATA);
-    const params = annot2std_params(output_annot_path, subjects, fsgd_file, subject_list_file, target, right_hemisphere, xhemi, surfreg, srcsurfreg, trgsurfreg, a2009s, segmentation, stack, help, version)
+    const params = annot2std_params(output_annot_path, subjects, fsgd_file, subject_list_file, target, left_hemisphere, right_hemisphere, xhemi, surfreg, srcsurfreg, trgsurfreg, annotname, aparc, a2009s, segmentation, stack, help, version)
     return annot2std_execute(params, execution);
 }
 
