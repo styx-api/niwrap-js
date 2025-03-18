@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIGNAL2IMAGE_METADATA: Metadata = {
-    id: "c966356e7e749d29ae76a10e34270ee060241613.boutiques",
+    id: "379c7cbead70bc3c2e0224d3cef103c8189825b6.boutiques",
     name: "signal2image",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -25,6 +25,7 @@ interface Signal2imageParameters {
     "cutoff"?: number | null | undefined;
     "rolloff"?: number | null | undefined;
     "save_flag": boolean;
+    "help_flag": boolean;
 }
 
 
@@ -96,6 +97,7 @@ function signal2image_params(
     cutoff: number | null = 100,
     rolloff: number | null = 10,
     save_flag: boolean = false,
+    help_flag: boolean = false,
 ): Signal2imageParameters {
     /**
      * Build parameters.
@@ -112,6 +114,7 @@ function signal2image_params(
      * @param cutoff Apodization with this cutoff; default 100.
      * @param rolloff Apodization with this rolloff; default 10.
      * @param save_flag Save window as ASCII matrix (DEBUG!)
+     * @param help_flag Display help message
     
      * @returns Parameter dictionary
      */
@@ -123,6 +126,7 @@ function signal2image_params(
         "verbose_flag": verbose_flag,
         "apodize_flag": apodize_flag,
         "save_flag": save_flag,
+        "help_flag": help_flag,
     };
     if (input_signal !== null) {
         params["input_signal"] = input_signal;
@@ -215,6 +219,9 @@ function signal2image_cargs(
     if ((params["save_flag"] ?? null)) {
         cargs.push("-s");
     }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
+    }
     return cargs;
 }
 
@@ -277,6 +284,7 @@ function signal2image(
     cutoff: number | null = 100,
     rolloff: number | null = 10,
     save_flag: boolean = false,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): Signal2imageOutputs {
     /**
@@ -298,13 +306,14 @@ function signal2image(
      * @param cutoff Apodization with this cutoff; default 100.
      * @param rolloff Apodization with this rolloff; default 10.
      * @param save_flag Save window as ASCII matrix (DEBUG!)
+     * @param help_flag Display help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `Signal2imageOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIGNAL2IMAGE_METADATA);
-    const params = signal2image_params(pulse_sequence, input_signal, output_image, kspace_coordinates, output_kspace, abs_flag, homodyne_flag, verbose_flag, apodize_flag, cutoff, rolloff, save_flag)
+    const params = signal2image_params(pulse_sequence, input_signal, output_image, kspace_coordinates, output_kspace, abs_flag, homodyne_flag, verbose_flag, apodize_flag, cutoff, rolloff, save_flag, help_flag)
     return signal2image_execute(params, execution);
 }
 

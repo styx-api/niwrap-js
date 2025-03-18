@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FILMBABE_METADATA: Metadata = {
-    id: "fc1cf8c447adde61838a84eeeddceca8e8eca59e.boutiques",
+    id: "57497a3df137ad65e449ad945725f730e5c1ee04.boutiques",
     name: "filmbabe",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -13,22 +13,37 @@ const FILMBABE_METADATA: Metadata = {
 
 interface FilmbabeParameters {
     "__STYXTYPE__": "filmbabe";
+    "datafile": InputPathType;
     "datafile_alias": InputPathType;
+    "mask": InputPathType;
     "mask_alias": InputPathType;
+    "designfile": InputPathType;
+    "designfile_alias_1": InputPathType;
     "designfile_alias_2": InputPathType;
     "frf": InputPathType;
+    "verbose_flag": boolean;
     "verbose_flag_alias": boolean;
+    "debug_level"?: string | null | undefined;
+    "debug_level_alias_1"?: string | null | undefined;
     "debug_level_alias_2"?: string | null | undefined;
     "timing_on_flag": boolean;
+    "help_flag": boolean;
     "help_flag_alias": boolean;
+    "flobs_prior_off_flag": boolean;
     "flobs_prior_off_alias": boolean;
     "flobs_dir"?: string | null | undefined;
+    "prior_covar_file"?: InputPathType | null | undefined;
     "prior_covar_file_alias"?: InputPathType | null | undefined;
+    "prior_mean_file"?: InputPathType | null | undefined;
     "prior_mean_file_alias"?: InputPathType | null | undefined;
+    "log_dir"?: string | null | undefined;
+    "log_dir_alias_1"?: string | null | undefined;
     "log_dir_alias_2"?: string | null | undefined;
     "num_iterations"?: number | null | undefined;
+    "temporal_ar_mrf_prec"?: number | null | undefined;
     "temporal_ar_mrf_prec_alias"?: number | null | undefined;
     "temporal_ar_flag": boolean;
+    "num_trace_samples"?: number | null | undefined;
     "num_trace_samples_alias"?: number | null | undefined;
     "temporal_ar_order"?: number | null | undefined;
 }
@@ -62,7 +77,6 @@ function dynOutputs(
      * @returns Build outputs function.
      */
     const outputsFuncs = {
-        "filmbabe": filmbabe_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,52 +92,78 @@ interface FilmbabeOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output directory
-     */
-    output_dir: OutputPathType;
 }
 
 
 function filmbabe_params(
+    datafile: InputPathType,
     datafile_alias: InputPathType,
+    mask: InputPathType,
     mask_alias: InputPathType,
+    designfile: InputPathType,
+    designfile_alias_1: InputPathType,
     designfile_alias_2: InputPathType,
     frf: InputPathType,
+    verbose_flag: boolean = false,
     verbose_flag_alias: boolean = false,
+    debug_level: string | null = null,
+    debug_level_alias_1: string | null = null,
     debug_level_alias_2: string | null = null,
     timing_on_flag: boolean = false,
+    help_flag: boolean = false,
     help_flag_alias: boolean = false,
+    flobs_prior_off_flag: boolean = false,
     flobs_prior_off_alias: boolean = false,
     flobs_dir: string | null = null,
+    prior_covar_file: InputPathType | null = null,
     prior_covar_file_alias: InputPathType | null = null,
+    prior_mean_file: InputPathType | null = null,
     prior_mean_file_alias: InputPathType | null = null,
+    log_dir: string | null = null,
+    log_dir_alias_1: string | null = null,
     log_dir_alias_2: string | null = null,
     num_iterations: number | null = 5,
+    temporal_ar_mrf_prec: number | null = -1,
     temporal_ar_mrf_prec_alias: number | null = -1,
     temporal_ar_flag: boolean = false,
+    num_trace_samples: number | null = 0,
     num_trace_samples_alias: number | null = 0,
     temporal_ar_order: number | null = 3,
 ): FilmbabeParameters {
     /**
      * Build parameters.
     
+     * @param datafile Data file
      * @param datafile_alias Data file
+     * @param mask Mask file
      * @param mask_alias Mask file
+     * @param designfile Design matrix file
+     * @param designfile_alias_1 Design matrix file
      * @param designfile_alias_2 Design matrix file
      * @param frf File indicating which regressors belong to which original EV design matrix file (a -1 label indicates a non-flobs regressor)
+     * @param verbose_flag Switch on diagnostic messages
      * @param verbose_flag_alias Switch on diagnostic messages
+     * @param debug_level Set debug level
+     * @param debug_level_alias_1 Set debug level
      * @param debug_level_alias_2 Set debug level
      * @param timing_on_flag Turn timing on
+     * @param help_flag Display help message
      * @param help_flag_alias Display help message
+     * @param flobs_prior_off_flag Turn FLOBS prior off
      * @param flobs_prior_off_alias Turn FLOBS prior off
      * @param flobs_dir FLOBS directory; required when using FLOBS constraints
+     * @param prior_covar_file Prior covariance matrix file
      * @param prior_covar_file_alias Prior covariance matrix file
+     * @param prior_mean_file Prior mean matrix file
      * @param prior_mean_file_alias Prior mean matrix file
+     * @param log_dir Log directory
+     * @param log_dir_alias_1 Log directory
      * @param log_dir_alias_2 Log directory
      * @param num_iterations Number of VB iterations; default is 5
+     * @param temporal_ar_mrf_prec MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
      * @param temporal_ar_mrf_prec_alias MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
      * @param temporal_ar_flag Impose ARD/MRF on temporal AR
+     * @param num_trace_samples Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
      * @param num_trace_samples_alias Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
      * @param temporal_ar_order Order of temporal AR; default is 3
     
@@ -131,27 +171,52 @@ function filmbabe_params(
      */
     const params = {
         "__STYXTYPE__": "filmbabe" as const,
+        "datafile": datafile,
         "datafile_alias": datafile_alias,
+        "mask": mask,
         "mask_alias": mask_alias,
+        "designfile": designfile,
+        "designfile_alias_1": designfile_alias_1,
         "designfile_alias_2": designfile_alias_2,
         "frf": frf,
+        "verbose_flag": verbose_flag,
         "verbose_flag_alias": verbose_flag_alias,
         "timing_on_flag": timing_on_flag,
+        "help_flag": help_flag,
         "help_flag_alias": help_flag_alias,
+        "flobs_prior_off_flag": flobs_prior_off_flag,
         "flobs_prior_off_alias": flobs_prior_off_alias,
         "temporal_ar_flag": temporal_ar_flag,
     };
+    if (debug_level !== null) {
+        params["debug_level"] = debug_level;
+    }
+    if (debug_level_alias_1 !== null) {
+        params["debug_level_alias_1"] = debug_level_alias_1;
+    }
     if (debug_level_alias_2 !== null) {
         params["debug_level_alias_2"] = debug_level_alias_2;
     }
     if (flobs_dir !== null) {
         params["flobs_dir"] = flobs_dir;
     }
+    if (prior_covar_file !== null) {
+        params["prior_covar_file"] = prior_covar_file;
+    }
     if (prior_covar_file_alias !== null) {
         params["prior_covar_file_alias"] = prior_covar_file_alias;
     }
+    if (prior_mean_file !== null) {
+        params["prior_mean_file"] = prior_mean_file;
+    }
     if (prior_mean_file_alias !== null) {
         params["prior_mean_file_alias"] = prior_mean_file_alias;
+    }
+    if (log_dir !== null) {
+        params["log_dir"] = log_dir;
+    }
+    if (log_dir_alias_1 !== null) {
+        params["log_dir_alias_1"] = log_dir_alias_1;
     }
     if (log_dir_alias_2 !== null) {
         params["log_dir_alias_2"] = log_dir_alias_2;
@@ -159,8 +224,14 @@ function filmbabe_params(
     if (num_iterations !== null) {
         params["num_iterations"] = num_iterations;
     }
+    if (temporal_ar_mrf_prec !== null) {
+        params["temporal_ar_mrf_prec"] = temporal_ar_mrf_prec;
+    }
     if (temporal_ar_mrf_prec_alias !== null) {
         params["temporal_ar_mrf_prec_alias"] = temporal_ar_mrf_prec_alias;
+    }
+    if (num_trace_samples !== null) {
+        params["num_trace_samples"] = num_trace_samples;
     }
     if (num_trace_samples_alias !== null) {
         params["num_trace_samples_alias"] = num_trace_samples_alias;
@@ -187,12 +258,28 @@ function filmbabe_cargs(
     const cargs: string[] = [];
     cargs.push("filmbabe");
     cargs.push(
+        "--df",
+        execution.inputFile((params["datafile"] ?? null))
+    );
+    cargs.push(
         "--datafile",
         execution.inputFile((params["datafile_alias"] ?? null))
     );
     cargs.push(
+        "-m",
+        execution.inputFile((params["mask"] ?? null))
+    );
+    cargs.push(
         "--mask",
         execution.inputFile((params["mask_alias"] ?? null))
+    );
+    cargs.push(
+        "-d",
+        execution.inputFile((params["designfile"] ?? null))
+    );
+    cargs.push(
+        "--dm",
+        execution.inputFile((params["designfile_alias_1"] ?? null))
     );
     cargs.push(
         "--designfile",
@@ -202,8 +289,23 @@ function filmbabe_cargs(
         "--frf",
         execution.inputFile((params["frf"] ?? null))
     );
+    if ((params["verbose_flag"] ?? null)) {
+        cargs.push("-V");
+    }
     if ((params["verbose_flag_alias"] ?? null)) {
         cargs.push("--verbose");
+    }
+    if ((params["debug_level"] ?? null) !== null) {
+        cargs.push(
+            "--db",
+            (params["debug_level"] ?? null)
+        );
+    }
+    if ((params["debug_level_alias_1"] ?? null) !== null) {
+        cargs.push(
+            "--debug",
+            (params["debug_level_alias_1"] ?? null)
+        );
     }
     if ((params["debug_level_alias_2"] ?? null) !== null) {
         cargs.push(
@@ -214,8 +316,14 @@ function filmbabe_cargs(
     if ((params["timing_on_flag"] ?? null)) {
         cargs.push("--to");
     }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
+    }
     if ((params["help_flag_alias"] ?? null)) {
         cargs.push("--help");
+    }
+    if ((params["flobs_prior_off_flag"] ?? null)) {
+        cargs.push("--fpo");
     }
     if ((params["flobs_prior_off_alias"] ?? null)) {
         cargs.push("--flobsprioroff");
@@ -226,16 +334,40 @@ function filmbabe_cargs(
             (params["flobs_dir"] ?? null)
         );
     }
+    if ((params["prior_covar_file"] ?? null) !== null) {
+        cargs.push(
+            "--pcf",
+            execution.inputFile((params["prior_covar_file"] ?? null))
+        );
+    }
     if ((params["prior_covar_file_alias"] ?? null) !== null) {
         cargs.push(
             "--priorcovarfile",
             execution.inputFile((params["prior_covar_file_alias"] ?? null))
         );
     }
+    if ((params["prior_mean_file"] ?? null) !== null) {
+        cargs.push(
+            "--pmf",
+            execution.inputFile((params["prior_mean_file"] ?? null))
+        );
+    }
     if ((params["prior_mean_file_alias"] ?? null) !== null) {
         cargs.push(
             "--priormeanfile",
             execution.inputFile((params["prior_mean_file_alias"] ?? null))
+        );
+    }
+    if ((params["log_dir"] ?? null) !== null) {
+        cargs.push(
+            "-l",
+            (params["log_dir"] ?? null)
+        );
+    }
+    if ((params["log_dir_alias_1"] ?? null) !== null) {
+        cargs.push(
+            "--ld",
+            (params["log_dir_alias_1"] ?? null)
         );
     }
     if ((params["log_dir_alias_2"] ?? null) !== null) {
@@ -250,6 +382,12 @@ function filmbabe_cargs(
             String((params["num_iterations"] ?? null))
         );
     }
+    if ((params["temporal_ar_mrf_prec"] ?? null) !== null) {
+        cargs.push(
+            "--tmp",
+            String((params["temporal_ar_mrf_prec"] ?? null))
+        );
+    }
     if ((params["temporal_ar_mrf_prec_alias"] ?? null) !== null) {
         cargs.push(
             "--tarmrfprec",
@@ -258,6 +396,12 @@ function filmbabe_cargs(
     }
     if ((params["temporal_ar_flag"] ?? null)) {
         cargs.push("--tarard");
+    }
+    if ((params["num_trace_samples"] ?? null) !== null) {
+        cargs.push(
+            "--nts",
+            String((params["num_trace_samples"] ?? null))
+        );
     }
     if ((params["num_trace_samples_alias"] ?? null) !== null) {
         cargs.push(
@@ -289,7 +433,6 @@ function filmbabe_outputs(
      */
     const ret: FilmbabeOutputs = {
         root: execution.outputFile("."),
-        output_dir: execution.outputFile(["output"].join('')),
     };
     return ret;
 }
@@ -320,22 +463,37 @@ function filmbabe_execute(
 
 
 function filmbabe(
+    datafile: InputPathType,
     datafile_alias: InputPathType,
+    mask: InputPathType,
     mask_alias: InputPathType,
+    designfile: InputPathType,
+    designfile_alias_1: InputPathType,
     designfile_alias_2: InputPathType,
     frf: InputPathType,
+    verbose_flag: boolean = false,
     verbose_flag_alias: boolean = false,
+    debug_level: string | null = null,
+    debug_level_alias_1: string | null = null,
     debug_level_alias_2: string | null = null,
     timing_on_flag: boolean = false,
+    help_flag: boolean = false,
     help_flag_alias: boolean = false,
+    flobs_prior_off_flag: boolean = false,
     flobs_prior_off_alias: boolean = false,
     flobs_dir: string | null = null,
+    prior_covar_file: InputPathType | null = null,
     prior_covar_file_alias: InputPathType | null = null,
+    prior_mean_file: InputPathType | null = null,
     prior_mean_file_alias: InputPathType | null = null,
+    log_dir: string | null = null,
+    log_dir_alias_1: string | null = null,
     log_dir_alias_2: string | null = null,
     num_iterations: number | null = 5,
+    temporal_ar_mrf_prec: number | null = -1,
     temporal_ar_mrf_prec_alias: number | null = -1,
     temporal_ar_flag: boolean = false,
+    num_trace_samples: number | null = 0,
     num_trace_samples_alias: number | null = 0,
     temporal_ar_order: number | null = 3,
     runner: Runner | null = null,
@@ -347,22 +505,37 @@ function filmbabe(
      * 
      * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
     
+     * @param datafile Data file
      * @param datafile_alias Data file
+     * @param mask Mask file
      * @param mask_alias Mask file
+     * @param designfile Design matrix file
+     * @param designfile_alias_1 Design matrix file
      * @param designfile_alias_2 Design matrix file
      * @param frf File indicating which regressors belong to which original EV design matrix file (a -1 label indicates a non-flobs regressor)
+     * @param verbose_flag Switch on diagnostic messages
      * @param verbose_flag_alias Switch on diagnostic messages
+     * @param debug_level Set debug level
+     * @param debug_level_alias_1 Set debug level
      * @param debug_level_alias_2 Set debug level
      * @param timing_on_flag Turn timing on
+     * @param help_flag Display help message
      * @param help_flag_alias Display help message
+     * @param flobs_prior_off_flag Turn FLOBS prior off
      * @param flobs_prior_off_alias Turn FLOBS prior off
      * @param flobs_dir FLOBS directory; required when using FLOBS constraints
+     * @param prior_covar_file Prior covariance matrix file
      * @param prior_covar_file_alias Prior covariance matrix file
+     * @param prior_mean_file Prior mean matrix file
      * @param prior_mean_file_alias Prior mean matrix file
+     * @param log_dir Log directory
+     * @param log_dir_alias_1 Log directory
      * @param log_dir_alias_2 Log directory
      * @param num_iterations Number of VB iterations; default is 5
+     * @param temporal_ar_mrf_prec MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
      * @param temporal_ar_mrf_prec_alias MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
      * @param temporal_ar_flag Impose ARD/MRF on temporal AR
+     * @param num_trace_samples Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
      * @param num_trace_samples_alias Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
      * @param temporal_ar_order Order of temporal AR; default is 3
      * @param runner Command runner
@@ -371,7 +544,7 @@ function filmbabe(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FILMBABE_METADATA);
-    const params = filmbabe_params(datafile_alias, mask_alias, designfile_alias_2, frf, verbose_flag_alias, debug_level_alias_2, timing_on_flag, help_flag_alias, flobs_prior_off_alias, flobs_dir, prior_covar_file_alias, prior_mean_file_alias, log_dir_alias_2, num_iterations, temporal_ar_mrf_prec_alias, temporal_ar_flag, num_trace_samples_alias, temporal_ar_order)
+    const params = filmbabe_params(datafile, datafile_alias, mask, mask_alias, designfile, designfile_alias_1, designfile_alias_2, frf, verbose_flag, verbose_flag_alias, debug_level, debug_level_alias_1, debug_level_alias_2, timing_on_flag, help_flag, help_flag_alias, flobs_prior_off_flag, flobs_prior_off_alias, flobs_dir, prior_covar_file, prior_covar_file_alias, prior_mean_file, prior_mean_file_alias, log_dir, log_dir_alias_1, log_dir_alias_2, num_iterations, temporal_ar_mrf_prec, temporal_ar_mrf_prec_alias, temporal_ar_flag, num_trace_samples, num_trace_samples_alias, temporal_ar_order)
     return filmbabe_execute(params, execution);
 }
 

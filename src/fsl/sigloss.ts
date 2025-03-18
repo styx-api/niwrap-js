@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIGLOSS_METADATA: Metadata = {
-    id: "925adf9e97058d87551f4f3a27c9b5b1c1c21397.boutiques",
+    id: "fa1b091e696a3f12441128ea72b339367ae2d030.boutiques",
     name: "sigloss",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -19,6 +19,7 @@ interface SiglossParameters {
     "echo_time"?: number | null | undefined;
     "slice_direction"?: "x" | "y" | "z" | null | undefined;
     "verbose_flag": boolean;
+    "help_flag": boolean;
 }
 
 
@@ -75,6 +76,7 @@ function sigloss_params(
     echo_time: number | null = null,
     slice_direction: "x" | "y" | "z" | null = null,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
 ): SiglossParameters {
     /**
      * Build parameters.
@@ -85,6 +87,7 @@ function sigloss_params(
      * @param echo_time Echo time (in seconds)
      * @param slice_direction Slice direction (either x, y or z)
      * @param verbose_flag Switch on diagnostic messages
+     * @param help_flag Display this help message
     
      * @returns Parameter dictionary
      */
@@ -93,6 +96,7 @@ function sigloss_params(
         "input_b0map": input_b0map,
         "output_sigloss": output_sigloss,
         "verbose_flag": verbose_flag,
+        "help_flag": help_flag,
     };
     if (input_mask !== null) {
         params["input_mask"] = input_mask;
@@ -150,6 +154,9 @@ function sigloss_cargs(
     if ((params["verbose_flag"] ?? null)) {
         cargs.push("-v");
     }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
+    }
     return cargs;
 }
 
@@ -204,6 +211,7 @@ function sigloss(
     echo_time: number | null = null,
     slice_direction: "x" | "y" | "z" | null = null,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): SiglossOutputs {
     /**
@@ -219,13 +227,14 @@ function sigloss(
      * @param echo_time Echo time (in seconds)
      * @param slice_direction Slice direction (either x, y or z)
      * @param verbose_flag Switch on diagnostic messages
+     * @param help_flag Display this help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `SiglossOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIGLOSS_METADATA);
-    const params = sigloss_params(input_b0map, output_sigloss, input_mask, echo_time, slice_direction, verbose_flag)
+    const params = sigloss_params(input_b0map, output_sigloss, input_mask, echo_time, slice_direction, verbose_flag, help_flag)
     return sigloss_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_BOXPLOT_METADATA: Metadata = {
-    id: "8abcb032f30a04f5dd6924727b860dc8df188123.boutiques",
+    id: "1c607fb933cfb9b2aa30f4e4fc2640bc64cf74c5.boutiques",
     name: "fsl_boxplot",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -15,6 +15,7 @@ interface FslBoxplotParameters {
     "__STYXTYPE__": "fsl_boxplot";
     "input_files": Array<InputPathType>;
     "output_image": string;
+    "help_flag": boolean;
     "title"?: string | null | undefined;
     "legend_file"?: InputPathType | null | undefined;
     "x_label"?: string | null | undefined;
@@ -78,6 +79,7 @@ interface FslBoxplotOutputs {
 function fsl_boxplot_params(
     input_files: Array<InputPathType>,
     output_image: string,
+    help_flag: boolean = false,
     title: string | null = null,
     legend_file: InputPathType | null = null,
     x_label: string | null = null,
@@ -90,6 +92,7 @@ function fsl_boxplot_params(
     
      * @param input_files Comma-separated list of input file names (ASCII text matrices, one column per boxplot)
      * @param output_image Output filename for the PNG file
+     * @param help_flag Display this help message
      * @param title Plot title
      * @param legend_file File name of ASCII text file, one row per legend entry
      * @param x_label X-axis label
@@ -103,6 +106,7 @@ function fsl_boxplot_params(
         "__STYXTYPE__": "fsl_boxplot" as const,
         "input_files": input_files,
         "output_image": output_image,
+        "help_flag": help_flag,
     };
     if (title !== null) {
         params["title"] = title;
@@ -148,6 +152,9 @@ function fsl_boxplot_cargs(
         "--out",
         (params["output_image"] ?? null)
     );
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("--help");
+    }
     if ((params["title"] ?? null) !== null) {
         cargs.push(
             "--title",
@@ -235,6 +242,7 @@ function fsl_boxplot_execute(
 function fsl_boxplot(
     input_files: Array<InputPathType>,
     output_image: string,
+    help_flag: boolean = false,
     title: string | null = null,
     legend_file: InputPathType | null = null,
     x_label: string | null = null,
@@ -252,6 +260,7 @@ function fsl_boxplot(
     
      * @param input_files Comma-separated list of input file names (ASCII text matrices, one column per boxplot)
      * @param output_image Output filename for the PNG file
+     * @param help_flag Display this help message
      * @param title Plot title
      * @param legend_file File name of ASCII text file, one row per legend entry
      * @param x_label X-axis label
@@ -264,7 +273,7 @@ function fsl_boxplot(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_BOXPLOT_METADATA);
-    const params = fsl_boxplot_params(input_files, output_image, title, legend_file, x_label, y_label, plot_height, plot_width)
+    const params = fsl_boxplot_params(input_files, output_image, help_flag, title, legend_file, x_label, y_label, plot_height, plot_width)
     return fsl_boxplot_execute(params, execution);
 }
 

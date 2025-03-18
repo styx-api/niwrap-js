@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONCAT_BVARS_METADATA: Metadata = {
-    id: "328d9c324b79e0289369cb9b2b4e758cac2f1131.boutiques",
+    id: "510347f86dbed1c84a14f18194f7a263598dc7bb.boutiques",
     name: "concat_bvars",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -14,6 +14,7 @@ const CONCAT_BVARS_METADATA: Metadata = {
 interface ConcatBvarsParameters {
     "__STYXTYPE__": "concat_bvars";
     "output_bvars": string;
+    "input_bvars": Array<InputPathType>;
 }
 
 
@@ -70,17 +71,20 @@ interface ConcatBvarsOutputs {
 
 function concat_bvars_params(
     output_bvars: string,
+    input_bvars: Array<InputPathType>,
 ): ConcatBvarsParameters {
     /**
      * Build parameters.
     
      * @param output_bvars Output .bvars file
+     * @param input_bvars List of input .bvars files
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "concat_bvars" as const,
         "output_bvars": output_bvars,
+        "input_bvars": input_bvars,
     };
     return params;
 }
@@ -101,7 +105,7 @@ function concat_bvars_cargs(
     const cargs: string[] = [];
     cargs.push("concat_bvars");
     cargs.push((params["output_bvars"] ?? null));
-    cargs.push("[INPUT_BVARS...]");
+    cargs.push(...(params["input_bvars"] ?? null).map(f => execution.inputFile(f)));
     return cargs;
 }
 
@@ -152,6 +156,7 @@ function concat_bvars_execute(
 
 function concat_bvars(
     output_bvars: string,
+    input_bvars: Array<InputPathType>,
     runner: Runner | null = null,
 ): ConcatBvarsOutputs {
     /**
@@ -162,13 +167,14 @@ function concat_bvars(
      * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
     
      * @param output_bvars Output .bvars file
+     * @param input_bvars List of input .bvars files
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `ConcatBvarsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONCAT_BVARS_METADATA);
-    const params = concat_bvars_params(output_bvars)
+    const params = concat_bvars_params(output_bvars, input_bvars)
     return concat_bvars_execute(params, execution);
 }
 

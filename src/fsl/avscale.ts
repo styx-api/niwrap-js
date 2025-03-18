@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const AVSCALE_METADATA: Metadata = {
-    id: "55dd77b83020d0048dbe4f542385e6f483818b7c.boutiques",
+    id: "6cdc303b66c5dbac43bc96344003d91f2c657123.boutiques",
     name: "avscale",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -48,7 +48,6 @@ function dynOutputs(
      * @returns Build outputs function.
      */
     const outputsFuncs = {
-        "avscale": avscale_outputs,
     };
     return outputsFuncs[t];
 }
@@ -65,9 +64,9 @@ interface AvscaleOutputs {
      */
     root: OutputPathType;
     /**
-     * The output file.
+     * output affine transfomration file
      */
-    output_file: OutputPathType;
+    output: string[];
 }
 
 
@@ -124,8 +123,6 @@ function avscale_cargs(
     if ((params["non_reference_volume"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["non_reference_volume"] ?? null)));
     }
-    cargs.push(">");
-    cargs.push("output.txt");
     return cargs;
 }
 
@@ -144,7 +141,7 @@ function avscale_outputs(
      */
     const ret: AvscaleOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile(["output.txt"].join('')),
+        output: [],
     };
     return ret;
 }
@@ -169,7 +166,7 @@ function avscale_execute(
     params = execution.params(params)
     const cargs = avscale_cargs(params, execution)
     const ret = avscale_outputs(params, execution)
-    execution.run(cargs, undefined);
+    execution.run(cargs, s => ret.output.push(s));
     return ret;
 }
 

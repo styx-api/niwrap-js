@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SLICEANIMATE_METADATA: Metadata = {
-    id: "05268b7eca1ce9802cba56c1e5171a4d5003db1c.boutiques",
+    id: "994a6c0affca32805e1b0fc8ed3c8be4255d40c5.boutiques",
     name: "sliceanimate",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -105,7 +105,6 @@ function sliceanimate_cargs(
     const cargs: string[] = [];
     cargs.push("sliceanimate");
     cargs.push((params["output_file"] ?? null));
-    cargs.push("--");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
     return cargs;
 }

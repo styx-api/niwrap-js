@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ASL_MFREE_METADATA: Metadata = {
-    id: "2c6ac3df84ba3307596d4d4ee92da51804362ee6.boutiques",
+    id: "56a5bf1d28bbcccb8dc3a23b62c4c832fbd32509.boutiques",
     name: "asl_mfree",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -31,6 +31,7 @@ interface AslMfreeParameters {
     "nwb"?: number | null | undefined;
     "turbo_quasar": boolean;
     "shift_factor"?: number | null | undefined;
+    "verbose": boolean;
 }
 
 
@@ -108,6 +109,7 @@ function asl_mfree_params(
     nwb: number | null = null,
     turbo_quasar: boolean = false,
     shift_factor: number | null = 1,
+    verbose: boolean = false,
 ): AslMfreeParameters {
     /**
      * Build parameters.
@@ -130,6 +132,7 @@ function asl_mfree_params(
      * @param nwb Number of permutations for wild bootstrapping (optional)
      * @param turbo_quasar Specify this is a Turbo QUASAR Sequence (optional)
      * @param shift_factor Slice shifting factor in Turbo QUASAR (default value: 1, optional)
+     * @param verbose Enable verbose mode
     
      * @returns Parameter dictionary
      */
@@ -144,6 +147,7 @@ function asl_mfree_params(
         "bat": bat,
         "std": std,
         "turbo_quasar": turbo_quasar,
+        "verbose": verbose,
     };
     if (metric !== null) {
         params["metric"] = metric;
@@ -276,7 +280,9 @@ function asl_mfree_cargs(
             String((params["shift_factor"] ?? null))
         );
     }
-    cargs.push("--verbose");
+    if ((params["verbose"] ?? null)) {
+        cargs.push("--verbose");
+    }
     return cargs;
 }
 
@@ -345,6 +351,7 @@ function asl_mfree(
     nwb: number | null = null,
     turbo_quasar: boolean = false,
     shift_factor: number | null = 1,
+    verbose: boolean = false,
     runner: Runner | null = null,
 ): AslMfreeOutputs {
     /**
@@ -372,13 +379,14 @@ function asl_mfree(
      * @param nwb Number of permutations for wild bootstrapping (optional)
      * @param turbo_quasar Specify this is a Turbo QUASAR Sequence (optional)
      * @param shift_factor Slice shifting factor in Turbo QUASAR (default value: 1, optional)
+     * @param verbose Enable verbose mode
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `AslMfreeOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ASL_MFREE_METADATA);
-    const params = asl_mfree_params(datafile, mask, out, aif, dt, metric, mthresh, tcorrect, bata, batt, bat, bat_grad_thr, t1, fa, std, nwb, turbo_quasar, shift_factor)
+    const params = asl_mfree_params(datafile, mask, out, aif, dt, metric, mthresh, tcorrect, bata, batt, bat, bat_grad_thr, t1, fa, std, nwb, turbo_quasar, shift_factor, verbose)
     return asl_mfree_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RUN_MESH_UTILS_METADATA: Metadata = {
-    id: "f37cf2d8f5013ba6fbfc7ef807691e24ce397261.boutiques",
+    id: "cdfab05f24fc32a3b16a3cae0afec233bda94bc8.boutiques",
     name: "run_mesh_utils",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -18,6 +18,18 @@ interface RunMeshUtilsParameters {
     "input_image"?: InputPathType | null | undefined;
     "second_input_image"?: InputPathType | null | undefined;
     "weighting_image_force"?: InputPathType | null | undefined;
+    "do_uncentre_model": boolean;
+    "do_subtract_constant_from_scalars": boolean;
+    "do_vertex_scalars_to_image_volume": boolean;
+    "base_mesh2"?: InputPathType | null | undefined;
+    "use_sc2": boolean;
+    "flirt_matrix"?: InputPathType | null | undefined;
+    "do_mesh_reg": boolean;
+    "threshold"?: number | null | undefined;
+    "degrees_of_freedom"?: number | null | undefined;
+    "inverse": boolean;
+    "verbose": boolean;
+    "help": boolean;
 }
 
 
@@ -78,6 +90,18 @@ function run_mesh_utils_params(
     input_image: InputPathType | null = null,
     second_input_image: InputPathType | null = null,
     weighting_image_force: InputPathType | null = null,
+    do_uncentre_model: boolean = false,
+    do_subtract_constant_from_scalars: boolean = false,
+    do_vertex_scalars_to_image_volume: boolean = false,
+    base_mesh2: InputPathType | null = null,
+    use_sc2: boolean = false,
+    flirt_matrix: InputPathType | null = null,
+    do_mesh_reg: boolean = false,
+    threshold: number | null = null,
+    degrees_of_freedom: number | null = null,
+    inverse: boolean = false,
+    verbose: boolean = false,
+    help: boolean = false,
 ): RunMeshUtilsParameters {
     /**
      * Build parameters.
@@ -87,6 +111,18 @@ function run_mesh_utils_params(
      * @param input_image Filename of input image
      * @param second_input_image Filename of second input image
      * @param weighting_image_force Weighting image force
+     * @param do_uncentre_model Do UnCentre Model
+     * @param do_subtract_constant_from_scalars Do Subtract Constant From Scalars
+     * @param do_vertex_scalars_to_image_volume Do Vertex Scalars To Image Volume
+     * @param base_mesh2 Filename of base mesh2
+     * @param use_sc2 Use SC2
+     * @param flirt_matrix Filename of flirt matrix
+     * @param do_mesh_reg Do Mesh Registration
+     * @param threshold Threshold
+     * @param degrees_of_freedom Degrees of freedom
+     * @param inverse Inverse Operation
+     * @param verbose Switch on diagnostic messages
+     * @param help Display help message
     
      * @returns Parameter dictionary
      */
@@ -94,6 +130,14 @@ function run_mesh_utils_params(
         "__STYXTYPE__": "run_mesh_utils" as const,
         "base_mesh": base_mesh,
         "output_image": output_image,
+        "do_uncentre_model": do_uncentre_model,
+        "do_subtract_constant_from_scalars": do_subtract_constant_from_scalars,
+        "do_vertex_scalars_to_image_volume": do_vertex_scalars_to_image_volume,
+        "use_sc2": use_sc2,
+        "do_mesh_reg": do_mesh_reg,
+        "inverse": inverse,
+        "verbose": verbose,
+        "help": help,
     };
     if (input_image !== null) {
         params["input_image"] = input_image;
@@ -103,6 +147,18 @@ function run_mesh_utils_params(
     }
     if (weighting_image_force !== null) {
         params["weighting_image_force"] = weighting_image_force;
+    }
+    if (base_mesh2 !== null) {
+        params["base_mesh2"] = base_mesh2;
+    }
+    if (flirt_matrix !== null) {
+        params["flirt_matrix"] = flirt_matrix;
+    }
+    if (threshold !== null) {
+        params["threshold"] = threshold;
+    }
+    if (degrees_of_freedom !== null) {
+        params["degrees_of_freedom"] = degrees_of_freedom;
     }
     return params;
 }
@@ -145,7 +201,54 @@ function run_mesh_utils_cargs(
             execution.inputFile((params["weighting_image_force"] ?? null))
         );
     }
-    cargs.push("[OPTIONAL_PARAMS...]");
+    if ((params["do_uncentre_model"] ?? null)) {
+        cargs.push("--doUnCentreModel");
+    }
+    if ((params["do_subtract_constant_from_scalars"] ?? null)) {
+        cargs.push("--doSubtractConstantFromScalars");
+    }
+    if ((params["do_vertex_scalars_to_image_volume"] ?? null)) {
+        cargs.push("--doVertexScalarsToImageVolume");
+    }
+    if ((params["base_mesh2"] ?? null) !== null) {
+        cargs.push(
+            "-n",
+            execution.inputFile((params["base_mesh2"] ?? null))
+        );
+    }
+    if ((params["use_sc2"] ?? null)) {
+        cargs.push("--useSc2");
+    }
+    if ((params["flirt_matrix"] ?? null) !== null) {
+        cargs.push(
+            "-f",
+            execution.inputFile((params["flirt_matrix"] ?? null))
+        );
+    }
+    if ((params["do_mesh_reg"] ?? null)) {
+        cargs.push("--doMeshReg");
+    }
+    if ((params["threshold"] ?? null) !== null) {
+        cargs.push(
+            "-t",
+            String((params["threshold"] ?? null))
+        );
+    }
+    if ((params["degrees_of_freedom"] ?? null) !== null) {
+        cargs.push(
+            "-a",
+            String((params["degrees_of_freedom"] ?? null))
+        );
+    }
+    if ((params["inverse"] ?? null)) {
+        cargs.push("--inverse");
+    }
+    if ((params["verbose"] ?? null)) {
+        cargs.push("-v");
+    }
+    if ((params["help"] ?? null)) {
+        cargs.push("-h");
+    }
     return cargs;
 }
 
@@ -200,6 +303,18 @@ function run_mesh_utils(
     input_image: InputPathType | null = null,
     second_input_image: InputPathType | null = null,
     weighting_image_force: InputPathType | null = null,
+    do_uncentre_model: boolean = false,
+    do_subtract_constant_from_scalars: boolean = false,
+    do_vertex_scalars_to_image_volume: boolean = false,
+    base_mesh2: InputPathType | null = null,
+    use_sc2: boolean = false,
+    flirt_matrix: InputPathType | null = null,
+    do_mesh_reg: boolean = false,
+    threshold: number | null = null,
+    degrees_of_freedom: number | null = null,
+    inverse: boolean = false,
+    verbose: boolean = false,
+    help: boolean = false,
     runner: Runner | null = null,
 ): RunMeshUtilsOutputs {
     /**
@@ -214,13 +329,25 @@ function run_mesh_utils(
      * @param input_image Filename of input image
      * @param second_input_image Filename of second input image
      * @param weighting_image_force Weighting image force
+     * @param do_uncentre_model Do UnCentre Model
+     * @param do_subtract_constant_from_scalars Do Subtract Constant From Scalars
+     * @param do_vertex_scalars_to_image_volume Do Vertex Scalars To Image Volume
+     * @param base_mesh2 Filename of base mesh2
+     * @param use_sc2 Use SC2
+     * @param flirt_matrix Filename of flirt matrix
+     * @param do_mesh_reg Do Mesh Registration
+     * @param threshold Threshold
+     * @param degrees_of_freedom Degrees of freedom
+     * @param inverse Inverse Operation
+     * @param verbose Switch on diagnostic messages
+     * @param help Display help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `RunMeshUtilsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_MESH_UTILS_METADATA);
-    const params = run_mesh_utils_params(base_mesh, output_image, input_image, second_input_image, weighting_image_force)
+    const params = run_mesh_utils_params(base_mesh, output_image, input_image, second_input_image, weighting_image_force, do_uncentre_model, do_subtract_constant_from_scalars, do_vertex_scalars_to_image_volume, base_mesh2, use_sc2, flirt_matrix, do_mesh_reg, threshold, degrees_of_freedom, inverse, verbose, help)
     return run_mesh_utils_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MSM_METADATA: Metadata = {
-    id: "36c2f1fd7109d0e69b48c213ae952c4422d9c88f.boutiques",
+    id: "a2df66598dc2cdfd06aa9ff522fa0d8bbb11acdd.boutiques",
     name: "msm",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -183,10 +183,7 @@ function msm_cargs(
     const cargs: string[] = [];
     cargs.push("msm");
     cargs.push(execution.inputFile((params["inmesh"] ?? null)));
-    cargs.push(
-        "-out",
-        ["-", (params["out"] ?? null)].join('')
-    );
+    cargs.push(["-out ", (params["out"] ?? null)].join(''));
     if ((params["refmesh"] ?? null) !== null) {
         cargs.push(
             "--refmesh",

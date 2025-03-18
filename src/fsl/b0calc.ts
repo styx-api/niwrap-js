@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const B0CALC_METADATA: Metadata = {
-    id: "327bbff7f12ab07ebfd36e73f5f6e8c5d9ba0cf0.boutiques",
+    id: "eec8842e2086b747c0dbc0c436e9feba0fb181a1.boutiques",
     name: "b0calc",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -27,6 +27,7 @@ interface B0calcParameters {
     "extend_boundary"?: number | null | undefined;
     "direct_conv": boolean;
     "verbose_flag": boolean;
+    "help_flag": boolean;
 }
 
 
@@ -108,6 +109,7 @@ function b0calc_params(
     extend_boundary: number | null = null,
     direct_conv: boolean = false,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
 ): B0calcParameters {
     /**
      * Build parameters.
@@ -126,6 +128,7 @@ function b0calc_params(
      * @param extend_boundary Relative proportion to extend voxels at boundary; default=1
      * @param direct_conv Use direct (image space) convolution, not FFT
      * @param verbose_flag Switch on diagnostic messages
+     * @param help_flag Display help message
     
      * @returns Parameter dictionary
      */
@@ -136,6 +139,7 @@ function b0calc_params(
         "xyz_flag": xyz_flag,
         "direct_conv": direct_conv,
         "verbose_flag": verbose_flag,
+        "help_flag": help_flag,
     };
     if (zero_order_x !== null) {
         params["zero_order_x"] = zero_order_x;
@@ -253,6 +257,9 @@ function b0calc_cargs(
     if ((params["verbose_flag"] ?? null)) {
         cargs.push("-v");
     }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
+    }
     return cargs;
 }
 
@@ -319,6 +326,7 @@ function b0calc(
     extend_boundary: number | null = null,
     direct_conv: boolean = false,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): B0calcOutputs {
     /**
@@ -342,13 +350,14 @@ function b0calc(
      * @param extend_boundary Relative proportion to extend voxels at boundary; default=1
      * @param direct_conv Use direct (image space) convolution, not FFT
      * @param verbose_flag Switch on diagnostic messages
+     * @param help_flag Display help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `B0calcOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(B0CALC_METADATA);
-    const params = b0calc_params(input_file, output_file, zero_order_x, zero_order_y, zero_order_z, b0_x, b0_y, b0_z, delta, chi0, xyz_flag, extend_boundary, direct_conv, verbose_flag)
+    const params = b0calc_params(input_file, output_file, zero_order_x, zero_order_y, zero_order_z, b0_x, b0_y, b0_z, delta, chi0, xyz_flag, extend_boundary, direct_conv, verbose_flag, help_flag)
     return b0calc_execute(params, execution);
 }
 

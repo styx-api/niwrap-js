@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLSMOOTHFILL_METADATA: Metadata = {
-    id: "decfe9aa72638e1ec65326903fe3b064f1752e01.boutiques",
+    id: "fbc060a3d94fdea837d41e4627731e10e81a63c1.boutiques",
     name: "fslsmoothfill",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -117,21 +117,9 @@ function fslsmoothfill_cargs(
      */
     const cargs: string[] = [];
     cargs.push("fslsmoothfill");
-    cargs.push("-i");
-    cargs.push(
-        "--in",
-        execution.inputFile((params["input_image"] ?? null))
-    );
-    cargs.push("-m");
-    cargs.push(
-        "--mask",
-        execution.inputFile((params["mask_image"] ?? null))
-    );
-    cargs.push("-o");
-    cargs.push(
-        "--out",
-        (params["output_image"] ?? null)
-    );
+    cargs.push(["--in=", execution.inputFile((params["input_image"] ?? null))].join(''));
+    cargs.push(["--mask=", execution.inputFile((params["mask_image"] ?? null))].join(''));
+    cargs.push(["--out=", (params["output_image"] ?? null)].join(''));
     if ((params["number_of_iterations"] ?? null) !== null) {
         cargs.push(
             "--niter",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMERGE_METADATA: Metadata = {
-    id: "5d8ea7aca79fd0b196c00441d4f31c201a3f63e6.boutiques",
+    id: "8e217bd107048eb1364b79da3a54a0b25c985418.boutiques",
     name: "fslmerge",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -14,9 +14,14 @@ const FSLMERGE_METADATA: Metadata = {
 interface FslmergeParameters {
     "__STYXTYPE__": "fslmerge";
     "merge_time": boolean;
+    "merge_x": boolean;
+    "merge_y": boolean;
+    "merge_z": boolean;
+    "auto_choose": boolean;
     "merge_set_tr": boolean;
     "output_file": string;
     "input_files": Array<InputPathType>;
+    "volume_number"?: number | null | undefined;
     "tr_value"?: number | null | undefined;
 }
 
@@ -76,7 +81,12 @@ function fslmerge_params(
     output_file: string,
     input_files: Array<InputPathType>,
     merge_time: boolean = false,
+    merge_x: boolean = false,
+    merge_y: boolean = false,
+    merge_z: boolean = false,
+    auto_choose: boolean = false,
     merge_set_tr: boolean = false,
+    volume_number: number | null = null,
     tr_value: number | null = null,
 ): FslmergeParameters {
     /**
@@ -85,7 +95,12 @@ function fslmerge_params(
      * @param output_file Output concatenated image file
      * @param input_files Input image files to concatenate
      * @param merge_time Concatenate images in time (4th dimension)
+     * @param merge_x Concatenate images in the x direction
+     * @param merge_y Concatenate images in the y direction
+     * @param merge_z Concatenate images in the z direction
+     * @param auto_choose Auto-choose: single slices -> volume, volumes -> 4D (time series)
      * @param merge_set_tr Concatenate images in time and set the output image tr to the provided value
+     * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1)
      * @param tr_value TR value in seconds, used with the -tr flag
     
      * @returns Parameter dictionary
@@ -93,10 +108,17 @@ function fslmerge_params(
     const params = {
         "__STYXTYPE__": "fslmerge" as const,
         "merge_time": merge_time,
+        "merge_x": merge_x,
+        "merge_y": merge_y,
+        "merge_z": merge_z,
+        "auto_choose": auto_choose,
         "merge_set_tr": merge_set_tr,
         "output_file": output_file,
         "input_files": input_files,
     };
+    if (volume_number !== null) {
+        params["volume_number"] = volume_number;
+    }
     if (tr_value !== null) {
         params["tr_value"] = tr_value;
     }
@@ -121,11 +143,29 @@ function fslmerge_cargs(
     if ((params["merge_time"] ?? null)) {
         cargs.push("-t");
     }
+    if ((params["merge_x"] ?? null)) {
+        cargs.push("-x");
+    }
+    if ((params["merge_y"] ?? null)) {
+        cargs.push("-y");
+    }
+    if ((params["merge_z"] ?? null)) {
+        cargs.push("-z");
+    }
+    if ((params["auto_choose"] ?? null)) {
+        cargs.push("-a");
+    }
     if ((params["merge_set_tr"] ?? null)) {
         cargs.push("-tr");
     }
     cargs.push((params["output_file"] ?? null));
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
+    if ((params["volume_number"] ?? null) !== null) {
+        cargs.push(
+            "-n",
+            String((params["volume_number"] ?? null))
+        );
+    }
     if ((params["tr_value"] ?? null) !== null) {
         cargs.push(String((params["tr_value"] ?? null)));
     }
@@ -181,7 +221,12 @@ function fslmerge(
     output_file: string,
     input_files: Array<InputPathType>,
     merge_time: boolean = false,
+    merge_x: boolean = false,
+    merge_y: boolean = false,
+    merge_z: boolean = false,
+    auto_choose: boolean = false,
     merge_set_tr: boolean = false,
+    volume_number: number | null = null,
     tr_value: number | null = null,
     runner: Runner | null = null,
 ): FslmergeOutputs {
@@ -195,7 +240,12 @@ function fslmerge(
      * @param output_file Output concatenated image file
      * @param input_files Input image files to concatenate
      * @param merge_time Concatenate images in time (4th dimension)
+     * @param merge_x Concatenate images in the x direction
+     * @param merge_y Concatenate images in the y direction
+     * @param merge_z Concatenate images in the z direction
+     * @param auto_choose Auto-choose: single slices -> volume, volumes -> 4D (time series)
      * @param merge_set_tr Concatenate images in time and set the output image tr to the provided value
+     * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1)
      * @param tr_value TR value in seconds, used with the -tr flag
      * @param runner Command runner
     
@@ -203,7 +253,7 @@ function fslmerge(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLMERGE_METADATA);
-    const params = fslmerge_params(output_file, input_files, merge_time, merge_set_tr, tr_value)
+    const params = fslmerge_params(output_file, input_files, merge_time, merge_x, merge_y, merge_z, auto_choose, merge_set_tr, volume_number, tr_value)
     return fslmerge_execute(params, execution);
 }
 

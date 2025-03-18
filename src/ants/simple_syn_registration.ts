@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIMPLE_SYN_REGISTRATION_METADATA: Metadata = {
-    id: "8bdec8bc3a221887858c098adc61e63838dc3139.boutiques",
+    id: "8c6a2cfa8d98ae9c6548640110fa2b5fad0e2036.boutiques",
     name: "simpleSynRegistration",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -116,9 +116,9 @@ function simple_syn_registration_cargs(
      */
     const cargs: string[] = [];
     cargs.push("simpleSynRegistration");
-    cargs.push([execution.inputFile((params["fixed_image"] ?? null)), ","].join(''));
-    cargs.push([execution.inputFile((params["moving_image"] ?? null)), ","].join(''));
-    cargs.push([(params["initial_transform"] ?? null), ","].join(''));
+    cargs.push(execution.inputFile((params["fixed_image"] ?? null)));
+    cargs.push(execution.inputFile((params["moving_image"] ?? null)));
+    cargs.push((params["initial_transform"] ?? null));
     cargs.push((params["output_prefix"] ?? null));
     return cargs;
 }

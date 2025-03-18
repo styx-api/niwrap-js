@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLVBM_1_BET_METADATA: Metadata = {
-    id: "b14f656e797f3613fc30f4f42a5942f8c36bc438.boutiques",
+    id: "59366bd9d41da1e2bd5aceb34a31a3b980bb9166.boutiques",
     name: "fslvbm_1_bet",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -13,6 +13,7 @@ const FSLVBM_1_BET_METADATA: Metadata = {
 
 interface Fslvbm1BetParameters {
     "__STYXTYPE__": "fslvbm_1_bet";
+    "default_bet": boolean;
     "increased_robustness": boolean;
     "bet_parameters"?: string | null | undefined;
 }
@@ -65,12 +66,14 @@ interface Fslvbm1BetOutputs {
 
 
 function fslvbm_1_bet_params(
+    default_bet: boolean = false,
     increased_robustness: boolean = false,
     bet_parameters: string | null = null,
 ): Fslvbm1BetParameters {
     /**
      * Build parameters.
     
+     * @param default_bet Default BET brain extraction with -f 0.4
      * @param increased_robustness Increased robustness in the brain extraction when a lot of neck is present
      * @param bet_parameters Additional options to be passed on to BET
     
@@ -78,6 +81,7 @@ function fslvbm_1_bet_params(
      */
     const params = {
         "__STYXTYPE__": "fslvbm_1_bet" as const,
+        "default_bet": default_bet,
         "increased_robustness": increased_robustness,
     };
     if (bet_parameters !== null) {
@@ -101,6 +105,9 @@ function fslvbm_1_bet_cargs(
      */
     const cargs: string[] = [];
     cargs.push("fslvbm_1_bet");
+    if ((params["default_bet"] ?? null)) {
+        cargs.push("-b");
+    }
     if ((params["increased_robustness"] ?? null)) {
         cargs.push("-N");
     }
@@ -155,6 +162,7 @@ function fslvbm_1_bet_execute(
 
 
 function fslvbm_1_bet(
+    default_bet: boolean = false,
     increased_robustness: boolean = false,
     bet_parameters: string | null = null,
     runner: Runner | null = null,
@@ -166,6 +174,7 @@ function fslvbm_1_bet(
      * 
      * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
     
+     * @param default_bet Default BET brain extraction with -f 0.4
      * @param increased_robustness Increased robustness in the brain extraction when a lot of neck is present
      * @param bet_parameters Additional options to be passed on to BET
      * @param runner Command runner
@@ -174,7 +183,7 @@ function fslvbm_1_bet(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLVBM_1_BET_METADATA);
-    const params = fslvbm_1_bet_params(increased_robustness, bet_parameters)
+    const params = fslvbm_1_bet_params(default_bet, increased_robustness, bet_parameters)
     return fslvbm_1_bet_execute(params, execution);
 }
 

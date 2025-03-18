@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SWAP_VOXELWISE_METADATA: Metadata = {
-    id: "4d3f862f263904d851a583fa7d717c4e6949c262.boutiques",
+    id: "0e000af7eb62f957a597cea6c58ed3ff2e31327a.boutiques",
     name: "swap_voxelwise",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -20,6 +20,7 @@ interface SwapVoxelwiseParameters {
     "reorder_mode"?: string | null | undefined;
     "init_mask"?: InputPathType | null | undefined;
     "crossing_thresh"?: number | null | undefined;
+    "verbose_flag": boolean;
 }
 
 
@@ -82,6 +83,7 @@ function swap_voxelwise_params(
     reorder_mode: string | null = "voxels",
     init_mask: InputPathType | null = null,
     crossing_thresh: number | null = 0.1,
+    verbose_flag: boolean = false,
 ): SwapVoxelwiseParameters {
     /**
      * Build parameters.
@@ -93,6 +95,7 @@ function swap_voxelwise_params(
      * @param reorder_mode Reordering mode - choose between 'voxels' (default) or 'volumes'
      * @param init_mask Filename of initialization mask
      * @param crossing_thresh Threshold for considering a crossing fibre region - default=0.1
+     * @param verbose_flag Switch on diagnostic messages
     
      * @returns Parameter dictionary
      */
@@ -100,6 +103,7 @@ function swap_voxelwise_params(
         "__STYXTYPE__": "swap_voxelwise" as const,
         "vectors_file_list": vectors_file_list,
         "mask": mask,
+        "verbose_flag": verbose_flag,
     };
     if (scalars_file_list !== null) {
         params["scalars_file_list"] = scalars_file_list;
@@ -172,7 +176,9 @@ function swap_voxelwise_cargs(
             String((params["crossing_thresh"] ?? null))
         );
     }
-    cargs.push("-V");
+    if ((params["verbose_flag"] ?? null)) {
+        cargs.push("-V");
+    }
     return cargs;
 }
 
@@ -229,6 +235,7 @@ function swap_voxelwise(
     reorder_mode: string | null = "voxels",
     init_mask: InputPathType | null = null,
     crossing_thresh: number | null = 0.1,
+    verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): SwapVoxelwiseOutputs {
     /**
@@ -245,13 +252,14 @@ function swap_voxelwise(
      * @param reorder_mode Reordering mode - choose between 'voxels' (default) or 'volumes'
      * @param init_mask Filename of initialization mask
      * @param crossing_thresh Threshold for considering a crossing fibre region - default=0.1
+     * @param verbose_flag Switch on diagnostic messages
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `SwapVoxelwiseOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SWAP_VOXELWISE_METADATA);
-    const params = swap_voxelwise_params(vectors_file_list, mask, scalars_file_list, output_base_name, reorder_mode, init_mask, crossing_thresh)
+    const params = swap_voxelwise_params(vectors_file_list, mask, scalars_file_list, output_base_name, reorder_mode, init_mask, crossing_thresh, verbose_flag)
     return swap_voxelwise_execute(params, execution);
 }
 

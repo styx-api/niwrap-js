@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ASL_FILE_METADATA: Metadata = {
-    id: "cbdbabdffdc0f831f4815b08ad995d7bf14f1cd6.boutiques",
+    id: "7d87ad6f19f8ce1c3c10bfebd308a104f8f1e664.boutiques",
     name: "asl_file",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -38,6 +38,8 @@ interface AslFileParameters {
     "epoch_unit"?: "rpt" | "tis" | null | undefined;
     "deconv": boolean;
     "aif"?: InputPathType | null | undefined;
+    "help": boolean;
+    "version": boolean;
 }
 
 
@@ -122,6 +124,8 @@ function asl_file_params(
     epoch_unit: "rpt" | "tis" | null = null,
     deconv: boolean = false,
     aif: InputPathType | null = null,
+    help: boolean = false,
+    version: boolean = false,
 ): AslFileParameters {
     /**
      * Build parameters.
@@ -151,6 +155,8 @@ function asl_file_params(
      * @param epoch_unit Epochs to be determined over
      * @param deconv Deconvolution of data with arterial input functions
      * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
+     * @param help Display the help message
+     * @param version Display version identification
     
      * @returns Parameter dictionary
      */
@@ -167,6 +173,8 @@ function asl_file_params(
         "mean": mean,
         "epoch": epoch,
         "deconv": deconv,
+        "help": help,
+        "version": version,
     };
     if (mask !== null) {
         params["mask"] = mask;
@@ -348,6 +356,12 @@ function asl_file_cargs(
             execution.inputFile((params["aif"] ?? null))
         );
     }
+    if ((params["help"] ?? null)) {
+        cargs.push("-h");
+    }
+    if ((params["version"] ?? null)) {
+        cargs.push("-v");
+    }
     return cargs;
 }
 
@@ -423,6 +437,8 @@ function asl_file(
     epoch_unit: "rpt" | "tis" | null = null,
     deconv: boolean = false,
     aif: InputPathType | null = null,
+    help: boolean = false,
+    version: boolean = false,
     runner: Runner | null = null,
 ): AslFileOutputs {
     /**
@@ -457,13 +473,15 @@ function asl_file(
      * @param epoch_unit Epochs to be determined over
      * @param deconv Deconvolution of data with arterial input functions
      * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
+     * @param help Display the help message
+     * @param version Display version identification
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `AslFileOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ASL_FILE_METADATA);
-    const params = asl_file_params(datafile, ntis, outfile, mask, inblockform, inaslform, rpts, pairs, spairs, diff, surrdiff, extrapolate, neighbour, pvgm, pvwm, kernel, outblockform, mean, split, epoch, epoch_length, epoch_overlap, epoch_unit, deconv, aif)
+    const params = asl_file_params(datafile, ntis, outfile, mask, inblockform, inaslform, rpts, pairs, spairs, diff, surrdiff, extrapolate, neighbour, pvgm, pvwm, kernel, outblockform, mean, split, epoch, epoch_length, epoch_overlap, epoch_unit, deconv, aif, help, version)
     return asl_file_execute(params, execution);
 }
 

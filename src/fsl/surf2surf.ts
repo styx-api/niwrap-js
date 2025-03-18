@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF2SURF_METADATA: Metadata = {
-    id: "d3f6f520e28b08a22c957c86939490db1fe6b107.boutiques",
+    id: "33ef19f0111fbc0a4b52d93be653e4608d688aa7.boutiques",
     name: "surf2surf",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -141,16 +141,8 @@ function surf2surf_cargs(
      */
     const cargs: string[] = [];
     cargs.push("surf2surf");
-    cargs.push("-i");
-    cargs.push(
-        "--surfin",
-        execution.inputFile((params["input_surface"] ?? null))
-    );
-    cargs.push("-o");
-    cargs.push(
-        "--surfout",
-        execution.inputFile((params["output_surface"] ?? null))
-    );
+    cargs.push(["--surfin=", execution.inputFile((params["input_surface"] ?? null))].join(''));
+    cargs.push(["--surfout=", execution.inputFile((params["output_surface"] ?? null))].join(''));
     if ((params["input_convention"] ?? null) !== null) {
         cargs.push(
             "--convin",

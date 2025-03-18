@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const N4_BIAS_FIELD_CORRECTION_METADATA: Metadata = {
-    id: "430c0cf662702b145c28eac54a52db1b1f1ee70a.boutiques",
+    id: "4a280b084bc5a3cc17740ab9941877cd853f5acd.boutiques",
     name: "N4BiasFieldCorrection",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -33,6 +33,19 @@ interface N4BiasFieldCorrectionHistogramSharpeningParameters {
 }
 
 
+interface N4BiasFieldCorrectionCorrectedOutputParameters {
+    "__STYXTYPE__": "correctedOutput";
+    "correctedOutputFileName": string;
+}
+
+
+interface N4BiasFieldCorrectionCorrectedOutputNoiseParameters {
+    "__STYXTYPE__": "correctedOutputNoise";
+    "correctedOutputFileName": string;
+    "biasFile"?: string | null | undefined;
+}
+
+
 interface N4BiasFieldCorrectionParameters {
     "__STYXTYPE__": "N4BiasFieldCorrection";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
@@ -45,8 +58,7 @@ interface N4BiasFieldCorrectionParameters {
     "histogram_sharpening"?: N4BiasFieldCorrectionHistogramSharpeningParameters | null | undefined;
     "verbose"?: 0 | 1 | null | undefined;
     "input_image": InputPathType;
-    "corrected_image_path": string;
-    "bias_field_path"?: string | null | undefined;
+    "output": N4BiasFieldCorrectionCorrectedOutputParameters | N4BiasFieldCorrectionCorrectedOutputNoiseParameters;
 }
 
 
@@ -65,6 +77,8 @@ function dynCargs(
         "convergence": n4_bias_field_correction_convergence_cargs,
         "bspline_fitting": n4_bias_field_correction_bspline_fitting_cargs,
         "histogram_sharpening": n4_bias_field_correction_histogram_sharpening_cargs,
+        "correctedOutput": n4_bias_field_correction_corrected_output_cargs,
+        "correctedOutputNoise": n4_bias_field_correction_corrected_output_noise_cargs,
     };
     return cargsFuncs[t];
 }
@@ -82,6 +96,8 @@ function dynOutputs(
      */
     const outputsFuncs = {
         "N4BiasFieldCorrection": n4_bias_field_correction_outputs,
+        "correctedOutput": n4_bias_field_correction_corrected_output_outputs,
+        "correctedOutputNoise": n4_bias_field_correction_corrected_output_noise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -217,6 +233,164 @@ function n4_bias_field_correction_histogram_sharpening_cargs(
 
 
 /**
+ * Output object returned when calling `N4BiasFieldCorrectionCorrectedOutputParameters(...)`.
+ *
+ * @interface
+ */
+interface N4BiasFieldCorrectionCorrectedOutputOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * Bias corrected image.
+     */
+    output_image_outfile: OutputPathType;
+}
+
+
+function n4_bias_field_correction_corrected_output_params(
+    corrected_output_file_name: string,
+): N4BiasFieldCorrectionCorrectedOutputParameters {
+    /**
+     * Build parameters.
+    
+     * @param corrected_output_file_name Output file name.
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "correctedOutput" as const,
+        "correctedOutputFileName": corrected_output_file_name,
+    };
+    return params;
+}
+
+
+function n4_bias_field_correction_corrected_output_cargs(
+    params: N4BiasFieldCorrectionCorrectedOutputParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    cargs.push((params["correctedOutputFileName"] ?? null));
+    return cargs;
+}
+
+
+function n4_bias_field_correction_corrected_output_outputs(
+    params: N4BiasFieldCorrectionCorrectedOutputParameters,
+    execution: Execution,
+): N4BiasFieldCorrectionCorrectedOutputOutputs {
+    /**
+     * Build outputs object containing output file paths and possibly stdout/stderr.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Outputs object.
+     */
+    const ret: N4BiasFieldCorrectionCorrectedOutputOutputs = {
+        root: execution.outputFile("."),
+        output_image_outfile: execution.outputFile([(params["correctedOutputFileName"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
+ * Output object returned when calling `N4BiasFieldCorrectionCorrectedOutputNoiseParameters(...)`.
+ *
+ * @interface
+ */
+interface N4BiasFieldCorrectionCorrectedOutputNoiseOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * Bias corrected image.
+     */
+    output_image_outfile: OutputPathType;
+    /**
+     * Bias field image.
+     */
+    output_bias_image: OutputPathType | null;
+}
+
+
+function n4_bias_field_correction_corrected_output_noise_params(
+    corrected_output_file_name: string,
+    bias_file: string | null = null,
+): N4BiasFieldCorrectionCorrectedOutputNoiseParameters {
+    /**
+     * Build parameters.
+    
+     * @param corrected_output_file_name Output file name.
+     * @param bias_file Output bias field image.
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "correctedOutputNoise" as const,
+        "correctedOutputFileName": corrected_output_file_name,
+    };
+    if (bias_file !== null) {
+        params["biasFile"] = bias_file;
+    }
+    return params;
+}
+
+
+function n4_bias_field_correction_corrected_output_noise_cargs(
+    params: N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["biasFile"] ?? null) !== null) {
+        cargs.push(["[", (params["correctedOutputFileName"] ?? null), ",", (params["biasFile"] ?? null), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+function n4_bias_field_correction_corrected_output_noise_outputs(
+    params: N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
+    execution: Execution,
+): N4BiasFieldCorrectionCorrectedOutputNoiseOutputs {
+    /**
+     * Build outputs object containing output file paths and possibly stdout/stderr.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Outputs object.
+     */
+    const ret: N4BiasFieldCorrectionCorrectedOutputNoiseOutputs = {
+        root: execution.outputFile("."),
+        output_image_outfile: execution.outputFile([(params["correctedOutputFileName"] ?? null)].join('')),
+        output_bias_image: ((params["biasFile"] ?? null) !== null) ? execution.outputFile([(params["biasFile"] ?? null)].join('')) : null,
+    };
+    return ret;
+}
+
+
+/**
  * Output object returned when calling `n4_bias_field_correction(...)`.
  *
  * @interface
@@ -227,19 +401,15 @@ interface N4BiasFieldCorrectionOutputs {
      */
     root: OutputPathType;
     /**
-     * The bias corrected version of the input image.
+     * Outputs from `N4BiasFieldCorrectionCorrectedOutputParameters` or `N4BiasFieldCorrectionCorrectedOutputNoiseParameters`.
      */
-    corrected_image: OutputPathType;
-    /**
-     * Estimated bias field image.
-     */
-    bias_field: OutputPathType | null;
+    output: N4BiasFieldCorrectionCorrectedOutputOutputs | N4BiasFieldCorrectionCorrectedOutputNoiseOutputs;
 }
 
 
 function n4_bias_field_correction_params(
     input_image: InputPathType,
-    corrected_image_path: string,
+    output: N4BiasFieldCorrectionCorrectedOutputParameters | N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
@@ -249,13 +419,12 @@ function n4_bias_field_correction_params(
     bspline_fitting: N4BiasFieldCorrectionBsplineFittingParameters | null = null,
     histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParameters | null = null,
     verbose: 0 | 1 | null = null,
-    bias_field_path: string | null = null,
 ): N4BiasFieldCorrectionParameters {
     /**
      * Build parameters.
     
      * @param input_image -i, --input-image inputImageFilename. A scalar image is expected as input for bias correction. Since N4 log transforms the intensities, negative values or values close to zero should be processed prior to correction.
-     * @param corrected_image_path The bias corrected version of the input image.
+     * @param output The bias corrected version of the input image, with optional noise image.
      * @param image_dimensionality -d, --image-dimensionality 2/3/4. This option forces the image to be treated as a specified-dimensional image. If not specified, N4 tries to infer the dimensionality from the input image.
      * @param shrink_factor -s, --shrink-factor 1/2/3/(4)/... Running N4 on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factors <= 4 are commonly used. Note that the shrink factor is only applied to the first two or three dimensions which we assume are spatial.
      * @param mask_image -x, --mask-image maskImageFilename. If a mask image is specified, the final bias correction is only performed in the mask region. If a weight image is not specified, only intensity values inside the masked region are used during the execution of the algorithm. If a weight image is specified, only the non-zero weights are used in the execution of the algorithm although the mask region defines where bias correction is performed in the final output. Otherwise bias correction occurs over the entire image domain.  See also the option description for the weight image. If a mask image is *not* specified then the entire image region will be used as the mask region. Note that this is different than the N3 implementation which uses the results of Otsu thresholding to define a mask. However, this leads to unknown anatomical regions being included and excluded during the bias correction.
@@ -265,14 +434,13 @@ function n4_bias_field_correction_params(
      * @param bspline_fitting -b, --bspline-fitting [splineDistance,<splineOrder=3>]. These options describe the b-spline fitting parameters. The initial b-spline mesh at the coarsest resolution is specified either as the number of elements in each dimension, e.g. 2x2x3 for 3-D images, or it can be specified as a single scalar parameter which describes the isotropic sizing of the mesh elements. The latter option is typically preferred. For each subsequent level, the spline distance decreases in half, or equivalently, the number of mesh elements doubles Cubic splines (order = 3) are typically used. The default setting is to employ a single mesh element over the entire domain, i.e., -b [1x1x1,3].
      * @param histogram_sharpening -t, --histogram-sharpening [<FWHM=0.15>,<wienerNoise=0.01>,<numberOfHistogramBins=200>]. These options describe the histogram sharpening parameters, i.e. the deconvolution step parameters described in the original N3 algorithm. The default values have been shown to work fairly well.
      * @param verbose Verbose output.
-     * @param bias_field_path Estimated bias field image.
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "N4BiasFieldCorrection" as const,
         "input_image": input_image,
-        "corrected_image_path": corrected_image_path,
+        "output": output,
     };
     if (image_dimensionality !== null) {
         params["image_dimensionality"] = image_dimensionality;
@@ -300,9 +468,6 @@ function n4_bias_field_correction_params(
     }
     if (verbose !== null) {
         params["verbose"] = verbose;
-    }
-    if (bias_field_path !== null) {
-        params["bias_field_path"] = bias_field_path;
     }
     return params;
 }
@@ -380,10 +545,10 @@ function n4_bias_field_correction_cargs(
         "--input-image",
         execution.inputFile((params["input_image"] ?? null))
     );
-    cargs.push("--output");
-    if ((params["bias_field_path"] ?? null) !== null) {
-        cargs.push(["[", (params["corrected_image_path"] ?? null), ",", (params["bias_field_path"] ?? null), "]"].join(''));
-    }
+    cargs.push(
+        "--output",
+        ...dynCargs((params["output"] ?? null).__STYXTYPE__)((params["output"] ?? null), execution)
+    );
     return cargs;
 }
 
@@ -402,8 +567,7 @@ function n4_bias_field_correction_outputs(
      */
     const ret: N4BiasFieldCorrectionOutputs = {
         root: execution.outputFile("."),
-        corrected_image: execution.outputFile([(params["corrected_image_path"] ?? null)].join('')),
-        bias_field: ((params["bias_field_path"] ?? null) !== null) ? execution.outputFile([(params["bias_field_path"] ?? null)].join('')) : null,
+        output: dynOutputs((params["output"] ?? null).__STYXTYPE__)?.((params["output"] ?? null), execution),
     };
     return ret;
 }
@@ -435,7 +599,7 @@ function n4_bias_field_correction_execute(
 
 function n4_bias_field_correction(
     input_image: InputPathType,
-    corrected_image_path: string,
+    output: N4BiasFieldCorrectionCorrectedOutputParameters | N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
@@ -445,7 +609,6 @@ function n4_bias_field_correction(
     bspline_fitting: N4BiasFieldCorrectionBsplineFittingParameters | null = null,
     histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParameters | null = null,
     verbose: 0 | 1 | null = null,
-    bias_field_path: string | null = null,
     runner: Runner | null = null,
 ): N4BiasFieldCorrectionOutputs {
     /**
@@ -456,7 +619,7 @@ function n4_bias_field_correction(
      * URL: https://github.com/ANTsX/ANTs
     
      * @param input_image -i, --input-image inputImageFilename. A scalar image is expected as input for bias correction. Since N4 log transforms the intensities, negative values or values close to zero should be processed prior to correction.
-     * @param corrected_image_path The bias corrected version of the input image.
+     * @param output The bias corrected version of the input image, with optional noise image.
      * @param image_dimensionality -d, --image-dimensionality 2/3/4. This option forces the image to be treated as a specified-dimensional image. If not specified, N4 tries to infer the dimensionality from the input image.
      * @param shrink_factor -s, --shrink-factor 1/2/3/(4)/... Running N4 on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factors <= 4 are commonly used. Note that the shrink factor is only applied to the first two or three dimensions which we assume are spatial.
      * @param mask_image -x, --mask-image maskImageFilename. If a mask image is specified, the final bias correction is only performed in the mask region. If a weight image is not specified, only intensity values inside the masked region are used during the execution of the algorithm. If a weight image is specified, only the non-zero weights are used in the execution of the algorithm although the mask region defines where bias correction is performed in the final output. Otherwise bias correction occurs over the entire image domain.  See also the option description for the weight image. If a mask image is *not* specified then the entire image region will be used as the mask region. Note that this is different than the N3 implementation which uses the results of Otsu thresholding to define a mask. However, this leads to unknown anatomical regions being included and excluded during the bias correction.
@@ -466,14 +629,13 @@ function n4_bias_field_correction(
      * @param bspline_fitting -b, --bspline-fitting [splineDistance,<splineOrder=3>]. These options describe the b-spline fitting parameters. The initial b-spline mesh at the coarsest resolution is specified either as the number of elements in each dimension, e.g. 2x2x3 for 3-D images, or it can be specified as a single scalar parameter which describes the isotropic sizing of the mesh elements. The latter option is typically preferred. For each subsequent level, the spline distance decreases in half, or equivalently, the number of mesh elements doubles Cubic splines (order = 3) are typically used. The default setting is to employ a single mesh element over the entire domain, i.e., -b [1x1x1,3].
      * @param histogram_sharpening -t, --histogram-sharpening [<FWHM=0.15>,<wienerNoise=0.01>,<numberOfHistogramBins=200>]. These options describe the histogram sharpening parameters, i.e. the deconvolution step parameters described in the original N3 algorithm. The default values have been shown to work fairly well.
      * @param verbose Verbose output.
-     * @param bias_field_path Estimated bias field image.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `N4BiasFieldCorrectionOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(N4_BIAS_FIELD_CORRECTION_METADATA);
-    const params = n4_bias_field_correction_params(input_image, corrected_image_path, image_dimensionality, shrink_factor, mask_image, rescale_intensities, weight_image, convergence, bspline_fitting, histogram_sharpening, verbose, bias_field_path)
+    const params = n4_bias_field_correction_params(input_image, output, image_dimensionality, shrink_factor, mask_image, rescale_intensities, weight_image, convergence, bspline_fitting, histogram_sharpening, verbose)
     return n4_bias_field_correction_execute(params, execution);
 }
 
@@ -481,6 +643,10 @@ function n4_bias_field_correction(
 export {
       N4BiasFieldCorrectionBsplineFittingParameters,
       N4BiasFieldCorrectionConvergenceParameters,
+      N4BiasFieldCorrectionCorrectedOutputNoiseOutputs,
+      N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
+      N4BiasFieldCorrectionCorrectedOutputOutputs,
+      N4BiasFieldCorrectionCorrectedOutputParameters,
       N4BiasFieldCorrectionHistogramSharpeningParameters,
       N4BiasFieldCorrectionOutputs,
       N4BiasFieldCorrectionParameters,
@@ -488,6 +654,8 @@ export {
       n4_bias_field_correction,
       n4_bias_field_correction_bspline_fitting_params,
       n4_bias_field_correction_convergence_params,
+      n4_bias_field_correction_corrected_output_noise_params,
+      n4_bias_field_correction_corrected_output_params,
       n4_bias_field_correction_histogram_sharpening_params,
       n4_bias_field_correction_params,
 };

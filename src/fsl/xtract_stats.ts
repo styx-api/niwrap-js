@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const XTRACT_STATS_METADATA: Metadata = {
-    id: "e725669f09830b40ddd91ee1f55f1928db5f4c9e.boutiques",
+    id: "31f00c0b17267b38d4a5cf1ffe466312b56a3c90.boutiques",
     name: "xtract_stats",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -16,6 +16,12 @@ interface XtractStatsParameters {
     "folder_basename": string;
     "XTRACT_dir": string;
     "xtract2diff": string;
+    "reference_image"?: InputPathType | null | undefined;
+    "output_file"?: string | null | undefined;
+    "structures_file"?: InputPathType | null | undefined;
+    "threshold"?: number | null | undefined;
+    "measurements"?: string | null | undefined;
+    "keep_temp_files": boolean;
 }
 
 
@@ -66,7 +72,7 @@ interface XtractStatsOutputs {
     /**
      * CSV file containing the statistics from XTRACT analysis.
      */
-    csv_output: OutputPathType;
+    csv_output: OutputPathType | null;
 }
 
 
@@ -74,6 +80,12 @@ function xtract_stats_params(
     folder_basename: string,
     xtract_dir: string,
     xtract2diff: string,
+    reference_image: InputPathType | null = null,
+    output_file: string | null = null,
+    structures_file: InputPathType | null = null,
+    threshold: number | null = null,
+    measurements: string | null = null,
+    keep_temp_files: boolean = false,
 ): XtractStatsParameters {
     /**
      * Build parameters.
@@ -81,6 +93,12 @@ function xtract_stats_params(
      * @param folder_basename Path to microstructure folder and basename of data (e.g. /home/DTI/dti_)
      * @param xtract_dir Path to XTRACT output folder
      * @param xtract2diff EITHER XTRACT results to diffusion space transform OR 'native' if tracts are already in diffusion space
+     * @param reference_image If not 'native', provide reference image in diffusion space (e.g. /home/DTI/dti_FA)
+     * @param output_file Output filepath (Default <XTRACT_dir>/stats.csv)
+     * @param structures_file Structures file (as in XTRACT) (Default is all tracts under <XTRACT_dir>)
+     * @param threshold Threshold applied to tract probability map (default = 0.001 = 0.1%)
+     * @param measurements Comma separated list of features to extract (Default = vol,prob,length,FA,MD - assumes DTI folder has been provided). vol = tract volume, prob = tract probability, length = tract length. Additional metrics must follow file naming conventions. e.g. for dti_L1 use 'L1'
+     * @param keep_temp_files Keep temporary files
     
      * @returns Parameter dictionary
      */
@@ -89,7 +107,23 @@ function xtract_stats_params(
         "folder_basename": folder_basename,
         "XTRACT_dir": xtract_dir,
         "xtract2diff": xtract2diff,
+        "keep_temp_files": keep_temp_files,
     };
+    if (reference_image !== null) {
+        params["reference_image"] = reference_image;
+    }
+    if (output_file !== null) {
+        params["output_file"] = output_file;
+    }
+    if (structures_file !== null) {
+        params["structures_file"] = structures_file;
+    }
+    if (threshold !== null) {
+        params["threshold"] = threshold;
+    }
+    if (measurements !== null) {
+        params["measurements"] = measurements;
+    }
     return params;
 }
 
@@ -120,12 +154,39 @@ function xtract_stats_cargs(
         "-w",
         (params["xtract2diff"] ?? null)
     );
-    cargs.push("[reference]");
-    cargs.push("[output_file]");
-    cargs.push("[structures_file]");
-    cargs.push("[threshold]");
-    cargs.push("[measurements]");
-    cargs.push("[keep_temp_files]");
+    if ((params["reference_image"] ?? null) !== null) {
+        cargs.push(
+            "-r",
+            execution.inputFile((params["reference_image"] ?? null))
+        );
+    }
+    if ((params["output_file"] ?? null) !== null) {
+        cargs.push(
+            "-out",
+            (params["output_file"] ?? null)
+        );
+    }
+    if ((params["structures_file"] ?? null) !== null) {
+        cargs.push(
+            "-str",
+            execution.inputFile((params["structures_file"] ?? null))
+        );
+    }
+    if ((params["threshold"] ?? null) !== null) {
+        cargs.push(
+            "-thr",
+            String((params["threshold"] ?? null))
+        );
+    }
+    if ((params["measurements"] ?? null) !== null) {
+        cargs.push(
+            "-meas",
+            (params["measurements"] ?? null)
+        );
+    }
+    if ((params["keep_temp_files"] ?? null)) {
+        cargs.push("-keepfiles");
+    }
     return cargs;
 }
 
@@ -144,7 +205,7 @@ function xtract_stats_outputs(
      */
     const ret: XtractStatsOutputs = {
         root: execution.outputFile("."),
-        csv_output: execution.outputFile(["[OUTPUT_FILE]"].join('')),
+        csv_output: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
     };
     return ret;
 }
@@ -178,6 +239,12 @@ function xtract_stats(
     folder_basename: string,
     xtract_dir: string,
     xtract2diff: string,
+    reference_image: InputPathType | null = null,
+    output_file: string | null = null,
+    structures_file: InputPathType | null = null,
+    threshold: number | null = null,
+    measurements: string | null = null,
+    keep_temp_files: boolean = false,
     runner: Runner | null = null,
 ): XtractStatsOutputs {
     /**
@@ -190,13 +257,19 @@ function xtract_stats(
      * @param folder_basename Path to microstructure folder and basename of data (e.g. /home/DTI/dti_)
      * @param xtract_dir Path to XTRACT output folder
      * @param xtract2diff EITHER XTRACT results to diffusion space transform OR 'native' if tracts are already in diffusion space
+     * @param reference_image If not 'native', provide reference image in diffusion space (e.g. /home/DTI/dti_FA)
+     * @param output_file Output filepath (Default <XTRACT_dir>/stats.csv)
+     * @param structures_file Structures file (as in XTRACT) (Default is all tracts under <XTRACT_dir>)
+     * @param threshold Threshold applied to tract probability map (default = 0.001 = 0.1%)
+     * @param measurements Comma separated list of features to extract (Default = vol,prob,length,FA,MD - assumes DTI folder has been provided). vol = tract volume, prob = tract probability, length = tract length. Additional metrics must follow file naming conventions. e.g. for dti_L1 use 'L1'
+     * @param keep_temp_files Keep temporary files
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `XtractStatsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XTRACT_STATS_METADATA);
-    const params = xtract_stats_params(folder_basename, xtract_dir, xtract2diff)
+    const params = xtract_stats_params(folder_basename, xtract_dir, xtract2diff, reference_image, output_file, structures_file, threshold, measurements, keep_temp_files)
     return xtract_stats_execute(params, execution);
 }
 

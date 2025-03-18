@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_TO_JPG_METADATA: Metadata = {
-    id: "5bc8a9ac227d992d762dc5365725a949c90f5c17.boutiques",
+    id: "31b6355945c3546a7d864a64fbe9afa58d72247b.boutiques",
     name: "ConvertToJpg",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -103,7 +103,9 @@ function convert_to_jpg_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push(["ConvertToJpg", execution.inputFile((params["infile"] ?? null)), (params["outfile"] ?? null)].join(''));
+    cargs.push("ConvertToJpg");
+    cargs.push(execution.inputFile((params["infile"] ?? null)));
+    cargs.push((params["outfile"] ?? null));
     return cargs;
 }
 

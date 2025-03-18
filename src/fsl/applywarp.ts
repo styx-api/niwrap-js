@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APPLYWARP_METADATA: Metadata = {
-    id: "af3d683241808436d501919df0347e718d9aee29.boutiques",
+    id: "f3b271ea5183294815af803d4556178f89f73b26.boutiques",
     name: "applywarp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -25,6 +25,8 @@ interface ApplywarpParameters {
     "output_type"?: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null | undefined;
     "postmat"?: InputPathType | null | undefined;
     "premat"?: InputPathType | null | undefined;
+    "ref_file_1": InputPathType;
+    "superlevel"?: "a" | null | undefined;
     "superlevel_2"?: number | null | undefined;
     "supersample": boolean;
 }
@@ -84,6 +86,7 @@ interface ApplywarpOutputs {
 function applywarp_params(
     in_file: InputPathType,
     ref_file: InputPathType,
+    ref_file_1: InputPathType,
     interp: "nn" | "trilinear" | "sinc" | "spline" | null = null,
     out_file: string | null = null,
     relwarp: boolean = false,
@@ -94,6 +97,7 @@ function applywarp_params(
     output_type: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null = null,
     postmat: InputPathType | null = null,
     premat: InputPathType | null = null,
+    superlevel: "a" | null = null,
     superlevel_2: number | null = null,
     supersample: boolean = false,
 ): ApplywarpParameters {
@@ -102,6 +106,7 @@ function applywarp_params(
     
      * @param in_file Image to be warped.
      * @param ref_file Reference image.
+     * @param ref_file_1 Reference image.
      * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
      * @param out_file Output filename.
      * @param relwarp Treat warp field as relative: x' = x + w(x).
@@ -112,6 +117,7 @@ function applywarp_params(
      * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
      * @param postmat Filename for post-transform (affine matrix).
      * @param premat Filename for pre-transform (affine matrix).
+     * @param superlevel 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
      * @param superlevel_2 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
      * @param supersample Intermediary supersampling of output, default is off.
     
@@ -123,6 +129,7 @@ function applywarp_params(
         "ref_file": ref_file,
         "relwarp": relwarp,
         "abswarp": abswarp,
+        "ref_file_1": ref_file_1,
         "supersample": supersample,
     };
     if (interp !== null) {
@@ -148,6 +155,9 @@ function applywarp_params(
     }
     if (premat !== null) {
         params["premat"] = premat;
+    }
+    if (superlevel !== null) {
+        params["superlevel"] = superlevel;
     }
     if (superlevel_2 !== null) {
         params["superlevel_2"] = superlevel_2;
@@ -201,6 +211,10 @@ function applywarp_cargs(
     }
     if ((params["premat"] ?? null) !== null) {
         cargs.push(["--premat=", execution.inputFile((params["premat"] ?? null))].join(''));
+    }
+    cargs.push(["--ref=", execution.inputFile((params["ref_file_1"] ?? null))].join(''));
+    if ((params["superlevel"] ?? null) !== null) {
+        cargs.push(["--superlevel=", (params["superlevel"] ?? null)].join(''));
     }
     if ((params["superlevel_2"] ?? null) !== null) {
         cargs.push(["--superlevel=", String((params["superlevel_2"] ?? null))].join(''));
@@ -259,6 +273,7 @@ function applywarp_execute(
 function applywarp(
     in_file: InputPathType,
     ref_file: InputPathType,
+    ref_file_1: InputPathType,
     interp: "nn" | "trilinear" | "sinc" | "spline" | null = null,
     out_file: string | null = null,
     relwarp: boolean = false,
@@ -269,6 +284,7 @@ function applywarp(
     output_type: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null = null,
     postmat: InputPathType | null = null,
     premat: InputPathType | null = null,
+    superlevel: "a" | null = null,
     superlevel_2: number | null = null,
     supersample: boolean = false,
     runner: Runner | null = null,
@@ -282,6 +298,7 @@ function applywarp(
     
      * @param in_file Image to be warped.
      * @param ref_file Reference image.
+     * @param ref_file_1 Reference image.
      * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
      * @param out_file Output filename.
      * @param relwarp Treat warp field as relative: x' = x + w(x).
@@ -292,6 +309,7 @@ function applywarp(
      * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
      * @param postmat Filename for post-transform (affine matrix).
      * @param premat Filename for pre-transform (affine matrix).
+     * @param superlevel 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
      * @param superlevel_2 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
      * @param supersample Intermediary supersampling of output, default is off.
      * @param runner Command runner
@@ -300,7 +318,7 @@ function applywarp(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APPLYWARP_METADATA);
-    const params = applywarp_params(in_file, ref_file, interp, out_file, relwarp, abswarp, datatype, field_file, mask_file, output_type, postmat, premat, superlevel_2, supersample)
+    const params = applywarp_params(in_file, ref_file, ref_file_1, interp, out_file, relwarp, abswarp, datatype, field_file, mask_file, output_type, postmat, premat, superlevel, superlevel_2, supersample)
     return applywarp_execute(params, execution);
 }
 

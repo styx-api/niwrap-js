@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APPLYXFM4_D_METADATA: Metadata = {
-    id: "0b7f726faa4dcd12d271bb6690d77ab6c74bf458.boutiques",
+    id: "6e61e41a15ca78446360dd7d24d483b2674318f2.boutiques",
     name: "applyxfm4D",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -17,6 +17,10 @@ interface Applyxfm4DParameters {
     "ref_volume": InputPathType;
     "output_volume": string;
     "transformation_matrix": string;
+    "interpolation_method"?: string | null | undefined;
+    "single_matrix_flag": boolean;
+    "four_digit_flag": boolean;
+    "user_prefix"?: string | null | undefined;
 }
 
 
@@ -76,6 +80,10 @@ function applyxfm4_d_params(
     ref_volume: InputPathType,
     output_volume: string,
     transformation_matrix: string,
+    interpolation_method: string | null = "sinc",
+    single_matrix_flag: boolean = false,
+    four_digit_flag: boolean = false,
+    user_prefix: string | null = null,
 ): Applyxfm4DParameters {
     /**
      * Build parameters.
@@ -84,6 +92,10 @@ function applyxfm4_d_params(
      * @param ref_volume Reference volume (e.g. ref.nii.gz)
      * @param output_volume Output volume after applying transformation (e.g. output.nii.gz)
      * @param transformation_matrix Transformation matrix file or directory
+     * @param interpolation_method Interpolation method; options are nearestneighbour (or nn), trilinear, spline, sinc; default is sinc
+     * @param single_matrix_flag Flag to specify a single transformation matrix
+     * @param four_digit_flag Flag to use four digits in naming files
+     * @param user_prefix User-defined prefix for output files
     
      * @returns Parameter dictionary
      */
@@ -93,7 +105,15 @@ function applyxfm4_d_params(
         "ref_volume": ref_volume,
         "output_volume": output_volume,
         "transformation_matrix": transformation_matrix,
+        "single_matrix_flag": single_matrix_flag,
+        "four_digit_flag": four_digit_flag,
     };
+    if (interpolation_method !== null) {
+        params["interpolation_method"] = interpolation_method;
+    }
+    if (user_prefix !== null) {
+        params["user_prefix"] = user_prefix;
+    }
     return params;
 }
 
@@ -116,6 +136,24 @@ function applyxfm4_d_cargs(
     cargs.push(execution.inputFile((params["ref_volume"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
     cargs.push((params["transformation_matrix"] ?? null));
+    if ((params["interpolation_method"] ?? null) !== null) {
+        cargs.push(
+            "--interp, -interp",
+            (params["interpolation_method"] ?? null)
+        );
+    }
+    if ((params["single_matrix_flag"] ?? null)) {
+        cargs.push("--singlematrix, -singlematrix");
+    }
+    if ((params["four_digit_flag"] ?? null)) {
+        cargs.push("--fourdigit, -fourdigit");
+    }
+    if ((params["user_prefix"] ?? null) !== null) {
+        cargs.push(
+            "--userprefix, -userprefix",
+            (params["user_prefix"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -169,6 +207,10 @@ function applyxfm4_d(
     ref_volume: InputPathType,
     output_volume: string,
     transformation_matrix: string,
+    interpolation_method: string | null = "sinc",
+    single_matrix_flag: boolean = false,
+    four_digit_flag: boolean = false,
+    user_prefix: string | null = null,
     runner: Runner | null = null,
 ): Applyxfm4DOutputs {
     /**
@@ -182,13 +224,17 @@ function applyxfm4_d(
      * @param ref_volume Reference volume (e.g. ref.nii.gz)
      * @param output_volume Output volume after applying transformation (e.g. output.nii.gz)
      * @param transformation_matrix Transformation matrix file or directory
+     * @param interpolation_method Interpolation method; options are nearestneighbour (or nn), trilinear, spline, sinc; default is sinc
+     * @param single_matrix_flag Flag to specify a single transformation matrix
+     * @param four_digit_flag Flag to use four digits in naming files
+     * @param user_prefix User-defined prefix for output files
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `Applyxfm4DOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APPLYXFM4_D_METADATA);
-    const params = applyxfm4_d_params(input_volume, ref_volume, output_volume, transformation_matrix)
+    const params = applyxfm4_d_params(input_volume, ref_volume, output_volume, transformation_matrix, interpolation_method, single_matrix_flag, four_digit_flag, user_prefix)
     return applyxfm4_d_execute(params, execution);
 }
 

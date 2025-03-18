@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BIANCA_METADATA: Metadata = {
-    id: "faece12893f9764ba2ed673c9b5a6791f2ed9a43.boutiques",
+    id: "2e37562d1d8d1df91782354d7db15e7e0cceaf98.boutiques",
     name: "bianca",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -17,6 +17,7 @@ interface BiancaParameters {
     "label_feature_num": number;
     "brain_mask_feature_num": number;
     "query_subject_num": number;
+    "training_nums"?: string | null | undefined;
     "feature_subset"?: string | null | undefined;
     "mat_feature_num"?: number | null | undefined;
     "spatial_weight"?: number | null | undefined;
@@ -25,6 +26,7 @@ interface BiancaParameters {
     "select_pts"?: string | null | undefined;
     "training_pts"?: string | null | undefined;
     "non_les_pts"?: string | null | undefined;
+    "load_classifier_data"?: string | null | undefined;
     "save_classifier_data"?: string | null | undefined;
     "verbose_flag": boolean;
     "out_name"?: string | null | undefined;
@@ -87,6 +89,7 @@ function bianca_params(
     label_feature_num: number,
     brain_mask_feature_num: number,
     query_subject_num: number,
+    training_nums: string | null = null,
     feature_subset: string | null = null,
     mat_feature_num: number | null = null,
     spatial_weight: number | null = 1,
@@ -95,6 +98,7 @@ function bianca_params(
     select_pts: string | null = "any",
     training_pts: string | null = null,
     non_les_pts: string | null = null,
+    load_classifier_data: string | null = null,
     save_classifier_data: string | null = null,
     verbose_flag: boolean = false,
     out_name: string | null = "output_bianca",
@@ -106,6 +110,7 @@ function bianca_params(
      * @param label_feature_num Column number (in the master file) of the manual masks (or any placeholder name for query subjects)
      * @param brain_mask_feature_num Column number (in the master file) of images to derive non-zero mask from
      * @param query_subject_num Row number of query subject (in masterlistfile)
+     * @param training_nums Subjects to be used in training. List of row numbers (comma separated, no spaces) or 'all' to use all the subjects in the master file
      * @param feature_subset Set of column numbers (comma separated and no spaces) for features/images to use (default: use all available modalities as intensity features). The image used to derive non-zero mask from must be part of the features subset
      * @param mat_feature_num Column number of matrix files (in masterlistfile). Needed to extract spatial features (MNI coordinates)
      * @param spatial_weight Weighting for spatial coordinates (default = 1, i.e., variance-normalized MNI coordinates). Requires --matfeaturenum to be specified
@@ -114,6 +119,7 @@ function bianca_params(
      * @param select_pts "any" (default) or "surround" or "noborder"
      * @param training_pts Number (max) of (lesion) points to use (per training subject) or "equalpoints" to select all lesion points and equal number of non-lesion points
      * @param non_les_pts Number (max) of non-lesion points to use. If not specified will be set to the same amount of lesion points
+     * @param load_classifier_data Load training data from file
      * @param save_classifier_data Save training data to file
      * @param verbose_flag Use verbose mode
      * @param out_name Specify (base) output name of files
@@ -129,6 +135,9 @@ function bianca_params(
         "patch_3d": patch_3d,
         "verbose_flag": verbose_flag,
     };
+    if (training_nums !== null) {
+        params["training_nums"] = training_nums;
+    }
     if (feature_subset !== null) {
         params["feature_subset"] = feature_subset;
     }
@@ -149,6 +158,9 @@ function bianca_params(
     }
     if (non_les_pts !== null) {
         params["non_les_pts"] = non_les_pts;
+    }
+    if (load_classifier_data !== null) {
+        params["load_classifier_data"] = load_classifier_data;
     }
     if (save_classifier_data !== null) {
         params["save_classifier_data"] = save_classifier_data;
@@ -175,59 +187,41 @@ function bianca_cargs(
     const cargs: string[] = [];
     cargs.push("bianca");
     cargs.push(["--singlefile=", execution.inputFile((params["master_file"] ?? null))].join(''));
-    cargs.push(["--labelfeaturenum=", String((params["label_feature_num"] ?? null))].join(''));
+    cargs.push(["labelfeaturenum=", String((params["label_feature_num"] ?? null))].join(''));
     cargs.push(["--brainmaskfeaturenum=", String((params["brain_mask_feature_num"] ?? null))].join(''));
     cargs.push(["--querysubjectnum=", String((params["query_subject_num"] ?? null))].join(''));
+    if ((params["training_nums"] ?? null) !== null) {
+        cargs.push(["--trainingnums=", (params["training_nums"] ?? null)].join(''));
+    }
     if ((params["feature_subset"] ?? null) !== null) {
-        cargs.push(
-            "--featuresubset",
-            (params["feature_subset"] ?? null)
-        );
+        cargs.push(["--featuresubset=", (params["feature_subset"] ?? null)].join(''));
     }
     if ((params["mat_feature_num"] ?? null) !== null) {
-        cargs.push(
-            "--matfeaturenum",
-            String((params["mat_feature_num"] ?? null))
-        );
+        cargs.push(["--matfeaturenum=", String((params["mat_feature_num"] ?? null))].join(''));
     }
     if ((params["spatial_weight"] ?? null) !== null) {
-        cargs.push(
-            "--spatialweight",
-            String((params["spatial_weight"] ?? null))
-        );
+        cargs.push(["--spatialweight=", String((params["spatial_weight"] ?? null))].join(''));
     }
     if ((params["patch_sizes"] ?? null) !== null) {
-        cargs.push(
-            "--patchsizes",
-            (params["patch_sizes"] ?? null)
-        );
+        cargs.push(["--patchsizes=", (params["patch_sizes"] ?? null)].join(''));
     }
     if ((params["patch_3d"] ?? null)) {
         cargs.push("--patch3D");
     }
     if ((params["select_pts"] ?? null) !== null) {
-        cargs.push(
-            "--selectpts",
-            (params["select_pts"] ?? null)
-        );
+        cargs.push(["--selectpts=", (params["select_pts"] ?? null)].join(''));
     }
     if ((params["training_pts"] ?? null) !== null) {
-        cargs.push(
-            "--trainingpts",
-            (params["training_pts"] ?? null)
-        );
+        cargs.push(["--trainingpts=", (params["training_pts"] ?? null)].join(''));
     }
     if ((params["non_les_pts"] ?? null) !== null) {
-        cargs.push(
-            "--nonlespts",
-            (params["non_les_pts"] ?? null)
-        );
+        cargs.push(["--nonlespts=", (params["non_les_pts"] ?? null)].join(''));
+    }
+    if ((params["load_classifier_data"] ?? null) !== null) {
+        cargs.push(["--loadclassifierdata=", (params["load_classifier_data"] ?? null)].join(''));
     }
     if ((params["save_classifier_data"] ?? null) !== null) {
-        cargs.push(
-            "--saveclassifierdata",
-            (params["save_classifier_data"] ?? null)
-        );
+        cargs.push(["--saveclassifierdata=", (params["save_classifier_data"] ?? null)].join(''));
     }
     if ((params["verbose_flag"] ?? null)) {
         cargs.push("-v");
@@ -291,6 +285,7 @@ function bianca(
     label_feature_num: number,
     brain_mask_feature_num: number,
     query_subject_num: number,
+    training_nums: string | null = null,
     feature_subset: string | null = null,
     mat_feature_num: number | null = null,
     spatial_weight: number | null = 1,
@@ -299,6 +294,7 @@ function bianca(
     select_pts: string | null = "any",
     training_pts: string | null = null,
     non_les_pts: string | null = null,
+    load_classifier_data: string | null = null,
     save_classifier_data: string | null = null,
     verbose_flag: boolean = false,
     out_name: string | null = "output_bianca",
@@ -315,6 +311,7 @@ function bianca(
      * @param label_feature_num Column number (in the master file) of the manual masks (or any placeholder name for query subjects)
      * @param brain_mask_feature_num Column number (in the master file) of images to derive non-zero mask from
      * @param query_subject_num Row number of query subject (in masterlistfile)
+     * @param training_nums Subjects to be used in training. List of row numbers (comma separated, no spaces) or 'all' to use all the subjects in the master file
      * @param feature_subset Set of column numbers (comma separated and no spaces) for features/images to use (default: use all available modalities as intensity features). The image used to derive non-zero mask from must be part of the features subset
      * @param mat_feature_num Column number of matrix files (in masterlistfile). Needed to extract spatial features (MNI coordinates)
      * @param spatial_weight Weighting for spatial coordinates (default = 1, i.e., variance-normalized MNI coordinates). Requires --matfeaturenum to be specified
@@ -323,6 +320,7 @@ function bianca(
      * @param select_pts "any" (default) or "surround" or "noborder"
      * @param training_pts Number (max) of (lesion) points to use (per training subject) or "equalpoints" to select all lesion points and equal number of non-lesion points
      * @param non_les_pts Number (max) of non-lesion points to use. If not specified will be set to the same amount of lesion points
+     * @param load_classifier_data Load training data from file
      * @param save_classifier_data Save training data to file
      * @param verbose_flag Use verbose mode
      * @param out_name Specify (base) output name of files
@@ -332,7 +330,7 @@ function bianca(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BIANCA_METADATA);
-    const params = bianca_params(master_file, label_feature_num, brain_mask_feature_num, query_subject_num, feature_subset, mat_feature_num, spatial_weight, patch_sizes, patch_3d, select_pts, training_pts, non_les_pts, save_classifier_data, verbose_flag, out_name)
+    const params = bianca_params(master_file, label_feature_num, brain_mask_feature_num, query_subject_num, training_nums, feature_subset, mat_feature_num, spatial_weight, patch_sizes, patch_3d, select_pts, training_pts, non_les_pts, load_classifier_data, save_classifier_data, verbose_flag, out_name)
     return bianca_execute(params, execution);
 }
 

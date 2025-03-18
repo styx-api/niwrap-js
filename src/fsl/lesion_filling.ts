@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LESION_FILLING_METADATA: Metadata = {
-    id: "ed2cf99fe48a14d59b488a818d0b2780af3475ae.boutiques",
+    id: "31beff7be4c61479fd13acecfb2776958ac9de6f.boutiques",
     name: "lesion_filling",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -19,6 +19,7 @@ interface LesionFillingParameters {
     "wmmask"?: InputPathType | null | undefined;
     "verbose_flag": boolean;
     "components_flag": boolean;
+    "help_flag": boolean;
 }
 
 
@@ -80,6 +81,7 @@ function lesion_filling_params(
     wmmask: InputPathType | null = null,
     verbose_flag: boolean = false,
     components_flag: boolean = false,
+    help_flag: boolean = false,
 ): LesionFillingParameters {
     /**
      * Build parameters.
@@ -90,6 +92,7 @@ function lesion_filling_params(
      * @param wmmask Filename of white matter mask image
      * @param verbose_flag Switch on diagnostic messages
      * @param components_flag Save all lesion components as volumes
+     * @param help_flag Display help message
     
      * @returns Parameter dictionary
      */
@@ -100,6 +103,7 @@ function lesion_filling_params(
         "lesionmask": lesionmask,
         "verbose_flag": verbose_flag,
         "components_flag": components_flag,
+        "help_flag": help_flag,
     };
     if (wmmask !== null) {
         params["wmmask"] = wmmask;
@@ -145,6 +149,9 @@ function lesion_filling_cargs(
     }
     if ((params["components_flag"] ?? null)) {
         cargs.push("-c");
+    }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
     }
     return cargs;
 }
@@ -201,6 +208,7 @@ function lesion_filling(
     wmmask: InputPathType | null = null,
     verbose_flag: boolean = false,
     components_flag: boolean = false,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): LesionFillingOutputs {
     /**
@@ -216,13 +224,14 @@ function lesion_filling(
      * @param wmmask Filename of white matter mask image
      * @param verbose_flag Switch on diagnostic messages
      * @param components_flag Save all lesion components as volumes
+     * @param help_flag Display help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LESION_FILLING_METADATA);
-    const params = lesion_filling_params(infile, outfile, lesionmask, wmmask, verbose_flag, components_flag)
+    const params = lesion_filling_params(infile, outfile, lesionmask, wmmask, verbose_flag, components_flag, help_flag)
     return lesion_filling_execute(params, execution);
 }
 

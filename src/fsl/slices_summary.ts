@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SLICES_SUMMARY_METADATA: Metadata = {
-    id: "c5a3bab21de16027f47ca41d594a765937d99825.boutiques",
+    id: "ef564b8318b77af06e116ca5d2dc4a9fef06575a.boutiques",
     name: "slices_summary",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -16,11 +16,11 @@ interface SlicesSummaryParameters {
     "4d_input_file": InputPathType;
     "threshold": number;
     "background_image": InputPathType;
-    "pictures_sum_second": string;
+    "pictures_sum": string;
     "single_slice_flag": boolean;
     "darker_background_flag": boolean;
     "dumb_rule_flag": boolean;
-    "pictures_sum_second_1": string;
+    "pictures_sum_second": string;
     "output_png": string;
     "timepoints": string;
 }
@@ -85,8 +85,8 @@ function slices_summary_params(
     v_4d_input_file: InputPathType,
     threshold: number,
     background_image: InputPathType,
+    pictures_sum: string,
     pictures_sum_second: string,
-    pictures_sum_second_1: string,
     output_png: string,
     timepoints: string,
     single_slice_flag: boolean = false,
@@ -99,8 +99,8 @@ function slices_summary_params(
      * @param v_4d_input_file 4D input image (e.g., melodic_IC)
      * @param threshold Threshold value for the slices
      * @param background_image Background image file (e.g., standard/MNI152_T1_2mm)
+     * @param pictures_sum Output directory for summary images
      * @param pictures_sum_second Path to summary images directory
-     * @param pictures_sum_second_1 Path to summary images directory
      * @param output_png Output PNG file
      * @param timepoints Space-separated list of timepoints to use; first timepoint is 0
      * @param single_slice_flag Generate single-slice summary images instead of 3-slice
@@ -114,11 +114,11 @@ function slices_summary_params(
         "4d_input_file": v_4d_input_file,
         "threshold": threshold,
         "background_image": background_image,
-        "pictures_sum_second": pictures_sum_second,
+        "pictures_sum": pictures_sum,
         "single_slice_flag": single_slice_flag,
         "darker_background_flag": darker_background_flag,
         "dumb_rule_flag": dumb_rule_flag,
-        "pictures_sum_second_1": pictures_sum_second_1,
+        "pictures_sum_second": pictures_sum_second,
         "output_png": output_png,
         "timepoints": timepoints,
     };
@@ -143,7 +143,7 @@ function slices_summary_cargs(
     cargs.push(execution.inputFile((params["4d_input_file"] ?? null)));
     cargs.push(String((params["threshold"] ?? null)));
     cargs.push(execution.inputFile((params["background_image"] ?? null)));
-    cargs.push((params["pictures_sum_second"] ?? null));
+    cargs.push((params["pictures_sum"] ?? null));
     if ((params["single_slice_flag"] ?? null)) {
         cargs.push("-1");
     }
@@ -153,9 +153,7 @@ function slices_summary_cargs(
     if ((params["dumb_rule_flag"] ?? null)) {
         cargs.push("-c");
     }
-    cargs.push("|");
-    cargs.push("slices_summary");
-    cargs.push((params["pictures_sum_second_1"] ?? null));
+    cargs.push((params["pictures_sum_second"] ?? null));
     cargs.push((params["output_png"] ?? null));
     cargs.push((params["timepoints"] ?? null));
     return cargs;
@@ -176,7 +174,7 @@ function slices_summary_outputs(
      */
     const ret: SlicesSummaryOutputs = {
         root: execution.outputFile("."),
-        summary_images_directory: execution.outputFile([(params["pictures_sum_second_1"] ?? null)].join('')),
+        summary_images_directory: execution.outputFile([(params["pictures_sum_second"] ?? null)].join('')),
         combined_summary_image: execution.outputFile([(params["output_png"] ?? null)].join('')),
     };
     return ret;
@@ -211,8 +209,8 @@ function slices_summary(
     v_4d_input_file: InputPathType,
     threshold: number,
     background_image: InputPathType,
+    pictures_sum: string,
     pictures_sum_second: string,
-    pictures_sum_second_1: string,
     output_png: string,
     timepoints: string,
     single_slice_flag: boolean = false,
@@ -230,8 +228,8 @@ function slices_summary(
      * @param v_4d_input_file 4D input image (e.g., melodic_IC)
      * @param threshold Threshold value for the slices
      * @param background_image Background image file (e.g., standard/MNI152_T1_2mm)
+     * @param pictures_sum Output directory for summary images
      * @param pictures_sum_second Path to summary images directory
-     * @param pictures_sum_second_1 Path to summary images directory
      * @param output_png Output PNG file
      * @param timepoints Space-separated list of timepoints to use; first timepoint is 0
      * @param single_slice_flag Generate single-slice summary images instead of 3-slice
@@ -243,7 +241,7 @@ function slices_summary(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICES_SUMMARY_METADATA);
-    const params = slices_summary_params(v_4d_input_file, threshold, background_image, pictures_sum_second, pictures_sum_second_1, output_png, timepoints, single_slice_flag, darker_background_flag, dumb_rule_flag)
+    const params = slices_summary_params(v_4d_input_file, threshold, background_image, pictures_sum, pictures_sum_second, output_png, timepoints, single_slice_flag, darker_background_flag, dumb_rule_flag)
     return slices_summary_execute(params, execution);
 }
 

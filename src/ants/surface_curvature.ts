@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_CURVATURE_METADATA: Metadata = {
-    id: "47bd42166388900cd8ce701c63aa9324fd46a426.boutiques",
+    id: "927be22df979e7c726c5de83ea9d6ec0a64535a3.boutiques",
     name: "SurfaceCurvature",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -111,7 +111,11 @@ function surface_curvature_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push(["SurfaceCurvature", execution.inputFile((params["filename_in"] ?? null)), (params["filename_out"] ?? null), String((params["sigma"] ?? null)), String((params["option"] ?? null))].join(''));
+    cargs.push("SurfaceCurvature");
+    cargs.push(execution.inputFile((params["filename_in"] ?? null)));
+    cargs.push((params["filename_out"] ?? null));
+    cargs.push(String((params["sigma"] ?? null)));
+    cargs.push(String((params["option"] ?? null)));
     return cargs;
 }
 

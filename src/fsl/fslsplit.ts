@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLSPLIT_METADATA: Metadata = {
-    id: "588ee0f4afcc0ecee61fd388fbeb58790d2471e2.boutiques",
+    id: "ea6d85b37f2c4f39bad74584587cfcd8367f4b21.boutiques",
     name: "fslsplit",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -15,6 +15,8 @@ interface FslsplitParameters {
     "__STYXTYPE__": "fslsplit";
     "infile": InputPathType;
     "output_basename"?: string | null | undefined;
+    "separation_x": boolean;
+    "separation_y": boolean;
     "separation_z": boolean;
     "separation_time": boolean;
 }
@@ -74,6 +76,8 @@ interface FslsplitOutputs {
 function fslsplit_params(
     infile: InputPathType,
     output_basename: string | null = "vol",
+    separation_x: boolean = false,
+    separation_y: boolean = false,
     separation_z: boolean = false,
     separation_time: boolean = false,
 ): FslsplitParameters {
@@ -82,6 +86,8 @@ function fslsplit_params(
     
      * @param infile Input image (e.g. img.nii.gz)
      * @param output_basename Output basename (default: vol)
+     * @param separation_x Separate images in the x direction
+     * @param separation_y Separate images in the y direction
      * @param separation_z Separate images in the z direction
      * @param separation_time Separate images in time (default behaviour)
     
@@ -90,6 +96,8 @@ function fslsplit_params(
     const params = {
         "__STYXTYPE__": "fslsplit" as const,
         "infile": infile,
+        "separation_x": separation_x,
+        "separation_y": separation_y,
         "separation_z": separation_z,
         "separation_time": separation_time,
     };
@@ -117,6 +125,12 @@ function fslsplit_cargs(
     cargs.push(execution.inputFile((params["infile"] ?? null)));
     if ((params["output_basename"] ?? null) !== null) {
         cargs.push((params["output_basename"] ?? null));
+    }
+    if ((params["separation_x"] ?? null)) {
+        cargs.push("-x");
+    }
+    if ((params["separation_y"] ?? null)) {
+        cargs.push("-y");
     }
     if ((params["separation_z"] ?? null)) {
         cargs.push("-z");
@@ -175,6 +189,8 @@ function fslsplit_execute(
 function fslsplit(
     infile: InputPathType,
     output_basename: string | null = "vol",
+    separation_x: boolean = false,
+    separation_y: boolean = false,
     separation_z: boolean = false,
     separation_time: boolean = false,
     runner: Runner | null = null,
@@ -188,6 +204,8 @@ function fslsplit(
     
      * @param infile Input image (e.g. img.nii.gz)
      * @param output_basename Output basename (default: vol)
+     * @param separation_x Separate images in the x direction
+     * @param separation_y Separate images in the y direction
      * @param separation_z Separate images in the z direction
      * @param separation_time Separate images in time (default behaviour)
      * @param runner Command runner
@@ -196,7 +214,7 @@ function fslsplit(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSPLIT_METADATA);
-    const params = fslsplit_params(infile, output_basename, separation_z, separation_time)
+    const params = fslsplit_params(infile, output_basename, separation_x, separation_y, separation_z, separation_time)
     return fslsplit_execute(params, execution);
 }
 

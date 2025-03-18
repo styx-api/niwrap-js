@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIRST_MULT_BCORR_METADATA: Metadata = {
-    id: "a7d6c8e2e8974e5facac9a650b214397ba549860.boutiques",
+    id: "a95f7de2baa97fafc838a6ec196d6bbf3665f45e.boutiques",
     name: "first_mult_bcorr",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -18,6 +18,7 @@ interface FirstMultBcorrParameters {
     "uncorrected_4d_labels": InputPathType;
     "output_image": string;
     "verbose_flag": boolean;
+    "help_flag": boolean;
 }
 
 
@@ -78,6 +79,7 @@ function first_mult_bcorr_params(
     uncorrected_4d_labels: InputPathType,
     output_image: string,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
 ): FirstMultBcorrParameters {
     /**
      * Build parameters.
@@ -87,6 +89,7 @@ function first_mult_bcorr_params(
      * @param uncorrected_4d_labels Filename of 4D image of uncorrected labels (with boundaries)
      * @param output_image Output image name (3D label image)
      * @param verbose_flag Output F-stats to standard out
+     * @param help_flag Display this help message
     
      * @returns Parameter dictionary
      */
@@ -97,6 +100,7 @@ function first_mult_bcorr_params(
         "uncorrected_4d_labels": uncorrected_4d_labels,
         "output_image": output_image,
         "verbose_flag": verbose_flag,
+        "help_flag": help_flag,
     };
     return params;
 }
@@ -134,6 +138,9 @@ function first_mult_bcorr_cargs(
     );
     if ((params["verbose_flag"] ?? null)) {
         cargs.push("-v");
+    }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
     }
     return cargs;
 }
@@ -189,6 +196,7 @@ function first_mult_bcorr(
     uncorrected_4d_labels: InputPathType,
     output_image: string,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): FirstMultBcorrOutputs {
     /**
@@ -203,13 +211,14 @@ function first_mult_bcorr(
      * @param uncorrected_4d_labels Filename of 4D image of uncorrected labels (with boundaries)
      * @param output_image Output image name (3D label image)
      * @param verbose_flag Output F-stats to standard out
+     * @param help_flag Display this help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FirstMultBcorrOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIRST_MULT_BCORR_METADATA);
-    const params = first_mult_bcorr_params(input_image, corrected_4d_labels, uncorrected_4d_labels, output_image, verbose_flag)
+    const params = first_mult_bcorr_params(input_image, corrected_4d_labels, uncorrected_4d_labels, output_image, verbose_flag, help_flag)
     return first_mult_bcorr_execute(params, execution);
 }
 

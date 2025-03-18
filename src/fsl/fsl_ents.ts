@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_ENTS_METADATA: Metadata = {
-    id: "f66a5a56bce20baecbbcffc7deaf985412131450.boutiques",
+    id: "9635afc2a7cf9e3f42a7bf343b19199cd83f3d28.boutiques",
     name: "fsl_ents",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -137,7 +137,6 @@ function fsl_ents_cargs(
             ...(params["conffile"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    cargs.push("[-h]");
     return cargs;
 }
 

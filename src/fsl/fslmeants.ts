@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMEANTS_METADATA: Metadata = {
-    id: "fcc95512e4d985215019fd1ae002fbea7f289d21.boutiques",
+    id: "a664704b3d93ff85fe61f57062d6ab782f4955bd.boutiques",
     name: "fslmeants",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -26,6 +26,7 @@ interface FslmeantsParameters {
     "transpose_flag": boolean;
     "weighted_mean_flag": boolean;
     "verbose_flag": boolean;
+    "help_flag": boolean;
 }
 
 
@@ -94,6 +95,7 @@ function fslmeants_params(
     transpose_flag: boolean = false,
     weighted_mean_flag: boolean = false,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
 ): FslmeantsParameters {
     /**
      * Build parameters.
@@ -111,6 +113,7 @@ function fslmeants_params(
      * @param transpose_flag Output results in transpose format (one row per voxel/mean)
      * @param weighted_mean_flag Output weighted mean, using mask values as weights, and exit.
      * @param verbose_flag Switch on diagnostic messages
+     * @param help_flag Display the help message
     
      * @returns Parameter dictionary
      */
@@ -124,6 +127,7 @@ function fslmeants_params(
         "transpose_flag": transpose_flag,
         "weighted_mean_flag": weighted_mean_flag,
         "verbose_flag": verbose_flag,
+        "help_flag": help_flag,
     };
     if (output !== null) {
         params["output"] = output;
@@ -213,6 +217,9 @@ function fslmeants_cargs(
     if ((params["verbose_flag"] ?? null)) {
         cargs.push("-v");
     }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
+    }
     return cargs;
 }
 
@@ -275,6 +282,7 @@ function fslmeants(
     transpose_flag: boolean = false,
     weighted_mean_flag: boolean = false,
     verbose_flag: boolean = false,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslmeantsOutputs {
     /**
@@ -297,13 +305,14 @@ function fslmeants(
      * @param transpose_flag Output results in transpose format (one row per voxel/mean)
      * @param weighted_mean_flag Output weighted mean, using mask values as weights, and exit.
      * @param verbose_flag Switch on diagnostic messages
+     * @param help_flag Display the help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FslmeantsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLMEANTS_METADATA);
-    const params = fslmeants_params(input_image, output, mask, coordinates, usemm_flag, showall_flag, eigenv_flag, eigenvariates_order, no_bin_flag, label_image, transpose_flag, weighted_mean_flag, verbose_flag)
+    const params = fslmeants_params(input_image, output, mask, coordinates, usemm_flag, showall_flag, eigenv_flag, eigenvariates_order, no_bin_flag, label_image, transpose_flag, weighted_mean_flag, verbose_flag, help_flag)
     return fslmeants_execute(params, execution);
 }
 

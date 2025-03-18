@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA: Metadata = {
-    id: "14d19d5d0cd63cddc6a5dbd0cf982ba44c0b6d8b.boutiques",
+    id: "21f7ecf88e61f31390dfa72a88706b1d88f8b655.boutiques",
     name: "WarpTensorImageMultiTransform",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -21,6 +21,8 @@ interface WarpTensorImageMultiTransformParameters {
     "reslice_by_header": boolean;
     "use_nearest_neighbor": boolean;
     "transforms": Array<string>;
+    "ants_prefix"?: string | null | undefined;
+    "ants_prefix_invert"?: string | null | undefined;
 }
 
 
@@ -84,6 +86,8 @@ function warp_tensor_image_multi_transform_params(
     tightest_bounding_box: boolean = false,
     reslice_by_header: boolean = false,
     use_nearest_neighbor: boolean = false,
+    ants_prefix: string | null = null,
+    ants_prefix_invert: string | null = null,
 ): WarpTensorImageMultiTransformParameters {
     /**
      * Build parameters.
@@ -96,6 +100,8 @@ function warp_tensor_image_multi_transform_params(
      * @param tightest_bounding_box Compute the tightest bounding box using all affine transformations.
      * @param reslice_by_header Use the orientation matrix and origin encoded in the image file header for reslicing.
      * @param use_nearest_neighbor Use Nearest Neighbor Interpolator for the transformation.
+     * @param ants_prefix Prefix for ANTS-generated deformation and affine transformation files.
+     * @param ants_prefix_invert Prefix for inverting ANTS-generated affine and deformation transformations.
     
      * @returns Parameter dictionary
      */
@@ -111,6 +117,12 @@ function warp_tensor_image_multi_transform_params(
     };
     if (reference_image !== null) {
         params["reference_image"] = reference_image;
+    }
+    if (ants_prefix !== null) {
+        params["ants_prefix"] = ants_prefix;
+    }
+    if (ants_prefix_invert !== null) {
+        params["ants_prefix_invert"] = ants_prefix_invert;
     }
     return params;
 }
@@ -129,7 +141,7 @@ function warp_tensor_image_multi_transform_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("WarpImageMultiTransform");
+    cargs.push("WarpTensorImageMultiTransform");
     cargs.push(String((params["image_dimension"] ?? null)));
     cargs.push(execution.inputFile((params["moving_image"] ?? null)));
     cargs.push((params["output_image"] ?? null));
@@ -149,6 +161,18 @@ function warp_tensor_image_multi_transform_cargs(
         cargs.push("--use-NN");
     }
     cargs.push(...(params["transforms"] ?? null));
+    if ((params["ants_prefix"] ?? null) !== null) {
+        cargs.push(
+            "--ANTS-prefix",
+            (params["ants_prefix"] ?? null)
+        );
+    }
+    if ((params["ants_prefix_invert"] ?? null) !== null) {
+        cargs.push(
+            "--ANTS-prefix-invert",
+            (params["ants_prefix_invert"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -178,7 +202,7 @@ function warp_tensor_image_multi_transform_execute(
     execution: Execution,
 ): WarpTensorImageMultiTransformOutputs {
     /**
-     * WarpImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
+     * WarpTensorImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
      * 
      * Author: ANTs Developers
      * 
@@ -206,10 +230,12 @@ function warp_tensor_image_multi_transform(
     tightest_bounding_box: boolean = false,
     reslice_by_header: boolean = false,
     use_nearest_neighbor: boolean = false,
+    ants_prefix: string | null = null,
+    ants_prefix_invert: string | null = null,
     runner: Runner | null = null,
 ): WarpTensorImageMultiTransformOutputs {
     /**
-     * WarpImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
+     * WarpTensorImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
      * 
      * Author: ANTs Developers
      * 
@@ -223,13 +249,15 @@ function warp_tensor_image_multi_transform(
      * @param tightest_bounding_box Compute the tightest bounding box using all affine transformations.
      * @param reslice_by_header Use the orientation matrix and origin encoded in the image file header for reslicing.
      * @param use_nearest_neighbor Use Nearest Neighbor Interpolator for the transformation.
+     * @param ants_prefix Prefix for ANTS-generated deformation and affine transformation files.
+     * @param ants_prefix_invert Prefix for inverting ANTS-generated affine and deformation transformations.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `WarpTensorImageMultiTransformOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA);
-    const params = warp_tensor_image_multi_transform_params(image_dimension, moving_image, output_image, transforms, reference_image, tightest_bounding_box, reslice_by_header, use_nearest_neighbor)
+    const params = warp_tensor_image_multi_transform_params(image_dimension, moving_image, output_image, transforms, reference_image, tightest_bounding_box, reslice_by_header, use_nearest_neighbor, ants_prefix, ants_prefix_invert)
     return warp_tensor_image_multi_transform_execute(params, execution);
 }
 

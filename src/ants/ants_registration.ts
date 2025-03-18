@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_REGISTRATION_METADATA: Metadata = {
-    id: "d1fb6c3d9e6d56e2bfee183ed29bef10a59da9d1.boutiques",
+    id: "c1ca233b97fb2c34e284eb1f804669cd3da9255a.boutiques",
     name: "antsRegistration",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -303,6 +303,7 @@ interface AntsRegistrationParameters {
     "minc"?: 0 | 1 | null | undefined;
     "random_seed"?: number | null | undefined;
     "verbose"?: 0 | 1 | null | undefined;
+    "float"?: 0 | 1 | null | undefined;
 }
 
 
@@ -1831,6 +1832,7 @@ function ants_registration_params(
     minc: 0 | 1 | null = null,
     random_seed: number | null = null,
     verbose: 0 | 1 | null = null,
+    float: 0 | 1 | null = null,
 ): AntsRegistrationParameters {
     /**
      * Build parameters.
@@ -1855,6 +1857,7 @@ Similarly, all adjacent displacement field transforms are combined when written 
      * @param minc Use MINC file formats for transformations.
      * @param random_seed Random seed.
      * @param verbose Verbose output.
+     * @param float Use 'float' instead of 'double' for computations.
     
      * @returns Parameter dictionary
      */
@@ -1915,6 +1918,9 @@ Similarly, all adjacent displacement field transforms are combined when written 
     }
     if (verbose !== null) {
         params["verbose"] = verbose;
+    }
+    if (float !== null) {
+        params["float"] = float;
     }
     return params;
 }
@@ -2043,6 +2049,12 @@ function ants_registration_cargs(
             String((params["verbose"] ?? null))
         );
     }
+    if ((params["float"] ?? null) !== null) {
+        cargs.push(
+            "--float",
+            String((params["float"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -2115,6 +2127,7 @@ function ants_registration(
     minc: 0 | 1 | null = null,
     random_seed: number | null = null,
     verbose: 0 | 1 | null = null,
+    float: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationOutputs {
     /**
@@ -2144,13 +2157,14 @@ Similarly, all adjacent displacement field transforms are combined when written 
      * @param minc Use MINC file formats for transformations.
      * @param random_seed Random seed.
      * @param verbose Verbose output.
+     * @param float Use 'float' instead of 'double' for computations.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_REGISTRATION_METADATA);
-    const params = ants_registration_params(stages, dimensionality, output, save_state, restore_state, write_composite_transform, print_similarity_measure_interval, write_interval_volumes, collapse_output_transforms, initialize_transforms_per_stage, interpolation, restrict_deformation, initial_fixed_transform, initial_moving_transform, winsorize_image_intensities, masks, minc, random_seed, verbose)
+    const params = ants_registration_params(stages, dimensionality, output, save_state, restore_state, write_composite_transform, print_similarity_measure_interval, write_interval_volumes, collapse_output_transforms, initialize_transforms_per_stage, interpolation, restrict_deformation, initial_fixed_transform, initial_moving_transform, winsorize_image_intensities, masks, minc, random_seed, verbose, float)
     return ants_registration_execute(params, execution);
 }
 

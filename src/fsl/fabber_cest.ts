@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_CEST_METADATA: Metadata = {
-    id: "02b8cdea1646edd376c3e6590fd5b1de7b4522ff.boutiques",
+    id: "f087da22b7afcc4cfc16f90fcc2adce684db0135.boutiques",
     name: "fabber_cest",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -13,6 +13,42 @@ const FABBER_CEST_METADATA: Metadata = {
 
 interface FabberCestParameters {
     "__STYXTYPE__": "fabber_cest";
+    "output": string;
+    "method": string;
+    "model": string;
+    "data": InputPathType;
+    "help": boolean;
+    "listmethods": boolean;
+    "listmodels": boolean;
+    "listparams": boolean;
+    "descparams": boolean;
+    "listoutputs": boolean;
+    "evaluate"?: string | null | undefined;
+    "evaluate_params"?: string | null | undefined;
+    "evaluate_nt"?: number | null | undefined;
+    "simple_output": boolean;
+    "overwrite": boolean;
+    "link_to_latest": boolean;
+    "loadmodels"?: InputPathType | null | undefined;
+    "data_multi"?: InputPathType | null | undefined;
+    "data_order"?: string | null | undefined;
+    "mask"?: InputPathType | null | undefined;
+    "masked_timepoints"?: number | null | undefined;
+    "suppdata"?: InputPathType | null | undefined;
+    "dump_param_names": boolean;
+    "save_model_fit": boolean;
+    "save_residuals": boolean;
+    "save_model_extras": boolean;
+    "save_mvn": boolean;
+    "save_mean": boolean;
+    "save_std": boolean;
+    "save_var": boolean;
+    "save_zstat": boolean;
+    "save_noise_mean": boolean;
+    "save_noise_std": boolean;
+    "save_free_energy": boolean;
+    "optfile"?: InputPathType | null | undefined;
+    "debug": boolean;
 }
 
 
@@ -112,15 +148,144 @@ interface FabberCestOutputs {
 
 
 function fabber_cest_params(
+    output: string,
+    method: string,
+    model: string,
+    data: InputPathType,
+    help: boolean = false,
+    listmethods: boolean = false,
+    listmodels: boolean = false,
+    listparams: boolean = false,
+    descparams: boolean = false,
+    listoutputs: boolean = false,
+    evaluate: string | null = null,
+    evaluate_params: string | null = null,
+    evaluate_nt: number | null = null,
+    simple_output: boolean = false,
+    overwrite: boolean = false,
+    link_to_latest: boolean = false,
+    loadmodels: InputPathType | null = null,
+    data_multi: InputPathType | null = null,
+    data_order: string | null = "interleave",
+    mask: InputPathType | null = null,
+    masked_timepoints: number | null = null,
+    suppdata: InputPathType | null = null,
+    dump_param_names: boolean = false,
+    save_model_fit: boolean = false,
+    save_residuals: boolean = false,
+    save_model_extras: boolean = false,
+    save_mvn: boolean = false,
+    save_mean: boolean = false,
+    save_std: boolean = false,
+    save_var: boolean = false,
+    save_zstat: boolean = false,
+    save_noise_mean: boolean = false,
+    save_noise_std: boolean = false,
+    save_free_energy: boolean = false,
+    optfile: InputPathType | null = null,
+    debug: boolean = false,
 ): FabberCestParameters {
     /**
      * Build parameters.
+    
+     * @param output Directory for output files
+     * @param method Inference method
+     * @param model Forward model
+     * @param data Input data file
+     * @param help Print usage help
+     * @param listmethods List all known inference methods
+     * @param listmodels List all known forward models
+     * @param listparams List model parameters
+     * @param descparams Describe model parameters
+     * @param listoutputs List additional model outputs
+     * @param evaluate Evaluate model and set to name of output required
+     * @param evaluate_params List of parameter values for evaluation
+     * @param evaluate_nt Number of time points for evaluation
+     * @param simple_output Simple output series of lines each giving progress as percentage
+     * @param overwrite Overwrite existing output
+     * @param link_to_latest Create a link to the most recent output directory with the prefix _latest
+     * @param loadmodels Load models dynamically from the specified filename
+     * @param data_multi Specify multiple data files (data<n>)
+     * @param data_order Handling of multiple data files (concatenate or interleave)
+     * @param mask Mask file. Inference performed where mask value > 0
+     * @param masked_timepoints List of masked time points to ignore (mt<n>)
+     * @param suppdata Supplemental timeseries data required for some models
+     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+     * @param save_model_fit Output the model prediction as a 4d volume
+     * @param save_residuals Output the residuals (difference between the data and the model prediction)
+     * @param save_model_extras Output additional model-specific timeseries data
+     * @param save_mvn Output the final MVN distributions.
+     * @param save_mean Output the parameter means.
+     * @param save_std Output the parameter standard deviations.
+     * @param save_var Output the parameter variances.
+     * @param save_zstat Output the parameter Zstats.
+     * @param save_noise_mean Output the noise means.
+     * @param save_noise_std Output the noise standard deviations.
+     * @param save_free_energy Output the free energy, if calculated.
+     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+     * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
     
      * @returns Parameter dictionary
      */
     const params = {
         "__STYXTYPE__": "fabber_cest" as const,
+        "output": output,
+        "method": method,
+        "model": model,
+        "data": data,
+        "help": help,
+        "listmethods": listmethods,
+        "listmodels": listmodels,
+        "listparams": listparams,
+        "descparams": descparams,
+        "listoutputs": listoutputs,
+        "simple_output": simple_output,
+        "overwrite": overwrite,
+        "link_to_latest": link_to_latest,
+        "dump_param_names": dump_param_names,
+        "save_model_fit": save_model_fit,
+        "save_residuals": save_residuals,
+        "save_model_extras": save_model_extras,
+        "save_mvn": save_mvn,
+        "save_mean": save_mean,
+        "save_std": save_std,
+        "save_var": save_var,
+        "save_zstat": save_zstat,
+        "save_noise_mean": save_noise_mean,
+        "save_noise_std": save_noise_std,
+        "save_free_energy": save_free_energy,
+        "debug": debug,
     };
+    if (evaluate !== null) {
+        params["evaluate"] = evaluate;
+    }
+    if (evaluate_params !== null) {
+        params["evaluate_params"] = evaluate_params;
+    }
+    if (evaluate_nt !== null) {
+        params["evaluate_nt"] = evaluate_nt;
+    }
+    if (loadmodels !== null) {
+        params["loadmodels"] = loadmodels;
+    }
+    if (data_multi !== null) {
+        params["data_multi"] = data_multi;
+    }
+    if (data_order !== null) {
+        params["data_order"] = data_order;
+    }
+    if (mask !== null) {
+        params["mask"] = mask;
+    }
+    if (masked_timepoints !== null) {
+        params["masked_timepoints"] = masked_timepoints;
+    }
+    if (suppdata !== null) {
+        params["suppdata"] = suppdata;
+    }
+    if (optfile !== null) {
+        params["optfile"] = optfile;
+    }
     return params;
 }
 
@@ -139,10 +304,148 @@ function fabber_cest_cargs(
      */
     const cargs: string[] = [];
     cargs.push("fabber_cest");
-    cargs.push("[--<option>");
-    cargs.push("|");
-    cargs.push("--<option>=<value>");
-    cargs.push("...]");
+    cargs.push(
+        "--output",
+        (params["output"] ?? null)
+    );
+    cargs.push(
+        "--method",
+        (params["method"] ?? null)
+    );
+    cargs.push(
+        "--model",
+        (params["model"] ?? null)
+    );
+    cargs.push(
+        "--data",
+        execution.inputFile((params["data"] ?? null))
+    );
+    if ((params["help"] ?? null)) {
+        cargs.push("--help");
+    }
+    if ((params["listmethods"] ?? null)) {
+        cargs.push("--listmethods");
+    }
+    if ((params["listmodels"] ?? null)) {
+        cargs.push("--listmodels");
+    }
+    if ((params["listparams"] ?? null)) {
+        cargs.push("--listparams");
+    }
+    if ((params["descparams"] ?? null)) {
+        cargs.push("--descparams");
+    }
+    if ((params["listoutputs"] ?? null)) {
+        cargs.push("--listoutputs");
+    }
+    if ((params["evaluate"] ?? null) !== null) {
+        cargs.push(
+            "--evaluate",
+            (params["evaluate"] ?? null)
+        );
+    }
+    if ((params["evaluate_params"] ?? null) !== null) {
+        cargs.push(
+            "--evaluate-params",
+            (params["evaluate_params"] ?? null)
+        );
+    }
+    if ((params["evaluate_nt"] ?? null) !== null) {
+        cargs.push(
+            "--evaluate-nt",
+            String((params["evaluate_nt"] ?? null))
+        );
+    }
+    if ((params["simple_output"] ?? null)) {
+        cargs.push("--simple-output");
+    }
+    if ((params["overwrite"] ?? null)) {
+        cargs.push("--overwrite");
+    }
+    if ((params["link_to_latest"] ?? null)) {
+        cargs.push("--link-to-latest");
+    }
+    if ((params["loadmodels"] ?? null) !== null) {
+        cargs.push(
+            "--loadmodels",
+            execution.inputFile((params["loadmodels"] ?? null))
+        );
+    }
+    if ((params["data_multi"] ?? null) !== null) {
+        cargs.push(
+            "--data",
+            execution.inputFile((params["data_multi"] ?? null))
+        );
+    }
+    if ((params["data_order"] ?? null) !== null) {
+        cargs.push(
+            "--data-order",
+            (params["data_order"] ?? null)
+        );
+    }
+    if ((params["mask"] ?? null) !== null) {
+        cargs.push(
+            "--mask",
+            execution.inputFile((params["mask"] ?? null))
+        );
+    }
+    if ((params["masked_timepoints"] ?? null) !== null) {
+        cargs.push(
+            "--mt",
+            String((params["masked_timepoints"] ?? null))
+        );
+    }
+    if ((params["suppdata"] ?? null) !== null) {
+        cargs.push(
+            "--suppdata",
+            execution.inputFile((params["suppdata"] ?? null))
+        );
+    }
+    if ((params["dump_param_names"] ?? null)) {
+        cargs.push("--dump-param-names");
+    }
+    if ((params["save_model_fit"] ?? null)) {
+        cargs.push("--save-model-fit");
+    }
+    if ((params["save_residuals"] ?? null)) {
+        cargs.push("--save-residuals");
+    }
+    if ((params["save_model_extras"] ?? null)) {
+        cargs.push("--save-model-extras");
+    }
+    if ((params["save_mvn"] ?? null)) {
+        cargs.push("--save-mvn");
+    }
+    if ((params["save_mean"] ?? null)) {
+        cargs.push("--save-mean");
+    }
+    if ((params["save_std"] ?? null)) {
+        cargs.push("--save-std");
+    }
+    if ((params["save_var"] ?? null)) {
+        cargs.push("--save-var");
+    }
+    if ((params["save_zstat"] ?? null)) {
+        cargs.push("--save-zstat");
+    }
+    if ((params["save_noise_mean"] ?? null)) {
+        cargs.push("--save-noise-mean");
+    }
+    if ((params["save_noise_std"] ?? null)) {
+        cargs.push("--save-noise-std");
+    }
+    if ((params["save_free_energy"] ?? null)) {
+        cargs.push("--save-free-energy");
+    }
+    if ((params["optfile"] ?? null) !== null) {
+        cargs.push(
+            "--optfile",
+            execution.inputFile((params["optfile"] ?? null))
+        );
+    }
+    if ((params["debug"] ?? null)) {
+        cargs.push("--debug");
+    }
     return cargs;
 }
 
@@ -161,18 +464,18 @@ function fabber_cest_outputs(
      */
     const ret: FabberCestOutputs = {
         root: execution.outputFile("."),
-        logfile: execution.outputFile(["[OUTPUT]/logfile.log"].join('')),
-        modelfit_out: execution.outputFile(["[OUTPUT]/model_fit.nii.gz"].join('')),
-        residuals_out: execution.outputFile(["[OUTPUT]/residuals.nii.gz"].join('')),
-        modelextras_out: execution.outputFile(["[OUTPUT]/model_extras.nii.gz"].join('')),
-        mvn_out: execution.outputFile(["[OUTPUT]/mvn.nii.gz"].join('')),
-        mean_out: execution.outputFile(["[OUTPUT]/mean.nii.gz"].join('')),
-        std_out: execution.outputFile(["[OUTPUT]/std.nii.gz"].join('')),
-        var_out: execution.outputFile(["[OUTPUT]/var.nii.gz"].join('')),
-        zstat_out: execution.outputFile(["[OUTPUT]/zstat.nii.gz"].join('')),
-        noise_mean_out: execution.outputFile(["[OUTPUT]/noise_mean.nii.gz"].join('')),
-        noise_std_out: execution.outputFile(["[OUTPUT]/noise_std.nii.gz"].join('')),
-        free_energy_out: execution.outputFile(["[OUTPUT]/free_energy.nii.gz"].join('')),
+        logfile: execution.outputFile([(params["output"] ?? null), "/logfile.log"].join('')),
+        modelfit_out: execution.outputFile([(params["output"] ?? null), "/model_fit.nii.gz"].join('')),
+        residuals_out: execution.outputFile([(params["output"] ?? null), "/residuals.nii.gz"].join('')),
+        modelextras_out: execution.outputFile([(params["output"] ?? null), "/model_extras.nii.gz"].join('')),
+        mvn_out: execution.outputFile([(params["output"] ?? null), "/mvn.nii.gz"].join('')),
+        mean_out: execution.outputFile([(params["output"] ?? null), "/mean.nii.gz"].join('')),
+        std_out: execution.outputFile([(params["output"] ?? null), "/std.nii.gz"].join('')),
+        var_out: execution.outputFile([(params["output"] ?? null), "/var.nii.gz"].join('')),
+        zstat_out: execution.outputFile([(params["output"] ?? null), "/zstat.nii.gz"].join('')),
+        noise_mean_out: execution.outputFile([(params["output"] ?? null), "/noise_mean.nii.gz"].join('')),
+        noise_std_out: execution.outputFile([(params["output"] ?? null), "/noise_std.nii.gz"].join('')),
+        free_energy_out: execution.outputFile([(params["output"] ?? null), "/free_energy.nii.gz"].join('')),
     };
     return ret;
 }
@@ -203,6 +506,42 @@ function fabber_cest_execute(
 
 
 function fabber_cest(
+    output: string,
+    method: string,
+    model: string,
+    data: InputPathType,
+    help: boolean = false,
+    listmethods: boolean = false,
+    listmodels: boolean = false,
+    listparams: boolean = false,
+    descparams: boolean = false,
+    listoutputs: boolean = false,
+    evaluate: string | null = null,
+    evaluate_params: string | null = null,
+    evaluate_nt: number | null = null,
+    simple_output: boolean = false,
+    overwrite: boolean = false,
+    link_to_latest: boolean = false,
+    loadmodels: InputPathType | null = null,
+    data_multi: InputPathType | null = null,
+    data_order: string | null = "interleave",
+    mask: InputPathType | null = null,
+    masked_timepoints: number | null = null,
+    suppdata: InputPathType | null = null,
+    dump_param_names: boolean = false,
+    save_model_fit: boolean = false,
+    save_residuals: boolean = false,
+    save_model_extras: boolean = false,
+    save_mvn: boolean = false,
+    save_mean: boolean = false,
+    save_std: boolean = false,
+    save_var: boolean = false,
+    save_zstat: boolean = false,
+    save_noise_mean: boolean = false,
+    save_noise_std: boolean = false,
+    save_free_energy: boolean = false,
+    optfile: InputPathType | null = null,
+    debug: boolean = false,
     runner: Runner | null = null,
 ): FabberCestOutputs {
     /**
@@ -212,13 +551,49 @@ function fabber_cest(
      * 
      * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
     
+     * @param output Directory for output files
+     * @param method Inference method
+     * @param model Forward model
+     * @param data Input data file
+     * @param help Print usage help
+     * @param listmethods List all known inference methods
+     * @param listmodels List all known forward models
+     * @param listparams List model parameters
+     * @param descparams Describe model parameters
+     * @param listoutputs List additional model outputs
+     * @param evaluate Evaluate model and set to name of output required
+     * @param evaluate_params List of parameter values for evaluation
+     * @param evaluate_nt Number of time points for evaluation
+     * @param simple_output Simple output series of lines each giving progress as percentage
+     * @param overwrite Overwrite existing output
+     * @param link_to_latest Create a link to the most recent output directory with the prefix _latest
+     * @param loadmodels Load models dynamically from the specified filename
+     * @param data_multi Specify multiple data files (data<n>)
+     * @param data_order Handling of multiple data files (concatenate or interleave)
+     * @param mask Mask file. Inference performed where mask value > 0
+     * @param masked_timepoints List of masked time points to ignore (mt<n>)
+     * @param suppdata Supplemental timeseries data required for some models
+     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+     * @param save_model_fit Output the model prediction as a 4d volume
+     * @param save_residuals Output the residuals (difference between the data and the model prediction)
+     * @param save_model_extras Output additional model-specific timeseries data
+     * @param save_mvn Output the final MVN distributions.
+     * @param save_mean Output the parameter means.
+     * @param save_std Output the parameter standard deviations.
+     * @param save_var Output the parameter variances.
+     * @param save_zstat Output the parameter Zstats.
+     * @param save_noise_mean Output the noise means.
+     * @param save_noise_std Output the noise standard deviations.
+     * @param save_free_energy Output the free energy, if calculated.
+     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+     * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FabberCestOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FABBER_CEST_METADATA);
-    const params = fabber_cest_params()
+    const params = fabber_cest_params(output, method, model, data, help, listmethods, listmodels, listparams, descparams, listoutputs, evaluate, evaluate_params, evaluate_nt, simple_output, overwrite, link_to_latest, loadmodels, data_multi, data_order, mask, masked_timepoints, suppdata, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, optfile, debug)
     return fabber_cest_execute(params, execution);
 }
 

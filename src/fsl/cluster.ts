@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CLUSTER_METADATA: Metadata = {
-    id: "f9c277296bff6829746b7b450932118c7250ea4d.boutiques",
+    id: "1e7115d5f39980c686e1006856f392affa404117.boutiques",
     name: "cluster",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -22,13 +22,21 @@ interface ClusterParameters {
     "minclustersize": boolean;
     "no_table": boolean;
     "num_maxima"?: number | null | undefined;
+    "out_index_file": boolean;
     "out_index_file_2"?: InputPathType | null | undefined;
+    "out_localmax_txt_file": boolean;
     "out_localmax_txt_file_2"?: InputPathType | null | undefined;
+    "out_localmax_vol_file": boolean;
     "out_localmax_vol_file_2"?: InputPathType | null | undefined;
+    "out_max_file": boolean;
     "out_max_file_2"?: InputPathType | null | undefined;
+    "out_mean_file": boolean;
     "out_mean_file_2"?: InputPathType | null | undefined;
+    "out_pval_file": boolean;
     "out_pval_file_2"?: InputPathType | null | undefined;
+    "out_size_file": boolean;
     "out_size_file_2"?: InputPathType | null | undefined;
+    "out_threshold_file": boolean;
     "out_threshold_file_2"?: InputPathType | null | undefined;
     "output_type"?: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null | undefined;
     "peak_distance"?: number | null | undefined;
@@ -132,13 +140,21 @@ function cluster_params(
     minclustersize: boolean = false,
     no_table: boolean = false,
     num_maxima: number | null = null,
+    out_index_file: boolean = false,
     out_index_file_2: InputPathType | null = null,
+    out_localmax_txt_file: boolean = false,
     out_localmax_txt_file_2: InputPathType | null = null,
+    out_localmax_vol_file: boolean = false,
     out_localmax_vol_file_2: InputPathType | null = null,
+    out_max_file: boolean = false,
     out_max_file_2: InputPathType | null = null,
+    out_mean_file: boolean = false,
     out_mean_file_2: InputPathType | null = null,
+    out_pval_file: boolean = false,
     out_pval_file_2: InputPathType | null = null,
+    out_size_file: boolean = false,
     out_size_file_2: InputPathType | null = null,
+    out_threshold_file: boolean = false,
     out_threshold_file_2: InputPathType | null = null,
     output_type: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null = null,
     peak_distance: number | null = null,
@@ -162,13 +178,21 @@ function cluster_params(
      * @param minclustersize Prints out minimum significant cluster size.
      * @param no_table Suppresses printing of the table info.
      * @param num_maxima No of local maxima to report.
+     * @param out_index_file A boolean or file. Output of cluster index (in size order).
      * @param out_index_file_2 A boolean or file. Output of cluster index (in size order).
+     * @param out_localmax_txt_file A boolean or file. Local maxima text file.
      * @param out_localmax_txt_file_2 A boolean or file. Local maxima text file.
+     * @param out_localmax_vol_file A boolean or file. Output of local maxima volume.
      * @param out_localmax_vol_file_2 A boolean or file. Output of local maxima volume.
+     * @param out_max_file A boolean or file. Filename for output of max image.
      * @param out_max_file_2 A boolean or file. Filename for output of max image.
+     * @param out_mean_file A boolean or file. Filename for output of mean image.
      * @param out_mean_file_2 A boolean or file. Filename for output of mean image.
+     * @param out_pval_file A boolean or file. Filename for image output of log pvals.
      * @param out_pval_file_2 A boolean or file. Filename for image output of log pvals.
+     * @param out_size_file A boolean or file. Filename for output of size image.
      * @param out_size_file_2 A boolean or file. Filename for output of size image.
+     * @param out_threshold_file A boolean or file. Thresholded image.
      * @param out_threshold_file_2 A boolean or file. Thresholded image.
      * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
      * @param peak_distance Minimum distance between local maxima/minima, in mm (default 0).
@@ -188,6 +212,14 @@ function cluster_params(
         "in_file": in_file,
         "minclustersize": minclustersize,
         "no_table": no_table,
+        "out_index_file": out_index_file,
+        "out_localmax_txt_file": out_localmax_txt_file,
+        "out_localmax_vol_file": out_localmax_vol_file,
+        "out_max_file": out_max_file,
+        "out_mean_file": out_mean_file,
+        "out_pval_file": out_pval_file,
+        "out_size_file": out_size_file,
+        "out_threshold_file": out_threshold_file,
         "threshold": threshold,
         "use_mm": use_mm,
     };
@@ -291,26 +323,50 @@ function cluster_cargs(
     if ((params["num_maxima"] ?? null) !== null) {
         cargs.push(["--num=", String((params["num_maxima"] ?? null))].join(''));
     }
+    if ((params["out_index_file"] ?? null)) {
+        cargs.push("--oindex");
+    }
     if ((params["out_index_file_2"] ?? null) !== null) {
         cargs.push(["--oindex=", execution.inputFile((params["out_index_file_2"] ?? null))].join(''));
+    }
+    if ((params["out_localmax_txt_file"] ?? null)) {
+        cargs.push("--olmax");
     }
     if ((params["out_localmax_txt_file_2"] ?? null) !== null) {
         cargs.push(["--olmax=", execution.inputFile((params["out_localmax_txt_file_2"] ?? null))].join(''));
     }
+    if ((params["out_localmax_vol_file"] ?? null)) {
+        cargs.push("--olmaxim");
+    }
     if ((params["out_localmax_vol_file_2"] ?? null) !== null) {
         cargs.push(["--olmaxim=", execution.inputFile((params["out_localmax_vol_file_2"] ?? null))].join(''));
+    }
+    if ((params["out_max_file"] ?? null)) {
+        cargs.push("--omax");
     }
     if ((params["out_max_file_2"] ?? null) !== null) {
         cargs.push(["--omax=", execution.inputFile((params["out_max_file_2"] ?? null))].join(''));
     }
+    if ((params["out_mean_file"] ?? null)) {
+        cargs.push("--omean");
+    }
     if ((params["out_mean_file_2"] ?? null) !== null) {
         cargs.push(["--omean=", execution.inputFile((params["out_mean_file_2"] ?? null))].join(''));
+    }
+    if ((params["out_pval_file"] ?? null)) {
+        cargs.push("--opvals");
     }
     if ((params["out_pval_file_2"] ?? null) !== null) {
         cargs.push(["--opvals=", execution.inputFile((params["out_pval_file_2"] ?? null))].join(''));
     }
+    if ((params["out_size_file"] ?? null)) {
+        cargs.push("--osize");
+    }
     if ((params["out_size_file_2"] ?? null) !== null) {
         cargs.push(["--osize=", execution.inputFile((params["out_size_file_2"] ?? null))].join(''));
+    }
+    if ((params["out_threshold_file"] ?? null)) {
+        cargs.push("--othresh");
     }
     if ((params["out_threshold_file_2"] ?? null) !== null) {
         cargs.push(["--othresh=", execution.inputFile((params["out_threshold_file_2"] ?? null))].join(''));
@@ -406,13 +462,21 @@ function cluster(
     minclustersize: boolean = false,
     no_table: boolean = false,
     num_maxima: number | null = null,
+    out_index_file: boolean = false,
     out_index_file_2: InputPathType | null = null,
+    out_localmax_txt_file: boolean = false,
     out_localmax_txt_file_2: InputPathType | null = null,
+    out_localmax_vol_file: boolean = false,
     out_localmax_vol_file_2: InputPathType | null = null,
+    out_max_file: boolean = false,
     out_max_file_2: InputPathType | null = null,
+    out_mean_file: boolean = false,
     out_mean_file_2: InputPathType | null = null,
+    out_pval_file: boolean = false,
     out_pval_file_2: InputPathType | null = null,
+    out_size_file: boolean = false,
     out_size_file_2: InputPathType | null = null,
+    out_threshold_file: boolean = false,
     out_threshold_file_2: InputPathType | null = null,
     output_type: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null = null,
     peak_distance: number | null = null,
@@ -441,13 +505,21 @@ function cluster(
      * @param minclustersize Prints out minimum significant cluster size.
      * @param no_table Suppresses printing of the table info.
      * @param num_maxima No of local maxima to report.
+     * @param out_index_file A boolean or file. Output of cluster index (in size order).
      * @param out_index_file_2 A boolean or file. Output of cluster index (in size order).
+     * @param out_localmax_txt_file A boolean or file. Local maxima text file.
      * @param out_localmax_txt_file_2 A boolean or file. Local maxima text file.
+     * @param out_localmax_vol_file A boolean or file. Output of local maxima volume.
      * @param out_localmax_vol_file_2 A boolean or file. Output of local maxima volume.
+     * @param out_max_file A boolean or file. Filename for output of max image.
      * @param out_max_file_2 A boolean or file. Filename for output of max image.
+     * @param out_mean_file A boolean or file. Filename for output of mean image.
      * @param out_mean_file_2 A boolean or file. Filename for output of mean image.
+     * @param out_pval_file A boolean or file. Filename for image output of log pvals.
      * @param out_pval_file_2 A boolean or file. Filename for image output of log pvals.
+     * @param out_size_file A boolean or file. Filename for output of size image.
      * @param out_size_file_2 A boolean or file. Filename for output of size image.
+     * @param out_threshold_file A boolean or file. Thresholded image.
      * @param out_threshold_file_2 A boolean or file. Thresholded image.
      * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
      * @param peak_distance Minimum distance between local maxima/minima, in mm (default 0).
@@ -463,7 +535,7 @@ function cluster(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CLUSTER_METADATA);
-    const params = cluster_params(in_file, threshold, connectivity, cope_file, dlh, find_min, fractional, minclustersize, no_table, num_maxima, out_index_file_2, out_localmax_txt_file_2, out_localmax_vol_file_2, out_max_file_2, out_mean_file_2, out_pval_file_2, out_size_file_2, out_threshold_file_2, output_type, peak_distance, pthreshold, std_space_file, use_mm, volume, warpfield_file, xfm_file)
+    const params = cluster_params(in_file, threshold, connectivity, cope_file, dlh, find_min, fractional, minclustersize, no_table, num_maxima, out_index_file, out_index_file_2, out_localmax_txt_file, out_localmax_txt_file_2, out_localmax_vol_file, out_localmax_vol_file_2, out_max_file, out_max_file_2, out_mean_file, out_mean_file_2, out_pval_file, out_pval_file_2, out_size_file, out_size_file_2, out_threshold_file, out_threshold_file_2, output_type, peak_distance, pthreshold, std_space_file, use_mm, volume, warpfield_file, xfm_file)
     return cluster_execute(params, execution);
 }
 

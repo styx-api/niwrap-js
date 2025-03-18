@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NEW_INVWARP_METADATA: Metadata = {
-    id: "c1339243d2b878297e61fc1b6693396e5c46a980.boutiques",
+    id: "baad182c7d3c52eb0aab700505218877c6e9ad97.boutiques",
     name: "new_invwarp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -139,7 +139,7 @@ function new_invwarp_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("invwarp");
+    cargs.push("new_invwarp");
     cargs.push(
         "-w",
         execution.inputFile((params["warpvol"] ?? null))

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_MOTION_CORR_STATS_METADATA: Metadata = {
-    id: "ae93cc3983b8309bee22c105a3b82c9e97354cf5.boutiques",
+    id: "95237c56a3652c4b5bd1f2cf0cee57d368f1c618.boutiques",
     name: "antsMotionCorrStats",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -20,6 +20,7 @@ interface AntsMotionCorrStatsParameters {
     "framewise"?: 0 | 1 | null | undefined;
     "spatial_map": boolean;
     "timeseries_displacement": boolean;
+    "help"?: 0 | 1 | null | undefined;
 }
 
 
@@ -82,6 +83,7 @@ function ants_motion_corr_stats_params(
     framewise: 0 | 1 | null = null,
     spatial_map: boolean = false,
     timeseries_displacement: boolean = false,
+    help: 0 | 1 | null = null,
 ): AntsMotionCorrStatsParameters {
     /**
      * Build parameters.
@@ -93,6 +95,7 @@ function ants_motion_corr_stats_params(
      * @param framewise Do framewise summary stats.
      * @param spatial_map Output image of displacement magnitude.
      * @param timeseries_displacement Output 4d time-series image of displacement magnitude.
+     * @param help Print the help menu. Short version with -h.
     
      * @returns Parameter dictionary
      */
@@ -109,6 +112,9 @@ function ants_motion_corr_stats_params(
     }
     if (framewise !== null) {
         params["framewise"] = framewise;
+    }
+    if (help !== null) {
+        params["help"] = help;
     }
     return params;
 }
@@ -157,6 +163,12 @@ function ants_motion_corr_stats_cargs(
     }
     if ((params["timeseries_displacement"] ?? null)) {
         cargs.push("-d");
+    }
+    if ((params["help"] ?? null) !== null) {
+        cargs.push(
+            "--help",
+            String((params["help"] ?? null))
+        );
     }
     return cargs;
 }
@@ -214,6 +226,7 @@ function ants_motion_corr_stats(
     framewise: 0 | 1 | null = null,
     spatial_map: boolean = false,
     timeseries_displacement: boolean = false,
+    help: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsMotionCorrStatsOutputs {
     /**
@@ -230,13 +243,14 @@ function ants_motion_corr_stats(
      * @param framewise Do framewise summary stats.
      * @param spatial_map Output image of displacement magnitude.
      * @param timeseries_displacement Output 4d time-series image of displacement magnitude.
+     * @param help Print the help menu. Short version with -h.
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `AntsMotionCorrStatsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_MOTION_CORR_STATS_METADATA);
-    const params = ants_motion_corr_stats_params(mask, moco_params, output, transform_index, framewise, spatial_map, timeseries_displacement)
+    const params = ants_motion_corr_stats_params(mask, moco_params, output, transform_index, framewise, spatial_map, timeseries_displacement, help)
     return ants_motion_corr_stats_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MULTIPLY_IMAGES_METADATA: Metadata = {
-    id: "3421bb6ea5f44c4d4eb0d2dd002f4de6f489cf86.boutiques",
+    id: "931cc9c455d8f28ee0d20f1ab002cb39fdc3ac7e.boutiques",
     name: "MultiplyImages",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -15,6 +15,7 @@ interface MultiplyImagesParameters {
     "__STYXTYPE__": "MultiplyImages";
     "dimension": 3 | 2;
     "first_input": InputPathType;
+    "second_input"?: InputPathType | null | undefined;
     "second_input_2"?: number | null | undefined;
     "output_product_image": string;
     "num_threads"?: number | null | undefined;
@@ -76,6 +77,7 @@ function multiply_images_params(
     dimension: 3 | 2,
     first_input: InputPathType,
     output_product_image: string,
+    second_input: InputPathType | null = null,
     second_input_2: number | null = null,
     num_threads: number | null = 1,
 ): MultiplyImagesParameters {
@@ -85,6 +87,7 @@ function multiply_images_params(
      * @param dimension 3 or 2. Image dimension (2 or 3).
      * @param first_input Image 1.
      * @param output_product_image Outputfname.nii.gz: the name of the resulting image.
+     * @param second_input file or string or a float. Image 2 or multiplication weight.
      * @param second_input_2 file or string or a float. Image 2 or multiplication weight.
      * @param num_threads Number of itk threads to use.
     
@@ -96,6 +99,9 @@ function multiply_images_params(
         "first_input": first_input,
         "output_product_image": output_product_image,
     };
+    if (second_input !== null) {
+        params["second_input"] = second_input;
+    }
     if (second_input_2 !== null) {
         params["second_input_2"] = second_input_2;
     }
@@ -122,6 +128,9 @@ function multiply_images_cargs(
     cargs.push("MultiplyImages");
     cargs.push(String((params["dimension"] ?? null)));
     cargs.push(execution.inputFile((params["first_input"] ?? null)));
+    if ((params["second_input"] ?? null) !== null) {
+        cargs.push(execution.inputFile((params["second_input"] ?? null)));
+    }
     if ((params["second_input_2"] ?? null) !== null) {
         cargs.push(String((params["second_input_2"] ?? null)));
     }
@@ -181,6 +190,7 @@ function multiply_images(
     dimension: 3 | 2,
     first_input: InputPathType,
     output_product_image: string,
+    second_input: InputPathType | null = null,
     second_input_2: number | null = null,
     num_threads: number | null = 1,
     runner: Runner | null = null,
@@ -195,6 +205,7 @@ function multiply_images(
      * @param dimension 3 or 2. Image dimension (2 or 3).
      * @param first_input Image 1.
      * @param output_product_image Outputfname.nii.gz: the name of the resulting image.
+     * @param second_input file or string or a float. Image 2 or multiplication weight.
      * @param second_input_2 file or string or a float. Image 2 or multiplication weight.
      * @param num_threads Number of itk threads to use.
      * @param runner Command runner
@@ -203,7 +214,7 @@ function multiply_images(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MULTIPLY_IMAGES_METADATA);
-    const params = multiply_images_params(dimension, first_input, output_product_image, second_input_2, num_threads)
+    const params = multiply_images_params(dimension, first_input, output_product_image, second_input, second_input_2, num_threads)
     return multiply_images_execute(params, execution);
 }
 

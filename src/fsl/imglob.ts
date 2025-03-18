@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMGLOB_METADATA: Metadata = {
-    id: "048af28afaecb36fea36a9848ee9d39cc57bafae.boutiques",
+    id: "13226e4faf802dbc2dd125edec75341de4a9155a.boutiques",
     name: "imglob",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -15,6 +15,7 @@ interface ImglobParameters {
     "__STYXTYPE__": "imglob";
     "multiple_extensions": boolean;
     "input_list": Array<string>;
+    "single_extension": boolean;
 }
 
 
@@ -67,12 +68,14 @@ interface ImglobOutputs {
 function imglob_params(
     input_list: Array<string>,
     multiple_extensions: boolean = false,
+    single_extension: boolean = false,
 ): ImglobParameters {
     /**
      * Build parameters.
     
      * @param input_list List of image names or file paths
      * @param multiple_extensions Output list of images with full extensions
+     * @param single_extension Output one image with full extension
     
      * @returns Parameter dictionary
      */
@@ -80,6 +83,7 @@ function imglob_params(
         "__STYXTYPE__": "imglob" as const,
         "multiple_extensions": multiple_extensions,
         "input_list": input_list,
+        "single_extension": single_extension,
     };
     return params;
 }
@@ -103,6 +107,9 @@ function imglob_cargs(
         cargs.push("-extensions");
     }
     cargs.push(...(params["input_list"] ?? null));
+    if ((params["single_extension"] ?? null)) {
+        cargs.push("-extension");
+    }
     return cargs;
 }
 
@@ -153,6 +160,7 @@ function imglob_execute(
 function imglob(
     input_list: Array<string>,
     multiple_extensions: boolean = false,
+    single_extension: boolean = false,
     runner: Runner | null = null,
 ): ImglobOutputs {
     /**
@@ -164,13 +172,14 @@ function imglob(
     
      * @param input_list List of image names or file paths
      * @param multiple_extensions Output list of images with full extensions
+     * @param single_extension Output one image with full extension
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `ImglobOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMGLOB_METADATA);
-    const params = imglob_params(input_list, multiple_extensions)
+    const params = imglob_params(input_list, multiple_extensions, single_extension)
     return imglob_execute(params, execution);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TCALC_METADATA: Metadata = {
-    id: "f811e9be21119eee4df1778a355c771fb0361c10.boutiques",
+    id: "b1adb0f4d7622a781a341b06937114ebf216a6a2.boutiques",
     name: "tcalc",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -182,16 +182,8 @@ function tcalc_cargs(
      */
     const cargs: string[] = [];
     cargs.push("tcalc");
-    cargs.push("-i");
-    cargs.push(
-        "--input",
-        execution.inputFile((params["input_image"] ?? null))
-    );
-    cargs.push("-o");
-    cargs.push(
-        "--output",
-        (params["output_image"] ?? null)
-    );
+    cargs.push(["--input=", execution.inputFile((params["input_image"] ?? null))].join(''));
+    cargs.push(["--output=", (params["output_image"] ?? null)].join(''));
     if ((params["echo_time"] ?? null) !== null) {
         cargs.push(
             "--te",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FTOZ_METADATA: Metadata = {
-    id: "c8ceafb840b836488700378bae545b8864c0a58c.boutiques",
+    id: "718b41cdb8c184566bcb56e5205ff75364795c69.boutiques",
     name: "ftoz",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -17,6 +17,7 @@ interface FtozParameters {
     "dof1": number;
     "dof2": number;
     "output_file"?: string | null | undefined;
+    "help_flag": boolean;
 }
 
 
@@ -76,6 +77,7 @@ function ftoz_params(
     dof1: number,
     dof2: number,
     output_file: string | null = "zstats",
+    help_flag: boolean = false,
 ): FtozParameters {
     /**
      * Build parameters.
@@ -84,6 +86,7 @@ function ftoz_params(
      * @param dof1 Degrees of freedom 1 for F-to-Z conversion
      * @param dof2 Degrees of freedom 2 for F-to-Z conversion
      * @param output_file Output file for Z-scores
+     * @param help_flag Display this help and exit
     
      * @returns Parameter dictionary
      */
@@ -92,6 +95,7 @@ function ftoz_params(
         "input_file": input_file,
         "dof1": dof1,
         "dof2": dof2,
+        "help_flag": help_flag,
     };
     if (output_file !== null) {
         params["output_file"] = output_file;
@@ -122,6 +126,9 @@ function ftoz_cargs(
             "-zout",
             (params["output_file"] ?? null)
         );
+    }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-help");
     }
     return cargs;
 }
@@ -176,6 +183,7 @@ function ftoz(
     dof1: number,
     dof2: number,
     output_file: string | null = "zstats",
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): FtozOutputs {
     /**
@@ -189,13 +197,14 @@ function ftoz(
      * @param dof1 Degrees of freedom 1 for F-to-Z conversion
      * @param dof2 Degrees of freedom 2 for F-to-Z conversion
      * @param output_file Output file for Z-scores
+     * @param help_flag Display this help and exit
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FtozOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FTOZ_METADATA);
-    const params = ftoz_params(input_file, dof1, dof2, output_file)
+    const params = ftoz_params(input_file, dof1, dof2, output_file, help_flag)
     return ftoz_execute(params, execution);
 }
 

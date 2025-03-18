@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MEAN_METADATA: Metadata = {
-    id: "d608ce9fea57e85bfbfc19ea1af870315c233573.boutiques",
+    id: "0639551c0a3c274393d386e803ea40a7f4203aa0.boutiques",
     name: "mean",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -31,6 +31,7 @@ interface MeanParameters {
     "noamp_flag": boolean;
     "prior_mean"?: number | null | undefined;
     "prior_std"?: number | null | undefined;
+    "help_flag": boolean;
 }
 
 
@@ -104,6 +105,7 @@ function mean_params(
     noamp_flag: boolean = false,
     prior_mean: number | null = null,
     prior_std: number | null = null,
+    help_flag: boolean = false,
 ): MeanParameters {
     /**
      * Build parameters.
@@ -126,6 +128,7 @@ function mean_params(
      * @param noamp_flag Turn off Analytical Marginalisation of error Precision
      * @param prior_mean Prior mean
      * @param prior_std Prior standard deviation
+     * @param help_flag Display help message
     
      * @returns Parameter dictionary
      */
@@ -137,6 +140,7 @@ function mean_params(
         "timing_flag": timing_flag,
         "forcedir_flag": forcedir_flag,
         "noamp_flag": noamp_flag,
+        "help_flag": help_flag,
     };
     if (debug_level !== null) {
         params["debug_level"] = debug_level;
@@ -284,6 +288,9 @@ function mean_cargs(
             String((params["prior_std"] ?? null))
         );
     }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
+    }
     return cargs;
 }
 
@@ -351,6 +358,7 @@ function mean(
     noamp_flag: boolean = false,
     prior_mean: number | null = null,
     prior_std: number | null = null,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): MeanOutputs {
     /**
@@ -378,13 +386,14 @@ function mean(
      * @param noamp_flag Turn off Analytical Marginalisation of error Precision
      * @param prior_mean Prior mean
      * @param prior_std Prior standard deviation
+     * @param help_flag Display help message
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `MeanOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MEAN_METADATA);
-    const params = mean_params(datafile, maskfile, verbose_flag, debug_level, timing_flag, log_dir, forcedir_flag, inference_tech, num_jumps, num_burnin, num_sample_every, num_update_proposalevery, acceptance_rate, seed, error_precision, noamp_flag, prior_mean, prior_std)
+    const params = mean_params(datafile, maskfile, verbose_flag, debug_level, timing_flag, log_dir, forcedir_flag, inference_tech, num_jumps, num_burnin, num_sample_every, num_update_proposalevery, acceptance_rate, seed, error_precision, noamp_flag, prior_mean, prior_std, help_flag)
     return mean_execute(params, execution);
 }
 

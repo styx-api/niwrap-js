@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const EDDY_METADATA: Metadata = {
-    id: "f596387c4a1472024a7a466d87ce6613e3f73908.boutiques",
-    name: "eddy",
+const EDDY_CUDA_METADATA: Metadata = {
+    id: "45284d42f0e0300e452adeb4b90339fdf92db1f7.boutiques",
+    name: "eddy_cuda",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
 };
 
 
-interface EddyParameters {
-    "__STYXTYPE__": "eddy";
+interface EddyCudaParameters {
+    "__STYXTYPE__": "eddy_cuda";
     "imain": InputPathType;
     "mask": InputPathType;
     "index": InputPathType;
@@ -71,7 +71,7 @@ function dynCargs(
      * @returns Build cargs function.
      */
     const cargsFuncs = {
-        "eddy": eddy_cargs,
+        "eddy_cuda": eddy_cuda_cargs,
     };
     return cargsFuncs[t];
 }
@@ -88,18 +88,18 @@ function dynOutputs(
      * @returns Build outputs function.
      */
     const outputsFuncs = {
-        "eddy": eddy_outputs,
+        "eddy_cuda": eddy_cuda_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `eddy(...)`.
+ * Output object returned when calling `eddy_cuda(...)`.
  *
  * @interface
  */
-interface EddyOutputs {
+interface EddyCudaOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -183,7 +183,7 @@ interface EddyOutputs {
 }
 
 
-function eddy_params(
+function eddy_cuda_params(
     imain: InputPathType,
     mask: InputPathType,
     index: InputPathType,
@@ -228,7 +228,7 @@ function eddy_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyParameters {
+): EddyCudaParameters {
     /**
      * Build parameters.
     
@@ -280,7 +280,7 @@ function eddy_params(
      * @returns Parameter dictionary
      */
     const params = {
-        "__STYXTYPE__": "eddy" as const,
+        "__STYXTYPE__": "eddy_cuda" as const,
         "imain": imain,
         "mask": mask,
         "index": index,
@@ -382,8 +382,8 @@ function eddy_params(
 }
 
 
-function eddy_cargs(
-    params: EddyParameters,
+function eddy_cuda_cargs(
+    params: EddyCudaParameters,
     execution: Execution,
 ): string[] {
     /**
@@ -395,7 +395,7 @@ function eddy_cargs(
      * @returns Command-line arguments.
      */
     const cargs: string[] = [];
-    cargs.push("eddy");
+    cargs.push("eddy_cuda");
     cargs.push(["--imain=", execution.inputFile((params["imain"] ?? null))].join(''));
     cargs.push(["--mask=", execution.inputFile((params["mask"] ?? null))].join(''));
     cargs.push(["--index=", execution.inputFile((params["index"] ?? null))].join(''));
@@ -518,10 +518,10 @@ function eddy_cargs(
 }
 
 
-function eddy_outputs(
-    params: EddyParameters,
+function eddy_cuda_outputs(
+    params: EddyCudaParameters,
     execution: Execution,
-): EddyOutputs {
+): EddyCudaOutputs {
     /**
      * Build outputs object containing output file paths and possibly stdout/stderr.
     
@@ -530,7 +530,7 @@ function eddy_outputs(
     
      * @returns Outputs object.
      */
-    const ret: EddyOutputs = {
+    const ret: EddyCudaOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null), ".nii.gz"].join('')),
         eddy_parameters: execution.outputFile([(params["out"] ?? null), ".eddy_parameters"].join('')),
@@ -556,10 +556,10 @@ function eddy_outputs(
 }
 
 
-function eddy_execute(
-    params: EddyParameters,
+function eddy_cuda_execute(
+    params: EddyCudaParameters,
     execution: Execution,
-): EddyOutputs {
+): EddyCudaOutputs {
     /**
      * A tool for correcting eddy currents and movements in diffusion data.
      * 
@@ -570,17 +570,17 @@ function eddy_execute(
      * @param params The parameters.
      * @param execution The execution object.
     
-     * @returns NamedTuple of outputs (described in `EddyOutputs`).
+     * @returns NamedTuple of outputs (described in `EddyCudaOutputs`).
      */
     params = execution.params(params)
-    const cargs = eddy_cargs(params, execution)
-    const ret = eddy_outputs(params, execution)
+    const cargs = eddy_cuda_cargs(params, execution)
+    const ret = eddy_cuda_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
-function eddy(
+function eddy_cuda(
     imain: InputPathType,
     mask: InputPathType,
     index: InputPathType,
@@ -626,7 +626,7 @@ function eddy(
     data_is_shelled: boolean = false,
     verbose: boolean = false,
     runner: Runner | null = null,
-): EddyOutputs {
+): EddyCudaOutputs {
     /**
      * A tool for correcting eddy currents and movements in diffusion data.
      * 
@@ -680,19 +680,19 @@ function eddy(
      * @param verbose switch on diagnostic messages
      * @param runner Command runner
     
-     * @returns NamedTuple of outputs (described in `EddyOutputs`).
+     * @returns NamedTuple of outputs (described in `EddyCudaOutputs`).
      */
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_METADATA);
-    const params = eddy_params(imain, mask, index, acqp, bvecs, bvals, out, mb, mb_offs, slspec, json, mporder, s2v_lambda, topup, field, field_mat, flm, slm, fwhm, niter, s2v_niter, cnr_maps, residuals, fep, interp, s2v_interp, resamp, nvoxhp, initrand, ff, repol, ol_nstd, ol_nvox, ol_type, ol_pos, ol_sqr, estimate_move_by_susceptibility, mbs_niter, mbs_lambda, mbs_ksp, dont_sep_offs_move, dont_peas, data_is_shelled, verbose)
-    return eddy_execute(params, execution);
+    const execution = runner.startExecution(EDDY_CUDA_METADATA);
+    const params = eddy_cuda_params(imain, mask, index, acqp, bvecs, bvals, out, mb, mb_offs, slspec, json, mporder, s2v_lambda, topup, field, field_mat, flm, slm, fwhm, niter, s2v_niter, cnr_maps, residuals, fep, interp, s2v_interp, resamp, nvoxhp, initrand, ff, repol, ol_nstd, ol_nvox, ol_type, ol_pos, ol_sqr, estimate_move_by_susceptibility, mbs_niter, mbs_lambda, mbs_ksp, dont_sep_offs_move, dont_peas, data_is_shelled, verbose)
+    return eddy_cuda_execute(params, execution);
 }
 
 
 export {
-      EDDY_METADATA,
-      EddyOutputs,
-      EddyParameters,
-      eddy,
-      eddy_params,
+      EDDY_CUDA_METADATA,
+      EddyCudaOutputs,
+      EddyCudaParameters,
+      eddy_cuda,
+      eddy_cuda_params,
 };

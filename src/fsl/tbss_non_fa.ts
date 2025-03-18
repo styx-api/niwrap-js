@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TBSS_NON_FA_METADATA: Metadata = {
-    id: "3450c5b3e221d9141579102c53fd40ca4340b74c.boutiques",
+    id: "e257b6d7924e892a20a9b9f3fc46e1f93d157da7.boutiques",
     name: "tbss_non_FA",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -16,6 +16,10 @@ interface TbssNonFaParameters {
     "concat_auto": boolean;
     "output_file": string;
     "input_files": Array<InputPathType>;
+    "concat_x": boolean;
+    "concat_y": boolean;
+    "concat_z": boolean;
+    "concat_t": boolean;
     "concat_tr"?: number | null | undefined;
     "volume_number"?: number | null | undefined;
 }
@@ -76,6 +80,10 @@ function tbss_non_fa_params(
     output_file: string,
     input_files: Array<InputPathType>,
     concat_auto: boolean = false,
+    concat_x: boolean = false,
+    concat_y: boolean = false,
+    concat_z: boolean = false,
+    concat_t: boolean = false,
     concat_tr: number | null = 0,
     volume_number: number | null = null,
 ): TbssNonFaParameters {
@@ -85,6 +93,10 @@ function tbss_non_fa_params(
      * @param output_file Output file for merged images.
      * @param input_files Images to concatenate.
      * @param concat_auto Auto-choose: single slices -> volume, volumes -> 4D (time series).
+     * @param concat_x Concatenate images in the x direction.
+     * @param concat_y Concatenate images in the y direction.
+     * @param concat_z Concatenate images in the z direction.
+     * @param concat_t Concatenate images in time.
      * @param concat_tr Concatenate images in time and set the output image TR (repetition time) to the final option value.
      * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1).
     
@@ -95,6 +107,10 @@ function tbss_non_fa_params(
         "concat_auto": concat_auto,
         "output_file": output_file,
         "input_files": input_files,
+        "concat_x": concat_x,
+        "concat_y": concat_y,
+        "concat_z": concat_z,
+        "concat_t": concat_t,
     };
     if (concat_tr !== null) {
         params["concat_tr"] = concat_tr;
@@ -125,6 +141,18 @@ function tbss_non_fa_cargs(
     }
     cargs.push((params["output_file"] ?? null));
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
+    if ((params["concat_x"] ?? null)) {
+        cargs.push("-x");
+    }
+    if ((params["concat_y"] ?? null)) {
+        cargs.push("-y");
+    }
+    if ((params["concat_z"] ?? null)) {
+        cargs.push("-z");
+    }
+    if ((params["concat_t"] ?? null)) {
+        cargs.push("-t");
+    }
     if ((params["concat_tr"] ?? null) !== null) {
         cargs.push(
             "-tr",
@@ -189,6 +217,10 @@ function tbss_non_fa(
     output_file: string,
     input_files: Array<InputPathType>,
     concat_auto: boolean = false,
+    concat_x: boolean = false,
+    concat_y: boolean = false,
+    concat_z: boolean = false,
+    concat_t: boolean = false,
     concat_tr: number | null = 0,
     volume_number: number | null = null,
     runner: Runner | null = null,
@@ -203,6 +235,10 @@ function tbss_non_fa(
      * @param output_file Output file for merged images.
      * @param input_files Images to concatenate.
      * @param concat_auto Auto-choose: single slices -> volume, volumes -> 4D (time series).
+     * @param concat_x Concatenate images in the x direction.
+     * @param concat_y Concatenate images in the y direction.
+     * @param concat_z Concatenate images in the z direction.
+     * @param concat_t Concatenate images in time.
      * @param concat_tr Concatenate images in time and set the output image TR (repetition time) to the final option value.
      * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1).
      * @param runner Command runner
@@ -211,7 +247,7 @@ function tbss_non_fa(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_NON_FA_METADATA);
-    const params = tbss_non_fa_params(output_file, input_files, concat_auto, concat_tr, volume_number)
+    const params = tbss_non_fa_params(output_file, input_files, concat_auto, concat_x, concat_y, concat_z, concat_t, concat_tr, volume_number)
     return tbss_non_fa_execute(params, execution);
 }
 

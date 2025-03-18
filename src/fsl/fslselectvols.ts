@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLSELECTVOLS_METADATA: Metadata = {
-    id: "dabd98132f6e29e1943e7c9b7d70ac37b409a5b6.boutiques",
+    id: "b97f2d0f36344dd886c04ca097a1839d519105c0.boutiques",
     name: "fslselectvols",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -18,6 +18,7 @@ interface FslselectvolsParameters {
     "vols_list": string;
     "output_mean_flag": boolean;
     "output_variance_flag": boolean;
+    "help_flag": boolean;
 }
 
 
@@ -78,6 +79,7 @@ function fslselectvols_params(
     vols_list: string,
     output_mean_flag: boolean = false,
     output_variance_flag: boolean = false,
+    help_flag: boolean = false,
 ): FslselectvolsParameters {
     /**
      * Build parameters.
@@ -87,6 +89,7 @@ function fslselectvols_params(
      * @param vols_list List of volumes to extract (comma-separated list or ascii file)
      * @param output_mean_flag Output mean instead of concatenation
      * @param output_variance_flag Output variance instead of concatenation
+     * @param help_flag Display help text
     
      * @returns Parameter dictionary
      */
@@ -97,6 +100,7 @@ function fslselectvols_params(
         "vols_list": vols_list,
         "output_mean_flag": output_mean_flag,
         "output_variance_flag": output_variance_flag,
+        "help_flag": help_flag,
     };
     return params;
 }
@@ -133,6 +137,9 @@ function fslselectvols_cargs(
     }
     if ((params["output_variance_flag"] ?? null)) {
         cargs.push("-v");
+    }
+    if ((params["help_flag"] ?? null)) {
+        cargs.push("-h");
     }
     return cargs;
 }
@@ -188,6 +195,7 @@ function fslselectvols(
     vols_list: string,
     output_mean_flag: boolean = false,
     output_variance_flag: boolean = false,
+    help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslselectvolsOutputs {
     /**
@@ -202,13 +210,14 @@ function fslselectvols(
      * @param vols_list List of volumes to extract (comma-separated list or ascii file)
      * @param output_mean_flag Output mean instead of concatenation
      * @param output_variance_flag Output variance instead of concatenation
+     * @param help_flag Display help text
      * @param runner Command runner
     
      * @returns NamedTuple of outputs (described in `FslselectvolsOutputs`).
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSELECTVOLS_METADATA);
-    const params = fslselectvols_params(input_file, output_file, vols_list, output_mean_flag, output_variance_flag)
+    const params = fslselectvols_params(input_file, output_file, vols_list, output_mean_flag, output_variance_flag, help_flag)
     return fslselectvols_execute(params, execution);
 }
 

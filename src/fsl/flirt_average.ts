@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FLIRT_AVERAGE_METADATA: Metadata = {
-    id: "0cc7b938efcdc9cb9d1e15e1453b173b6ccc4af1.boutiques",
+    id: "0a2146e58cdab9fa8a4c7f343edcb6c51001fec8.boutiques",
     name: "flirt_average",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -16,6 +16,7 @@ interface FlirtAverageParameters {
     "ninputs": number;
     "input1": InputPathType;
     "input2": InputPathType;
+    "input3"?: InputPathType | null | undefined;
     "output_file": string;
     "reference_image"?: InputPathType | null | undefined;
     "flirt_options"?: string | null | undefined;
@@ -78,6 +79,7 @@ function flirt_average_params(
     input1: InputPathType,
     input2: InputPathType,
     output_file: string,
+    input3: InputPathType | null = null,
     reference_image: InputPathType | null = null,
     flirt_options: string | null = null,
 ): FlirtAverageParameters {
@@ -88,6 +90,7 @@ function flirt_average_params(
      * @param input1 First input image (e.g. rawT1_1.nii.gz)
      * @param input2 Second input image (e.g. rawT1_2.nii.gz)
      * @param output_file Output image (e.g. averageT1.nii.gz)
+     * @param input3 Third input image (e.g. rawT1_3.nii.gz)
      * @param reference_image Reference image to use instead of first input
      * @param flirt_options Options to be passed to FLIRT
     
@@ -100,6 +103,9 @@ function flirt_average_params(
         "input2": input2,
         "output_file": output_file,
     };
+    if (input3 !== null) {
+        params["input3"] = input3;
+    }
     if (reference_image !== null) {
         params["reference_image"] = reference_image;
     }
@@ -127,7 +133,9 @@ function flirt_average_cargs(
     cargs.push(String((params["ninputs"] ?? null)));
     cargs.push(execution.inputFile((params["input1"] ?? null)));
     cargs.push(execution.inputFile((params["input2"] ?? null)));
-    cargs.push("...");
+    if ((params["input3"] ?? null) !== null) {
+        cargs.push(execution.inputFile((params["input3"] ?? null)));
+    }
     cargs.push((params["output_file"] ?? null));
     if ((params["reference_image"] ?? null) !== null) {
         cargs.push(
@@ -191,6 +199,7 @@ function flirt_average(
     input1: InputPathType,
     input2: InputPathType,
     output_file: string,
+    input3: InputPathType | null = null,
     reference_image: InputPathType | null = null,
     flirt_options: string | null = null,
     runner: Runner | null = null,
@@ -206,6 +215,7 @@ function flirt_average(
      * @param input1 First input image (e.g. rawT1_1.nii.gz)
      * @param input2 Second input image (e.g. rawT1_2.nii.gz)
      * @param output_file Output image (e.g. averageT1.nii.gz)
+     * @param input3 Third input image (e.g. rawT1_3.nii.gz)
      * @param reference_image Reference image to use instead of first input
      * @param flirt_options Options to be passed to FLIRT
      * @param runner Command runner
@@ -214,7 +224,7 @@ function flirt_average(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FLIRT_AVERAGE_METADATA);
-    const params = flirt_average_params(ninputs, input1, input2, output_file, reference_image, flirt_options)
+    const params = flirt_average_params(ninputs, input1, input2, output_file, input3, reference_image, flirt_options)
     return flirt_average_execute(params, execution);
 }
 
