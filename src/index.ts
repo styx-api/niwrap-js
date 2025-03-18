@@ -11,4 +11,4 @@ export * as freesurfer from './freesurfer'
 export * as greedy from './greedy'
 export * as dcm2niix from './dcm2niix'
 export * from 'styxdefs'
-export const version = '0.5.1';
+export const version = '0.5.2';
