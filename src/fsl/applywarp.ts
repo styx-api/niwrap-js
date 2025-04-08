@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APPLYWARP_METADATA: Metadata = {
-    id: "f3b271ea5183294815af803d4556178f89f73b26.boutiques",
+    id: "357528f20f7db4478fa8e8b36bb6508ff658e4cd.boutiques",
     name: "applywarp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -25,7 +25,6 @@ interface ApplywarpParameters {
     "output_type"?: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null | undefined;
     "postmat"?: InputPathType | null | undefined;
     "premat"?: InputPathType | null | undefined;
-    "ref_file_1": InputPathType;
     "superlevel"?: "a" | null | undefined;
     "superlevel_2"?: number | null | undefined;
     "supersample": boolean;
@@ -86,7 +85,6 @@ interface ApplywarpOutputs {
 function applywarp_params(
     in_file: InputPathType,
     ref_file: InputPathType,
-    ref_file_1: InputPathType,
     interp: "nn" | "trilinear" | "sinc" | "spline" | null = null,
     out_file: string | null = null,
     relwarp: boolean = false,
@@ -106,7 +104,6 @@ function applywarp_params(
     
      * @param in_file Image to be warped.
      * @param ref_file Reference image.
-     * @param ref_file_1 Reference image.
      * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
      * @param out_file Output filename.
      * @param relwarp Treat warp field as relative: x' = x + w(x).
@@ -129,7 +126,6 @@ function applywarp_params(
         "ref_file": ref_file,
         "relwarp": relwarp,
         "abswarp": abswarp,
-        "ref_file_1": ref_file_1,
         "supersample": supersample,
     };
     if (interp !== null) {
@@ -212,7 +208,6 @@ function applywarp_cargs(
     if ((params["premat"] ?? null) !== null) {
         cargs.push(["--premat=", execution.inputFile((params["premat"] ?? null))].join(''));
     }
-    cargs.push(["--ref=", execution.inputFile((params["ref_file_1"] ?? null))].join(''));
     if ((params["superlevel"] ?? null) !== null) {
         cargs.push(["--superlevel=", (params["superlevel"] ?? null)].join(''));
     }
@@ -273,7 +268,6 @@ function applywarp_execute(
 function applywarp(
     in_file: InputPathType,
     ref_file: InputPathType,
-    ref_file_1: InputPathType,
     interp: "nn" | "trilinear" | "sinc" | "spline" | null = null,
     out_file: string | null = null,
     relwarp: boolean = false,
@@ -298,7 +292,6 @@ function applywarp(
     
      * @param in_file Image to be warped.
      * @param ref_file Reference image.
-     * @param ref_file_1 Reference image.
      * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
      * @param out_file Output filename.
      * @param relwarp Treat warp field as relative: x' = x + w(x).
@@ -318,7 +311,7 @@ function applywarp(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APPLYWARP_METADATA);
-    const params = applywarp_params(in_file, ref_file, ref_file_1, interp, out_file, relwarp, abswarp, datatype, field_file, mask_file, output_type, postmat, premat, superlevel, superlevel_2, supersample)
+    const params = applywarp_params(in_file, ref_file, interp, out_file, relwarp, abswarp, datatype, field_file, mask_file, output_type, postmat, premat, superlevel, superlevel_2, supersample)
     return applywarp_execute(params, execution);
 }
 
