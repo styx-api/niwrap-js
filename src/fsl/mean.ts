@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MEAN_METADATA: Metadata = {
-    id: "44e283f88b5efda8ac7038b190c99d03d9e841ef.boutiques",
+    id: "7eac454fc3cb226f50808ed6cb3f9258cac0417e.boutiques",
     name: "mean",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

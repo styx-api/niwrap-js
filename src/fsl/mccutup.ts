@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MCCUTUP_METADATA: Metadata = {
-    id: "c97d920f890b2c2d376d19fa82699a8efbbf2c3d.boutiques",
+    id: "0f68e863495d6d4c5b17f7f5ba43e003d866fab3.boutiques",
     name: "mccutup",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

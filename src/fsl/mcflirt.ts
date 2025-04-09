@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MCFLIRT_METADATA: Metadata = {
-    id: "b042797f3b245be7f01eb11a8323bf8237ce49ed.boutiques",
+    id: "1091e69bcf11c445597aea81550c90105968bc6e.boutiques",
     name: "mcflirt",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

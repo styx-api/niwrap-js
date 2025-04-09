@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_MERGE_METADATA: Metadata = {
-    id: "fbe63f7b5e3b77570e7d9cde28008810880adb1f.boutiques",
+    id: "59466d755606ff946abb15ca7506a7d3307f8537.boutiques",
     name: "volume-merge",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_GRADIENT_METADATA: Metadata = {
-    id: "34d6cbaae570a549339db43167fdacebe4d11ea6.boutiques",
+    id: "f39faf9e44389b76874a4aaef665f54cb7870989.boutiques",
     name: "cifti-gradient",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

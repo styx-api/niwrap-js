@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SWAP_SUBJECTWISE_METADATA: Metadata = {
-    id: "5af24925494f3011f02c35b796b9bf8904045912.boutiques",
+    id: "281cd4302b7a84b291d077861717f5646ab39a05.boutiques",
     name: "swap_subjectwise",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

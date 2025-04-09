@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NIFTI_INFORMATION_METADATA: Metadata = {
-    id: "f18273727f1089286fed88bbc0ea49f639dfd663.boutiques",
+    id: "164861e14f5c635c3703cb28b05b47e358566048.boutiques",
     name: "nifti-information",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

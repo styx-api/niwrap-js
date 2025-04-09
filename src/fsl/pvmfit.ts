@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PVMFIT_METADATA: Metadata = {
-    id: "8f17260c2322f37f5ada0cb78b6804021a6ac096.boutiques",
+    id: "2f5feeff275440050d46f82516af1c525bc61659.boutiques",
     name: "pvmfit",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

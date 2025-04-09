@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_MERGE_METADATA: Metadata = {
-    id: "0f7ab24784e93710e411ba2f4f47b302c4635fae.boutiques",
+    id: "4d282f9c70868b6c676ce722c7cf68c4b8aa1f6f.boutiques",
     name: "cifti-merge",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA: Metadata = {
-    id: "e28b7723dc233ae33bddb7baaceb4212b4fd873b.boutiques",
+    id: "abdabbace9026c54a8d4304b491e29eb70af1964.boutiques",
     name: "convert-matrix4-to-workbench-sparse",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

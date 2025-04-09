@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NIFTI_TOOL_METADATA: Metadata = {
-    id: "1c9551305c9497ae602f58fe16bc6cf4a4324dbd.boutiques",
+    id: "9789f342be7ffa2a9b170901d7f6938dde505424.boutiques",
     name: "nifti_tool",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

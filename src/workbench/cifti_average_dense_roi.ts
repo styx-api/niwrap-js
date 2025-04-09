@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_AVERAGE_DENSE_ROI_METADATA: Metadata = {
-    id: "b11e7aa7ea73b8fff513450302305f98a2932e29.boutiques",
+    id: "a3a3489578afe38ad8d6af6590591c8111e1864d.boutiques",
     name: "cifti-average-dense-roi",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_FUNCVITS_METADATA: Metadata = {
-    id: "6c587fcd20a5508967c6e2405c370dc7a9cfffae.boutiques",
+    id: "c31b3fea785150e0e49672d8b3bcc550b5d3bfdb.boutiques",
     name: "mri-funcvits",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -81,7 +81,7 @@ function mri_funcvits_params(
     paintsurf: string | null = "white",
     sphere: string | null = "sphere",
     icosize: number | null = 10242,
-    hemi: Array<string> | null = ["lh", "rh"],
+    hemi: Array<string> | null = null,
     svitdir: string | null = null,
     icodir: string | null = "/usr/local/freesurfer/lib/bem",
     umask: string | null = null,
@@ -276,7 +276,7 @@ function mri_funcvits(
     paintsurf: string | null = "white",
     sphere: string | null = "sphere",
     icosize: number | null = 10242,
-    hemi: Array<string> | null = ["lh", "rh"],
+    hemi: Array<string> | null = null,
     svitdir: string | null = null,
     icodir: string | null = "/usr/local/freesurfer/lib/bem",
     umask: string | null = null,

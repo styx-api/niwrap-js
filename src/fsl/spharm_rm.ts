@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPHARM_RM_METADATA: Metadata = {
-    id: "6d381e2779f347ba4886c9cd3e115a3644a29554.boutiques",
+    id: "6ce0bd30a351d4dd85bdf4a897450c1e3b5bac37.boutiques",
     name: "spharm_rm",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

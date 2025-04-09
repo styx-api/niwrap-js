@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_BLUR_TO_FWHM_METADATA: Metadata = {
-    id: "d4b8a6dd00325e64cbed6094bf69f7741990577d.boutiques",
+    id: "e3c0c223285ad52e0076e3b433c4e9372a9374b3.boutiques",
     name: "3dBlurToFWHM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SLICETIMER_METADATA: Metadata = {
-    id: "e93c4d33edc754a32221f044da8294f16c8db13a.boutiques",
+    id: "4c58bd416c438fc3d8b3664e317bd8eaaa5287b6.boutiques",
     name: "slicetimer",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

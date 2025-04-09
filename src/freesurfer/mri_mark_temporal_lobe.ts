@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_MARK_TEMPORAL_LOBE_METADATA: Metadata = {
-    id: "b5d5eff097e1f9621f01642626cc977e81ed2be7.boutiques",
+    id: "75e6e60a85ce6a2bfb0234747d1412e2709192d8.boutiques",
     name: "mri_mark_temporal_lobe",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

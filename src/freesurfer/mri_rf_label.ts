@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_RF_LABEL_METADATA: Metadata = {
-    id: "f6a8f74bc20598512ca39566372ca9777024a7f0.boutiques",
+    id: "b3bf0dd7970ddab056fc6331f77e7af692ba0c3a.boutiques",
     name: "mri_rf_label",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -144,7 +144,7 @@ function mri_rf_label_params(
     mask: InputPathType | null = null,
     expand: number | null = null,
     max_iter: number | null = 200,
-    filter_mode: Array<number> | null = [0, 0.5],
+    filter_mode: Array<number> | null = null,
     longitudinal_vol: InputPathType | null = null,
     longitudinal_lta: InputPathType | null = null,
     relabel_unlikely_flag: Array<number> | null = null,
@@ -590,7 +590,7 @@ function mri_rf_label(
     mask: InputPathType | null = null,
     expand: number | null = null,
     max_iter: number | null = 200,
-    filter_mode: Array<number> | null = [0, 0.5],
+    filter_mode: Array<number> | null = null,
     longitudinal_vol: InputPathType | null = null,
     longitudinal_lta: InputPathType | null = null,
     relabel_unlikely_flag: Array<number> | null = null,

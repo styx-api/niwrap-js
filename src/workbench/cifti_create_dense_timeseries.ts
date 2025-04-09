@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_CREATE_DENSE_TIMESERIES_METADATA: Metadata = {
-    id: "cdcb5235c0276d9a64c680f90f6510d67bb9abf5.boutiques",
+    id: "cda17688630bad9be0d1cf4cb8aac8005b0fc14f.boutiques",
     name: "cifti-create-dense-timeseries",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

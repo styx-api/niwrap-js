@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const OXFORD_ASL_METADATA: Metadata = {
-    id: "bdbf1ed97eaa86bb7fae170ece4a5bc7b7b7a7f8.boutiques",
+    id: "8194742c3b2dbb22df251463ae2d8e61be1ce31d.boutiques",
     name: "oxford_asl",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

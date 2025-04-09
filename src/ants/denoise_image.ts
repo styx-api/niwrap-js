@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DENOISE_IMAGE_METADATA: Metadata = {
-    id: "496721817248c92b0a7f0b2d8b992d1de838f093.boutiques",
+    id: "c724dafafc43426f15d57c46a1fd25866000d279.boutiques",
     name: "DenoiseImage",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

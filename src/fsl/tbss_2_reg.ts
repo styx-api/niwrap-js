@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TBSS_2_REG_METADATA: Metadata = {
-    id: "fb321939c1a47682f2208eab2ffd76697d39780c.boutiques",
+    id: "63ea8f1a13e407ea5d4763480fbad687bcda887c.boutiques",
     name: "tbss_2_reg",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

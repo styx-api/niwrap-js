@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_GRADIENT_METADATA: Metadata = {
-    id: "85f351e3141115988d9b7b85ecb3220ac59a6a7a.boutiques",
+    id: "b2e05ab6596432670887376c65ab980a6d39579c.boutiques",
     name: "volume-gradient",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

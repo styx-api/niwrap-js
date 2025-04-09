@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_MERGE_METADATA: Metadata = {
-    id: "31ddeff6d6f42baa89002d874f1cd7a6567c1272.boutiques",
+    id: "25db567ed08ac7ab90f2cdc9e83034d38278f198.boutiques",
     name: "metric-merge",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

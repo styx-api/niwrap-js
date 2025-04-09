@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CBLUMWMGYRI_METADATA: Metadata = {
-    id: "d70c321ffd2178f712d23c18fb8f191f7a1abfa4.boutiques",
+    id: "564e3588afc9810c3dc5013f2e056c14a2f92213.boutiques",
     name: "cblumwmgyri",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
