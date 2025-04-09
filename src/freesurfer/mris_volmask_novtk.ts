@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_VOLMASK_NOVTK_METADATA: Metadata = {
-    id: "cbd19c74730136999fd3325b2d680e2b4bbb3842.boutiques",
+    id: "4e1cb80a05cb3eaf1f94144ef1674e45ce0528db.boutiques",
     name: "mris_volmask_novtk",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

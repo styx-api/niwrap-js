@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MNI152REG_METADATA: Metadata = {
-    id: "8fa95f49688c26996caeccdd18ef44b1edc62d55.boutiques",
+    id: "dfc37620e722a922c216aae5f87bf785a7f52f00.boutiques",
     name: "mni152reg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_ANNOT_TO_SEGMENTATION_METADATA: Metadata = {
-    id: "a6fe77811c128028277a69a99f1e7f945cb0ac57.boutiques",
+    id: "f2187529fdf57449595cf8d2c0a0b2fc7b737908.boutiques",
     name: "mris_annot_to_segmentation",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIXELFILTER_METADATA: Metadata = {
-    id: "de612300fec8260dbe9407acf8595be232354182.boutiques",
+    id: "7740c3daac540db34d0b5cf2ca567029c3529f83.boutiques",
     name: "fixelfilter",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

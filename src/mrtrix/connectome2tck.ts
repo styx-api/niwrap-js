@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONNECTOME2TCK_METADATA: Metadata = {
-    id: "68591f4f9a13309e07f97bb4a65436101f61042f.boutiques",
+    id: "32504798f4152f6e8b935fbdd10c1918fca1272d.boutiques",
     name: "connectome2tck",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

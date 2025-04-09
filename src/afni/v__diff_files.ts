@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__DIFF_FILES_METADATA: Metadata = {
-    id: "edd2d42b0097cf74079def4a47b5ad005afd8f78.boutiques",
+    id: "b2c90d856d96607ae349b21ec8912aa4efbe8df2.boutiques",
     name: "@diff.files",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const UBER_SKEL_METADATA: Metadata = {
-    id: "d77a80fc9ecd09ed285b440328c53e4f45eb7735.boutiques",
+    id: "9c8b94aec9b6f8e9660a86aa775db219d44ebe60.boutiques",
     name: "uber_skel",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

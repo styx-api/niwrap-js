@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BETA2SXA_METADATA: Metadata = {
-    id: "715f661699d8a42e26b57d5896f55ec5edf8d5d2.boutiques",
+    id: "f0f822c3fdfc6946f2efbf9d1eba0fc23f0154a3.boutiques",
     name: "beta2sxa",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DTIGEN_METADATA: Metadata = {
-    id: "1693c829ac7f8ececf6dc63605144e179c65163b.boutiques",
+    id: "b88f7720edb3ed0059b4378a820521655958200f.boutiques",
     name: "dtigen",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

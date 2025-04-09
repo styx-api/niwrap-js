@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DIRSPLIT_METADATA: Metadata = {
-    id: "d82959d6cce8aae6cb5eceb8d9601a41289f41a7.boutiques",
+    id: "6e37b12fbc3f04f176653870efe5897fa98a5daf.boutiques",
     name: "dirsplit",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

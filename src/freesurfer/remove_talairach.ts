@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const REMOVE_TALAIRACH_METADATA: Metadata = {
-    id: "4b227d57c6cc0632758ead5783a3cd254592158b.boutiques",
+    id: "6d87145fdad666778dcc144dffa61059a2addded.boutiques",
     name: "remove_talairach",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

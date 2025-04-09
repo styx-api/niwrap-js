@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_VOLDIFF_METADATA: Metadata = {
-    id: "049ba42a8da17fa9e060b046adb2f02031ce75c5.boutiques",
+    id: "5e429d73c117af7455959c3d9b5dd01c1cc12dae.boutiques",
     name: "mri_voldiff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

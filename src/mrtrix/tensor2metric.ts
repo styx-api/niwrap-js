@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TENSOR2METRIC_METADATA: Metadata = {
-    id: "ce3b6c1eb5966c84af85ddfef969868689c115fb.boutiques",
+    id: "fee96ebf896c02832ff2ab23a9d2e2132129e3d5.boutiques",
     name: "tensor2metric",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

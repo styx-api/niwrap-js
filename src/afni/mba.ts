@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MBA_METADATA: Metadata = {
-    id: "eb3770a45e9a9a1d951dda7cc20331a2afd73cf7.boutiques",
+    id: "f8f6f30c2f9a76d32aa2209cf855c9214666a8bc.boutiques",
     name: "MBA",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

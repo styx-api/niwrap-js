@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__DEMO_PROMPT_METADATA: Metadata = {
-    id: "28759d07ed8faa73243bb8713758a156bb9ca999.boutiques",
+    id: "c4b5e7f34c3a5cb4cd23d570b2079024d2ba5ad5.boutiques",
     name: "@demo_prompt",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

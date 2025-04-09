@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MMPPSP_METADATA: Metadata = {
-    id: "f81f47b918a5f8423b269d5eccc58eb98d9d2e6f.boutiques",
+    id: "ed33242168bcb8e40435e7c590174310c28760c1.boutiques",
     name: "mmppsp",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

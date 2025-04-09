@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_MODIFY_KEYS_METADATA: Metadata = {
-    id: "ce46240e03c08d651d4c811741f57d7c7aeebe60.boutiques",
+    id: "cab3ece5d50cc33b1189c25e7cfbf0c9d18feae9.boutiques",
     name: "label-modify-keys",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

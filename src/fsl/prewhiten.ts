@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PREWHITEN_METADATA: Metadata = {
-    id: "7908b2674351c8eda706fea6c142d2b26d298d0f.boutiques",
+    id: "7d74c352b87a4e7f429a1c4ad6a51155b986a8c2.boutiques",
     name: "prewhiten",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SHOW_DYNAMIC_RANGE_METADATA: Metadata = {
-    id: "d0ec3925ed417e46aad2070bdc6ba2ddd1248eca.boutiques",
+    id: "79a18236c270604039c67089fe05e4d75deeff40.boutiques",
     name: "@ShowDynamicRange",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

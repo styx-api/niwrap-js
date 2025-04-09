@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TFIM_METADATA: Metadata = {
-    id: "e112b845a4c25dd82a06881f7a7a51dae6274c19.boutiques",
+    id: "38e322eb579d3ffa906fe84891ae928a1b57f743.boutiques",
     name: "tfim",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

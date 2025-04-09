@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TAGALIGN_METADATA: Metadata = {
-    id: "72f062732ebd3946f6103ba90212bf73566a6b67.boutiques",
+    id: "475b53c4b6432ecad79b017ae32826c765d7c00c.boutiques",
     name: "3dTagalign",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

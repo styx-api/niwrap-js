@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FVCOMPARE_METADATA: Metadata = {
-    id: "34ef4943d85118cb4252e43061bab2f274dff0b4.boutiques",
+    id: "a1051daa28d455cf970ddfd61d853128a3adffe9.boutiques",
     name: "fvcompare",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

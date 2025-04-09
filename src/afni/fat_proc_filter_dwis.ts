@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_PROC_FILTER_DWIS_METADATA: Metadata = {
-    id: "f1ab079defa2b7a6a0437c119ce099f8d81cc812.boutiques",
+    id: "3def8805da69fa90cfe590bc1ca23a15f6d16d00.boutiques",
     name: "fat_proc_filter_dwis",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

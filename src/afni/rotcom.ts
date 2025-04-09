@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ROTCOM_METADATA: Metadata = {
-    id: "65366e1283781ddcf84d07b0c61d20c1cdbf07ba.boutiques",
+    id: "fd59ff87f6727df1beafdf436f19aba6a53a3cea.boutiques",
     name: "rotcom",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__EXAMINE_GEN_FEAT_DISTS_METADATA: Metadata = {
-    id: "60ac2c94312fce85a0d90163607df55149e2869d.boutiques",
+    id: "4760e5b0736b09b09bbfea2061b56fd6ac5a0f99.boutiques",
     name: "@ExamineGenFeatDists",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

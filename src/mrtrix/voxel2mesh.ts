@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOXEL2MESH_METADATA: Metadata = {
-    id: "61319a325faead4ced930defcbdd82b99a6a72af.boutiques",
+    id: "f74c43ba4b3142a027e629205b8aad59f7f8a496.boutiques",
     name: "voxel2mesh",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

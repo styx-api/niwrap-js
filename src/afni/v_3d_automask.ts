@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_AUTOMASK_METADATA: Metadata = {
-    id: "82a07079691dfc6d4da9b82882274fb3db4cb678.boutiques",
+    id: "f992ca4762a529ed69e904d3e63a20615001f364.boutiques",
     name: "3dAutomask",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

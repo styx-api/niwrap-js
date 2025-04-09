@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSREAD_ANNOT_METADATA: Metadata = {
-    id: "791089bdafa5aacda0d88f6366afe5d004fd749e.boutiques",
+    id: "119c7f16e85967567c34d369d4ee5cf158ea2364.boutiques",
     name: "FSread_annot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

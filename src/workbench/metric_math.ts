@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_MATH_METADATA: Metadata = {
-    id: "528e08f2f90f7ba1a4d53826cb32fb490e132602.boutiques",
+    id: "f0bbfd4ceccc2831b6191d98df5239e9eb4bf766.boutiques",
     name: "metric-math",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

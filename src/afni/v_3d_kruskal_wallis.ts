@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_KRUSKAL_WALLIS_METADATA: Metadata = {
-    id: "d8f52138ea0ac2f25d27a21c1fd03e57b216b428.boutiques",
+    id: "317079b0dac4061070175eb508c808dec48b1852.boutiques",
     name: "3dKruskalWallis",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

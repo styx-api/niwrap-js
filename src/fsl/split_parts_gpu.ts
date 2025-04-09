@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPLIT_PARTS_GPU_METADATA: Metadata = {
-    id: "d04fb1d28332d7da5a41bbc4ec0da2b3260458cf.boutiques",
+    id: "bda890fb23c36ebbcf15c9ff09e5ac7bff39d458.boutiques",
     name: "split_parts_gpu",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FILM_CIFTI_METADATA: Metadata = {
-    id: "7e2504e3ecb6cdf617162ea7e2b85cf9bf443541.boutiques",
+    id: "5f6fb11fedf9a9f15e724807d8d7ff9bb2a45c2b.boutiques",
     name: "film_cifti",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

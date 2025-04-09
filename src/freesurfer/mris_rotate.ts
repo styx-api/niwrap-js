@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_ROTATE_METADATA: Metadata = {
-    id: "ef8f8112c666b20f57f67d98677ecae66ab493de.boutiques",
+    id: "d9c070a5b188c09d84fb30d4647745da84c963b5.boutiques",
     name: "mris_rotate",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMCUTUP_METADATA: Metadata = {
-    id: "f7a6e708513c2d65a4c90feab343a1b3f974642a.boutiques",
+    id: "b1adabd616594192ac521f6cca28633dc2132145.boutiques",
     name: "imcutup",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRINFO_METADATA: Metadata = {
-    id: "640aec1bccae29356c89f4af6bea995bd8e6eee5.boutiques",
+    id: "5dc17d2a1d5fe47e79268addf324166471b53837.boutiques",
     name: "mrinfo",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

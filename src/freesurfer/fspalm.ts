@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSPALM_METADATA: Metadata = {
-    id: "99a4d5403d2183af602919ad014d4db78cf3675b.boutiques",
+    id: "6423174c0a141ab40ff807e3980bfa4f3ce57b18.boutiques",
     name: "fspalm",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

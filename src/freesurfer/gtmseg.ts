@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GTMSEG_METADATA: Metadata = {
-    id: "29e1c1370e446a18137bbf4e9561c7972ac57725.boutiques",
+    id: "4ab9659e70272d979f39dad258eeff58c22157fc.boutiques",
     name: "gtmseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

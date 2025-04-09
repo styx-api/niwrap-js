@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_REMOVE_VARIANCE_METADATA: Metadata = {
-    id: "179ff3984d2be9f6ba0b11909b268c8560dc15ee.boutiques",
+    id: "f725b8052ca4cdae9b81c460bf2279cdcc7e582b.boutiques",
     name: "mris_remove_variance",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CP_DICOM_METADATA: Metadata = {
-    id: "e87057efacb16ed69de0523e99719b16d1c3fb64.boutiques",
+    id: "a3b5658a53886c2046aff8ddfa60c01956982a5b.boutiques",
     name: "cp-dicom",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

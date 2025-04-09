@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FILMBABE_METADATA: Metadata = {
-    id: "57497a3df137ad65e449ad945725f730e5c1ee04.boutiques",
+    id: "9d19a94bce86df5f0f0c8bb8dc1b561471f41504.boutiques",
     name: "filmbabe",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

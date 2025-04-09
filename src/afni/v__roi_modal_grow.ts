@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__ROI_MODAL_GROW_METADATA: Metadata = {
-    id: "d33815ad6bfc8ff7ac694bacf23eb5bed10577bf.boutiques",
+    id: "569ed3bfade748be8a4eae1d8812ba05b410fe8f.boutiques",
     name: "@ROI_modal_grow",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

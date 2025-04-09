@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_SPACE_TIME_CORR_METADATA: Metadata = {
-    id: "8dd159ea37a52b08625a393a1f0450d03271fcfd.boutiques",
+    id: "02283e56a615340b7f56f781bc42f0718ddae8af.boutiques",
     name: "3dSpaceTimeCorr",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

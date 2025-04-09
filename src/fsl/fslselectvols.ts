@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLSELECTVOLS_METADATA: Metadata = {
-    id: "b97f2d0f36344dd886c04ca097a1839d519105c0.boutiques",
+    id: "3851b87d000f13b8596f3b7395c673cd4e806921.boutiques",
     name: "fslselectvols",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

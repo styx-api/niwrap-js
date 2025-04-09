@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SWAP_VOXELWISE_METADATA: Metadata = {
-    id: "0e000af7eb62f957a597cea6c58ed3ff2e31327a.boutiques",
+    id: "223faf94dffe99536986feca3c1a502a1c0de27d.boutiques",
     name: "swap_voxelwise",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

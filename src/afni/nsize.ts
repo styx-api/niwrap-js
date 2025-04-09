@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NSIZE_METADATA: Metadata = {
-    id: "d61eb0714ab51aec00c025a2f54aab55318f6b55.boutiques",
+    id: "a9d2ae05ed0705b6b163c901233146b3b789bc31.boutiques",
     name: "nsize",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

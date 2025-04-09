@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BRAIN_SKIN_METADATA: Metadata = {
-    id: "b29116757bd00299a9e042bed62f178844c81d0f.boutiques",
+    id: "0d74e03c612b5e5a46624d4adb229be24b424b58.boutiques",
     name: "BrainSkin",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

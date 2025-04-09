@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SLICEDELAY_METADATA: Metadata = {
-    id: "e0e78eeb6a32014e4f62ce730e136633e9ef9494.boutiques",
+    id: "fefd12c00942108f1db83dac38baac8c6a806f9e.boutiques",
     name: "slicedelay",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

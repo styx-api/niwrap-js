@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DESPIKE_METADATA: Metadata = {
-    id: "724be608ea12115bb59f6e6981f0905bfd860c95.boutiques",
+    id: "44ec753320617541f5d497eb7063805f1b6ba522.boutiques",
     name: "3dDespike",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

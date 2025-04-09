@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DGEN_ARMA11_METADATA: Metadata = {
-    id: "db531d2478af899030ee6f05096f794916316ef9.boutiques",
+    id: "d3d64709ffedbcb6d22bdf6adacec22853afa9ab.boutiques",
     name: "1dgenARMA11",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

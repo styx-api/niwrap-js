@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SIMULATE_MOTION_METADATA: Metadata = {
-    id: "5fc17ce508dbb62923e813f5cff61e70e1accb2d.boutiques",
+    id: "81ca0292d10cb27ca6eec2771f9556bf24d569dc.boutiques",
     name: "@simulate_motion",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

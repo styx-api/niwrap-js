@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IS_LTA_METADATA: Metadata = {
-    id: "566d24838e7313b28a22f432de359c9b90571b0e.boutiques",
+    id: "a9d22638bdece2ba3d66169a55affcf047517108.boutiques",
     name: "IsLTA",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

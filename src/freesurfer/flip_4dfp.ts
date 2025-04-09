@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FLIP_4DFP_METADATA: Metadata = {
-    id: "546744c4be37b8dfd459146df7ba1a0232818b0d.boutiques",
+    id: "8ea4c9ced73015848191893b7f55466d9dc889a2.boutiques",
     name: "flip_4dfp",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

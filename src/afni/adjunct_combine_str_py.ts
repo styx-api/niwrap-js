@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ADJUNCT_COMBINE_STR_PY_METADATA: Metadata = {
-    id: "a45fe06c2fd58fe9e7783f5a93c6f6403e1fcec4.boutiques",
+    id: "000e1eed64bccb1d991895bd288ca5f9ee91719d.boutiques",
     name: "adjunct_combine_str.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

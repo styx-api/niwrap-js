@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_RESCALE_METADATA: Metadata = {
-    id: "dc82fd3ed28ce8af91d50743abd00b226c549b2e.boutiques",
+    id: "7c34665e3228c1d75cd583cfdaebcd5129ccb2cf.boutiques",
     name: "mris_rescale",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

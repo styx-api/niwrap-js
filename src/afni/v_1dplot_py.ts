@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DPLOT_PY_METADATA: Metadata = {
-    id: "9a09a3b646afa4ae694c267932f8acdb6bcb6eec.boutiques",
+    id: "1d4b51ffb97efd0a7d1029f51fabf9626d9f1906.boutiques",
     name: "1dplot.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

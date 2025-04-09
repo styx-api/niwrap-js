@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DTISTUDIO_FIBERTO_SEGMENTS_METADATA: Metadata = {
-    id: "3f18eb1cd61025f3b6f243c49c95ab75c9ad86a9.boutiques",
+    id: "7b645090f91e42ee064699f7e346fa9a87d9da30.boutiques",
     name: "DTIStudioFibertoSegments",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

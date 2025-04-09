@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const N3_BIAS_FIELD_CORRECTION_METADATA: Metadata = {
-    id: "12e6ca015aa736902ad4369af67b842768a91549.boutiques",
+    id: "b990a157f047038c6c36199d59b074fb02282e95.boutiques",
     name: "N3BiasFieldCorrection",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

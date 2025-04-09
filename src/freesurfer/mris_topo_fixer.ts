@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_TOPO_FIXER_METADATA: Metadata = {
-    id: "4b97f9063ba3136c5f175963808d0468021279ab.boutiques",
+    id: "8f80d79d55bacb40b2cbd2f6150f071f3dec1313.boutiques",
     name: "mris_topo_fixer",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

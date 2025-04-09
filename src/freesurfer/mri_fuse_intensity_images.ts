@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_FUSE_INTENSITY_IMAGES_METADATA: Metadata = {
-    id: "22ecf33c78a1fc7ec78703d7b49001464fb5a595.boutiques",
+    id: "699b41025eeb33505b173850fa881f397ffb407b.boutiques",
     name: "mri_fuse_intensity_images",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

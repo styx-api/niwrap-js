@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ICO_SUPERSAMPLE_METADATA: Metadata = {
-    id: "14aa48c095a4ad3f4f834bf5d2084bdf9092540a.boutiques",
+    id: "a325b40c5e9a6433abb23e27b0d456238f472064.boutiques",
     name: "ico_supersample",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

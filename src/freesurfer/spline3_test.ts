@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPLINE3_TEST_METADATA: Metadata = {
-    id: "329f87f17c7d7e02a8b2c078f5a794aee33adae2.boutiques",
+    id: "9ccbc9f138b1998a711b2f181ada2004afbb26fb.boutiques",
     name: "Spline3_test",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

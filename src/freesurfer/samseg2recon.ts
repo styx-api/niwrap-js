@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SAMSEG2RECON_METADATA: Metadata = {
-    id: "d187c3e2881ef4e68bbc4c2919f41e8e9ad94cca.boutiques",
+    id: "97f76cfe683f565bad32807ad5fd88ea96f398c8.boutiques",
     name: "samseg2recon",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

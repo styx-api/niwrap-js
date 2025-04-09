@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TSPLOT_METADATA: Metadata = {
-    id: "cbc10eaa8d497c661991699af648c2805c89bfe3.boutiques",
+    id: "357f3c74d48e059c3c56760b5ba99627555d9b68.boutiques",
     name: "tsplot",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

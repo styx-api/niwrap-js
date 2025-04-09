@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const HALFCOSBASIS_METADATA: Metadata = {
-    id: "c8c182d4a3df220c65e74df1bac9b275343d2a41.boutiques",
+    id: "723641d1a6daf091dfd62c187e4b62e128df7b02.boutiques",
     name: "halfcosbasis",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

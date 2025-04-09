@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const UNPACK_IMA1_TCL_METADATA: Metadata = {
-    id: "52c94b15732556feb79bbc32eda9530f12619cbc.boutiques",
+    id: "2f44fce6973250c18da864f8fa4ee59aea5aae9d.boutiques",
     name: "unpack_ima1.tcl",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

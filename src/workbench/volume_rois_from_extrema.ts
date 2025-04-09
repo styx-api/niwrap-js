@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_ROIS_FROM_EXTREMA_METADATA: Metadata = {
-    id: "c4fedde00f78c99eb288d08659b236035a5d3048.boutiques",
+    id: "da73bea4d1a691afc0fd8fd88e3a81f0b1c7e507.boutiques",
     name: "volume-rois-from-extrema",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

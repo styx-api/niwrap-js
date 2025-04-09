@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIGNED_DISTANCE_TO_SURFACE_METADATA: Metadata = {
-    id: "8c742ccb7ded65823db6e22f82d38fb5ff077472.boutiques",
+    id: "1796554a2d94421b2b6c260e929d7ad272d3242f.boutiques",
     name: "signed-distance-to-surface",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

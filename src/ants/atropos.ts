@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ATROPOS_METADATA: Metadata = {
-    id: "4530aeaa8993b5f6c6337cb784311667ed8f0bbf.boutiques",
+    id: "4cb469cdce62fc57298fef68a491750d55ea4517.boutiques",
     name: "Atropos",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BIASFIELD_METADATA: Metadata = {
-    id: "c8391deeed6d412683183d406717be9cba1af3b4.boutiques",
+    id: "5981ee8ca338526bd3e95eb71c3b7956f4c7d239.boutiques",
     name: "biasfield",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

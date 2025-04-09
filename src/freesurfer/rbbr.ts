@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RBBR_METADATA: Metadata = {
-    id: "5e244d64ac10cdbe8cb73d1d3628ed3768d60a04.boutiques",
+    id: "83d2a121d87ec0c6e66a4604bc69ecd4e43a3343.boutiques",
     name: "rbbr",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

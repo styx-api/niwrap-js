@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPHARM_DECO_METADATA: Metadata = {
-    id: "6c5408eda75c3fcbee3c137d9a99cb7b538fb149.boutiques",
+    id: "17ed1e33cae4fff9df92d0adb8f450d2e0de7d46.boutiques",
     name: "SpharmDeco",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

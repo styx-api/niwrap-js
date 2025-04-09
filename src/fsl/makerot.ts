@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKEROT_METADATA: Metadata = {
-    id: "ef60d83a5829289551593ecda4455fd09243cfb5.boutiques",
+    id: "556bf5e2160ce115fbc8a2259f5cf3120759618e.boutiques",
     name: "makerot",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

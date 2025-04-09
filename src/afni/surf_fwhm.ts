@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF_FWHM_METADATA: Metadata = {
-    id: "c0c295cfa2772a4d6c7970693902b2233ab45c11.boutiques",
+    id: "5f3d67852b7237a8609f944b36387016b6ab2c24.boutiques",
     name: "SurfFWHM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

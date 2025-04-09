@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCMDJPEG_FS_METADATA: Metadata = {
-    id: "23277311b6d3ec67d22170dc491d01934643849c.boutiques",
+    id: "359bc973b8599706e77b1aca498ebac2ce7ef402.boutiques",
     name: "dcmdjpeg.fs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GCAPREPONE_METADATA: Metadata = {
-    id: "2e14a31362a677b265992815008f70a18a14c39c.boutiques",
+    id: "fea37ea95fe10bc19c820f21259071fe7046f12d.boutiques",
     name: "gcaprepone",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

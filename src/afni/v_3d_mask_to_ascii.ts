@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MASK_TO_ASCII_METADATA: Metadata = {
-    id: "20970426ca6ec9c84b1d7625189cb189cffb0a2f.boutiques",
+    id: "778a8402c86f1b42b01b3553f5a5396f990949e6.boutiques",
     name: "3dMaskToASCII",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

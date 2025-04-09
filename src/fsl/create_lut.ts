@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CREATE_LUT_METADATA: Metadata = {
-    id: "927e39579e62b2b6321d61476b9d896179d49b27.boutiques",
+    id: "2fb6d06c984b605b731a3ef2e9b3bde601d28909.boutiques",
     name: "create_lut",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

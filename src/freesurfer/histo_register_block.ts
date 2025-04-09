@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const HISTO_REGISTER_BLOCK_METADATA: Metadata = {
-    id: "a9ce2e4f5a3f5c4fa13464f62cf2766ed76dbba2.boutiques",
+    id: "1572900c1097b5f831c522fde78dfc03b4370b94.boutiques",
     name: "histo_register_block",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

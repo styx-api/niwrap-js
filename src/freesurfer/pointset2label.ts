@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const POINTSET2LABEL_METADATA: Metadata = {
-    id: "76bc9f6d69a026b807da7960f3bfd93ec5f85c89.boutiques",
+    id: "8c0b512eb160ace5a62b2299a47ecd6a1783aaf7.boutiques",
     name: "pointset2label",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

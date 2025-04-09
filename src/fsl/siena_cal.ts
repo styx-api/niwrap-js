@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIENA_CAL_METADATA: Metadata = {
-    id: "242ef49e28319c61f6a5f6ae2b1dfc3ffd7f393f.boutiques",
+    id: "b53c1eae8f14da0f80dcdb3e52fdf35ef7db733f.boutiques",
     name: "siena_cal",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

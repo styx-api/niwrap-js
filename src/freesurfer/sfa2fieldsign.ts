@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SFA2FIELDSIGN_METADATA: Metadata = {
-    id: "673483cb133e81114140c357c0715b77a189756a.boutiques",
+    id: "7f94ee11352613b06c9c4748c7eadb754e7722c8.boutiques",
     name: "sfa2fieldsign",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

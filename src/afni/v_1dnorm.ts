@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DNORM_METADATA: Metadata = {
-    id: "ea6e83597c9dc8fb3895db8c36d06ddc6f559447.boutiques",
+    id: "b18f2b7151430c04db8fdedd32593dbc7242dda1.boutiques",
     name: "1dnorm",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

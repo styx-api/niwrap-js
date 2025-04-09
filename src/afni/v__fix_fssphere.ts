@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__FIX_FSSPHERE_METADATA: Metadata = {
-    id: "b742177d5b0ebe3a73650e2f92bfe87238f0bcca.boutiques",
+    id: "f74e39104dce4bf48131b40121e83b0669d1fac9.boutiques",
     name: "@fix_FSsphere",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

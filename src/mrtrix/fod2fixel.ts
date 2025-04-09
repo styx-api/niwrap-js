@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FOD2FIXEL_METADATA: Metadata = {
-    id: "4748cd2237541a5061a51ecd86840055b92d34ff.boutiques",
+    id: "a00904c7bdbccc20a322e2bbb4456d2ea946b6a4.boutiques",
     name: "fod2fixel",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

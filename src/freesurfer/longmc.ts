@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONGMC_METADATA: Metadata = {
-    id: "a60463859b66f4dac910ccf5dd67f14573c1ca1f.boutiques",
+    id: "9c5dbdbd78fd37002556b682f478a737c506908c.boutiques",
     name: "longmc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

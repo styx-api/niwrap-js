@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCBF_PREP_METADATA: Metadata = {
-    id: "1a26630009bc7f6431b9c45507dba269ec5c416e.boutiques",
+    id: "cc945b25a058d97a2f09fc2fea371b4100093541.boutiques",
     name: "rcbf-prep",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_TO_BORDER_METADATA: Metadata = {
-    id: "857759c9b572b7d74e3d73a701d7e698c1933481.boutiques",
+    id: "73d4d8e81dee3be463cf016c882b4dcf98d7acf2.boutiques",
     name: "label-to-border",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

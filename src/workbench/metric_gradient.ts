@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_GRADIENT_METADATA: Metadata = {
-    id: "f4530e09758cb38a6a09de62a78168104a151cfb.boutiques",
+    id: "fd238afae302d9463d0d2c31b74e8846e69d33c7.boutiques",
     name: "metric-gradient",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

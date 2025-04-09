@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ORIENT_LAS_METADATA: Metadata = {
-    id: "c8cbae7a0ae48bc5ff23e10ecc70110ddd8919ae.boutiques",
+    id: "b3e62899eafe42b95670c2b16590844cb54f8b91.boutiques",
     name: "orientLAS",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

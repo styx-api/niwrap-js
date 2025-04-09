@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_CLUSTERIZE_METADATA: Metadata = {
-    id: "246ae39c1ef3384b86a60550a94fbf5baade053a.boutiques",
+    id: "e4655542f19e9af1312825c39fb9645b11431092.boutiques",
     name: "3dClusterize",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

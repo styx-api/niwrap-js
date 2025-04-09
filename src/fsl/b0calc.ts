@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const B0CALC_METADATA: Metadata = {
-    id: "eec8842e2086b747c0dbc0c436e9feba0fb181a1.boutiques",
+    id: "c3e4959eaa17886d5bba8085fe05cc394e597296.boutiques",
     name: "b0calc",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

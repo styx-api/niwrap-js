@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const R_PKGS_INSTALL_METADATA: Metadata = {
-    id: "9c9d4c7ec7df54a4bd835bc8c7156ea51895da44.boutiques",
+    id: "02fcafb674321d658d1a59f536c7612b3e27207f.boutiques",
     name: "rPkgsInstall",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

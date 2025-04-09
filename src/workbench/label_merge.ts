@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_MERGE_METADATA: Metadata = {
-    id: "23abeff64ad6c7ec293da11e92c329b37b1711f7.boutiques",
+    id: "db3ae692db4c86627df663a917e751144fd992bd.boutiques",
     name: "label-merge",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

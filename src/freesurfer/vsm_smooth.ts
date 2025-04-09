@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VSM_SMOOTH_METADATA: Metadata = {
-    id: "c9910f98cd5b5b7c5c6d2ac12c7a50e16ba9d6d7.boutiques",
+    id: "620a6bccb466424ba83ef7108c99f0114a863d88.boutiques",
     name: "vsm-smooth",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

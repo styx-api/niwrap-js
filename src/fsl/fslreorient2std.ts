@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLREORIENT2STD_METADATA: Metadata = {
-    id: "9d744e19ce2bb5b88fa76e50bb16323a2b9a65dd.boutiques",
+    id: "7d2a23aaff44e7b6adc55de71f4f8bdf7a3b0cf3.boutiques",
     name: "fslreorient2std",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

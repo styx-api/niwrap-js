@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_REG_ANA_METADATA: Metadata = {
-    id: "1631118904756d1061212c150565890bf979dbc0.boutiques",
+    id: "d0f5f9773868694c40c8514ea58aae0c0f7243a6.boutiques",
     name: "3dRegAna",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

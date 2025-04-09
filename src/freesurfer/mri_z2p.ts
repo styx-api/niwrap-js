@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_Z2P_METADATA: Metadata = {
-    id: "78dfd44d5447e6090f81e24d6551a8f322082fcf.boutiques",
+    id: "7987d56daa05e85cf63f7316456ae6a98c40b859.boutiques",
     name: "mri_z2p",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

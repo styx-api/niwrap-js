@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LOMB_SCARGLE_METADATA: Metadata = {
-    id: "ec1cdb90b6faac538a25b9943b1823c8bc7afa27.boutiques",
+    id: "9e597a7312ee6b69d649017dd3754eea9c3d47b9.boutiques",
     name: "3dLombScargle",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PREDICT_V1_SH_METADATA: Metadata = {
-    id: "fa5102ea5c78705d9124599a58b8008cca2f5a92.boutiques",
+    id: "a2a49b8ffc476b3fa2e75490295c5f01b94168c0.boutiques",
     name: "predict_v1.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

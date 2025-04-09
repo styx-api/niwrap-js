@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL2FLAT_METADATA: Metadata = {
-    id: "4324c6b767a12f1782bca11055508c5f21fddd7d.boutiques",
+    id: "90c34f8dd4c3992195ca9cfd336c415fc13321a8.boutiques",
     name: "label2flat",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

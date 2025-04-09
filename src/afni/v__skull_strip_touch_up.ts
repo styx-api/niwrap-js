@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SKULL_STRIP_TOUCH_UP_METADATA: Metadata = {
-    id: "460010f2b657da6818c5cc52af6697286e7b7fd3.boutiques",
+    id: "9f2f6c87f11ad6568c143e9302cc39f55ec33279.boutiques",
     name: "@SkullStrip_TouchUp",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

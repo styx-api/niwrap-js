@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MORPH_TABLES_LH_METADATA: Metadata = {
-    id: "34324860233ca7709fb6c2b4418a71bd3f0cbdf6.boutiques",
+    id: "866a14f40d53d744f21eba0c69ccf4cecb15c51c.boutiques",
     name: "morph_tables-lh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ZTOP_METADATA: Metadata = {
-    id: "aaa21f331bdaf4f959165aeb5f8d7c495a9d8f9d.boutiques",
+    id: "6b31068866f230a27c4cad71ca0d8dd5f91dd96e.boutiques",
     name: "ztop",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

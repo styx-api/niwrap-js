@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DWI2ADC_METADATA: Metadata = {
-    id: "1ddf7b2c6bfbca7b535b58b3a0e9ad2e95b300d3.boutiques",
+    id: "61198d912b75d0ee3f4a652ba60b6429d7e5a05c.boutiques",
     name: "dwi2adc",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

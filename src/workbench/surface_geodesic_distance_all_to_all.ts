@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_GEODESIC_DISTANCE_ALL_TO_ALL_METADATA: Metadata = {
-    id: "c5c99621d8058817160d0334f2df766f3870b6d6.boutiques",
+    id: "a890212d1459e2b009fb3ac62c427e314578ba4d.boutiques",
     name: "surface-geodesic-distance-all-to-all",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

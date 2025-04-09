@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RESPONSEMEAN_METADATA: Metadata = {
-    id: "e6c56f5745cf6a8cbb9c9387ca97dbcce3e44b95.boutiques",
+    id: "81ec998971b969a494c27142aa2c763ec1e1ab0f.boutiques",
     name: "responsemean",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

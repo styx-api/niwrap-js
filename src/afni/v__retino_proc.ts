@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__RETINO_PROC_METADATA: Metadata = {
-    id: "0836ad099b5ae0ebd794fce9bafc7b29723fb572.boutiques",
+    id: "bd77350246b7022b7742239292c89e845e034c79.boutiques",
     name: "@RetinoProc",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

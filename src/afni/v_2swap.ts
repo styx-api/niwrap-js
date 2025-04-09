@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_2SWAP_METADATA: Metadata = {
-    id: "9a225778ddb446b7e5915ca65f1e69f4a2104017.boutiques",
+    id: "7816342873aa809adec96eabf2b229c9a0d64bcc.boutiques",
     name: "2swap",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

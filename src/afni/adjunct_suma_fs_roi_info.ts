@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ADJUNCT_SUMA_FS_ROI_INFO_METADATA: Metadata = {
-    id: "779dea93198c9c27ce2d88ef43623927b9130d07.boutiques",
+    id: "174d682bbfbcc03f436d1ab2dd83376c7847145f.boutiques",
     name: "adjunct_suma_fs_roi_info",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

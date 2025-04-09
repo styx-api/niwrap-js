@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MKIMA_INDEX_TCL_METADATA: Metadata = {
-    id: "c105809b402206036812e673c076cf9989e47ed5.boutiques",
+    id: "d22dfd37da5b994e6395a605a77c2fb31a66cdd0.boutiques",
     name: "mkima_index.tcl",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

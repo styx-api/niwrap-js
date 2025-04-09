@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CREATE_ICOSAHEDRON_METADATA: Metadata = {
-    id: "0c5ed33e6d9371f02ee960933e1903bb9350e470.boutiques",
+    id: "7e97ac60c3ab73084c4724cc7515e703d2c1bdde.boutiques",
     name: "CreateIcosahedron",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

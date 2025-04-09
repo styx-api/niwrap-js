@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_IMAGE2VTK_METADATA: Metadata = {
-    id: "67a28ca73b630cb9d69525ca86a737dcf4b40ebe.boutiques",
+    id: "7b250305c2162f969f29d43c265bfd72a2a1b8e4.boutiques",
     name: "mris_image2vtk",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

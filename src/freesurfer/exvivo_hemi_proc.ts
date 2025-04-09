@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EXVIVO_HEMI_PROC_METADATA: Metadata = {
-    id: "e3813e1b2b5ac9842148171363015c6a44f9e300.boutiques",
+    id: "cb414a078e8d94e5c45d97713e59b5d051d0f4fb.boutiques",
     name: "exvivo-hemi-proc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

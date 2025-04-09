@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GRAD_UNWARP_METADATA: Metadata = {
-    id: "3f8f59f71178da3b91ee74fc055a9520bba22b05.boutiques",
+    id: "c8a86a5da26d5d46183d8506a6feda47afabaf36.boutiques",
     name: "grad_unwarp",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

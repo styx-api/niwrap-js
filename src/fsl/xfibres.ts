@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const XFIBRES_METADATA: Metadata = {
-    id: "00d64d41006871cc5a1d207ddbf5b69d43eb50c8.boutiques",
+    id: "014107f283218ebf74108230feddbcabe49a8c3d.boutiques",
     name: "xfibres",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

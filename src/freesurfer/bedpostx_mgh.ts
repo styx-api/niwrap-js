@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BEDPOSTX_MGH_METADATA: Metadata = {
-    id: "fb49a4fd21cd6f6cf877e9365ca0aa77e9e1a7f5.boutiques",
+    id: "3ed864ec81d1c034c4ff17b4f55cad7b918d2d91.boutiques",
     name: "bedpostx_mgh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

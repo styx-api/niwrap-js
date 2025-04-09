@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_CURVATURE2IMAGE_METADATA: Metadata = {
-    id: "39d168b98aa409f7185978cb8e4d30fc3f31b37b.boutiques",
+    id: "9ccee59651e31ee7ee611ecd70b9689056081813.boutiques",
     name: "mris_curvature2image",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

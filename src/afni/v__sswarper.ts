@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SSWARPER_METADATA: Metadata = {
-    id: "197ce8d754dd8af8616a9982ec614230700e19aa.boutiques",
+    id: "55de91c2c71be7a93c0be727ede67f8d0b90d4a4.boutiques",
     name: "@SSwarper",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

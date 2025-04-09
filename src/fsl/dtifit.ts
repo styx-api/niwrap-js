@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DTIFIT_METADATA: Metadata = {
-    id: "dacf8e41c8fb8dc8737a88c2eb3ec2ff8cf64a28.boutiques",
+    id: "c67d94bae8b50749dfbcf1f528488eb3bededc2e.boutiques",
     name: "dtifit",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

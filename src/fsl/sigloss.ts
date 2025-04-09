@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIGLOSS_METADATA: Metadata = {
-    id: "fa1b091e696a3f12441128ea72b339367ae2d030.boutiques",
+    id: "62b0cac3a43b072bb3adee39d0ff5d2c39f5b6fd.boutiques",
     name: "sigloss",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

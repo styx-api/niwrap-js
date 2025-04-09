@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DSVD_METADATA: Metadata = {
-    id: "c137a2a26ce0b2c14b24befee7a12ab31db435c8.boutiques",
+    id: "a44411b921407798a01380cba6cb97822fb9b904.boutiques",
     name: "1dsvd",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

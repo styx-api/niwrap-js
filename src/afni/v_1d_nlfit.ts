@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_NLFIT_METADATA: Metadata = {
-    id: "278b48af705917ecf316b95eb2c3d2075a15c475.boutiques",
+    id: "07821b44f40b4c899e165791769521e0adbe5c7b.boutiques",
     name: "1dNLfit",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

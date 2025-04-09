@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_MEF_SURFACES_METADATA: Metadata = {
-    id: "02223303295326924a357b3a06e1f9463f061c83.boutiques",
+    id: "f5e7133e280262c674ba034bd20d28f4c0e8e683.boutiques",
     name: "mris_mef_surfaces",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

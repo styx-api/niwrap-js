@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA: Metadata = {
-    id: "7af4a9a784989ddd8ff76f3225c25b7355e86a75.boutiques",
+    id: "bb975911b3570b50aaf12e5161a598d6bd9e8b04.boutiques",
     name: "ANTSUseLandmarkImagesToGetBSplineDisplacementField",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

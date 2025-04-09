@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GIFTI_LABEL_ADD_PREFIX_METADATA: Metadata = {
-    id: "3d379a6c755dab747292a0a91f754e423ff73eca.boutiques",
+    id: "76b8a9079ea9cac8c55f45c7a4b9a912c3dd3ded.boutiques",
     name: "gifti-label-add-prefix",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DIRFLIP_METADATA: Metadata = {
-    id: "86336786511bfdfa104481617aa49c18d390fff0.boutiques",
+    id: "1bc40c1342a5e6b2fe13e011f0393b92cd599ded.boutiques",
     name: "dirflip",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

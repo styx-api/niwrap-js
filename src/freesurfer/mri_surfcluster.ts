@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_SURFCLUSTER_METADATA: Metadata = {
-    id: "d511292684dbbb10f74daadd0e2a8026a7360392.boutiques",
+    id: "a70520f8f1d486263670ae25cac56adca853556b.boutiques",
     name: "mri_surfcluster",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

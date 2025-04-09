@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const INSPEC_METADATA: Metadata = {
-    id: "6a13b0f30f764b4a293786927f7b9ec71eacbd6c.boutiques",
+    id: "89203ff038bd27aa4191bdef00850e222bfaf10c.boutiques",
     name: "inspec",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

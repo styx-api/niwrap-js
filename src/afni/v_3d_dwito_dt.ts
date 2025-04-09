@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DWITO_DT_METADATA: Metadata = {
-    id: "09d06c55d013b2bd12bb78a05cda82297b034024.boutiques",
+    id: "9a917bfe0fc87dc6e13908baec1679a6c7340c54.boutiques",
     name: "3dDWItoDT",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

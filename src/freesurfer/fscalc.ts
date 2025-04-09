@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSCALC_METADATA: Metadata = {
-    id: "8980bc90eda2781be7235010d28f030a03b7741c.boutiques",
+    id: "ea4a3f00afbc065f06ad7bec64190787fc5e16a4.boutiques",
     name: "fscalc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

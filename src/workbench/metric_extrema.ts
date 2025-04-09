@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_EXTREMA_METADATA: Metadata = {
-    id: "a2f46a01c07390207099bf087477bc693bc124ec.boutiques",
+    id: "b5a5a8e1eabca508aab9810592b0263ebefe54da.boutiques",
     name: "metric-extrema",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

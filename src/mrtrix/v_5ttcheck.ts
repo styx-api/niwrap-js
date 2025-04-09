@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_5TTCHECK_METADATA: Metadata = {
-    id: "81b3e0b2961a573a6a802146cca2c10ffb8d0868.boutiques",
+    id: "173240c50f533553ebf03ac04f99f00671f6b2e7.boutiques",
     name: "5ttcheck",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

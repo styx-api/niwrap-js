@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_APPLY_AFFINE_METADATA: Metadata = {
-    id: "25500b134b89cab81e66e3d0a44f8ea90dc1d25a.boutiques",
+    id: "7c311c10a2ade66cd243abaae3783d8c5c9df63a.boutiques",
     name: "surface-apply-affine",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DWIBIASCORRECT_METADATA: Metadata = {
-    id: "4640ee70fc28dad36861c4fa612c0bcaeca0c5a2.boutiques",
+    id: "dac5427c31c92afc7a68b01d1ea1d2a9c9d5a76c.boutiques",
     name: "dwibiascorrect",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const STD2IMGCOORD_METADATA: Metadata = {
-    id: "05322cde0f0612798367ff4b15825c44466bc700.boutiques",
+    id: "d698a06ad62f45a815a814a8849568a128429f34.boutiques",
     name: "std2imgcoord",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

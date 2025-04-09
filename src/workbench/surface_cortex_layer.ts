@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_CORTEX_LAYER_METADATA: Metadata = {
-    id: "1fb2598f6c40246e1cd4406b005c1caba798780a.boutiques",
+    id: "71faa5a4ca1d525020040bf9f35226bb32dd6fd8.boutiques",
     name: "surface-cortex-layer",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

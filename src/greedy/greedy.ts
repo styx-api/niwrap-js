@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GREEDY_METADATA: Metadata = {
-    id: "81e25c6c4fb84453185826b4258b91dafaf56f30.boutiques",
+    id: "8773061e4151d52c79dfd7c67e140eb0646f36ba.boutiques",
     name: "greedy",
     package: "greedy",
     container_image_tag: "pyushkevich/itksnap:v3.8.2",

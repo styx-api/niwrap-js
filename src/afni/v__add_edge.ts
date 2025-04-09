@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__ADD_EDGE_METADATA: Metadata = {
-    id: "e1c15db21c7ca3b4679541ce445b80838292b240.boutiques",
+    id: "06a72814ee44ef3e2b9ca6f055c466f63cd08827.boutiques",
     name: "@AddEdge",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

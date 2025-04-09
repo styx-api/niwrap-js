@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_PVAL_METADATA: Metadata = {
-    id: "728ce13fea332a59b9d1741e5383247954eba774.boutiques",
+    id: "724a7212deebf60511bbed100d1d685ab6d47da3.boutiques",
     name: "3dPval",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

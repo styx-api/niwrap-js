@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFMATHS_METADATA: Metadata = {
-    id: "0c06587bdc6b2f6011719cc92c36318d59f130d9.boutiques",
+    id: "127d7002767598077923f23b914e230d8b471f40.boutiques",
     name: "surfmaths",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

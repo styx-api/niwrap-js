@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MINC2SEQINFO_METADATA: Metadata = {
-    id: "30fbf462a54b5ca1f7c6f0f4e71bda9dbde0712d.boutiques",
+    id: "d57928aac7b425a7a859150e95ea57280a4d9604.boutiques",
     name: "minc2seqinfo",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

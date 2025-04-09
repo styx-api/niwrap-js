@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GIFTI_LABEL_TO_ROI_METADATA: Metadata = {
-    id: "252be09cb9f5099d7e1cc317ddf28a5cc85d2ab6.boutiques",
+    id: "fbd577d7a4881455906a02f5415f91e4912c0e7b.boutiques",
     name: "gifti-label-to-roi",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

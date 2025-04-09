@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LFCD_METADATA: Metadata = {
-    id: "7698c7de46741d205ab4763adc29dccd492e943b.boutiques",
+    id: "f5cd1217795dc365fd887681ccdc9ede54ef4e60.boutiques",
     name: "3dLFCD",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

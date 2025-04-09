@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_BRAIN_SYNC_METADATA: Metadata = {
-    id: "5b4873a7460d63bb6ab8b2f718571646d6b0ba3b.boutiques",
+    id: "508af7da56bddf5a954492ce4305cdd0edc2a285.boutiques",
     name: "3dBrainSync",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_TRK2TRK_METADATA: Metadata = {
-    id: "7065b499ec2cb8133b9197d9f36d138deaee55a7.boutiques",
+    id: "7844dccd83a0f8a05fdeac88a974277b4e6257b3.boutiques",
     name: "dmri_trk2trk",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

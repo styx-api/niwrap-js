@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FOCI_RESAMPLE_METADATA: Metadata = {
-    id: "d25e8eee3893055f474c3819282ad3f943c97a1d.boutiques",
+    id: "59865b131ca7364a06d2e1d92c8d6c22e316cd8d.boutiques",
     name: "foci-resample",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

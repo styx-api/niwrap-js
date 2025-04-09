@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_FRIEDMAN_METADATA: Metadata = {
-    id: "39739dbe60149a8c929fe468d57b937cc221945c.boutiques",
+    id: "f420b1764d2a8c3e67aa44bf4d11906383ad53d6.boutiques",
     name: "3dFriedman",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

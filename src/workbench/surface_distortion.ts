@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_DISTORTION_METADATA: Metadata = {
-    id: "33d31d751f5d7af166ba1ff32d6fbd091f53f5e8.boutiques",
+    id: "48fa054376bf4c18372dba53ab95fa9cc3a1605c.boutiques",
     name: "surface-distortion",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

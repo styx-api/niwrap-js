@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VERTEXVOL_METADATA: Metadata = {
-    id: "72720dd9559564a7517285d29ffdf9116e4d731a.boutiques",
+    id: "aedf6bfbc68d398b67ba8bf52f969278f2f9468d.boutiques",
     name: "vertexvol",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

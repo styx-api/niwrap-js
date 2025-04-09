@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FREEVIEW_METADATA: Metadata = {
-    id: "ea7d3ba2300d2eb2c6fc1ff4ec8778d1a042e201.boutiques",
+    id: "c7a33420dcdb44d944cc751c512e7e743300b534.boutiques",
     name: "freeview",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const QUOTIZE_METADATA: Metadata = {
-    id: "d23de9ba9a8a0ec51eec10d409b73d3f766156d0.boutiques",
+    id: "4c584c1c53b452f98fe6627b0010b0bc7d24c8a7.boutiques",
     name: "quotize",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const WM_ANAT_SNR_METADATA: Metadata = {
-    id: "8df82e78354c9dc463da4f9e7e5dd619c20d563a.boutiques",
+    id: "720d73c797ea6b11df6f56d663b8a31bbc7866b2.boutiques",
     name: "wm-anat-snr",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

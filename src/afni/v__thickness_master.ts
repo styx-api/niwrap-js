@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__THICKNESS_MASTER_METADATA: Metadata = {
-    id: "7cbe201588fb28fa02cdf63392c9f32c09dd8fea.boutiques",
+    id: "16b2f3c5546e0b51fc57c90130ccb25d83ec244f.boutiques",
     name: "@thickness_master",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

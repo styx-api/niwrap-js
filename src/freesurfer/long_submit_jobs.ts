@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_SUBMIT_JOBS_METADATA: Metadata = {
-    id: "73a46d90ad07cf1b262590059e8ca43cc4fde840.boutiques",
+    id: "086cfad901401d521e1ad829af326fc9c4c50c61.boutiques",
     name: "long_submit_jobs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

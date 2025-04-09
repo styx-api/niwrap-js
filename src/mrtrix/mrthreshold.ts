@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRTHRESHOLD_METADATA: Metadata = {
-    id: "5f0e00d650d7ff4c22350347b81985e0b496eddf.boutiques",
+    id: "63955d6506c219775e9ca4df901c67a97355416d.boutiques",
     name: "mrthreshold",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

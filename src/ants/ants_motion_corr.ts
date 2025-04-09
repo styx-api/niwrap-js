@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_MOTION_CORR_METADATA: Metadata = {
-    id: "101179d7b402b3245503ed337e9b9c5479b1f966.boutiques",
+    id: "58362334671e0855cb951afdc10cfd6cb08dacd7.boutiques",
     name: "antsMotionCorr",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

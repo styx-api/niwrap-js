@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FNAME2EXT_METADATA: Metadata = {
-    id: "d737533f13debab7b8cdf915ca9c4aa939e7445c.boutiques",
+    id: "cdbc3b779525039eaecbc00609f9a994c8dfa840.boutiques",
     name: "fname2ext",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

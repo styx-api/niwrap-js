@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MELODIC_METADATA: Metadata = {
-    id: "676ecf3f7a3e52a01972f67049800329276421c8.boutiques",
+    id: "26dfaaafda323665e1ced6f940ff5cca346ee530.boutiques",
     name: "melodic",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_FOLDING_ATLAS_METADATA: Metadata = {
-    id: "2ea9d8d1b60df2ade6f961abd423e6b44d34ffda.boutiques",
+    id: "5c53218428de33badf3c43ee3c12c11136a54df8.boutiques",
     name: "make_folding_atlas",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_FILL_HOLES_METADATA: Metadata = {
-    id: "96ff203654f51b0fbf464f9740941d18d8533b77.boutiques",
+    id: "2a113ff44bea5d14595099ce0bbbde3440ec8eb4.boutiques",
     name: "metric-fill-holes",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

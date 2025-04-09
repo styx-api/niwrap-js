@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const REGISTER_CSH_METADATA: Metadata = {
-    id: "8e13f3c3638f86e0bcc4bf3ee729a031f8071c67.boutiques",
+    id: "c9ab3e14ec84ff1958de185eb676b496d0729d72.boutiques",
     name: "register.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

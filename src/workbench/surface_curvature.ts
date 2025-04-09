@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_CURVATURE_METADATA: Metadata = {
-    id: "42563206ac34cec769150b6b51e5edd19c49be9c.boutiques",
+    id: "26d231c70d4cfdd6ea0dac8bd1a39770dcd11b07.boutiques",
     name: "surface-curvature",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

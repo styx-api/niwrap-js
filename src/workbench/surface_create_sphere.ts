@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_CREATE_SPHERE_METADATA: Metadata = {
-    id: "4f2f655e81d545740a448403ba6bbaff1b89f0a6.boutiques",
+    id: "c18b118a2072dd39d41e5c3a49f7806fd4c7ac95.boutiques",
     name: "surface-create-sphere",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

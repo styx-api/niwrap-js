@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FFTEST_METADATA: Metadata = {
-    id: "7f399a82e4de970c2f3605cc9dc21800aa067bd4.boutiques",
+    id: "242a4a37e8f3488a79d04ee8e61c7d3309af7f5b.boutiques",
     name: "fftest",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

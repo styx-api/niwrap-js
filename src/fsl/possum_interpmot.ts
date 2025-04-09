@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const POSSUM_INTERPMOT_METADATA: Metadata = {
-    id: "8ab9d694fafa3b09d7acaca8ca43d500f9c7675b.boutiques",
+    id: "19a05108d70a52f83dc7560156ab3b5bd08df5d8.boutiques",
     name: "possum_interpmot",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

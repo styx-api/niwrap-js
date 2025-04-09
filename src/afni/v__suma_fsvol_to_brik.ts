@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SUMA_FSVOL_TO_BRIK_METADATA: Metadata = {
-    id: "34a251de0c81f7f2fc2da3a56752e5c868f22a46.boutiques",
+    id: "4852184b5da4f86b34b433664927c76929e3ca4c.boutiques",
     name: "@SUMA_FSvolToBRIK",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_PROBABILITY_METADATA: Metadata = {
-    id: "e56f56942b5ff7cb28acb95c758d3ed822e1b2d5.boutiques",
+    id: "3bf96115558abb862c2cc39f754bd2330ac604ee.boutiques",
     name: "label-probability",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

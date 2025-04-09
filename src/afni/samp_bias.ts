@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SAMP_BIAS_METADATA: Metadata = {
-    id: "e1325d010e905394733e9c7b189375c71f01d74b.boutiques",
+    id: "73bcedebddacb73e50fa496ef2f4a5a44b29fdd5.boutiques",
     name: "SampBias",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

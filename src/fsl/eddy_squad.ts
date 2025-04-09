@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EDDY_SQUAD_METADATA: Metadata = {
-    id: "6ecefb53fde2da8de13d6b0803475b0a4336061f.boutiques",
+    id: "4f05bda157802874f7b91635ee4f20986d081e7f.boutiques",
     name: "eddy_squad",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

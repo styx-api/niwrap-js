@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLCPGEOM_METADATA: Metadata = {
-    id: "abfea41c33a7487bc5c6fba058aaad8f45e8d06a.boutiques",
+    id: "2cee341aa83ab36ce9a32fd9150f0f2630b80b22.boutiques",
     name: "fslcpgeom",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

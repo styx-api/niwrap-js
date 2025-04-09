@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DRIVE_SUMA_METADATA: Metadata = {
-    id: "926f692f4116a5424cd5bd01a3b09ea3e0539288.boutiques",
+    id: "a84ac5b5fa5efa62f31e31f6fea077bf00c5e358.boutiques",
     name: "DriveSuma",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

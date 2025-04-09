@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EDDY_CORRECT_METADATA: Metadata = {
-    id: "02952b63ff7a435bc981ecebb28837bbe6e3e7cb.boutiques",
+    id: "f584efeff63980d18cbf6faead3a8e116d76ea1f.boutiques",
     name: "eddy_correct",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

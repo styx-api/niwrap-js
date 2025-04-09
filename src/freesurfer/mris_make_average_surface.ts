@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
-    id: "c7c7dc6c877d2ef020d99e894c96f070fb1a71d2.boutiques",
+    id: "5ca60dd661acd09992cf09d60028e85c12fb8055.boutiques",
     name: "mris_make_average_surface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const HIST2PROB_METADATA: Metadata = {
-    id: "5072c0a1058e5f776baf142ca06c38b53022df66.boutiques",
+    id: "9a0694f1331e41c1803a820e366b78bb807361a8.boutiques",
     name: "hist2prob",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

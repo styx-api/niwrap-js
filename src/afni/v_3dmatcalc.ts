@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DMATCALC_METADATA: Metadata = {
-    id: "9c4d323b9663dd4eadd79fdc472de04da567e563.boutiques",
+    id: "b12640a251db3b73fc81eee4373e39cfe399c403.boutiques",
     name: "3dmatcalc",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRCHECKERBOARDMASK_METADATA: Metadata = {
-    id: "d3e361c565ddae09545311ba3dafc739a0f94a5f.boutiques",
+    id: "a3b0ea1bbc979f69d0d7f7f9d44b33ccf51605d8.boutiques",
     name: "mrcheckerboardmask",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_GEOMETRY_MEASURES_METADATA: Metadata = {
-    id: "e7ce3202e62bc39e7b15a1562ae20a5cef322440.boutiques",
+    id: "d570e50748d9876bc47a760ba32c91d5c92cbc80.boutiques",
     name: "LabelGeometryMeasures",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

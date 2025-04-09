@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIENA_DIFF_METADATA: Metadata = {
-    id: "e8aca2fd67e31bd3e2c0994ac03b8c6a57e6de78.boutiques",
+    id: "b8b72079d7dab3f6695c1336961c8f62b75ede03.boutiques",
     name: "siena_diff",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

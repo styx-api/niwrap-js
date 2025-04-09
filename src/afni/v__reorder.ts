@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__REORDER_METADATA: Metadata = {
-    id: "a1aaf6dbb807ea79af1609bee99a7c13181932fa.boutiques",
+    id: "ef9c00baf613311acb5352e7a897dfe4418a1739.boutiques",
     name: "@Reorder",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

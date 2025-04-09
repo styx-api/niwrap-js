@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const POINTFLIRT_METADATA: Metadata = {
-    id: "460b6d9bdf4517e6ada68203b2bdc3886e4c92c3.boutiques",
+    id: "ab04b9408227e5cbe1dc1b00b5f38d5566787968.boutiques",
     name: "pointflirt",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

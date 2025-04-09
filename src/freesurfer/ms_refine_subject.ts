@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MS_REFINE_SUBJECT_METADATA: Metadata = {
-    id: "c522667edafe63ffe7ee067f5ceb07e59d920d4c.boutiques",
+    id: "f721290b4f615b29593a88005b00f64f24e7ebf7.boutiques",
     name: "ms_refine_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

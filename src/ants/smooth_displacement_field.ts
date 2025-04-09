@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SMOOTH_DISPLACEMENT_FIELD_METADATA: Metadata = {
-    id: "47ffc5bce5c9c966c1031311bf5353dec2fcef8b.boutiques",
+    id: "7b2437454393f060b65a9e4b3b1f97abf404bcc0.boutiques",
     name: "SmoothDisplacementField",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

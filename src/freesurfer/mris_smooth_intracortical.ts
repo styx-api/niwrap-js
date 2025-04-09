@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_SMOOTH_INTRACORTICAL_METADATA: Metadata = {
-    id: "2d913141d3a964703c9f9e1365f71235771f5c17.boutiques",
+    id: "40a15a33b82c63e11e7ab868f6bbf4b236de01b3.boutiques",
     name: "mris_smooth_intracortical",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

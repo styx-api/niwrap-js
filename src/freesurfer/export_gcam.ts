@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EXPORT_GCAM_METADATA: Metadata = {
-    id: "f25415af5380b382665875b6fa909277c012e14e.boutiques",
+    id: "433fb1878c30c38bab33359daa220e7ac52950c8.boutiques",
     name: "exportGcam",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

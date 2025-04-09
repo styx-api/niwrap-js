@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_STATS_TPS_METADATA: Metadata = {
-    id: "1bcd114b81501e8287ad3b93601056a429f0aaa9.boutiques",
+    id: "6c6ba4b0e888d88fa279b18e6e58656975356f16.boutiques",
     name: "long_stats_tps",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

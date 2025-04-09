@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PEAKS2AMP_METADATA: Metadata = {
-    id: "90ed8fa8022a8bb67e41e995c1aaf7cea334db02.boutiques",
+    id: "fd8b6b23778dba96a61c88654c44b2dc27f350a7.boutiques",
     name: "peaks2amp",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

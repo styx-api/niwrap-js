@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_SUBJECT_FLASH_METADATA: Metadata = {
-    id: "1d6e63edc1016916b719770e029fc275fe393603.boutiques",
+    id: "bcad38440b77e9ce5c271bd713bdd98a72db7cf7.boutiques",
     name: "label_subject_flash",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

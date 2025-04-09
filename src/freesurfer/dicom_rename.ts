@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DICOM_RENAME_METADATA: Metadata = {
-    id: "967c36e6f1722cec2c2a414d9307145c8c3ca445.boutiques",
+    id: "3fa82f4f7cfa0f517393cf4bbd8d9673564b758d.boutiques",
     name: "dicom-rename",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

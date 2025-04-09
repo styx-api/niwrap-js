@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DIRSTAT_METADATA: Metadata = {
-    id: "b222674c205e6c5c5726d0d3c896ce48287bbceb.boutiques",
+    id: "54c92c56f5ceb3968ec6cf9bb9929c2227e1f7a2.boutiques",
     name: "dirstat",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

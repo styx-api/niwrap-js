@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_EDIT_SEGMENTATION_METADATA: Metadata = {
-    id: "25345594af6f00c5d1125c06b5d3a088c2d5244f.boutiques",
+    id: "4268d37b37ec0629a95cd2fcd649fc7fa4c4561c.boutiques",
     name: "mri_edit_segmentation",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

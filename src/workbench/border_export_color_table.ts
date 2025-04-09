@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BORDER_EXPORT_COLOR_TABLE_METADATA: Metadata = {
-    id: "47f8717766356f0bcb7da91bb98cdef4d44c97d0.boutiques",
+    id: "b07356bd59a7014a0150a342d7a8af84716e878d.boutiques",
     name: "border-export-color-table",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

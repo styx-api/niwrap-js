@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_FSLMAT_TO_LTA_METADATA: Metadata = {
-    id: "a584f1ce4737b11d3bc46a9cd0dac5a4276a9a35.boutiques",
+    id: "43d6ea5a8918dcf72ca72861a59575adb4671e75.boutiques",
     name: "mri_fslmat_to_lta",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

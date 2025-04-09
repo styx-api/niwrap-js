@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GDCMCONV_FS_METADATA: Metadata = {
-    id: "98f7b1994832a771c3433368967176f42a435bc4.boutiques",
+    id: "33b8dc164d4657e5b24c4c1c814e2af7b9be58de.boutiques",
     name: "gdcmconv.fs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

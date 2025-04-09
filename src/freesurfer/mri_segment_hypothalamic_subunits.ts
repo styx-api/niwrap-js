@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA: Metadata = {
-    id: "f03ac3b7165171b1e5dc19884858113ebce6c791.boutiques",
+    id: "b0412856cc51b682a2dedadbe7cb38e5edcb0d22.boutiques",
     name: "mri_segment_hypothalamic_subunits",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_EXTRACT_LARGEST_CC_METADATA: Metadata = {
-    id: "d482ce41fdae770a9397038906daba39eebb0541.boutiques",
+    id: "53c95adc4bc5ee58b6c612c01980a0da86b6de18.boutiques",
     name: "mri_extract_largest_CC",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

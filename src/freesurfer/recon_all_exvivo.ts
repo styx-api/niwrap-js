@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RECON_ALL_EXVIVO_METADATA: Metadata = {
-    id: "ab8a5243b725eb3269bc328c28f826e76302edba.boutiques",
+    id: "9f00b252b2f61f947af4a725491db0b3cab46912.boutiques",
     name: "recon-all-exvivo",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

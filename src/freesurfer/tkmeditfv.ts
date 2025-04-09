@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TKMEDITFV_METADATA: Metadata = {
-    id: "c54cb02c761041c3c2bd1fa2a8964899175b9969.boutiques",
+    id: "cbd5f4cf7541f87238cd68202cdafa6b3a7ee7d0.boutiques",
     name: "tkmeditfv",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
