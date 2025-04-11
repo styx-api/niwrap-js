@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_METRICS_METADATA: Metadata = {
-    id: "e4df32dd8b28144bf2cbd95cce2803cc7a22e9d3.boutiques",
+    id: "1ef3c8a44dad85904fd6b95c168fae520751be00.boutiques",
     name: "SurfaceMetrics",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -18,6 +18,7 @@ interface SurfaceMetricsParameters {
     "closest_node"?: InputPathType | null | undefined;
     "area": boolean;
     "tri_sines": boolean;
+    "tri_cosines": boolean;
     "tri_CoSines": boolean;
     "tri_angles": boolean;
     "node_angles": boolean;
@@ -91,6 +92,7 @@ function surface_metrics_params(
     closest_node: InputPathType | null = null,
     area: boolean = false,
     tri_sines: boolean = false,
+    tri_cosines: boolean = false,
     tri_co_sines: boolean = false,
     tri_angles: boolean = false,
     node_angles: boolean = false,
@@ -117,6 +119,7 @@ function surface_metrics_params(
      * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
      * @param area Output area of each triangle.
      * @param tri_sines Output sine of angles at nodes forming triangles.
+     * @param tri_cosines Output cosine of angles at nodes forming triangles.
      * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
      * @param tri_angles Unsigned angles in radians of triangles.
      * @param node_angles Unsigned angles in radians at nodes of surface.
@@ -142,6 +145,7 @@ function surface_metrics_params(
         "convexity": convexity,
         "area": area,
         "tri_sines": tri_sines,
+        "tri_cosines": tri_cosines,
         "tri_CoSines": tri_co_sines,
         "tri_angles": tri_angles,
         "node_angles": node_angles,
@@ -204,6 +208,9 @@ function surface_metrics_cargs(
     }
     if ((params["tri_sines"] ?? null)) {
         cargs.push("-tri_sines");
+    }
+    if ((params["tri_cosines"] ?? null)) {
+        cargs.push("-tri_cosines");
     }
     if ((params["tri_CoSines"] ?? null)) {
         cargs.push("-tri_CoSines");
@@ -320,6 +327,7 @@ function surface_metrics(
     closest_node: InputPathType | null = null,
     area: boolean = false,
     tri_sines: boolean = false,
+    tri_cosines: boolean = false,
     tri_co_sines: boolean = false,
     tri_angles: boolean = false,
     node_angles: boolean = false,
@@ -351,6 +359,7 @@ function surface_metrics(
      * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
      * @param area Output area of each triangle.
      * @param tri_sines Output sine of angles at nodes forming triangles.
+     * @param tri_cosines Output cosine of angles at nodes forming triangles.
      * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
      * @param tri_angles Unsigned angles in radians of triangles.
      * @param node_angles Unsigned angles in radians at nodes of surface.
@@ -373,7 +382,7 @@ function surface_metrics(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_METRICS_METADATA);
-    const params = surface_metrics_params(surf1, volume, convexity, closest_node, area, tri_sines, tri_co_sines, tri_angles, node_angles, curvature, edges, node_normals, face_normals, normals_scale, coords, sph_coords, sph_coords_center, boundary_nodes, boundary_triangles, internal_nodes, tlrc, prefix)
+    const params = surface_metrics_params(surf1, volume, convexity, closest_node, area, tri_sines, tri_cosines, tri_co_sines, tri_angles, node_angles, curvature, edges, node_normals, face_normals, normals_scale, coords, sph_coords, sph_coords_center, boundary_nodes, boundary_triangles, internal_nodes, tlrc, prefix)
     return surface_metrics_execute(params, execution);
 }
 

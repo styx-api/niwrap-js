@@ -4,11 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SCALE_TO_MAP_METADATA: Metadata = {
-    id: "138fa837b12f477298b27ad4f0e790647533e634.boutiques",
+    id: "9a992db39f38d17e9c86690f3d2805363790bd24.boutiques",
     name: "ScaleToMap",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
+
+
+interface ScaleToMapTraceParameters {
+    "__STYXTYPE__": "trace";
+    "trace": boolean;
+    "TRACE": boolean;
+}
 
 
 interface ScaleToMapParameters {
@@ -39,8 +46,7 @@ interface ScaleToMapParameters {
     "novolreg": boolean;
     "noxform": boolean;
     "setenv"?: string | null | undefined;
-    "TRACE": boolean;
-    "TRACE_1": boolean;
+    "trace"?: ScaleToMapTraceParameters | null | undefined;
     "nomall": boolean;
     "yesmall": boolean;
 }
@@ -58,6 +64,7 @@ function dynCargs(
      */
     const cargsFuncs = {
         "ScaleToMap": scale_to_map_cargs,
+        "trace": scale_to_map_trace_cargs,
     };
     return cargsFuncs[t];
 }
@@ -76,6 +83,50 @@ function dynOutputs(
     const outputsFuncs = {
     };
     return outputsFuncs[t];
+}
+
+
+function scale_to_map_trace_params(
+    trace: boolean = false,
+    trace_: boolean = false,
+): ScaleToMapTraceParameters {
+    /**
+     * Build parameters.
+    
+     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+     * @param trace_ Turns on extreme tracing.
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "trace" as const,
+        "trace": trace,
+        "TRACE": trace_,
+    };
+    return params;
+}
+
+
+function scale_to_map_trace_cargs(
+    params: ScaleToMapTraceParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["trace"] ?? null)) {
+        cargs.push("-trace");
+    }
+    if ((params["TRACE"] ?? null)) {
+        cargs.push("-TRACE");
+    }
+    return cargs;
 }
 
 
@@ -119,8 +170,7 @@ function scale_to_map_params(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: boolean = false,
-    trace_1: boolean = false,
+    trace: ScaleToMapTraceParameters | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
 ): ScaleToMapParameters {
@@ -153,8 +203,7 @@ function scale_to_map_params(
      * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
      * @param noxform Same as -novolreg
      * @param setenv Set environment variable ENVname to ENVvalue. Quotes are necessary
-     * @param trace Turn on extreme tracing
-     * @param trace_1 Turn on extreme tracing
+     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
      * @param nomall Turn off memory tracing
      * @param yesmall Turn on memory tracing (default)
     
@@ -177,8 +226,6 @@ function scale_to_map_params(
         "showdb": showdb,
         "novolreg": novolreg,
         "noxform": noxform,
-        "TRACE": trace,
-        "TRACE_1": trace_1,
         "nomall": nomall,
         "yesmall": yesmall,
     };
@@ -214,6 +261,9 @@ function scale_to_map_params(
     }
     if (setenv !== null) {
         params["setenv"] = setenv;
+    }
+    if (trace !== null) {
+        params["trace"] = trace;
     }
     return params;
 }
@@ -338,11 +388,8 @@ function scale_to_map_cargs(
             (params["setenv"] ?? null)
         );
     }
-    if ((params["TRACE"] ?? null)) {
-        cargs.push("-TRACE");
-    }
-    if ((params["TRACE_1"] ?? null)) {
-        cargs.push("-TRACE");
+    if ((params["trace"] ?? null) !== null) {
+        cargs.push(...dynCargs((params["trace"] ?? null).__STYXTYPE__)((params["trace"] ?? null), execution));
     }
     if ((params["nomall"] ?? null)) {
         cargs.push("-nomall");
@@ -424,8 +471,7 @@ function scale_to_map(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: boolean = false,
-    trace_1: boolean = false,
+    trace: ScaleToMapTraceParameters | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
     runner: Runner | null = null,
@@ -463,8 +509,7 @@ function scale_to_map(
      * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
      * @param noxform Same as -novolreg
      * @param setenv Set environment variable ENVname to ENVvalue. Quotes are necessary
-     * @param trace Turn on extreme tracing
-     * @param trace_1 Turn on extreme tracing
+     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
      * @param nomall Turn off memory tracing
      * @param yesmall Turn on memory tracing (default)
      * @param runner Command runner
@@ -473,7 +518,7 @@ function scale_to_map(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SCALE_TO_MAP_METADATA);
-    const params = scale_to_map_params(input_file, icol, vcol, cmap, cmapfile, cmapdb, frf, clp, perc_clp, apr, anr, interp, nointerp, direct, msk_zero, msk, msk_col, nomsk_col, br, help, verbose, showmap, showdb, novolreg, noxform, setenv, trace, trace_1, nomall, yesmall)
+    const params = scale_to_map_params(input_file, icol, vcol, cmap, cmapfile, cmapdb, frf, clp, perc_clp, apr, anr, interp, nointerp, direct, msk_zero, msk, msk_col, nomsk_col, br, help, verbose, showmap, showdb, novolreg, noxform, setenv, trace, nomall, yesmall)
     return scale_to_map_execute(params, execution);
 }
 
@@ -482,6 +527,8 @@ export {
       SCALE_TO_MAP_METADATA,
       ScaleToMapOutputs,
       ScaleToMapParameters,
+      ScaleToMapTraceParameters,
       scale_to_map,
       scale_to_map_params,
+      scale_to_map_trace_params,
 };

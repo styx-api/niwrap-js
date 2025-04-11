@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DINFO_METADATA: Metadata = {
-    id: "f353120eab54bc890231034383d0e4bd7a054c5f.boutiques",
+    id: "86a1a25185fbac11195a77f478c99c578510dd6d.boutiques",
     name: "3dinfo",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

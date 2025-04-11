@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RBOX_METADATA: Metadata = {
-    id: "68a575328899ce33835ac92e288c0d8133631651.boutiques",
+    id: "67924a2ff0036f0fdd2043af4f02345db414c076.boutiques",
     name: "rbox",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -31,7 +31,6 @@ interface RboxParameters {
     "remove_command_line": boolean;
     "time_seed": boolean;
     "integer_coordinates": boolean;
-    "bounding_box_1"?: number | null | undefined;
     "offset"?: number | null | undefined;
     "user_seed"?: number | null | undefined;
     "mesh_lattice"?: Array<string> | null | undefined;
@@ -103,7 +102,6 @@ function rbox_params(
     remove_command_line: boolean = false,
     time_seed: boolean = false,
     integer_coordinates: boolean = false,
-    bounding_box_1: number | null = null,
     offset: number | null = null,
     user_seed: number | null = null,
     mesh_lattice: Array<string> | null = null,
@@ -129,7 +127,6 @@ function rbox_params(
      * @param remove_command_line Remove command line from the first line of output
      * @param time_seed Use time as the random number seed (default is command line)
      * @param integer_coordinates Print integer coordinates, default 'Bn' is 1e+06
-     * @param bounding_box_1 Bounding box coordinates, default 0.5
      * @param offset Offset coordinates by n
      * @param user_seed Use n as the random number seed
      * @param mesh_lattice Lattice (Mesh) rotated by [n,-m,0], [m,n,0], [0,0,r], ...
@@ -166,9 +163,6 @@ function rbox_params(
     }
     if (bounding_box !== null) {
         params["bounding_box"] = bounding_box;
-    }
-    if (bounding_box_1 !== null) {
-        params["bounding_box_1"] = bounding_box_1;
     }
     if (offset !== null) {
         params["offset"] = offset;
@@ -261,12 +255,6 @@ function rbox_cargs(
     if ((params["integer_coordinates"] ?? null)) {
         cargs.push("z");
     }
-    if ((params["bounding_box_1"] ?? null) !== null) {
-        cargs.push(
-            "B",
-            String((params["bounding_box_1"] ?? null))
-        );
-    }
     if ((params["offset"] ?? null) !== null) {
         cargs.push(
             "O",
@@ -351,7 +339,6 @@ function rbox(
     remove_command_line: boolean = false,
     time_seed: boolean = false,
     integer_coordinates: boolean = false,
-    bounding_box_1: number | null = null,
     offset: number | null = null,
     user_seed: number | null = null,
     mesh_lattice: Array<string> | null = null,
@@ -382,7 +369,6 @@ function rbox(
      * @param remove_command_line Remove command line from the first line of output
      * @param time_seed Use time as the random number seed (default is command line)
      * @param integer_coordinates Print integer coordinates, default 'Bn' is 1e+06
-     * @param bounding_box_1 Bounding box coordinates, default 0.5
      * @param offset Offset coordinates by n
      * @param user_seed Use n as the random number seed
      * @param mesh_lattice Lattice (Mesh) rotated by [n,-m,0], [m,n,0], [0,0,r], ...
@@ -392,7 +378,7 @@ function rbox(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RBOX_METADATA);
-    const params = rbox_params(number_points, dimension, unit_cube, unit_diamond, spiral, regular_polygon, cospherical_points, simplex_points, simplex_plus_points, add_point, lens_distribution, random_within, random_disk, bounding_box, homogeneous_coordinates, remove_command_line, time_seed, integer_coordinates, bounding_box_1, offset, user_seed, mesh_lattice)
+    const params = rbox_params(number_points, dimension, unit_cube, unit_diamond, spiral, regular_polygon, cospherical_points, simplex_points, simplex_plus_points, add_point, lens_distribution, random_within, random_disk, bounding_box, homogeneous_coordinates, remove_command_line, time_seed, integer_coordinates, offset, user_seed, mesh_lattice)
     return rbox_execute(params, execution);
 }
 

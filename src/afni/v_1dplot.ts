@@ -4,11 +4,32 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DPLOT_METADATA: Metadata = {
-    id: "6788a8e1515d2599fa0907e7c75462b8f951b805.boutiques",
+    id: "c1f84212c52ad16293732b26e206afbcd098f255.boutiques",
     name: "1dplot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
+
+
+interface V1dplotNolineParameters {
+    "__STYXTYPE__": "noline";
+    "noline": boolean;
+    "NOLINE": boolean;
+}
+
+
+interface V1dplotThickParameters {
+    "__STYXTYPE__": "thick";
+    "thick": boolean;
+    "THICK": boolean;
+}
+
+
+interface V1dplotRboxParameters {
+    "__STYXTYPE__": "rbox";
+    "rbox"?: string | null | undefined;
+    "Rbox"?: string | null | undefined;
+}
 
 
 interface V1dplotParameters {
@@ -18,8 +39,7 @@ interface V1dplotParameters {
     "sep": boolean;
     "one": boolean;
     "sepscl": boolean;
-    "NOLINE": boolean;
-    "NOLINE_1": boolean;
+    "noline"?: V1dplotNolineParameters | null | undefined;
     "box": boolean;
     "hist": boolean;
     "norm2": boolean;
@@ -56,16 +76,14 @@ interface V1dplotParameters {
     "yaxis"?: string | null | undefined;
     "ynames"?: Array<string> | null | undefined;
     "volreg": boolean;
-    "THICK": boolean;
-    "THICK_1": boolean;
+    "thick"?: V1dplotThickParameters | null | undefined;
     "dashed"?: string | null | undefined;
     "setenv"?: string | null | undefined;
     "censor_RGB"?: string | null | undefined;
     "censor"?: InputPathType | null | undefined;
     "CENSORTR"?: Array<string> | null | undefined;
     "concat"?: InputPathType | null | undefined;
-    "Rbox"?: string | null | undefined;
-    "Rbox_1"?: string | null | undefined;
+    "rbox"?: V1dplotRboxParameters | null | undefined;
     "line"?: string | null | undefined;
 }
 
@@ -82,6 +100,9 @@ function dynCargs(
      */
     const cargsFuncs = {
         "1dplot": v_1dplot_cargs,
+        "noline": v_1dplot_noline_cargs,
+        "thick": v_1dplot_thick_cargs,
+        "rbox": v_1dplot_rbox_cargs,
     };
     return cargsFuncs[t];
 }
@@ -100,6 +121,148 @@ function dynOutputs(
     const outputsFuncs = {
     };
     return outputsFuncs[t];
+}
+
+
+function v_1dplot_noline_params(
+    noline: boolean = false,
+    noline_: boolean = false,
+): V1dplotNolineParameters {
+    /**
+     * Build parameters.
+    
+     * @param noline Don't plot the connecting lines.
+     * @param noline_ Same as -noline, but will not try to plot values outside the rectangular box that contains the graph axes.
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "noline" as const,
+        "noline": noline,
+        "NOLINE": noline_,
+    };
+    return params;
+}
+
+
+function v_1dplot_noline_cargs(
+    params: V1dplotNolineParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["noline"] ?? null)) {
+        cargs.push("-noline");
+    }
+    if ((params["NOLINE"] ?? null)) {
+        cargs.push("-NOLINE");
+    }
+    return cargs;
+}
+
+
+function v_1dplot_thick_params(
+    thick: boolean = false,
+    thick_: boolean = false,
+): V1dplotThickParameters {
+    /**
+     * Build parameters.
+    
+     * @param thick Increase the line thickness used for plotting.
+     * @param thick_ Twice the power of '-thick' at no extra cost!
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "thick" as const,
+        "thick": thick,
+        "THICK": thick_,
+    };
+    return params;
+}
+
+
+function v_1dplot_thick_cargs(
+    params: V1dplotThickParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["thick"] ?? null)) {
+        cargs.push("-thick");
+    }
+    if ((params["THICK"] ?? null)) {
+        cargs.push("-THICK");
+    }
+    return cargs;
+}
+
+
+function v_1dplot_rbox_params(
+    rbox: string | null = null,
+    rbox_: string | null = null,
+): V1dplotRboxParameters {
+    /**
+     * Build parameters.
+    
+     * @param rbox Draw a rectangular box with specified corners and colors.
+     * @param rbox_ Draw a rectangular box with one extra horizontal line.
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "rbox" as const,
+    };
+    if (rbox !== null) {
+        params["rbox"] = rbox;
+    }
+    if (rbox_ !== null) {
+        params["Rbox"] = rbox_;
+    }
+    return params;
+}
+
+
+function v_1dplot_rbox_cargs(
+    params: V1dplotRboxParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["rbox"] ?? null) !== null) {
+        cargs.push(
+            "-rbox",
+            (params["rbox"] ?? null)
+        );
+    }
+    if ((params["Rbox"] ?? null) !== null) {
+        cargs.push(
+            "-Rbox",
+            (params["Rbox"] ?? null)
+        );
+    }
+    return cargs;
 }
 
 
@@ -122,8 +285,7 @@ function v_1dplot_params(
     sep: boolean = false,
     one: boolean = false,
     sepscl: boolean = false,
-    noline: boolean = false,
-    noline_1: boolean = false,
+    noline: V1dplotNolineParameters | null = null,
     box: boolean = false,
     hist: boolean = false,
     norm2: boolean = false,
@@ -160,16 +322,14 @@ function v_1dplot_params(
     yaxis: string | null = null,
     ynames: Array<string> | null = null,
     volreg: boolean = false,
-    thick: boolean = false,
-    thick_1: boolean = false,
+    thick: V1dplotThickParameters | null = null,
     dashed: string | null = null,
     setenv: string | null = null,
     censor_rgb: string | null = null,
     censor: InputPathType | null = null,
     censortr: Array<string> | null = null,
     concat: InputPathType | null = null,
-    rbox: string | null = null,
-    rbox_1: string | null = null,
+    rbox: V1dplotRboxParameters | null = null,
     line: string | null = null,
 ): V1dplotParameters {
     /**
@@ -180,8 +340,7 @@ function v_1dplot_params(
      * @param sep Plot each column in a separate sub-graph.
      * @param one Plot all columns together in one big graph.
      * @param sepscl Plot each column in a separate sub-graph and allow each sub-graph to have a different y-scale. This option is meaningless with -one!
-     * @param noline Same as -noline, but will not try to plot values outside the rectangular box that contains the graph axes.
-     * @param noline_1 Same as -noline, but will not try to plot values outside the rectangular box that contains the graph axes.
+     * @param noline Don't plot the connecting lines.
      * @param box Plot a small 'box' at each data point.
      * @param hist Plot graphs in histogram style (i.e., vertical boxes).
      * @param norm2 Independently scale each time series plotted to have L_2 norm = 1 (sum of squares).
@@ -218,16 +377,14 @@ function v_1dplot_params(
      * @param yaxis Set the y-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
      * @param ynames Use the strings as labels to the right of the graphs, corresponding to each input column.
      * @param volreg Makes the 'ynames' be the same as the 6 labels used in plug_volreg for Roll, Pitch, Yaw, I-S, R-L, and A-P movements.
-     * @param thick Twice the power of '-thick' at no extra cost!
-     * @param thick_1 Twice the power of '-thick' at no extra cost!
+     * @param thick Increase the line thickness used for plotting.
      * @param dashed Plot dashed lines between data points using specified colon-separated list of dash values (1: solid, 2: longer dashes, 3: shorter dashes).
      * @param setenv Set environment variable 'name' to 'val' for this run of the program only.
      * @param censor_rgb Set the color used for marking to a specified color.
      * @param censor Specify the filename of the censor .1D time series.
      * @param censortr Specify time indexes to be marked in the graph(s).
      * @param concat Specify the filename for the list of concatenated runs.
-     * @param rbox Draw a rectangular box with one extra horizontal line.
-     * @param rbox_1 Draw a rectangular box with one extra horizontal line.
+     * @param rbox Draw a rectangular box.
      * @param line Draw one line segment.
     
      * @returns Parameter dictionary
@@ -239,8 +396,6 @@ function v_1dplot_params(
         "sep": sep,
         "one": one,
         "sepscl": sepscl,
-        "NOLINE": noline,
-        "NOLINE_1": noline_1,
         "box": box,
         "hist": hist,
         "norm2": norm2,
@@ -252,9 +407,10 @@ function v_1dplot_params(
         "stdin": stdin,
         "ps": ps,
         "volreg": volreg,
-        "THICK": thick,
-        "THICK_1": thick_1,
     };
+    if (noline !== null) {
+        params["noline"] = noline;
+    }
     if (x !== null) {
         params["x"] = x;
     }
@@ -330,6 +486,9 @@ function v_1dplot_params(
     if (ynames !== null) {
         params["ynames"] = ynames;
     }
+    if (thick !== null) {
+        params["thick"] = thick;
+    }
     if (dashed !== null) {
         params["dashed"] = dashed;
     }
@@ -349,10 +508,7 @@ function v_1dplot_params(
         params["concat"] = concat;
     }
     if (rbox !== null) {
-        params["Rbox"] = rbox;
-    }
-    if (rbox_1 !== null) {
-        params["Rbox_1"] = rbox_1;
+        params["rbox"] = rbox;
     }
     if (line !== null) {
         params["line"] = line;
@@ -388,11 +544,8 @@ function v_1dplot_cargs(
     if ((params["sepscl"] ?? null)) {
         cargs.push("-sepscl");
     }
-    if ((params["NOLINE"] ?? null)) {
-        cargs.push("-NOLINE");
-    }
-    if ((params["NOLINE_1"] ?? null)) {
-        cargs.push("-NOLINE");
+    if ((params["noline"] ?? null) !== null) {
+        cargs.push(...dynCargs((params["noline"] ?? null).__STYXTYPE__)((params["noline"] ?? null), execution));
     }
     if ((params["box"] ?? null)) {
         cargs.push("-box");
@@ -577,11 +730,8 @@ function v_1dplot_cargs(
     if ((params["volreg"] ?? null)) {
         cargs.push("-volreg");
     }
-    if ((params["THICK"] ?? null)) {
-        cargs.push("-THICK");
-    }
-    if ((params["THICK_1"] ?? null)) {
-        cargs.push("-THICK");
+    if ((params["thick"] ?? null) !== null) {
+        cargs.push(...dynCargs((params["thick"] ?? null).__STYXTYPE__)((params["thick"] ?? null), execution));
     }
     if ((params["dashed"] ?? null) !== null) {
         cargs.push(
@@ -619,17 +769,8 @@ function v_1dplot_cargs(
             execution.inputFile((params["concat"] ?? null))
         );
     }
-    if ((params["Rbox"] ?? null) !== null) {
-        cargs.push(
-            "-Rbox",
-            (params["Rbox"] ?? null)
-        );
-    }
-    if ((params["Rbox_1"] ?? null) !== null) {
-        cargs.push(
-            "-Rbox",
-            (params["Rbox_1"] ?? null)
-        );
+    if ((params["rbox"] ?? null) !== null) {
+        cargs.push(...dynCargs((params["rbox"] ?? null).__STYXTYPE__)((params["rbox"] ?? null), execution));
     }
     if ((params["line"] ?? null) !== null) {
         cargs.push(
@@ -690,8 +831,7 @@ function v_1dplot(
     sep: boolean = false,
     one: boolean = false,
     sepscl: boolean = false,
-    noline: boolean = false,
-    noline_1: boolean = false,
+    noline: V1dplotNolineParameters | null = null,
     box: boolean = false,
     hist: boolean = false,
     norm2: boolean = false,
@@ -728,16 +868,14 @@ function v_1dplot(
     yaxis: string | null = null,
     ynames: Array<string> | null = null,
     volreg: boolean = false,
-    thick: boolean = false,
-    thick_1: boolean = false,
+    thick: V1dplotThickParameters | null = null,
     dashed: string | null = null,
     setenv: string | null = null,
     censor_rgb: string | null = null,
     censor: InputPathType | null = null,
     censortr: Array<string> | null = null,
     concat: InputPathType | null = null,
-    rbox: string | null = null,
-    rbox_1: string | null = null,
+    rbox: V1dplotRboxParameters | null = null,
     line: string | null = null,
     runner: Runner | null = null,
 ): V1dplotOutputs {
@@ -753,8 +891,7 @@ function v_1dplot(
      * @param sep Plot each column in a separate sub-graph.
      * @param one Plot all columns together in one big graph.
      * @param sepscl Plot each column in a separate sub-graph and allow each sub-graph to have a different y-scale. This option is meaningless with -one!
-     * @param noline Same as -noline, but will not try to plot values outside the rectangular box that contains the graph axes.
-     * @param noline_1 Same as -noline, but will not try to plot values outside the rectangular box that contains the graph axes.
+     * @param noline Don't plot the connecting lines.
      * @param box Plot a small 'box' at each data point.
      * @param hist Plot graphs in histogram style (i.e., vertical boxes).
      * @param norm2 Independently scale each time series plotted to have L_2 norm = 1 (sum of squares).
@@ -791,16 +928,14 @@ function v_1dplot(
      * @param yaxis Set the y-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
      * @param ynames Use the strings as labels to the right of the graphs, corresponding to each input column.
      * @param volreg Makes the 'ynames' be the same as the 6 labels used in plug_volreg for Roll, Pitch, Yaw, I-S, R-L, and A-P movements.
-     * @param thick Twice the power of '-thick' at no extra cost!
-     * @param thick_1 Twice the power of '-thick' at no extra cost!
+     * @param thick Increase the line thickness used for plotting.
      * @param dashed Plot dashed lines between data points using specified colon-separated list of dash values (1: solid, 2: longer dashes, 3: shorter dashes).
      * @param setenv Set environment variable 'name' to 'val' for this run of the program only.
      * @param censor_rgb Set the color used for marking to a specified color.
      * @param censor Specify the filename of the censor .1D time series.
      * @param censortr Specify time indexes to be marked in the graph(s).
      * @param concat Specify the filename for the list of concatenated runs.
-     * @param rbox Draw a rectangular box with one extra horizontal line.
-     * @param rbox_1 Draw a rectangular box with one extra horizontal line.
+     * @param rbox Draw a rectangular box.
      * @param line Draw one line segment.
      * @param runner Command runner
     
@@ -808,15 +943,21 @@ function v_1dplot(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DPLOT_METADATA);
-    const params = v_1dplot_params(tsfiles, install, sep, one, sepscl, noline, noline_1, box, hist, norm2, normx, norm1, demean, x, xl10, dx, xzero, nopush, ignore, use, xlabel, ylabel, plabel, title, wintitle, naked, aspect, stdin, ps, jpg, jpeg, png, pnm, pngs, jpgs, jpegs, pnms, ytran, xtran, xaxis, yaxis, ynames, volreg, thick, thick_1, dashed, setenv, censor_rgb, censor, censortr, concat, rbox, rbox_1, line)
+    const params = v_1dplot_params(tsfiles, install, sep, one, sepscl, noline, box, hist, norm2, normx, norm1, demean, x, xl10, dx, xzero, nopush, ignore, use, xlabel, ylabel, plabel, title, wintitle, naked, aspect, stdin, ps, jpg, jpeg, png, pnm, pngs, jpgs, jpegs, pnms, ytran, xtran, xaxis, yaxis, ynames, volreg, thick, dashed, setenv, censor_rgb, censor, censortr, concat, rbox, line)
     return v_1dplot_execute(params, execution);
 }
 
 
 export {
+      V1dplotNolineParameters,
       V1dplotOutputs,
       V1dplotParameters,
+      V1dplotRboxParameters,
+      V1dplotThickParameters,
       V_1DPLOT_METADATA,
       v_1dplot,
+      v_1dplot_noline_params,
       v_1dplot_params,
+      v_1dplot_rbox_params,
+      v_1dplot_thick_params,
 };

@@ -4,11 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_METADATA: Metadata = {
-    id: "5d2a0e6b29e70fe10b66108a8eac5087e85c371d.boutiques",
+    id: "101ab2bd38fcd345ee05713b574dfaa5596da053.boutiques",
     name: "fabber",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
 };
+
+
+interface FabberOptfileParameters {
+    "__STYXTYPE__": "optfile";
+    "optfile_short"?: InputPathType | null | undefined;
+    "optfile_long"?: InputPathType | null | undefined;
+}
 
 
 interface FabberParameters {
@@ -30,7 +37,7 @@ interface FabberParameters {
     "link_to_latest": boolean;
     "load_models"?: InputPathType | null | undefined;
     "debug": boolean;
-    "optfile"?: InputPathType | null | undefined;
+    "optfile"?: FabberOptfileParameters | null | undefined;
     "save_model_fit": boolean;
     "save_residuals": boolean;
     "save_model_extras": boolean;
@@ -48,7 +55,6 @@ interface FabberParameters {
     "list_params": boolean;
     "desc_params": boolean;
     "list_outputs": boolean;
-    "optfile_1"?: InputPathType | null | undefined;
     "old_optfile"?: InputPathType | null | undefined;
 }
 
@@ -65,6 +71,7 @@ function dynCargs(
      */
     const cargsFuncs = {
         "fabber": fabber_cargs,
+        "optfile": fabber_optfile_cargs,
     };
     return cargsFuncs[t];
 }
@@ -84,6 +91,60 @@ function dynOutputs(
         "fabber": fabber_outputs,
     };
     return outputsFuncs[t];
+}
+
+
+function fabber_optfile_params(
+    optfile_short: InputPathType | null = null,
+    optfile_long: InputPathType | null = null,
+): FabberOptfileParameters {
+    /**
+     * Build parameters.
+    
+     * @param optfile_short Read options in option=value form from the specified file
+     * @param optfile_long File containing additional options, one per line, in the same form as specified on the command line
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "optfile" as const,
+    };
+    if (optfile_short !== null) {
+        params["optfile_short"] = optfile_short;
+    }
+    if (optfile_long !== null) {
+        params["optfile_long"] = optfile_long;
+    }
+    return params;
+}
+
+
+function fabber_optfile_cargs(
+    params: FabberOptfileParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["optfile_short"] ?? null) !== null) {
+        cargs.push(
+            "-f",
+            execution.inputFile((params["optfile_short"] ?? null))
+        );
+    }
+    if ((params["optfile_long"] ?? null) !== null) {
+        cargs.push(
+            "--optfile",
+            execution.inputFile((params["optfile_long"] ?? null))
+        );
+    }
+    return cargs;
 }
 
 
@@ -166,7 +227,7 @@ function fabber_params(
     link_to_latest: boolean = false,
     load_models: InputPathType | null = null,
     debug: boolean = false,
-    optfile: InputPathType | null = null,
+    optfile: FabberOptfileParameters | null = null,
     save_model_fit: boolean = false,
     save_residuals: boolean = false,
     save_model_extras: boolean = false,
@@ -184,7 +245,6 @@ function fabber_params(
     list_params: boolean = false,
     desc_params: boolean = false,
     list_outputs: boolean = false,
-    optfile_1: InputPathType | null = null,
     old_optfile: InputPathType | null = null,
 ): FabberParameters {
     /**
@@ -207,7 +267,7 @@ function fabber_params(
      * @param link_to_latest Try to create a link to the most recent output directory with the prefix _latest
      * @param load_models Load models dynamically from the specified filename, which should be a DLL/shared library
      * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-     * @param optfile Read options in option=value form from the specified file
+     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
      * @param save_model_fit Output the model prediction as a 4d volume
      * @param save_residuals Output the residuals (difference between the data and the model prediction)
      * @param save_model_extras Output any additional model-specific timeseries data
@@ -225,7 +285,6 @@ function fabber_params(
      * @param list_params List model parameters (requires model configuration options to be given)
      * @param desc_params Describe model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
      * @param list_outputs List additional model outputs (requires model configuration options to be given)
-     * @param optfile_1 Read options in option=value form from the specified file
      * @param old_optfile Read options in command line form from the specified file (DEPRECATED)
     
      * @returns Parameter dictionary
@@ -287,9 +346,6 @@ function fabber_params(
     }
     if (optfile !== null) {
         params["optfile"] = optfile;
-    }
-    if (optfile_1 !== null) {
-        params["optfile_1"] = optfile_1;
     }
     if (old_optfile !== null) {
         params["old_optfile"] = old_optfile;
@@ -395,10 +451,7 @@ function fabber_cargs(
         cargs.push("--debug");
     }
     if ((params["optfile"] ?? null) !== null) {
-        cargs.push(
-            "-f",
-            execution.inputFile((params["optfile"] ?? null))
-        );
+        cargs.push(...dynCargs((params["optfile"] ?? null).__STYXTYPE__)((params["optfile"] ?? null), execution));
     }
     if ((params["save_model_fit"] ?? null)) {
         cargs.push("--save-model-fit");
@@ -450,12 +503,6 @@ function fabber_cargs(
     }
     if ((params["list_outputs"] ?? null)) {
         cargs.push("--listoutputs");
-    }
-    if ((params["optfile_1"] ?? null) !== null) {
-        cargs.push(
-            "-f",
-            execution.inputFile((params["optfile_1"] ?? null))
-        );
     }
     if ((params["old_optfile"] ?? null) !== null) {
         cargs.push(
@@ -540,7 +587,7 @@ function fabber(
     link_to_latest: boolean = false,
     load_models: InputPathType | null = null,
     debug: boolean = false,
-    optfile: InputPathType | null = null,
+    optfile: FabberOptfileParameters | null = null,
     save_model_fit: boolean = false,
     save_residuals: boolean = false,
     save_model_extras: boolean = false,
@@ -558,7 +605,6 @@ function fabber(
     list_params: boolean = false,
     desc_params: boolean = false,
     list_outputs: boolean = false,
-    optfile_1: InputPathType | null = null,
     old_optfile: InputPathType | null = null,
     runner: Runner | null = null,
 ): FabberOutputs {
@@ -586,7 +632,7 @@ function fabber(
      * @param link_to_latest Try to create a link to the most recent output directory with the prefix _latest
      * @param load_models Load models dynamically from the specified filename, which should be a DLL/shared library
      * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-     * @param optfile Read options in option=value form from the specified file
+     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
      * @param save_model_fit Output the model prediction as a 4d volume
      * @param save_residuals Output the residuals (difference between the data and the model prediction)
      * @param save_model_extras Output any additional model-specific timeseries data
@@ -604,7 +650,6 @@ function fabber(
      * @param list_params List model parameters (requires model configuration options to be given)
      * @param desc_params Describe model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
      * @param list_outputs List additional model outputs (requires model configuration options to be given)
-     * @param optfile_1 Read options in option=value form from the specified file
      * @param old_optfile Read options in command line form from the specified file (DEPRECATED)
      * @param runner Command runner
     
@@ -612,15 +657,17 @@ function fabber(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FABBER_METADATA);
-    const params = fabber_params(output, method, model, data_file, data_files, data_order, mask_file, mt_n, supp_data, evaluate_output, evaluate_params, evaluate_nt, simple_output, overwrite, link_to_latest, load_models, debug, optfile, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, help, list_methods, list_models, list_params, desc_params, list_outputs, optfile_1, old_optfile)
+    const params = fabber_params(output, method, model, data_file, data_files, data_order, mask_file, mt_n, supp_data, evaluate_output, evaluate_params, evaluate_nt, simple_output, overwrite, link_to_latest, load_models, debug, optfile, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, help, list_methods, list_models, list_params, desc_params, list_outputs, old_optfile)
     return fabber_execute(params, execution);
 }
 
 
 export {
       FABBER_METADATA,
+      FabberOptfileParameters,
       FabberOutputs,
       FabberParameters,
       fabber,
+      fabber_optfile_params,
       fabber_params,
 };

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TSFMULT_METADATA: Metadata = {
-    id: "4b57581032a9d693139dce131b325135d4381b3e.boutiques",
+    id: "105c8e8f8aa0ac88867d8e13a902f5ea3d4b3545.boutiques",
     name: "tsfmult",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",
@@ -29,7 +29,6 @@ interface TsfmultParameters {
     "help": boolean;
     "version": boolean;
     "input1": InputPathType;
-    "input1_1": InputPathType;
     "output": string;
 }
 
@@ -129,7 +128,6 @@ interface TsfmultOutputs {
 
 function tsfmult_params(
     input1: InputPathType,
-    input1_1: InputPathType,
     output: string,
     info: boolean = false,
     quiet: boolean = false,
@@ -144,7 +142,6 @@ function tsfmult_params(
      * Build parameters.
     
      * @param input1 the second input track scalar file.
-     * @param input1_1 the second input track scalar file.
      * @param output the output track scalar file
      * @param info display information messages.
      * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
@@ -166,7 +163,6 @@ function tsfmult_params(
         "help": help,
         "version": version,
         "input1": input1,
-        "input1_1": input1_1,
         "output": output,
     };
     if (nthreads !== null) {
@@ -221,7 +217,6 @@ function tsfmult_cargs(
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input1"] ?? null)));
-    cargs.push(execution.inputFile((params["input1_1"] ?? null)));
     cargs.push((params["output"] ?? null));
     return cargs;
 }
@@ -279,7 +274,6 @@ function tsfmult_execute(
 
 function tsfmult(
     input1: InputPathType,
-    input1_1: InputPathType,
     output: string,
     info: boolean = false,
     quiet: boolean = false,
@@ -305,7 +299,6 @@ function tsfmult(
      * URL: https://www.mrtrix.org/
     
      * @param input1 the second input track scalar file.
-     * @param input1_1 the second input track scalar file.
      * @param output the output track scalar file
      * @param info display information messages.
      * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
@@ -321,7 +314,7 @@ function tsfmult(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TSFMULT_METADATA);
-    const params = tsfmult_params(input1, input1_1, output, info, quiet, debug, force, nthreads, config, help, version)
+    const params = tsfmult_params(input1, output, info, quiet, debug, force, nthreads, config, help, version)
     return tsfmult_execute(params, execution);
 }
 

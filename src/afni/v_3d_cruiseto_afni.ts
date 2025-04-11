@@ -4,11 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_CRUISETO_AFNI_METADATA: Metadata = {
-    id: "90d0713bc385c41707035728eac40990b25fbf39.boutiques",
+    id: "ecced7561c452fa6014dcc10bbbbd514bae7282a.boutiques",
     name: "3dCRUISEtoAFNI",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
+
+
+interface V3dCruisetoAfniTraceParameters {
+    "__STYXTYPE__": "trace";
+    "trace": boolean;
+    "TRACE": boolean;
+}
 
 
 interface V3dCruisetoAfniParameters {
@@ -17,8 +24,7 @@ interface V3dCruisetoAfniParameters {
     "novolreg": boolean;
     "noxform": boolean;
     "setenv"?: string | null | undefined;
-    "TRACE": boolean;
-    "TRACE_1": boolean;
+    "trace"?: V3dCruisetoAfniTraceParameters | null | undefined;
     "nomall": boolean;
     "yesmall": boolean;
     "help": boolean;
@@ -38,6 +44,7 @@ function dynCargs(
      */
     const cargsFuncs = {
         "3dCRUISEtoAFNI": v_3d_cruiseto_afni_cargs,
+        "trace": v_3d_cruiseto_afni_trace_cargs,
     };
     return cargsFuncs[t];
 }
@@ -59,6 +66,50 @@ function dynOutputs(
 }
 
 
+function v_3d_cruiseto_afni_trace_params(
+    trace: boolean = false,
+    trace_: boolean = false,
+): V3dCruisetoAfniTraceParameters {
+    /**
+     * Build parameters.
+    
+     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+     * @param trace_ Turns on extreme tracing.
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "trace" as const,
+        "trace": trace,
+        "TRACE": trace_,
+    };
+    return params;
+}
+
+
+function v_3d_cruiseto_afni_trace_cargs(
+    params: V3dCruisetoAfniTraceParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["trace"] ?? null)) {
+        cargs.push("-trace");
+    }
+    if ((params["TRACE"] ?? null)) {
+        cargs.push("-TRACE");
+    }
+    return cargs;
+}
+
+
 /**
  * Output object returned when calling `v_3d_cruiseto_afni(...)`.
  *
@@ -77,8 +128,7 @@ function v_3d_cruiseto_afni_params(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: boolean = false,
-    trace_1: boolean = false,
+    trace: V3dCruisetoAfniTraceParameters | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
     help: boolean = false,
@@ -91,8 +141,7 @@ function v_3d_cruiseto_afni_params(
      * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
      * @param noxform Same as -novolreg.
      * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary. Example: suma -setenv "'SUMA_BackgroundColor = 1 0 1'"
-     * @param trace Turns on extreme tracing.
-     * @param trace_1 Turns on extreme tracing.
+     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
      * @param nomall Turn off memory tracing.
      * @param yesmall Turn on memory tracing (default).
      * @param help The entire help output.
@@ -105,8 +154,6 @@ function v_3d_cruiseto_afni_params(
         "input": input,
         "novolreg": novolreg,
         "noxform": noxform,
-        "TRACE": trace,
-        "TRACE_1": trace_1,
         "nomall": nomall,
         "yesmall": yesmall,
         "help": help,
@@ -114,6 +161,9 @@ function v_3d_cruiseto_afni_params(
     };
     if (setenv !== null) {
         params["setenv"] = setenv;
+    }
+    if (trace !== null) {
+        params["trace"] = trace;
     }
     return params;
 }
@@ -149,11 +199,8 @@ function v_3d_cruiseto_afni_cargs(
             (params["setenv"] ?? null)
         );
     }
-    if ((params["TRACE"] ?? null)) {
-        cargs.push("-TRACE");
-    }
-    if ((params["TRACE_1"] ?? null)) {
-        cargs.push("-TRACE");
+    if ((params["trace"] ?? null) !== null) {
+        cargs.push(...dynCargs((params["trace"] ?? null).__STYXTYPE__)((params["trace"] ?? null), execution));
     }
     if ((params["nomall"] ?? null)) {
         cargs.push("-nomall");
@@ -219,8 +266,7 @@ function v_3d_cruiseto_afni(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: boolean = false,
-    trace_1: boolean = false,
+    trace: V3dCruisetoAfniTraceParameters | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
     help: boolean = false,
@@ -238,8 +284,7 @@ function v_3d_cruiseto_afni(
      * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
      * @param noxform Same as -novolreg.
      * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary. Example: suma -setenv "'SUMA_BackgroundColor = 1 0 1'"
-     * @param trace Turns on extreme tracing.
-     * @param trace_1 Turns on extreme tracing.
+     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
      * @param nomall Turn off memory tracing.
      * @param yesmall Turn on memory tracing (default).
      * @param help The entire help output.
@@ -250,7 +295,7 @@ function v_3d_cruiseto_afni(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CRUISETO_AFNI_METADATA);
-    const params = v_3d_cruiseto_afni_params(input, novolreg, noxform, setenv, trace, trace_1, nomall, yesmall, help, h)
+    const params = v_3d_cruiseto_afni_params(input, novolreg, noxform, setenv, trace, nomall, yesmall, help, h)
     return v_3d_cruiseto_afni_execute(params, execution);
 }
 
@@ -258,7 +303,9 @@ function v_3d_cruiseto_afni(
 export {
       V3dCruisetoAfniOutputs,
       V3dCruisetoAfniParameters,
+      V3dCruisetoAfniTraceParameters,
       V_3D_CRUISETO_AFNI_METADATA,
       v_3d_cruiseto_afni,
       v_3d_cruiseto_afni_params,
+      v_3d_cruiseto_afni_trace_params,
 };

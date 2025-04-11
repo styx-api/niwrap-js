@@ -4,11 +4,25 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ANOVA3_METADATA: Metadata = {
-    id: "0ca071faeca5610f927f49f81f4766db7f8ba8c2.boutiques",
+    id: "1e464f155335b3c9815ddb43161916b9ff1a4fe2.boutiques",
     name: "3dANOVA3",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
+
+
+interface V3dAnova3OutfileAbcontrParameters {
+    "__STYXTYPE__": "outfile_abcontr";
+    "outfile_abcontr"?: string | null | undefined;
+    "outfile_Abcontr"?: string | null | undefined;
+}
+
+
+interface V3dAnova3OutfileAbcontr1Parameters {
+    "__STYXTYPE__": "outfile_abcontr_1";
+    "outfile_abdiff"?: string | null | undefined;
+    "outfile_Abdiff"?: string | null | undefined;
+}
 
 
 interface V3dAnova3Parameters {
@@ -39,8 +53,8 @@ interface V3dAnova3Parameters {
     "outfile_acontr"?: string | null | undefined;
     "outfile_bcontr"?: string | null | undefined;
     "outfile_ccontr"?: string | null | undefined;
-    "outfile_Abcontr"?: string | null | undefined;
-    "outfile_Abdiff"?: string | null | undefined;
+    "outfile_abcontr"?: V3dAnova3OutfileAbcontrParameters | null | undefined;
+    "outfile_abdiff"?: V3dAnova3OutfileAbcontr1Parameters | null | undefined;
     "outfile_abmean"?: string | null | undefined;
     "outfile_bucket"?: string | null | undefined;
     "anova_options"?: Array<string> | null | undefined;
@@ -59,6 +73,8 @@ function dynCargs(
      */
     const cargsFuncs = {
         "3dANOVA3": v_3d_anova3_cargs,
+        "outfile_abcontr": v_3d_anova3_outfile_abcontr_cargs,
+        "outfile_abcontr_1": v_3d_anova3_outfile_abcontr_1_cargs,
     };
     return cargsFuncs[t];
 }
@@ -78,6 +94,114 @@ function dynOutputs(
         "3dANOVA3": v_3d_anova3_outputs,
     };
     return outputsFuncs[t];
+}
+
+
+function v_3d_anova3_outfile_abcontr_params(
+    outfile_abcontr: string | null = null,
+    outfile_abcontr_: string | null = null,
+): V3dAnova3OutfileAbcontrParameters {
+    /**
+     * Build parameters.
+    
+     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
+     * @param outfile_abcontr_ Specify the output file for the interaction contrast results between A and B (case-sensitive).
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "outfile_abcontr" as const,
+    };
+    if (outfile_abcontr !== null) {
+        params["outfile_abcontr"] = outfile_abcontr;
+    }
+    if (outfile_abcontr_ !== null) {
+        params["outfile_Abcontr"] = outfile_abcontr_;
+    }
+    return params;
+}
+
+
+function v_3d_anova3_outfile_abcontr_cargs(
+    params: V3dAnova3OutfileAbcontrParameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["outfile_abcontr"] ?? null) !== null) {
+        cargs.push(
+            "-aBcontr",
+            (params["outfile_abcontr"] ?? null)
+        );
+    }
+    if ((params["outfile_Abcontr"] ?? null) !== null) {
+        cargs.push(
+            "-Abcontr",
+            (params["outfile_Abcontr"] ?? null)
+        );
+    }
+    return cargs;
+}
+
+
+function v_3d_anova3_outfile_abcontr_1_params(
+    outfile_abdiff: string | null = null,
+    outfile_abdiff_: string | null = null,
+): V3dAnova3OutfileAbcontr1Parameters {
+    /**
+     * Build parameters.
+    
+     * @param outfile_abdiff Specify the output file for the interaction difference results between A and B.
+     * @param outfile_abdiff_ Specify the output file for the interaction difference results between A and B (case-sensitive).
+    
+     * @returns Parameter dictionary
+     */
+    const params = {
+        "__STYXTYPE__": "outfile_abcontr_1" as const,
+    };
+    if (outfile_abdiff !== null) {
+        params["outfile_abdiff"] = outfile_abdiff;
+    }
+    if (outfile_abdiff_ !== null) {
+        params["outfile_Abdiff"] = outfile_abdiff_;
+    }
+    return params;
+}
+
+
+function v_3d_anova3_outfile_abcontr_1_cargs(
+    params: V3dAnova3OutfileAbcontr1Parameters,
+    execution: Execution,
+): string[] {
+    /**
+     * Build command-line arguments from parameters.
+    
+     * @param params The parameters.
+     * @param execution The execution object for resolving input paths.
+    
+     * @returns Command-line arguments.
+     */
+    const cargs: string[] = [];
+    if ((params["outfile_abdiff"] ?? null) !== null) {
+        cargs.push(
+            "-aBdiff",
+            (params["outfile_abdiff"] ?? null)
+        );
+    }
+    if ((params["outfile_Abdiff"] ?? null) !== null) {
+        cargs.push(
+            "-Abdiff",
+            (params["outfile_Abdiff"] ?? null)
+        );
+    }
+    return cargs;
 }
 
 
@@ -157,8 +281,8 @@ function v_3d_anova3_params(
     outfile_acontr: string | null = null,
     outfile_bcontr: string | null = null,
     outfile_ccontr: string | null = null,
-    outfile_abcontr: string | null = null,
-    outfile_abdiff: string | null = null,
+    outfile_abcontr: V3dAnova3OutfileAbcontrParameters | null = null,
+    outfile_abdiff: V3dAnova3OutfileAbcontr1Parameters | null = null,
     outfile_abmean: string | null = null,
     outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
@@ -192,8 +316,8 @@ function v_3d_anova3_params(
      * @param outfile_acontr Specify the output file for the A contrast results.
      * @param outfile_bcontr Specify the output file for the B contrast results.
      * @param outfile_ccontr Specify the output file for the C contrast results.
-     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B (case-sensitive).
-     * @param outfile_abdiff Specify the output file for the interaction difference results between A and B (case-sensitive).
+     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
+     * @param outfile_abdiff Specify the output file for the interaction contrast results between A and B.
      * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
      * @param outfile_bucket Specify the output file for the bucket (combined) results.
      * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
@@ -270,10 +394,10 @@ function v_3d_anova3_params(
         params["outfile_ccontr"] = outfile_ccontr;
     }
     if (outfile_abcontr !== null) {
-        params["outfile_Abcontr"] = outfile_abcontr;
+        params["outfile_abcontr"] = outfile_abcontr;
     }
     if (outfile_abdiff !== null) {
-        params["outfile_Abdiff"] = outfile_abdiff;
+        params["outfile_abdiff"] = outfile_abdiff;
     }
     if (outfile_abmean !== null) {
         params["outfile_abmean"] = outfile_abmean;
@@ -445,17 +569,11 @@ function v_3d_anova3_cargs(
             (params["outfile_ccontr"] ?? null)
         );
     }
-    if ((params["outfile_Abcontr"] ?? null) !== null) {
-        cargs.push(
-            "-Abcontr",
-            (params["outfile_Abcontr"] ?? null)
-        );
+    if ((params["outfile_abcontr"] ?? null) !== null) {
+        cargs.push(...dynCargs((params["outfile_abcontr"] ?? null).__STYXTYPE__)((params["outfile_abcontr"] ?? null), execution));
     }
-    if ((params["outfile_Abdiff"] ?? null) !== null) {
-        cargs.push(
-            "-Abdiff",
-            (params["outfile_Abdiff"] ?? null)
-        );
+    if ((params["outfile_abdiff"] ?? null) !== null) {
+        cargs.push(...dynCargs((params["outfile_abdiff"] ?? null).__STYXTYPE__)((params["outfile_abdiff"] ?? null), execution));
     }
     if ((params["outfile_abmean"] ?? null) !== null) {
         cargs.push(
@@ -558,8 +676,8 @@ function v_3d_anova3(
     outfile_acontr: string | null = null,
     outfile_bcontr: string | null = null,
     outfile_ccontr: string | null = null,
-    outfile_abcontr: string | null = null,
-    outfile_abdiff: string | null = null,
+    outfile_abcontr: V3dAnova3OutfileAbcontrParameters | null = null,
+    outfile_abdiff: V3dAnova3OutfileAbcontr1Parameters | null = null,
     outfile_abmean: string | null = null,
     outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
@@ -598,8 +716,8 @@ function v_3d_anova3(
      * @param outfile_acontr Specify the output file for the A contrast results.
      * @param outfile_bcontr Specify the output file for the B contrast results.
      * @param outfile_ccontr Specify the output file for the C contrast results.
-     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B (case-sensitive).
-     * @param outfile_abdiff Specify the output file for the interaction difference results between A and B (case-sensitive).
+     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
+     * @param outfile_abdiff Specify the output file for the interaction contrast results between A and B.
      * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
      * @param outfile_bucket Specify the output file for the bucket (combined) results.
      * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
@@ -615,9 +733,13 @@ function v_3d_anova3(
 
 
 export {
+      V3dAnova3OutfileAbcontr1Parameters,
+      V3dAnova3OutfileAbcontrParameters,
       V3dAnova3Outputs,
       V3dAnova3Parameters,
       V_3D_ANOVA3_METADATA,
       v_3d_anova3,
+      v_3d_anova3_outfile_abcontr_1_params,
+      v_3d_anova3_outfile_abcontr_params,
       v_3d_anova3_params,
 };
