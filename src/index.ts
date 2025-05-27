@@ -11,4 +11,4 @@ export * as fastsurfer from './fastsurfer'
 export * as afni from './afni'
 export * as niftyreg from './niftyreg'
 export * from 'styxdefs'
-export const version = '0.6.0';
+export const version = '0.6.1';
