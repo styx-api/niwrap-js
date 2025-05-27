@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMATHS_METADATA: Metadata = {
-    id: "6afa8edeb98c48d6664cbd54b6ec1f52961f305e.boutiques",
+    id: "bee6d517966bb652a53c121a65d5ea59827f20a1.boutiques",
     name: "fslmaths",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -76,7 +76,7 @@ interface FslmathsOperationParameters {
     "fmedian": boolean;
     "fmean": boolean;
     "fmeanu": boolean;
-    "s": number;
+    "s"?: number | null | undefined;
     "subsamp2": boolean;
     "subsamp2offc": boolean;
     "Tmean": boolean;
@@ -160,7 +160,6 @@ function dynOutputs(
 
 
 function fslmaths_operation_params(
-    s: number,
     add: number | null = null,
     sub: number | null = null,
     mul: number | null = null,
@@ -224,6 +223,7 @@ function fslmaths_operation_params(
     fmedian: boolean = false,
     fmean: boolean = false,
     fmeanu: boolean = false,
+    s: number | null = null,
     subsamp2: boolean = false,
     subsamp2offc: boolean = false,
     tmean: boolean = false,
@@ -262,7 +262,6 @@ function fslmaths_operation_params(
     /**
      * Build parameters.
     
-     * @param s Create a gauss kernel of sigma mm and perform mean filtering
      * @param add Add following input to current image
      * @param sub Subtract following input from current image
      * @param mul Multiply current image by following input
@@ -326,6 +325,7 @@ function fslmaths_operation_params(
      * @param fmedian Median Filtering
      * @param fmean Mean filtering, kernel weighted (conventionally used with gauss kernel)
      * @param fmeanu Mean filtering, kernel weighted, un-normalised (gives edge effects)
+     * @param s Create a gauss kernel of sigma mm and perform mean filtering
      * @param subsamp2 Downsamples image by a factor of 2 (keeping new voxels centred on old)
      * @param subsamp2offc Downsamples image by a factor of 2 (non-centred)
      * @param tmean Mean across time
@@ -401,7 +401,6 @@ function fslmaths_operation_params(
         "fmedian": fmedian,
         "fmean": fmean,
         "fmeanu": fmeanu,
-        "s": s,
         "subsamp2": subsamp2,
         "subsamp2offc": subsamp2offc,
         "Tmean": tmean,
@@ -510,6 +509,9 @@ function fslmaths_operation_params(
     }
     if (kernel_file !== null) {
         params["kernel_file"] = kernel_file;
+    }
+    if (s !== null) {
+        params["s"] = s;
     }
     if (tperc !== null) {
         params["Tperc"] = tperc;
@@ -819,10 +821,12 @@ function fslmaths_operation_cargs(
     if ((params["fmeanu"] ?? null)) {
         cargs.push("-fmeanu");
     }
-    cargs.push(
-        "-s",
-        String((params["s"] ?? null))
-    );
+    if ((params["s"] ?? null) !== null) {
+        cargs.push(
+            "-s",
+            String((params["s"] ?? null))
+        );
+    }
     if ((params["subsamp2"] ?? null)) {
         cargs.push("-subsamp2");
     }
