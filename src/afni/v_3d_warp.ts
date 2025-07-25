@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_WARP_METADATA: Metadata = {
-    id: "20e7717e6fe44e3192a9a8b3cbb0fc5ec57f7b95.boutiques",
+    id: "f905d9db7eb4dc5e4bba6d7a453936b46a2e8f24.boutiques",
     name: "3dWarp",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -13,7 +13,6 @@ const V_3D_WARP_METADATA: Metadata = {
 
 interface V3dWarpParameters {
     "__STYXTYPE__": "3dWarp";
-    "dataset": string;
     "matvec_in2out"?: InputPathType | null | undefined;
     "matvec_out2in"?: InputPathType | null | undefined;
     "tta2mni": boolean;
@@ -35,6 +34,7 @@ interface V3dWarpParameters {
     "zpad"?: number | null | undefined;
     "verb": boolean;
     "prefix"?: string | null | undefined;
+    "dataset": string;
 }
 
 
@@ -138,7 +138,6 @@ function v_3d_warp_params(
      */
     const params = {
         "__STYXTYPE__": "3dWarp" as const,
-        "dataset": dataset,
         "tta2mni": tta2mni,
         "mni2tta": mni2tta,
         "deoblique": deoblique,
@@ -151,6 +150,7 @@ function v_3d_warp_params(
         "wsinc5": wsinc5,
         "fsl_matvec": fsl_matvec,
         "verb": verb,
+        "dataset": dataset,
     };
     if (matvec_in2out !== null) {
         params["matvec_in2out"] = matvec_in2out;
@@ -197,7 +197,6 @@ function v_3d_warp_cargs(
      */
     const cargs: string[] = [];
     cargs.push("3dWarp");
-    cargs.push((params["dataset"] ?? null));
     if ((params["matvec_in2out"] ?? null) !== null) {
         cargs.push(
             "-matvec_in2out",
@@ -288,6 +287,7 @@ function v_3d_warp_cargs(
             (params["prefix"] ?? null)
         );
     }
+    cargs.push((params["dataset"] ?? null));
     return cargs;
 }
 
