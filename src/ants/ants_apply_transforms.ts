@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_APPLY_TRANSFORMS_METADATA: Metadata = {
-    id: "84e6b62e3004e9e04e98dfc8830b8f3a73ec6dbe.boutiques",
+    id: "5bae5c4751160f7ccaa07fc3078825fcfbfea774.boutiques",
     name: "antsApplyTransforms",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -125,7 +125,7 @@ interface AntsApplyTransformsParameters {
     "__STYXTYPE__": "antsApplyTransforms";
     "dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image_type"?: 0 | 1 | 2 | 3 | 4 | 5 | null | undefined;
-    "input_image": InputPathType;
+    "input_image"?: InputPathType | null | undefined;
     "reference_image": InputPathType;
     "output": AntsApplyTransformsWarpedOutputParameters | AntsApplyTransformsCompositeDisplacementFieldOutputParameters | AntsApplyTransformsGenericAffineTransformOutputParameters;
     "interpolation"?: AntsApplyTransformsLinearParameters | AntsApplyTransformsNearestNeighborParameters | AntsApplyTransformsMultiLabelnoparamsParameters | AntsApplyTransformsMultiLabelParameters | AntsApplyTransformsGaussianParameters | AntsApplyTransformsBsplineParameters | AntsApplyTransformsCosineWindowedSincParameters | AntsApplyTransformsWelchWindowedSincParameters | AntsApplyTransformsHammingWindowedSincParameters | AntsApplyTransformsLanczosWindowedSincParameters | AntsApplyTransformsGenericLabelParameters | null | undefined;
@@ -1008,11 +1008,11 @@ interface AntsApplyTransformsOutputs {
 
 
 function ants_apply_transforms_params(
-    input_image: InputPathType,
     reference_image: InputPathType,
     output: AntsApplyTransformsWarpedOutputParameters | AntsApplyTransformsCompositeDisplacementFieldOutputParameters | AntsApplyTransformsGenericAffineTransformOutputParameters,
     dimensionality: 2 | 3 | 4 | null = null,
     input_image_type: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
+    input_image: InputPathType | null = null,
     interpolation: AntsApplyTransformsLinearParameters | AntsApplyTransformsNearestNeighborParameters | AntsApplyTransformsMultiLabelnoparamsParameters | AntsApplyTransformsMultiLabelParameters | AntsApplyTransformsGaussianParameters | AntsApplyTransformsBsplineParameters | AntsApplyTransformsCosineWindowedSincParameters | AntsApplyTransformsWelchWindowedSincParameters | AntsApplyTransformsHammingWindowedSincParameters | AntsApplyTransformsLanczosWindowedSincParameters | AntsApplyTransformsGenericLabelParameters | null = null,
     output_data_type: "char" | "uchar" | "short" | "int" | "float" | "double" | "default" | null = null,
     transform: Array<AntsApplyTransformsTransformFileNameParameters | AntsApplyTransformsUseInverseParameters> | null = null,
@@ -1024,11 +1024,11 @@ function ants_apply_transforms_params(
     /**
      * Build parameters.
     
-     * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
      * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
      * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image. A third option is to compose all affine transforms and (if boolean is set) calculate its inverse which is then written to an ITK file.
      * @param dimensionality This option forces the image to be treated as a specified-dimensional image. if not specified, antswarp tries to infer the dimensionality from the input image.
      * @param input_image_type Option specifying the input image type of scalar (default), vector, tensor, time series, or multi-channel. A time series image is a scalar image defined by an additional dimension for the time component whereas a multi-channel image is a vector image with only spatial dimensions. Five-dimensional images are e.g., AFNI stats image.
+     * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
      * @param interpolation Several interpolation options are available in ITK. These have all been made available.
      * @param output_data_type Output image data type. This is a direct typecast; output values are not rescaled. Default is to use the internal data type (float or double). uchar is unsigned char; others are signed. WARNING: Outputs will be incorrect (overflowed/reinterpreted) if values exceed the range allowed by your choice. Note that some pixel types are not supported by some image formats. e.g. int is not supported by jpg.
      * @param transform Several transform options are supported including all those defined in the ITK library in addition to a deformation field transform. The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform. Also, it should be noted that the inverse transform can be accommodated with the usual caveat that such an inverse must be defined by the specified transform class.
@@ -1041,7 +1041,6 @@ function ants_apply_transforms_params(
      */
     const params = {
         "__STYXTYPE__": "antsApplyTransforms" as const,
-        "input_image": input_image,
         "reference_image": reference_image,
         "output": output,
     };
@@ -1050,6 +1049,9 @@ function ants_apply_transforms_params(
     }
     if (input_image_type !== null) {
         params["input_image_type"] = input_image_type;
+    }
+    if (input_image !== null) {
+        params["input_image"] = input_image;
     }
     if (interpolation !== null) {
         params["interpolation"] = interpolation;
@@ -1102,10 +1104,12 @@ function ants_apply_transforms_cargs(
             String((params["input_image_type"] ?? null))
         );
     }
-    cargs.push(
-        "--input",
-        execution.inputFile((params["input_image"] ?? null))
-    );
+    if ((params["input_image"] ?? null) !== null) {
+        cargs.push(
+            "--input",
+            execution.inputFile((params["input_image"] ?? null))
+        );
+    }
     cargs.push(
         "--reference-image",
         execution.inputFile((params["reference_image"] ?? null))
@@ -1205,11 +1209,11 @@ function ants_apply_transforms_execute(
 
 
 function ants_apply_transforms(
-    input_image: InputPathType,
     reference_image: InputPathType,
     output: AntsApplyTransformsWarpedOutputParameters | AntsApplyTransformsCompositeDisplacementFieldOutputParameters | AntsApplyTransformsGenericAffineTransformOutputParameters,
     dimensionality: 2 | 3 | 4 | null = null,
     input_image_type: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
+    input_image: InputPathType | null = null,
     interpolation: AntsApplyTransformsLinearParameters | AntsApplyTransformsNearestNeighborParameters | AntsApplyTransformsMultiLabelnoparamsParameters | AntsApplyTransformsMultiLabelParameters | AntsApplyTransformsGaussianParameters | AntsApplyTransformsBsplineParameters | AntsApplyTransformsCosineWindowedSincParameters | AntsApplyTransformsWelchWindowedSincParameters | AntsApplyTransformsHammingWindowedSincParameters | AntsApplyTransformsLanczosWindowedSincParameters | AntsApplyTransformsGenericLabelParameters | null = null,
     output_data_type: "char" | "uchar" | "short" | "int" | "float" | "double" | "default" | null = null,
     transform: Array<AntsApplyTransformsTransformFileNameParameters | AntsApplyTransformsUseInverseParameters> | null = null,
@@ -1226,11 +1230,11 @@ function ants_apply_transforms(
      * 
      * URL: https://github.com/ANTsX/ANTs
     
-     * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
      * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
      * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image. A third option is to compose all affine transforms and (if boolean is set) calculate its inverse which is then written to an ITK file.
      * @param dimensionality This option forces the image to be treated as a specified-dimensional image. if not specified, antswarp tries to infer the dimensionality from the input image.
      * @param input_image_type Option specifying the input image type of scalar (default), vector, tensor, time series, or multi-channel. A time series image is a scalar image defined by an additional dimension for the time component whereas a multi-channel image is a vector image with only spatial dimensions. Five-dimensional images are e.g., AFNI stats image.
+     * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
      * @param interpolation Several interpolation options are available in ITK. These have all been made available.
      * @param output_data_type Output image data type. This is a direct typecast; output values are not rescaled. Default is to use the internal data type (float or double). uchar is unsigned char; others are signed. WARNING: Outputs will be incorrect (overflowed/reinterpreted) if values exceed the range allowed by your choice. Note that some pixel types are not supported by some image formats. e.g. int is not supported by jpg.
      * @param transform Several transform options are supported including all those defined in the ITK library in addition to a deformation field transform. The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform. Also, it should be noted that the inverse transform can be accommodated with the usual caveat that such an inverse must be defined by the specified transform class.
@@ -1244,7 +1248,7 @@ function ants_apply_transforms(
      */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_APPLY_TRANSFORMS_METADATA);
-    const params = ants_apply_transforms_params(input_image, reference_image, output, dimensionality, input_image_type, interpolation, output_data_type, transform, default_value, static_cast_for_r, float, verbose)
+    const params = ants_apply_transforms_params(reference_image, output, dimensionality, input_image_type, input_image, interpolation, output_data_type, transform, default_value, static_cast_for_r, float, verbose)
     return ants_apply_transforms_execute(params, execution);
 }
 
