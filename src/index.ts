@@ -11,4 +11,4 @@ export * as dcm2niix from './dcm2niix'
 export * as afni from './afni'
 export * as freesurfer from './freesurfer'
 export * from 'styxdefs'
-export const version = '0.6.2';
+export const version = '0.6.3';
