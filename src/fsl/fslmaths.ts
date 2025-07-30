@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMATHS_METADATA: Metadata = {
-    id: "bee6d517966bb652a53c121a65d5ea59827f20a1.boutiques",
+    id: "760e17385a7691eaccc3d99ec26b7c4305dfcd41.boutiques",
     name: "fslmaths",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -975,7 +975,7 @@ function fslmaths_params(
     input_files: Array<InputPathType>,
     operations: Array<FslmathsOperationParameters>,
     output: string,
-    datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = "float",
+    datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
 ): FslmathsParameters {
     /**
@@ -1086,7 +1086,7 @@ function fslmaths(
     input_files: Array<InputPathType>,
     operations: Array<FslmathsOperationParameters>,
     output: string,
-    datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = "float",
+    datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     runner: Runner | null = null,
 ): FslmathsOutputs {
